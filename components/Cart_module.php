@@ -1,12 +1,12 @@
 <?php if (!defined('BASEPATH')) exit('No direct access allowed');
 
-class Cart_module extends Base_Component
+class Cart_module extends BaseComponent
 {
 
 	protected $referrer_uri;
 
-	public function __construct() {
-		parent::__construct();                                                                    // calls the constructor
+	public function __construct($controller, $params = []) {
+		parent::__construct($controller, $params);                                                                    // calls the constructor
 
 		$this->load->model('cart_module/Cart_model');                                                        // load the cart model
 		$this->load->model('Image_tool_model');                                                        // load the Image tool model
