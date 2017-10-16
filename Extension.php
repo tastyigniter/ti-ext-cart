@@ -1,32 +1,52 @@
-<?php namespace Cart_module;
+<?php namespace SamPoyigi\Cart;
 
-if (!defined('BASEPATH')) exit('No direct access allowed');
+use Event;
+use Illuminate\Config\Repository;
+use System\Classes\BaseController;
+use System\Classes\BaseExtension;
 
-class Extension extends \Base_Extension
+class Extension extends BaseExtension
 {
+    public function register()
+    {
+        require __DIR__.'/vendor/autoload.php';
 
-	public function registerComponents() {
-		return array(
-			'cart_module/components/Cart_module' => array(
-				'code'        => 'cart_module',
-				'name'       => 'lang:cart_module.text_component_title',
-				'description' => 'lang:cart_module.text_component_desc',
-			),
-		);
-	}
+        $this->app['config']['cart'] = new Repository(require __DIR__.'/config/cart.php');
+        $this->app->bind('cart', 'SamPoyigi\Cart\Classes\Cart');
+    }
 
-	public function registerPermissions() {
-		return array(
-			'name'        => 'Module.CartModule',
-			'action'      => array('manage'),
-			'description' => 'Ability to manage cart module',
-		);
-	}
+    public function registerComponents()
+    {
+        return [
+            'SamPoyigi\Cart\components\Cart' => [
+                'code'        => 'cart',
+                'name'        => 'lang:cart::default.text_component_title',
+                'description' => 'lang:cart::default.text_component_desc',
+            ],
+        ];
+    }
 
-	public function registerSettings() {
-		return admin_extension_url('cart_module/settings');
-	}
+    public function registerPermissions()
+    {
+        return [
+            'Module.CartModule' => [
+                'description' => 'Ability to manage cart module',
+                'action'      => ['manage'],
+            ],
+        ];
+    }
+
+    public function registerSettings()
+    {
+        return [
+            'settings' => [
+                'label'       => 'Cart Settings',
+                'description' => 'Manage cart settings.',
+                'icon'        => '',
+                'model'       => 'SamPoyigi\Cart\Models\Settings_model',
+                'permissions' => ['Module.CartModule'],
+                'url'         => admin_url('extensions/settings/sampoyigi/cart'),
+            ],
+        ];
+    }
 }
-
-/* End of file Extension.php */
-/* Location: ./extensions/cart_module/Extension.php */

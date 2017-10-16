@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct access allowed');
+<?php
 
 /**
  * Add new cart total extension records as type 'total' in extensions table
@@ -88,6 +88,3 @@ class Migration_create_cart_total_extension_data_in_extensions_table extends CI_
         $this->db->delete('extensions');
     }
 }
-
-/* End of file 001_create_cart_total_extension_data_in_extensions_table.php */
-/* Location: ./extensions/cart_module/migrations/001_create_cart_total_extension_data_in_extensions_table.php */

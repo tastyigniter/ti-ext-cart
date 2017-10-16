@@ -12,9 +12,8 @@
  * @since     File available since Release 1.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Cart_module_lib {
+class Cart_lib
+{
 
     public function __construct() {
         $this->CI =& get_instance();

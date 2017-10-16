@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct access allowed');
+<?php 
 
 class Cart_model extends TI_Model {
 
@@ -6,7 +6,7 @@ class Cart_model extends TI_Model {
         parent::__construct();
 
         if ($this->db->where('type', 'cart_total')->get('extensions')->num_rows() <= 0) {
-            Modules::run_migration('cart_module');
+            Modules::run_migration('cart');
         }
     }
 
@@ -266,6 +266,3 @@ class Cart_model extends TI_Model {
         return $query;
     }
 }
-
-/* End of file cart_model.php */
-/* Location: ./extensions/cart_module/models/cart_model.php */
