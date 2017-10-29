@@ -45,7 +45,6 @@ class Extension extends BaseExtension
                 'icon'        => '',
                 'model'       => 'SamPoyigi\Cart\Models\Settings_model',
                 'permissions' => ['Module.CartModule'],
-                'url'         => admin_url('extensions/settings/sampoyigi/cart'),
             ],
         ];
     }
