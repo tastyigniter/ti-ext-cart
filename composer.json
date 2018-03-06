@@ -1,9 +1,0 @@
-{
-  "name": "tastyigniter/cart",
-  "description": "TastyIgniter Cart Extension.",
-  "autoload": {
-    "classmap": [
-      "third_party"
-    ]
-  }
-}

@@ -1,36 +1,59 @@
 <?php namespace SamPoyigi\Cart\Models;
 
-use Gloudemans\Shoppingcart\Contracts\Buyable;
-use Igniter\Models\Menus_model as MenusModel;
+use Admin\Models\Menus_model as BaseMenus_model;
+use Carbon\Carbon;
+use Igniter\Flame\Cart\Contracts\Buyable;
 
-//class Menus_model extends Model
-class Menus_model extends MenusModel implements Buyable
+class Menus_model extends BaseMenus_model implements Buyable
 {
-//    protected $table = 'menus';
-//
-//    /**
-//     * @var string The database table primary key
-//     */
-//    protected $primaryKey = 'menu_id';
-//
-//    public $relation = [
-//        'hasMany'       => [
-//            'menu_options'       => ['Igniter\Models\Menu_item_options_model', 'delete' => true],
-//            'menu_option_values' => ['Igniter\Models\Menu_item_option_values_model'],
-//        ],
-//        'hasOne'        => [
-//            'special' => ['Igniter\Models\Menus_specials_model', 'delete' => true],
-//        ],
-//        'belongsTo'     => [
-//            'mealtime' => ['Igniter\Models\Mealtimes_model'],
-//        ],
-//        'belongsToMany' => [
-//            'categories' => ['Igniter\Models\Categories_model', 'table' => 'menu_categories', 'delete' => true],
-//        ],
-//        'morphToMany'   => [
-//            'locations' => ['Igniter\Models\Locations_model', 'name' => 'locationable'],
-//        ],
-//    ];
+    public $with = ['special', 'mealtime', 'menu_options', 'menu_options.option'];
+
+    public function isAvailable()
+    {
+        if (!$mealtime = $this->mealtime()->first())
+            return TRUE;
+
+        if (!$mealtime->mealtime_status)
+            return TRUE;
+
+        $now = Carbon::now();
+
+        return $mealtime->start_time->lte($now) AND $mealtime->end_time->gte($now);
+    }
+
+    public function iSpecial()
+    {
+        if (!$special = $this->special()->first())
+            return false;
+
+        if (!$special->special_status)
+            return false;
+
+        $now = Carbon::now();
+
+        return $special->start_date->lte($now) AND $special->end_date->gte($now);
+    }
+
+    public function checkMinQuantity($quantity = 0)
+    {
+        return $quantity >= $this->minimum_qty;
+    }
+
+    public function outOfStock()
+    {
+        return $this->stock_qty < 1;
+    }
+
+    public function checkStockLevel($quantity = 0)
+    {
+        if ($this->stock_qty < $this->minimum_qty)
+            return false;
+
+        if ($quantity < $this->minimum_qty)
+            return false;
+
+        return $this->stock_qty > $quantity;
+    }
 
     /**
      * Get the identifier of the Buyable item.
@@ -47,9 +70,9 @@ class Menus_model extends MenusModel implements Buyable
      *
      * @return string
      */
-    public function getBuyableDescription($options = null)
+    public function getBuyableName($options = null)
     {
-        return $this->description;
+        return $this->menu_name;
     }
 
     /**
@@ -59,8 +82,12 @@ class Menus_model extends MenusModel implements Buyable
      */
     public function getBuyablePrice($options = null)
     {
-        var_dump($options);
+        $price = $this->iSpecial() ? $this->special->special_price : $this->menu_price;
 
-        return $this->menu_price;
+        if (count($options)) {
+            $price += collect($options)->sum('price');
+        }
+
+        return $price;
     }
 }

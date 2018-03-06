@@ -1,27 +1,38 @@
 <?php namespace SamPoyigi\Cart;
 
-use Event;
-use Illuminate\Config\Repository;
-use System\Classes\BaseController;
+//use Cart;
+use Igniter\Flame\Cart\Cart;
+use Igniter\Flame\Cart\CartServiceProvider;
+use Illuminate\Foundation\AliasLoader;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension
 {
     public function register()
     {
-        require __DIR__.'/vendor/autoload.php';
+        $alias = AliasLoader::getInstance();
+        $alias->alias('Cart', 'Igniter\Flame\Cart\Facades\Cart');
 
-        $this->app['config']['cart'] = new Repository(require __DIR__.'/config/cart.php');
-        $this->app->bind('cart', 'SamPoyigi\Cart\Classes\Cart');
+        $config = __DIR__.'/config/cart.php';
+        $this->mergeConfigFrom($config, 'cart');
+
+        $this->app->singleton('cart', function ($app) {
+            return new Cart($app['session.store'], $app['events']);
+        });
     }
 
     public function registerComponents()
     {
         return [
-            'SamPoyigi\Cart\components\Cart' => [
-                'code'        => 'cart',
+            'SamPoyigi\Cart\components\CartBox'  => [
+                'code'        => 'cartBox',
                 'name'        => 'lang:cart::default.text_component_title',
                 'description' => 'lang:cart::default.text_component_desc',
+            ],
+            'SamPoyigi\Cart\components\Checkout' => [
+                'code'        => 'checkout',
+                'name'        => 'lang:cart::default.text_checkout_component_title',
+                'description' => 'lang:cart::default.text_checkout_component_desc',
             ],
         ];
     }
@@ -32,19 +43,6 @@ class Extension extends BaseExtension
             'Module.CartModule' => [
                 'description' => 'Ability to manage cart module',
                 'action'      => ['manage'],
-            ],
-        ];
-    }
-
-    public function registerSettings()
-    {
-        return [
-            'settings' => [
-                'label'       => 'Cart Settings',
-                'description' => 'Manage cart settings.',
-                'icon'        => '',
-                'model'       => 'SamPoyigi\Cart\Models\Settings_model',
-                'permissions' => ['Module.CartModule'],
             ],
         ];
     }

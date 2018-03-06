@@ -5,7 +5,7 @@
   "version": "2.0.0",
   "author": "SamPoyigi",
   "icon": "fa-shopping-cart",
-  "homepage": "https://github.com/igniter-labs/ti-cart-extension",
+  "homepage": "https://github.com/sampoyigi/ti-cart-extension",
   "tags": {
     "1.0.0": "Initial tag of cart extension",
     "1.0.1": "Renamed language text collection to Pick-up",

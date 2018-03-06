@@ -19,40 +19,77 @@ return [
             ],
         ],
         'fields'  => [
-            'menu_quantity'    => [
-                'label' => 'lang:label_menu_quantity',
-                'span'  => 'left',
-                'type'  => 'switch',
-            ],
-            'add_comment'      => [
-                'label' => 'lang:label_add_comment',
-                'span'  => 'right',
-                'type'  => 'switch',
-            ],
-            'show_cart_images' => [
-                'label' => 'lang:label_show_cart_images',
-                'type'  => 'switch',
-            ],
-            'cart_images_h'    => [
-                'label' => 'lang:label_cart_images_h',
-                'span'  => 'left',
-                'type'  => 'number',
-            ],
-            'cart_images_w'    => [
-                'label' => 'lang:label_cart_images_w',
-                'span'  => 'right',
-                'type'  => 'number',
-            ],
-            'cart_totals'      => [
-                'label' => 'lang:label_cart_image_size',
-                'span'  => 'right',
-                'type'  => 'repeater',
-                'form'  => [
-                    'fields' => [
-
-                    ],
-                ],
-            ],
+//            'show_cart_images' => [
+//                'label' => 'lang:sampoyigi.cart::default.label_show_cart_images',
+//                'type'  => 'switch',
+//            ],
+//            'cart_images_h'    => [
+//                'label' => 'lang:sampoyigi.cart::default.label_cart_images_h',
+//                'span'  => 'left',
+//                'type'  => 'number',
+//                'trigger'  => [
+//                    'action'    => 'show',
+//                    'field'     => 'show_cart_images',
+//                    'condition' => 'checked',
+//                ],
+//            ],
+//            'cart_images_w'    => [
+//                'label' => 'lang:sampoyigi.cart::default.label_cart_images_w',
+//                'span'  => 'right',
+//                'type'  => 'number',
+//                'trigger'  => [
+//                    'action'    => 'show',
+//                    'field'     => 'show_cart_images',
+//                    'condition' => 'checked',
+//                ],
+//            ],
+//            'stock_checkout'     => [
+//                'label'   => 'lang:sampoyigi.cart::default.label_stock_checkout',
+//                'type'    => 'switch',
+//                'default'  => true,
+//                'comment' => 'lang:sampoyigi.cart::default.help_stock_checkout',
+//            ],
+//            'show_stock_warning' => [
+//                'label'   => 'lang:sampoyigi.cart::default.label_show_stock_warning',
+//                'type'    => 'switch',
+//                'comment' => 'lang:sampoyigi.cart::default.help_show_stock_warning',
+//            ],
+//            'menu_quantity'    => [
+//                'label' => 'lang:sampoyigi.cart::default.label_menu_quantity',
+//                'span'  => 'left',
+//                'type'  => 'switch',
+//            ],
+//            'add_comment'      => [
+//                'label' => 'lang:sampoyigi.cart::default.label_add_comment',
+//                'span'  => 'right',
+//                'type'  => 'switch',
+//            ],
+//            'conditions'      => [
+//                'label' => 'lang:sampoyigi.cart::default.label_cart_totals',
+//                'type'  => 'partial',
+//                'sortable'  => TRUE,
+//                'form'  => [
+//                    'fields' => [
+//                        'priority'       => [
+//                            'label' => 'lang:sampoyigi.cart::default.column_priority',
+//                            'type' => 'hidden',
+//                        ],
+//                        'code' => [
+//                            'label' => 'lang:sampoyigi.cart::default.column_code',
+//                            'type' => 'text',
+//                        ],
+//                        'label'       => [
+//                            'label' => 'lang:sampoyigi.cart::default.column_title',
+//                            'type' => 'text',
+//                        ],
+//                        'status'       => [
+//                            'label' => 'lang:sampoyigi.cart::default.column_display',
+//                            'type'  => 'switch',
+//                            'default'  => true,
+//                        ],
+//                    ],
+//                ],
+//            ],
         ],
     ],
 ];

@@ -1,6 +1,7 @@
 <?php namespace SamPoyigi\Cart\Models;
 
 use Model;
+use SamPoyigi\Cart\Classes\Manager;
 
 class Settings_model extends Model
 {
@@ -12,7 +13,42 @@ class Settings_model extends Model
     // Reference to field configuration
     public $settingsFieldsConfig = 'settings_model';
 
-    protected function validateForm()
+    protected $totals;
+
+    public function listTotals()
+    {
+//        if ($this->totals == null)
+//            $this->loadTotals();
+//
+//        if (!is_array($this->totals))
+//            return [];
+//
+//        $result = [];
+//        foreach ($this->totals as $total) {
+//            if (!class_exists($total['class']))
+//                continue;
+//
+//            $gatewayObj = new $total['class'];
+//            $result[$gateway['code']] = array_merge($gateway, [
+//                'object' => $gatewayObj,
+//            ]);
+//        }
+
+//        return $this->totals;
+        $registeredModifiers = Manager::instance()->listRegisteredModifiers();
+        $dbTotals = $this->getSettingsValue('cart_totals', []);
+        $totals = $registeredModifiers + $dbTotals;
+        ksort($totals);
+
+        return $totals;
+    }
+
+    public static function getConditionPriorities()
+    {
+        return array_flip((new static)->get('conditions', []));
+    }
+
+    protected function validateRules($form)
     {
         $this->form_validation->set_rules('show_cart_images', 'lang:label_show_cart_images', 'required|integer');
         $this->form_validation->set_rules('fixed_cart', 'lang:label_fixed_cart', 'required|integer');
@@ -21,6 +57,8 @@ class Settings_model extends Model
             $this->form_validation->set_rules('fixed_top_offset', 'lang:label_fixed_top_offset', 'required|integer');
             $this->form_validation->set_rules('fixed_bottom_offset', 'lang:label_fixed_bottom_offset', 'required|integer');
         }
+//        ['stock_checkout', 'lang:system::settings.label_stock_checkout', 'required|integer'],
+//            ['show_stock_warning', 'lang:system::settings.label_show_stock_warning', 'required|integer'],
 
         if ($this->input->post('show_cart_images') == '1') {
             $this->form_validation->set_rules('cart_images_h', 'lang:label_cart_images_h', 'required|integer');
