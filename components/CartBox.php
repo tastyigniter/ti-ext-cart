@@ -43,7 +43,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function onRun()
     {
-        $this->addCss('css/cartbox.css', 'cartbox-css');
+        $this->addCss('css/cartbox.css', 'cart-box-css');
         $this->addJs('js/cartbox.js', 'cart-box-js');
         $this->addJs('js/cartitem.js', 'cart-item-js');
         $this->addJs('js/cartbox.modal.js', 'cart-box-modal-js');
@@ -281,10 +281,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function onProceedToCheckout()
     {
         try {
-            if (!is_numeric($id = post('locationId')))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
-
-            if (!$location = Location::getById($id))
+            if (!is_numeric($id = post('locationId')) OR !$location = Location::getById($id))
                 throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
 
             Location::setCurrent($location);
@@ -430,7 +427,7 @@ class CartBox extends \System\Classes\BaseComponent
         $orderType = Location::orderType();
         $coveredArea = Location::coveredArea();
         $deliveryCharge = $coveredArea->deliveryAmount(Cart::subtotal());
-        $minimumOrder = floatval($coveredArea->minimumOrderTotal(Cart::subtotal()));
+        $minimumOrder = (float)$coveredArea->minimumOrderTotal(Cart::subtotal());
 
         $condition->setActions(['value' => "+{$deliveryCharge}"]);
         $condition->setRules([
@@ -447,7 +444,7 @@ class CartBox extends \System\Classes\BaseComponent
         });
     }
 
-    public function applyCouponToCart()
+    protected function applyCouponToCart()
     {
         if (!$condition = Cart::getConditionByName('coupon'))
             return;

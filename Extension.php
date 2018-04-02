@@ -2,8 +2,8 @@
 
 //use Cart;
 use Igniter\Flame\Cart\Cart;
-use Igniter\Flame\Cart\CartServiceProvider;
 use Illuminate\Foundation\AliasLoader;
+use SamPoyigi\Cart\Models\Orders_model;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension
@@ -24,12 +24,12 @@ class Extension extends BaseExtension
     public function registerComponents()
     {
         return [
-            'SamPoyigi\Cart\components\CartBox'  => [
+            'SamPoyigi\Cart\Components\CartBox'  => [
                 'code'        => 'cartBox',
                 'name'        => 'lang:cart::default.text_component_title',
                 'description' => 'lang:cart::default.text_component_desc',
             ],
-            'SamPoyigi\Cart\components\Checkout' => [
+            'SamPoyigi\Cart\Components\Checkout' => [
                 'code'        => 'checkout',
                 'name'        => 'lang:cart::default.text_checkout_component_title',
                 'description' => 'lang:cart::default.text_checkout_component_desc',
@@ -45,5 +45,22 @@ class Extension extends BaseExtension
                 'action'      => ['manage'],
             ],
         ];
+    }
+
+    public function registerMailTemplates()
+    {
+        return [
+            'sampoyigi.cart::mail.order' => 'Order confirmation email to customer',
+            'sampoyigi.cart::mail.order_alert' => 'New order alert email to admin',
+        ];
+    }
+
+    protected function extendOrderModel()
+    {
+        \Admin\Models\Statuses_model::extend(function ($model) {
+
+            $model->bindEvent('model.afterCreate', function () use ($model) {
+            });
+        });
     }
 }

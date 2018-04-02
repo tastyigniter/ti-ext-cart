@@ -31,7 +31,9 @@
                        </span>
                         </td>
                         <td class="text-right">
-                            <?= ($result = $condition->result()) ? currency_format($result) : '--'; ?>
+                            <?= ($result = $condition->result())
+                                ? currency_format($result)
+                                : lang('main::default.text_free'); ?>
                         </td>
                     </tr>
                 <?php } ?>

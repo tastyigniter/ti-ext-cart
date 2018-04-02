@@ -53,10 +53,12 @@
             <?php } ?>
         </div>
     </div>
-    <p class="text-muted text-center">
-        <?= $minOrderTotal
-            ? lang('sampoyigi.cart::default.text_min_total').':'.currency_format($minOrderTotal)
-            : lang('sampoyigi.cart::default.text_no_min_total');
-        ?>
-    </p>
+    <?php if ($orderType == 'delivery') { ?>
+        <p class="text-muted text-center">
+            <?= $minOrderTotal
+                ? lang('sampoyigi.cart::default.text_min_total').':'.currency_format($minOrderTotal)
+                : lang('sampoyigi.cart::default.text_no_min_total');
+            ?>
+        </p>
+    <?php } ?>
 <?php } ?>

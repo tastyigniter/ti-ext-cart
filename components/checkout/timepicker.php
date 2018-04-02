@@ -34,7 +34,7 @@
             <div
                 class="input-group"
                 data-control="checkout-timepicker"
-                data-date-format="<?= $orderDateFormat; ?>"
+                data-date-format="<?= $orderDayFormat; ?>"
                 data-hour-format="<?= $orderHourFormat; ?>"
                 data-date-range="<?= e(json_encode($orderTimeRange)); ?>"
             >
@@ -42,7 +42,7 @@
                 <select
                     name="order_date"
                     data-timepicker="date"
-                    data-timepicker-selected="<?= old('order_date') ?>"
+                    data-timepicker-selected="<?= old('order_date', $order->order_date) ?>"
                     class="form-control"
                 ></select>
                 <select

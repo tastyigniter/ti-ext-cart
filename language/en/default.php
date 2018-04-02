@@ -103,8 +103,6 @@ return [
         'text_heading'            => 'Checkout',
         'text_checkout'           => 'Almost there, Please confirm your details and proceed to payment.',
         'text_payments'           => 'Please choose your payment method.',
-        'text_registered'         => 'Already have an account? <a href="%s">Login Here</a>',
-        'text_logout'             => 'Welcome Back %s, Not You? <a href="%s">Logout</a>',
         'text_asap'               => 'As soon as possible',
         'text_later'              => 'Later',
         'text_step_one'           => 'Step 1',
