@@ -305,7 +305,7 @@ class Checkout extends BaseComponent
         if (!$userPosition OR !$userPosition->isValid())
             throw new ApplicationException(lang('sampoyigi.local::default.alert_invalid_search_query'));
 
-        if (!$area = Location::current()->findDeliveryArea($userPosition))
+        if (!$area = Location::current()->filterDeliveryArea($userPosition))
             throw new ApplicationException(lang('sampoyigi.cart::default.checkout.error_covered_area'));
 
         if (!Location::isCurrentAreaId($area->area_id)) {

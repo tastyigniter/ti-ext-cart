@@ -18,6 +18,6 @@
     "2.0.0": "Update code to use latest Extension API"
   },
   "require": {
-    "sampoyigi.local_module": "*"
+    "sampoyigi.local": "*"
   }
 }
