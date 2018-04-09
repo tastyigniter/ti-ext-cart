@@ -57,6 +57,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     protected function prepareVars()
     {
+        $this->page['cartBoxTimeFormat'] = $this->property('timeFormat');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
@@ -90,12 +91,10 @@ class CartBox extends \System\Classes\BaseComponent
 
         $this->page['hasDelivery'] = Location::current()->hasDelivery();
         $this->page['hasCollection'] = Location::current()->hasCollection();
-        $this->page['deliveryStatus'] = Location::workingStatus('delivery');
-        $this->page['collectionStatus'] = Location::workingStatus('collection');
         $this->page['deliveryMinutes'] = Location::current()->deliveryMinutes();
         $this->page['collectionMinutes'] = Location::current()->collectionMinutes();
-        $this->page['deliveryTime'] = Location::openTime('delivery', $this->property('timeFormat'));
-        $this->page['collectionTime'] = Location::openTime('collection', $this->property('timeFormat'));
+        $this->page['deliverySchedule'] = Location::deliverySchedule();
+        $this->page['collectionSchedule'] = Location::collectionSchedule();
     }
 
     protected function getAppliedConditions()
@@ -118,7 +117,7 @@ class CartBox extends \System\Classes\BaseComponent
             if (!Location::checkOrderType($orderType = post('type')))
                 throw new ApplicationException(lang('sampoyigi.cart::default.alert_'.$orderType.'_unavailable'));
 
-            Location::setOrderType($orderType);
+            Location::updateOrderType($orderType);
 
             $this->pageCycle();
 
@@ -308,7 +307,7 @@ class CartBox extends \System\Classes\BaseComponent
                     throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_option_required'),
                         $menuOption->option_name));
 
-                if (!count($selectedOption['option_values']))
+                if (!isset($selectedOption['option_values']) OR !count($selectedOption['option_values']))
                     return FALSE;
 
                 $option['menu_option_id'] = $menuOption->menu_option_id;

@@ -158,9 +158,6 @@ class Checkout extends BaseComponent
         $timeInterval = Location::orderTimeInterval();
         $periods = Location::orderTimePeriods();
         foreach ($periods as $date => $workingHours) {
-            if ($workingHours->isClosed())
-                continue;
-
             $weekDate = $workingHours->getWeekDate()->format($this->property('dayFormat'));
             if ($workingHours->open->isToday())
                 $workingHours->opening_time = Carbon::now()->addMinutes($timeInterval)->format('H:i');
@@ -217,7 +214,6 @@ class Checkout extends BaseComponent
 
             return Redirect::to($returnPage);
         } catch (Exception $ex) {
-            throw $ex;
             flash()->warning($ex->getMessage());
 
             return Redirect::back()->withInput();

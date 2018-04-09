@@ -14,11 +14,11 @@
                     <strong><?= lang('sampoyigi.cart::default.text_delivery'); ?></strong>
                     <span
                         class="small center-block">
-                        <?php if ($deliveryStatus === 'open') { ?>
+                        <?php if ($deliverySchedule->isOpen()) { ?>
                             <?= sprintf(lang('sampoyigi.cart::default.text_in_minutes'), $deliveryMinutes); ?>
                         <?php }
-                        else if ($deliveryStatus === 'opening') { ?>
-                            <?= sprintf(lang('sampoyigi.cart::default.text_starts'), $deliveryTime); ?>
+                        else if ($deliverySchedule->isOpening()) { ?>
+                            <?= sprintf(lang('sampoyigi.cart::default.text_starts'), $deliverySchedule->getOpenTime($cartBoxTimeFormat)); ?>
                         <?php }
                         else { ?>
                             <?= lang('sampoyigi.cart::default.text_is_closed'); ?>
@@ -39,11 +39,11 @@
                     <strong><?= lang('sampoyigi.cart::default.text_collection'); ?></strong>
                     <span
                         class="small center-block">
-                        <?php if ($collectionStatus === 'open') { ?>
+                        <?php if ($collectionSchedule->isOpen()) { ?>
                             <?= sprintf(lang('sampoyigi.cart::default.text_in_minutes'), $collectionMinutes); ?>
                         <?php }
-                        else if ($collectionStatus === 'opening') { ?>
-                            <?= sprintf(lang('sampoyigi.cart::default.text_starts'), $collectionTime); ?>
+                        else if ($collectionSchedule->isOpening()) { ?>
+                            <?= sprintf(lang('sampoyigi.cart::default.text_starts'), $collectionSchedule->getOpenTime($cartBoxTimeFormat)); ?>
                         <?php }
                         else { ?>
                             <?= lang('sampoyigi.cart::default.text_is_closed'); ?>
