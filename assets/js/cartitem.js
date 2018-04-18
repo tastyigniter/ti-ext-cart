@@ -46,8 +46,6 @@
     CartItem.prototype.onSubmitForm = function (event) {
         event.preventDefault()
         this.$form.request()
-            .success(function () {
-            })
             .fail(function (xhr) {
                 $.ti.flashMessage({class: 'danger', text: xhr.responseText})
             })

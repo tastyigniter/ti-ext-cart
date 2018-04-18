@@ -352,6 +352,11 @@ class CartBox extends \System\Classes\BaseComponent
         if ($quantity == 0)
             return;
 
+        // Quantity is valid if its divisive by the minimum quantity
+        if (($quantity % $menuModel->minimum_qty) > 0)
+            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_qty_is_invalid'),
+                $menuModel->minimum_qty));
+
         // checks if stock quantity is less than or equal to zero
         if ($menuModel->outOfStock())
             throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_out_of_stock'),

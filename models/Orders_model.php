@@ -6,54 +6,7 @@ use Main\Classes\MainController;
 
 class Orders_model extends BaseOrders_model
 {
-    protected static $receiptPageName;
-
-    protected static $orderViewPageName;
-
     protected $fillable = ['customer_id', 'first_name', 'last_name', 'email', 'telephone', 'comment', 'payment'];
-
-    public function setReceiptPageName($pageName)
-    {
-        self::$receiptPageName = $pageName;
-    }
-
-    public function setOrderViewPageName($pageName)
-    {
-        self::$orderViewPageName = $pageName;
-    }
-
-    public function getReceiptUrl()
-    {
-        $controller = MainController::getController() ?: new MainController;
-
-        $pageName = self::$receiptPageName;
-        if ($this->return_page)
-            $pageName = $this->return_page;
-
-        return $controller->pageUrl($pageName, $this->getUrlParams());
-    }
-
-    public function getOrderViewPageUrl()
-    {
-        $controller = MainController::getController() ?: new MainController;
-
-        $pageName = self::$orderViewPageName;
-
-        return $controller->pageUrl($pageName, $this->getUrlParams());
-    }
-
-    public function getUrlParams()
-    {
-        return [
-            'orderId' => $this->order_id,
-            'hash'    => $this->hash,
-        ];
-    }
-
-    public function listCustomerAddresses()
-    {
-        return [];
-    }
 
     /**
      * Complete order by sending email confirmation and,
@@ -78,12 +31,5 @@ class Orders_model extends BaseOrders_model
         $this->addStatusHistory(['notify' => 1]);
 
         // @todo: fire order.completed event
-    }
-
-    public function mailGetData()
-    {
-        return array_merge(parent::mailGetData(), [
-            'order_view_url' => $this->getOrderViewPageUrl()
-        ]);
     }
 }

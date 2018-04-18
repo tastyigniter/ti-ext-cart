@@ -41,7 +41,6 @@ return [
     'button_confirm'      => 'Confirm',
     'button_apply_coupon' => 'Apply Coupon',
     'button_view_cart'    => 'Back to My Order',
-    'button_go_back'      => 'Add more items',
 
     'column_code'     => 'Total Code',
     'column_priority' => 'Total Priority',
@@ -73,6 +72,7 @@ return [
     'alert_menu_not_found'           => '<p class="alert-danger">%s not found, please add from the local menus page.</p>',
     'alert_no_menu_selected'         => '<p class="alert-danger">Please select a menu to add to your order.</p>',
     'alert_option_required'          => '<p class="alert-danger">Please choose from the <b>%s</b> option.</p>',
+    'alert_qty_is_invalid'           => '<p class="alert-danger">Selected quantity is not divisive by the minimum quantity of %s.</p>',
     'alert_qty_is_below_min_qty'     => '<p class="alert-danger">Selected quantity is below the menu\'s minimum quantity of %s.</p>',
     'alert_location_required'        => '<p class="alert-danger">No location found or selected</p>',
     'alert_location_closed'          => '<p class="alert-danger">Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.</p>',

@@ -1,9 +1,8 @@
 <?php namespace SamPoyigi\Cart;
 
-//use Cart;
+use Event;
 use Igniter\Flame\Cart\Cart;
 use Illuminate\Foundation\AliasLoader;
-use SamPoyigi\Cart\Models\Orders_model;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension
@@ -18,6 +17,17 @@ class Extension extends BaseExtension
 
         $this->app->singleton('cart', function ($app) {
             return new Cart($app['session.store'], $app['events']);
+        });
+    }
+
+    public function initialize()
+    {
+        Event::listen('admin.order.paymentProcessed', function ($model) {
+            $model->mailSend('sampoyigi.cart::mail.order', 'customer');
+            $model->mailSend('sampoyigi.cart::mail.order_alert', 'location');
+            $model->mailSend('sampoyigi.cart::mail.order_alert', 'admin');
+
+            // Subtract menu quantity and redeem coupon
         });
     }
 
@@ -50,17 +60,8 @@ class Extension extends BaseExtension
     public function registerMailTemplates()
     {
         return [
-            'sampoyigi.cart::mail.order' => 'Order confirmation email to customer',
+            'sampoyigi.cart::mail.order'       => 'Order confirmation email to customer',
             'sampoyigi.cart::mail.order_alert' => 'New order alert email to admin',
         ];
-    }
-
-    protected function extendOrderModel()
-    {
-        \Admin\Models\Statuses_model::extend(function ($model) {
-
-            $model->bindEvent('model.afterCreate', function () use ($model) {
-            });
-        });
     }
 }

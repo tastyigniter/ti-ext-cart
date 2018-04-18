@@ -4,6 +4,7 @@ namespace SamPoyigi\Cart\Components;
 
 use Admin\Models\Addresses_model;
 use Admin\Models\Coupons_model;
+use Request;
 use SamPoyigi\Pages\Models\Pages_model;
 use Admin\Models\Payments_model;
 use Admin\Traits\ValidatesForm;
@@ -110,6 +111,7 @@ class Checkout extends BaseComponent
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
+        $this->page['orderTotal'] = Cart::total();
         $this->page['orderType'] = Location::orderType();
         $this->page['orderTimeRange'] = $this->getOrderTimes();
         $this->page['paymentGateways'] = Location::current()->listAvailablePayments();
@@ -129,7 +131,6 @@ class Checkout extends BaseComponent
             $order = Orders_model::find($this->getCurrentOrderId());
         }
 
-
         $customer = $this->customer();
         $customerId = $customer ? $customer->customer_id : null;
 
@@ -137,8 +138,7 @@ class Checkout extends BaseComponent
         if (!$order OR $order->customer_id != $customerId)
             $order = Orders_model::make($this->getDefaultAttributes());
 
-        if ($order)
-            $order->setReceiptPageName($this->property('successPage'));
+        $this->setDefaultAttributes($order);
 
         return $this->order = $order;
     }
@@ -196,23 +196,26 @@ class Checkout extends BaseComponent
 
             $order = $this->createOrder($data);
 
+            $data['cancelPage'] = $this->property('redirectPage');
+            $data['successPage'] = $successPage = $this->property('successPage');
 //            activity()
 //                ->causedBy(Auth::getUser())
 //                ->log(lang('system::activities.activity_logged_in'));
 
-            if ($paymentMethod = Payments_model::isEnabled()->whereCode($order->payment)->first()) {
+            $paymentMethod = Payments_model::whereCode($order->payment)->first();
+            if ($order->payment AND (!$paymentMethod OR !$paymentMethod->status))
+                throw new ApplicationException('Selected payment method is inactive, try a different one.');
 
-                if (($redirect = $paymentMethod->processPaymentForm($data, $paymentMethod, $order)) === FALSE)
-                    return;
-
-                if ($redirect instanceof RedirectResponse)
-                    return $redirect;
-            }
-
-            if (!$returnPage = $order->getReceiptUrl())
+            if (($redirect = $paymentMethod->processPaymentForm($data, $paymentMethod, $order)) === FALSE)
                 return;
 
-            return Redirect::to($returnPage);
+            if ($redirect instanceof RedirectResponse)
+                return $redirect;
+
+            if (!$successPage)
+                return;
+
+            return Redirect::to($this->pageUrl($successPage, ['hash' => $order->hash]));
         } catch (Exception $ex) {
             flash()->warning($ex->getMessage());
 
@@ -371,16 +374,12 @@ class Checkout extends BaseComponent
         $order->fill($data);
         $order->address_id = $addressId;
         $order->customer_id = $customerId;
-        $order->location_id = Location::current()->getKey();
-        $order->order_type = Location::orderType();
         $order->order_date = $orderDateTime->format('Y-m-d');
         $order->order_time = $orderDateTime->format('H:i');
-        $order->total_items = Cart::count();
-        $order->cart = $content = Cart::content();
-        $order->order_total = Cart::total();
+        $this->setDefaultAttributes($order);
         $order->save();
 
-        $order->addOrderMenus($content->toArray());
+        $order->addOrderMenus($order->cart);
         $order->addOrderTotals(Cart::allTotals());
 
         if ($couponCondition = Cart::getConditionByName('coupon')) {
@@ -390,8 +389,6 @@ class Checkout extends BaseComponent
         }
 
         $this->setCurrentOrderId($order->order_id);
-
-        $order->setOrderViewPageName($this->property('ordersPage'));
 
         return $order;
     }
@@ -406,6 +403,16 @@ class Checkout extends BaseComponent
             'email' => $customer ? $customer->email : null,
             'telephone' => $customer ? $customer->telephone : null,
         ];
+    }
+
+    public function setDefaultAttributes($order)
+    {
+        $order->location_id = Location::current()->getKey();
+        $order->order_type = Location::orderType();
+        $order->order_total_items = Cart::count();
+        $order->cart = Cart::content();
+        $order->order_total = Cart::total();
+        $order->ip_address = Request::getClientIp();
     }
 
     protected function isCheckoutSuccessPage()

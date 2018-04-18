@@ -48,37 +48,37 @@ class Settings_model extends Model
         return array_flip((new static)->get('conditions', []));
     }
 
-    protected function validateRules($form)
-    {
-        $this->form_validation->set_rules('show_cart_images', 'lang:label_show_cart_images', 'required|integer');
-        $this->form_validation->set_rules('fixed_cart', 'lang:label_fixed_cart', 'required|integer');
-
-        if ($this->input->post('fixed_cart') == '1') {
-            $this->form_validation->set_rules('fixed_top_offset', 'lang:label_fixed_top_offset', 'required|integer');
-            $this->form_validation->set_rules('fixed_bottom_offset', 'lang:label_fixed_bottom_offset', 'required|integer');
-        }
-//        ['stock_checkout', 'lang:system::settings.label_stock_checkout', 'required|integer'],
-//            ['show_stock_warning', 'lang:system::settings.label_show_stock_warning', 'required|integer'],
-
-        if ($this->input->post('show_cart_images') == '1') {
-            $this->form_validation->set_rules('cart_images_h', 'lang:label_cart_images_h', 'required|integer');
-            $this->form_validation->set_rules('cart_images_w', 'lang:label_cart_images_w', 'required|integer');
-        }
-
-        if ($this->input->post('totals')) {
-            foreach ($this->input->post('totals') as $key => $value) {
-                $this->form_validation->set_rules('totals['.$key.'][title]', "[{$key}] ".lang('column_title'), 'required|max:128');
-                $this->form_validation->set_rules('totals['.$key.'][admin_title]', "[{$key}] ".lang('column_admin_title'), 'required|max:128');
-                $this->form_validation->set_rules('totals['.$key.'][name]', "[{$key}] ".lang('column_name'), 'required|alpha_dash');
-                $this->form_validation->set_rules('totals['.$key.'][status]', "[{$key}] ".lang('column_display'), 'required|integer');
-            }
-        }
-
-        if ($this->form_validation->run() === TRUE) {
-            return TRUE;
-        }
-        else {
-            return FALSE;
-        }
-    }
+//    protected function validateRules($form)
+//    {
+//        $this->form_validation->set_rules('show_cart_images', 'lang:label_show_cart_images', 'required|integer');
+//        $this->form_validation->set_rules('fixed_cart', 'lang:label_fixed_cart', 'required|integer');
+//
+//        if ($this->input->post('fixed_cart') == '1') {
+//            $this->form_validation->set_rules('fixed_top_offset', 'lang:label_fixed_top_offset', 'required|integer');
+//            $this->form_validation->set_rules('fixed_bottom_offset', 'lang:label_fixed_bottom_offset', 'required|integer');
+//        }
+////        ['stock_checkout', 'lang:system::settings.label_stock_checkout', 'required|integer'],
+////            ['show_stock_warning', 'lang:system::settings.label_show_stock_warning', 'required|integer'],
+//
+//        if ($this->input->post('show_cart_images') == '1') {
+//            $this->form_validation->set_rules('cart_images_h', 'lang:label_cart_images_h', 'required|integer');
+//            $this->form_validation->set_rules('cart_images_w', 'lang:label_cart_images_w', 'required|integer');
+//        }
+//
+//        if ($this->input->post('totals')) {
+//            foreach ($this->input->post('totals') as $key => $value) {
+//                $this->form_validation->set_rules('totals['.$key.'][title]', "[{$key}] ".lang('column_title'), 'required|max:128');
+//                $this->form_validation->set_rules('totals['.$key.'][admin_title]', "[{$key}] ".lang('column_admin_title'), 'required|max:128');
+//                $this->form_validation->set_rules('totals['.$key.'][name]', "[{$key}] ".lang('column_name'), 'required|alpha_dash');
+//                $this->form_validation->set_rules('totals['.$key.'][status]', "[{$key}] ".lang('column_display'), 'required|integer');
+//            }
+//        }
+//
+//        if ($this->form_validation->run() === TRUE) {
+//            return TRUE;
+//        }
+//        else {
+//            return FALSE;
+//        }
+//    }
 }

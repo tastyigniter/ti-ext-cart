@@ -1,5 +1,6 @@
 <div class="modal-dialog"
      data-control="cart-item"
+     data-min-quantity="<?= $menuItem->minimum_qty; ?>"
 >
     <div class="modal-content">
         <div class="modal-header">
@@ -39,7 +40,6 @@
                     <div
                         class="input-group"
                         data-cart-toggle="quantity"
-                        data-min-quantity="<?= $menuItem->minimum_qty; ?>"
                     >
                             <span class="input-group-btn">
                                 <button

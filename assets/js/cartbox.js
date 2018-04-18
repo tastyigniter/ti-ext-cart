@@ -62,7 +62,13 @@
     }
 
     CartBox.prototype.confirmCheckout = function ($el) {
-        $($el.data('request-form')).request().fail(function (xhr) {
+        var _event = jQuery.Event('submitCheckoutForm'),
+            $checkoutForm = $($el.data('request-form'))
+
+        $checkoutForm.trigger(_event)
+        if (_event.isDefaultPrevented()) return
+
+        $checkoutForm.request().fail(function (xhr) {
             $.ti.flashMessage({class: 'danger', text: xhr.responseText})
         })
     }
