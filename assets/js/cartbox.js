@@ -14,7 +14,6 @@
     }
 
     CartBox.prototype.refreshCart = function (event) {
-        console.log('refreshCart')
     }
 
     CartBox.prototype.loadItem = function ($el) {
