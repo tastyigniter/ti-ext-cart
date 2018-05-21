@@ -6,7 +6,6 @@ use Illuminate\Database\Schema\Blueprint;
 /**
  * Create cart and fill with records from cart field on customers table
  */
-
 class CreateCartTable extends Migration
 {
     public function up()

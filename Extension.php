@@ -26,7 +26,6 @@ class Extension extends BaseExtension
             $model->mailSend('sampoyigi.cart::mail.order', 'customer');
             $model->mailSend('sampoyigi.cart::mail.order_alert', 'location');
             $model->mailSend('sampoyigi.cart::mail.order_alert', 'admin');
-
             // Subtract menu quantity and redeem coupon
         });
     }
@@ -36,13 +35,13 @@ class Extension extends BaseExtension
         return [
             'SamPoyigi\Cart\Components\CartBox'  => [
                 'code'        => 'cartBox',
-                'name'        => 'lang:cart::default.text_component_title',
-                'description' => 'lang:cart::default.text_component_desc',
+                'name'        => 'lang:sampoyigi.cart::default.text_component_title',
+                'description' => 'lang:sampoyigi.cart::default.text_component_desc',
             ],
             'SamPoyigi\Cart\Components\Checkout' => [
                 'code'        => 'checkout',
-                'name'        => 'lang:cart::default.text_checkout_component_title',
-                'description' => 'lang:cart::default.text_checkout_component_desc',
+                'name'        => 'lang:sampoyigi.cart::default.text_checkout_component_title',
+                'description' => 'lang:sampoyigi.cart::default.text_checkout_component_desc',
             ],
         ];
     }

@@ -6,7 +6,8 @@
                     ? lang('sampoyigi.cart::default.checkout.label_delivery') : lang('sampoyigi.cart::default.checkout.label_collection')); ?>
             </label>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default <?= old('asap', '1') == 1 ? 'btn-primary active' : ''; ?>" data-btn="btn-primary">
+                <label class="btn btn-default <?= old('asap', '1') == 1 ? 'btn-primary active' : ''; ?>"
+                       data-btn="btn-primary">
                     <input
                         type="radio"
                         name="asap"
@@ -14,7 +15,8 @@
                         <?= set_radio('asap', '1', TRUE); ?>
                     ><?= lang('sampoyigi.cart::default.checkout.text_asap'); ?>
                 </label>
-                <label class="btn btn-default <?= old('asap', '1') == 1 ? '' : 'btn-primary active'; ?>" data-btn="btn-primary">
+                <label class="btn btn-default <?= old('asap', '1') == 1 ? '' : 'btn-primary active'; ?>"
+                       data-btn="btn-primary">
                     <input
                         type="radio"
                         name="asap"

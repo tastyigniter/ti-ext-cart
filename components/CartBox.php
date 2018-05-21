@@ -1,12 +1,12 @@
 <?php namespace SamPoyigi\Cart\Components;
 
-use AjaxException;
 use ApplicationException;
 use Auth;
 use Cart;
 use Exception;
 use Igniter\Flame\Cart\CartCondition;
 use Location;
+use Main\Template\Page;
 use Redirect;
 use Request;
 use SamPoyigi\Cart\Models\Coupons_model;
@@ -18,7 +18,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function defineProperties()
     {
         return [
-            'timeFormat'     => [
+            'timeFormat'         => [
                 'label'   => 'Time format',
                 'type'    => 'text',
                 'default' => 'D H:i a',
@@ -28,17 +28,22 @@ class CartBox extends \System\Classes\BaseComponent
                 'type'    => 'switch',
                 'default' => FALSE,
             ],
-            'pageIsCheckout' => [
+            'pageIsCheckout'     => [
                 'label'   => 'Whether this component is loaded on the checkout page',
                 'type'    => 'switch',
                 'default' => FALSE,
             ],
-            'checkoutPage'   => [
+            'checkoutPage'       => [
                 'label'   => 'Checkout Page',
-                'type'    => 'text',
+                'type'    => 'select',
                 'default' => 'checkout/checkout',
             ],
         ];
+    }
+
+    public static function getCheckoutPageOptions()
+    {
+        return Page::lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()
@@ -129,6 +134,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             if ($this->property('pageIsCheckout'))
                 return Redirect::to($this->pageUrl($this->property('checkoutPage')));
+
 //                $partials['#checkout-container'] = $this->controller->renderPartial('checkout::checkout_form');
 
             return $partials;

@@ -1,8 +1,8 @@
 <?= form_open(current_url(),
     [
-        'id'      => 'checkout-form',
-        'role'    => 'form',
-        'method'  => 'POST',
+        'id'           => 'checkout-form',
+        'role'         => 'form',
+        'method'       => 'POST',
         'data-request' => $confirmCheckoutEventHandler,
     ]
 ); ?>

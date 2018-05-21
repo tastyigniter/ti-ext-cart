@@ -2,7 +2,6 @@
 
 use Admin\Models\Orders_model as BaseOrders_model;
 use Admin\Models\Statuses_model;
-use Main\Classes\MainController;
 
 class Orders_model extends BaseOrders_model
 {
@@ -29,7 +28,6 @@ class Orders_model extends BaseOrders_model
         $this->mailSend('sampoyigi.cart::mail.order_alert', 'admin');
 
         $this->addStatusHistory(['notify' => 1]);
-
         // @todo: fire order.completed event
     }
 }

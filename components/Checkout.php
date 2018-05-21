@@ -4,8 +4,6 @@ namespace SamPoyigi\Cart\Components;
 
 use Admin\Models\Addresses_model;
 use Admin\Models\Coupons_model;
-use Request;
-use SamPoyigi\Pages\Models\Pages_model;
 use Admin\Models\Payments_model;
 use Admin\Traits\ValidatesForm;
 use ApplicationException;
@@ -14,13 +12,13 @@ use Carbon\Carbon;
 use Cart;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
 use Location;
+use Main\Template\Page;
 use Redirect;
+use Request;
 use SamPoyigi\Cart\Models\Orders_model;
 use Session;
 use System\Classes\BaseComponent;
-use ValidationException;
 
 class Checkout extends BaseComponent
 {
@@ -33,40 +31,45 @@ class Checkout extends BaseComponent
     public function defineProperties()
     {
         return [
-            'dayFormat'     => [
+            'dayFormat'        => [
                 'label'   => 'Date format for the order times dropdown',
                 'type'    => 'text',
                 'default' => 'D d',
             ],
-            'hourFormat'     => [
+            'hourFormat'       => [
                 'label'   => 'Hour format for the order times dropdown',
                 'type'    => 'text',
                 'default' => 'h a',
             ],
-            'agreeTermsPage' => [
-                'label'   => 'lang::sampoyigi.cart::default.checkout.label_checkout_terms',
+            'agreeTermsPage'   => [
+                'label'   => 'lang:sampoyigi.cart::default.checkout.label_checkout_terms',
                 'type'    => 'select',
-                'comment' => 'lang::sampoyigi.cart::default.checkout.help_checkout_terms',
+                'options' => [static::class, 'getPageOptions'],
+                'comment' => 'lang:sampoyigi.cart::default.checkout.help_checkout_terms',
             ],
-            'menusPage'      => [
-                'label'   => 'lang::sampoyigi.cart::default.checkout.label_checkout_terms',
+            'menusPage'        => [
+                'label'   => 'lang:sampoyigi.cart::default.checkout.label_checkout_terms',
                 'type'    => 'select',
                 'default' => 'local/menus',
+                'options' => [static::class, 'getPageOptions'],
                 'comment' => 'Page to redirect to when checkout can not be performed.',
             ],
-            'redirectPage'   => [
+            'redirectPage'     => [
                 'label'   => 'Page to redirect to when checkout fails',
-                'type'    => 'text',
+                'type'    => 'select',
+                'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/checkout',
             ],
-            'ordersPage'    => [
+            'ordersPage'       => [
                 'label'   => 'Account orders page',
-                'type'    => 'text',
+                'type'    => 'select',
+                'options' => [static::class, 'getPageOptions'],
                 'default' => 'account/orders',
             ],
-            'successPage'    => [
+            'successPage'      => [
                 'label'   => 'Page to redirect to when checkout is successful',
-                'type'    => 'text',
+                'type'    => 'select',
+                'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/success',
             ],
             'successParamCode' => [
@@ -77,9 +80,9 @@ class Checkout extends BaseComponent
         ];
     }
 
-    public function getAgreeTermsPageDropdown()
+    public static function getPageOptions()
     {
-        return Pages_model::getDropdownOptions();
+        return Page::lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()
@@ -127,7 +130,8 @@ class Checkout extends BaseComponent
 
         if ($this->isCheckoutSuccessPage()) {
             $order = $this->getOrderByHash();
-        } else {
+        }
+        else {
             $order = Orders_model::find($this->getCurrentOrderId());
         }
 
@@ -187,7 +191,7 @@ class Checkout extends BaseComponent
         try {
             $data = post();
 
-            $this->validateCart(true);
+            $this->validateCart(TRUE);
 
             $this->validate($data, $this->createRules());
 
@@ -264,7 +268,7 @@ class Checkout extends BaseComponent
         return $this->getCurrentOrderId() == $orderId;
     }
 
-    protected function validateCart($throwException = false)
+    protected function validateCart($throwException = FALSE)
     {
         try {
             if (!Cart::count())
@@ -286,6 +290,7 @@ class Checkout extends BaseComponent
                 throw $ex;
 
             flash()->warning($ex->getMessage())->now();
+
             return FALSE;
         }
 
@@ -399,9 +404,9 @@ class Checkout extends BaseComponent
 
         return [
             'first_name' => $customer ? $customer->first_name : null,
-            'last_name' => $customer ? $customer->last_name : null,
-            'email' => $customer ? $customer->email : null,
-            'telephone' => $customer ? $customer->telephone : null,
+            'last_name'  => $customer ? $customer->last_name : null,
+            'email'      => $customer ? $customer->email : null,
+            'telephone'  => $customer ? $customer->telephone : null,
         ];
     }
 

@@ -73,9 +73,9 @@
                             />
 
                             <?= partial('@item_option_'.$menuOption->display_type, [
-                                'index' => $index,
-                                'cartItem' => $cartItem,
-                                'menuOption' => $menuOption
+                                'index'      => $index,
+                                'cartItem'   => $cartItem,
+                                'menuOption' => $menuOption,
                             ]); ?>
                         <?php } ?>
                     </div>

@@ -1,31 +1,31 @@
 <div>
     <div
         class="btn-group btn-group-md col-xs-12"
-         data-toggle="buttons"
+        data-toggle="buttons"
     >
         <?php if (count($customerAddresses = $order->listCustomerAddresses())) { ?>
-        <?php $index = 0;
-        foreach ($customerAddresses as $address) { ?>
-            <?php
-            $isDefaultAddress = ($order->address_id == $address->address_id);
-            ?>
-            <label
-                class="btn <?= $isDefaultAddress ? 'btn-primary active' : 'btn-default'; ?>"
-                data-btn="btn-primary"
-            >
+            <?php $index = 0;
+            foreach ($customerAddresses as $address) { ?>
+                <?php
+                $isDefaultAddress = ($order->address_id == $address->address_id);
+                ?>
+                <label
+                    class="btn <?= $isDefaultAddress ? 'btn-primary active' : 'btn-default'; ?>"
+                    data-btn="btn-primary"
+                >
                 <span
                     class="edit-address pull-right"
                     data-form="#address-form-<?= $index; ?>"
                 ><?= lang('sampoyigi.cart::default.checkout.text_edit'); ?></span>
-                <input
-                    type="radio"
-                    name="address_id"
-                    value="<?= $address->address_id; ?>"
-                    <?= $isDefaultAddress ? 'checked="checked"' : ''; ?> />
-                <address class="text-left"><?= $address->formatted; ?></address>
-            </label>
-            <?php $index++; ?>
-        <?php } ?>
+                    <input
+                        type="radio"
+                        name="address_id"
+                        value="<?= $address->address_id; ?>"
+                        <?= $isDefaultAddress ? 'checked="checked"' : ''; ?> />
+                    <address class="text-left"><?= $address->formatted; ?></address>
+                </label>
+                <?php $index++; ?>
+            <?php } ?>
         <?php } ?>
     </div>
     <div class="col-xs-12">

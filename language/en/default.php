@@ -1,13 +1,13 @@
 <?php
 
 return [
-    '_text_title'          => 'Cart',
-    'text_tab_general'     => 'General',
-    'text_component_title' => 'Cart Component',
-    'text_component_desc'  => 'Displays cart for menu to be added',
+    '_text_title'                   => 'Cart',
+    'text_tab_general'              => 'General',
+    'text_component_title'          => 'Cart Component',
+    'text_component_desc'           => 'Displays cart for menu to be added',
     'text_checkout_component_title' => 'Checkout Component',
     'text_checkout_component_desc'  => 'Displays checkout form and accept orders',
-    'text_tab_totals'      => 'Cart Totals',
+    'text_tab_totals'               => 'Cart Totals',
 
     'text_heading'         => 'My Order',
     'text_update_heading'  => 'Updating menu choices',
@@ -157,9 +157,9 @@ return [
         'label_terms'             => 'By clicking I Agree, you agree to the <a href="%s" data-toggle="modal" data-target="#terms-modal">Terms and Conditions</a> set out by this site, including our Cookie Use.',
         'label_comment'           => 'Add Comments',
         'label_ip'                => 'IP Address',
-        'label_checkout_terms'                   => 'Checkout Terms',
+        'label_checkout_terms'    => 'Checkout Terms',
 
-        'help_checkout_terms'               => 'Require customers to agree to terms before checkout',
+        'help_checkout_terms' => 'Require customers to agree to terms before checkout',
 
         'button_agree_terms' => 'I Agree',
 

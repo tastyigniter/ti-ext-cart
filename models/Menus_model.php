@@ -24,10 +24,10 @@ class Menus_model extends BaseMenus_model implements Buyable
     public function iSpecial()
     {
         if (!$special = $this->special()->first())
-            return false;
+            return FALSE;
 
         if (!$special->special_status)
-            return false;
+            return FALSE;
 
         $now = Carbon::now();
 
@@ -47,10 +47,10 @@ class Menus_model extends BaseMenus_model implements Buyable
     public function checkStockLevel($quantity = 0)
     {
         if ($this->stock_qty < $this->minimum_qty)
-            return false;
+            return FALSE;
 
         if ($quantity < $this->minimum_qty)
-            return false;
+            return FALSE;
 
         return $this->stock_qty > $quantity;
     }
