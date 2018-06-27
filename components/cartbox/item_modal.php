@@ -3,105 +3,107 @@
      data-min-quantity="<?= $menuItem->minimum_qty; ?>"
 >
     <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><?= $cartItem
-                    ? lang('sampoyigi.cart::default.text_update_heading')
-                    : lang('sampoyigi.cart::default.text_add_heading'); ?></h4>
-        </div>
-
-        <div id="menu-options"
-             class="modal-body"
-             data-control="item-options"
-        >
-            <form method="POST" data-request="<?= $formHandler; ?>">
-                <input type="hidden" name="menuId" value="<?= $menuItem->getBuyableIdentifier(); ?>"/>
-                <input type="hidden" name="rowId" value="<?= $cartItem ? $cartItem->rowId : null; ?>"/>
-
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object" src="<?= $menuItem->menu_image; ?>">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="media-heading">
-                            <?= $menuItem->getBuyableName(); ?>
-                            <span class="pull-right"><?= currency_format($menuItem->getBuyablePrice()); ?></span>
-                        </h3>
-                        <?php if (strlen($menuItem->menu_description)) { ?>
-                            <p><?= $menuItem->menu_description; ?></p>
-                        <?php } ?>
-                    </div>
+        <form method="POST" data-request="<?= $formHandler; ?>">
+            <?php if (!empty($menuItem->menu_photo)) { ?>
+                <div class="modal-top">
+                    <img class="img-fluid" src="<?= $menuItem->getThumb(); ?>">
                 </div>
+            <?php } ?>
 
-                <div class="form-group">
-                    <label for="quantity"><?= lang('sampoyigi.cart::default.label_menu_quantity'); ?></label>
-                    <div
-                        class="input-group"
-                        data-cart-toggle="quantity"
-                    >
-                            <span class="input-group-btn">
-                                <button
-                                    class="btn btn-default"
-                                    data-operator="minus"
-                                    type="button"
-                                ><i class="fa fa-minus"></i></button>
-                            </span>
-                        <input
-                            type="number"
-                            name="quantity"
-                            class="form-control text-center"
-                            value="<?= $cartItem ? $cartItem->qty : $menuItem->minimum_qty; ?>">
-                        <span class="input-group-btn">
-                            <button
-                                class="btn btn-default"
-                                data-operator="plus"
-                                type="button"
-                            ><i class="fa fa-plus"></i></button>
-                        </span>
-                    </div>
-                </div>
+            <div class="modal-body">
+                <button
+                    type="button"
+                    class="close px-2"
+                    data-dismiss="modal"
+                ><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title"><b><?= $menuItem->getBuyableName(); ?></b></h5>
+                <?php if (strlen($menuItem->menu_description)) { ?>
+                    <p class="text-muted"><?= $menuItem->menu_description; ?></p>
+                <?php } ?>
 
-                <div class="menu-options">
+                <div
+                    id="menu-options"
+                    data-control="item-options"
+                >
+                    <input type="hidden" name="menuId" value="<?= $menuItem->getBuyableIdentifier(); ?>"/>
+                    <input type="hidden" name="rowId" value="<?= $cartItem ? $cartItem->rowId : null; ?>"/>
+
                     <div class="menu-options">
-                        <?php foreach ($menuItem->menu_options as $index => $menuOption) { ?>
-                            <input
-                                type="hidden"
-                                name="menu_options[<?= $index; ?>][menu_option_id]"
-                                value="<?= $menuOption->menu_option_id; ?>"
-                            />
+                        <div class="menu-options">
+                            <?php foreach ($menuItem->menu_options->sortBy('priority') as $index => $menuOption) { ?>
+                                <div class="form-group">
+                                    <input
+                                        type="hidden"
+                                        name="menu_options[<?= $index; ?>][menu_option_id]"
+                                        value="<?= $menuOption->menu_option_id; ?>"
+                                    />
+                                    <div class="option option-<?= $menuOption->display_type; ?>">
+                                        <label class="font-weight-bold"><?= $menuOption->option_name; ?></label>
 
-                            <?= partial('@item_option_'.$menuOption->display_type, [
-                                'index'      => $index,
-                                'cartItem'   => $cartItem,
-                                'menuOption' => $menuOption,
-                            ]); ?>
-                        <?php } ?>
+                                        <?= partial('@item_option_'.$menuOption->display_type, [
+                                            'index'      => $index,
+                                            'cartItem'   => $cartItem,
+                                            'menuOption' => $menuOption,
+                                        ]); ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="comment"><?= lang('sampoyigi.cart::default.label_add_comment'); ?></label>
                     <textarea
                         name="comment"
                         class="form-control"
-                        rows="3"
+                        rows="2"
+                        placeholder="<?= lang('sampoyigi.cart::default.label_add_comment'); ?>"
                     ><?= $cartItem ? $cartItem->comment : null; ?></textarea>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <button
-                            type="submit"
-                            class="btn btn-success btn-block"
-                        ><?= $cartItem
+            <div class="modal-footer">
+                <div class="row no-gutters w-100">
+                    <div class="col-sm-5 pb-3 pb-sm-0">
+                        <div class="input-group" data-cart-toggle="quantity">
+                            <div class="input-group-btn">
+                                <button
+                                    class="btn btn-outline-default"
+                                    data-operator="minus"
+                                    type="button"
+                                ><i class="fa fa-minus"></i></button>
+                            </div>
+                            <input
+                                type="number"
+                                name="quantity"
+                                class="form-control text-center"
+                                value="<?= $cartItem ? $cartItem->qty : $menuItem->minimum_qty; ?>"
+                            >
+                            <div class="input-group-btn">
+                                <button
+                                    class="btn btn-outline-default"
+                                    data-operator="plus"
+                                    type="button"
+                                ><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 pl-sm-2">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <?= $cartItem
                                 ? lang('sampoyigi.cart::default.button_update')
                                 : lang('sampoyigi.cart::default.button_add_to_order');
-                            ?></button>
+                            ?>
+                            <span class="small ml-4">
+                                <?= currency_format($cartItem
+                                    ? $cartItem->subtotal
+                                    : $menuItem->getBuyablePrice());
+                                ?>
+                            </span>&nbsp;
+                        </button>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>

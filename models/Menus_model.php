@@ -16,9 +16,7 @@ class Menus_model extends BaseMenus_model implements Buyable
         if (!$mealtime->mealtime_status)
             return TRUE;
 
-        $now = Carbon::now();
-
-        return $mealtime->start_time->lte($now) AND $mealtime->end_time->gte($now);
+        return $mealtime->isAvailableNow();
     }
 
     public function iSpecial()

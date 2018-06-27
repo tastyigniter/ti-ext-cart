@@ -19,21 +19,21 @@
                     <tr>
                         <td>
                         <span class="text-muted">
-                            <?= e($condition->label); ?>:
+                            <?= e($condition->getLabel()); ?>:
                             <?php if ($condition->removeable) { ?>
-                                <a
+                                <button
+                                    type="button"
+                                    class="btn btn-light btn-sm"
                                     data-cart-condition-id="<?= $id; ?>"
                                     data-cart-control="remove-condition"
-                                >
-                                    <span class="fa fa-times"></span>
-                                </a>
+                                ><i class="fa fa-times"></i></button>
                             <?php } ?>
                        </span>
                         </td>
                         <td class="text-right">
-                            <?= ($result = $condition->result())
+                            <?= is_numeric($result = $condition->calculatedValue())
                                 ? currency_format($result)
-                                : lang('main::default.text_free'); ?>
+                                : '--'; ?>
                         </td>
                     </tr>
                 <?php } ?>

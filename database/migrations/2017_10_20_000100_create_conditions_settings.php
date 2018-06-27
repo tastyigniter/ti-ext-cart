@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use SamPoyigi\Cart\Models\Settings_model;
+use SamPoyigi\Cart\Models\CartSettings_;
 use System\Models\Extensions_model;
 
 /**
@@ -23,8 +23,8 @@ class CreateConditionsSettings extends Migration
             $conditions[$data['priority']] = $data['name'];
         }
 
-        if (!Settings_model::get('conditions'))
-            Settings_model::set('conditions', $conditions);
+        if (!CartSettings_::get('conditions'))
+            CartSettings_::set('conditions', $conditions);
     }
 
     public function down()

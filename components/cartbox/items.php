@@ -4,12 +4,13 @@
             <?php foreach ($cartContent->reverse() as $cartItem) { ?>
                 <li>
                     <a
-                        class="cart-btn text-muted small"
+                        class="cart-btn btn btn-light btn-sm text-muted"
                         data-cart-control="remove-item"
                         data-row-id="<?= $cartItem->rowId; ?>"
                         data-menu-id="<?= $cartItem->id; ?>"
                     ><i class="fa fa-minus-circle"></i></a>
 
+                    <span class="pull-right"><?= currency_format($cartItem->subtotal); ?></span>
                     <a
                         class="name-image"
                         data-cart-control="load-item"
@@ -17,9 +18,11 @@
                         data-menu-id="<?= $cartItem->id; ?>"
                     >
                         <span class="name">
-                            <span class="quantity">
-                                <?= $cartItem->qty.' '.lang('sampoyigi.cart::default.text_times'); ?>
-                            </span>
+                            <?php if ($cartItem->qty > 1) { ?>
+                                <span class="quantity font-weight-bold">
+                                    <?= $cartItem->qty.' '.lang('sampoyigi.cart::default.text_times'); ?>
+                                </span>
+                            <?php } ?>
                             <?= $cartItem->name; ?>
                         </span>
                         <?php if ($cartItem->hasOptions()) { ?>
@@ -27,13 +30,12 @@
                                 'itemOptions' => $cartItem->options,
                             ]); ?>
                         <?php } ?>
-                    </a>
-                    <p class="comment-amount">
-                        <span class="amount pull-right"><?= currency_format($cartItem->subtotal); ?></span>
                         <?php if (!empty($cartItem->comment)) { ?>
-                            <span class="comment text-muted small">[<?= $cartItem->comment; ?>]</span>
+                            <p class="comment text-muted small">
+                                <?= $cartItem->comment; ?>
+                            </p>
                         <?php } ?>
-                    </p>
+                    </a>
                 </li>
             <?php } ?>
         </ul>

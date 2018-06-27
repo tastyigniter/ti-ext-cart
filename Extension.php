@@ -3,6 +3,7 @@
 use Event;
 use Igniter\Flame\Cart\Cart;
 use Illuminate\Foundation\AliasLoader;
+use SamPoyigi\Cart\Models\CartSettings;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension
@@ -18,6 +19,8 @@ class Extension extends BaseExtension
         $this->app->singleton('cart', function ($app) {
             return new Cart($app['session.store'], $app['events']);
         });
+
+        $this->registerCartConditions();
     }
 
     public function initialize()
@@ -26,7 +29,23 @@ class Extension extends BaseExtension
             $model->mailSend('sampoyigi.cart::mail.order', 'customer');
             $model->mailSend('sampoyigi.cart::mail.order_alert', 'location');
             $model->mailSend('sampoyigi.cart::mail.order_alert', 'admin');
-            // Subtract menu quantity and redeem coupon
+        });
+    }
+
+    public function registerCartConditions()
+    {
+        CartSettings::registerConditions(function (CartSettings $settingsModel) {
+            $settingsModel->registerCondition('SamPoyigi\Cart\Conditions\Coupon', [
+                'name'        => 'coupon',
+                'label'       => 'lang:sampoyigi.cart::default.text_coupon',
+                'description' => 'lang:sampoyigi.cart::default.help_coupon_condition',
+            ]);
+
+            $settingsModel->registerCondition('SamPoyigi\Cart\Conditions\Tax', [
+                'name'        => 'tax',
+                'label'       => 'lang:sampoyigi.cart::default.text_vat',
+                'description' => 'lang:sampoyigi.cart::default.help_tax_condition',
+            ]);
         });
     }
 
@@ -52,6 +71,19 @@ class Extension extends BaseExtension
             'Module.CartModule' => [
                 'description' => 'Ability to manage cart module',
                 'action'      => ['manage'],
+            ],
+        ];
+    }
+
+    public function registerSettings()
+    {
+        return [
+            'cartsettings' => [
+                'label'       => 'Cart Settings',
+                'description' => 'Manage cart settings.',
+                'icon'        => '',
+                'model'       => 'SamPoyigi\Cart\Models\CartSettings',
+                'permissions' => ['Module.Cart'],
             ],
         ];
     }

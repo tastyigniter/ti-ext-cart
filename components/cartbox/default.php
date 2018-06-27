@@ -1,5 +1,5 @@
 <div
-    class="hidden-xs"
+    class="<?= (!$pageIsCart) ? 'affix-cart d-none d-sm-block' : ''; ?>"
     data-control="cart-box"
     data-load-item-handler="<?= $loadCartItemEventHandler; ?>"
     data-update-item-handler="<?= $updateCartItemEventHandler; ?>"
@@ -9,11 +9,7 @@
     data-remove-condition-handler="<?= $removeConditionEventHandler; ?>"
 >
     <div id="cart-box" class="module-box">
-        <div class="panel panel-default panel-cart <?= ($pageIsCheckout) ? 'hidden-xs' : ''; ?>">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= lang('sampoyigi.cart::default.text_heading'); ?></h3>
-            </div>
-
+        <div class="panel panel-cart">
             <div class="panel-body">
                 <div id="cart-control">
                     <?= partial('@control'); ?>
@@ -30,23 +26,23 @@
                 <div id="cart-totals">
                     <?= partial('@totals'); ?>
                 </div>
-            </div>
-        </div>
 
-        <div id="cart-buttons">
-            <?= partial('@buttons'); ?>
+                <div id="cart-buttons" class="mt-3">
+                    <?= partial('@buttons'); ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div
     id="cart-mobile-buttons"
-    class="<?= (!$pageIsCheckout) ? 'visible-xs' : 'hide'; ?>"
+    class="<?= ($pageIsCart OR $pageIsCheckout) ? 'hide' : 'fixed-bottom d-block d-sm-none'; ?>"
 >
     <a
-        class="btn btn-default cart-toggle text-nowrap"
+        class="btn btn-primary btn-block cart-toggle text-nowrap"
         href="<?= site_url('cart') ?>"
     >
-        <?= lang('sampoyigi.cart::default.text_heading'); ?>
-        <span class="order-total"><?= $cartTotal; ?></span>
+        <?= lang('sampoyigi.cart::default.text_heading'); ?>:
+        <span id="cart-total" class="font-weight-bold"><?= currency_format($cartTotal); ?></span>
     </a>
 </div>

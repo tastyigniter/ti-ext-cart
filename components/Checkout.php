@@ -3,12 +3,10 @@
 namespace SamPoyigi\Cart\Components;
 
 use Admin\Models\Addresses_model;
-use Admin\Models\Coupons_model;
 use Admin\Models\Payments_model;
 use Admin\Traits\ValidatesForm;
 use ApplicationException;
 use Auth;
-use Carbon\Carbon;
 use Cart;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +15,7 @@ use Main\Template\Page;
 use Redirect;
 use Request;
 use SamPoyigi\Cart\Models\Orders_model;
+use SamPoyigi\Pages\Models\Pages_model;
 use Session;
 use System\Classes\BaseComponent;
 
@@ -31,20 +30,18 @@ class Checkout extends BaseComponent
     public function defineProperties()
     {
         return [
-            'dayFormat'        => [
-                'label'   => 'Date format for the order times dropdown',
-                'type'    => 'text',
-                'default' => 'D d',
+            'orderDateFormat'  => [
+                'label' => 'Date format to display order date on the checkout success page',
+                'type'  => 'text',
             ],
-            'hourFormat'       => [
-                'label'   => 'Hour format for the order times dropdown',
-                'type'    => 'text',
-                'default' => 'h a',
+            'orderTimeFormat'  => [
+                'label' => 'Time format to display order time on the checkout success page',
+                'type'  => 'text',
             ],
             'agreeTermsPage'   => [
                 'label'   => 'lang:sampoyigi.cart::default.checkout.label_checkout_terms',
                 'type'    => 'select',
-                'options' => [static::class, 'getPageOptions'],
+                'options' => [static::class, 'getPagesOptions'],
                 'comment' => 'lang:sampoyigi.cart::default.checkout.help_checkout_terms',
             ],
             'menusPage'        => [
@@ -85,11 +82,14 @@ class Checkout extends BaseComponent
         return Page::lists('baseFileName', 'baseFileName');
     }
 
+    public static function getPagesOptions()
+    {
+        return Pages_model::dropdown('name');
+    }
+
     public function onRun()
     {
-        $this->addJs(assets_url('js/app/trigger.js'), 'trigger-js');
-        $this->addJs('vendor/moment.min.js', 'checkout-moment-js');
-        $this->addJs('js/checkout.timepicker.js', 'checkout-timepicker-js');
+        $this->addJs('js/vendor/trigger.js', 'trigger-js');
 
         if ($this->isCheckoutSuccessPage())
             $this->clearCurrentOrderId();
@@ -101,10 +101,8 @@ class Checkout extends BaseComponent
 
     protected function prepareVars()
     {
-        $this->page['orderDayFormat'] = $this->property('dayFormat');
-        $this->page['orderHourFormat'] = $this->property('hourFormat');
-        $this->page['orderDateFormat'] = setting('date_format');
-        $this->page['orderTimeFormat'] = setting('time_format');
+        $this->page['orderDateFormat'] = $this->property('orderDateFormat', setting('date_format'));
+        $this->page['orderTimeFormat'] = $this->property('orderTimeFormat', setting('time_format'));
         $this->page['agreeTermsPage'] = $this->property('agreeTermsPage');
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');
@@ -116,7 +114,6 @@ class Checkout extends BaseComponent
         $this->page['order'] = $this->getOrder();
         $this->page['orderTotal'] = Cart::total();
         $this->page['orderType'] = Location::orderType();
-        $this->page['orderTimeRange'] = $this->getOrderTimes();
         $this->page['paymentGateways'] = Location::current()->listAvailablePayments();
     }
 
@@ -154,25 +151,6 @@ class Checkout extends BaseComponent
         }
 
         return Auth::getUser();
-    }
-
-    public function getOrderTimes()
-    {
-        $generated = [];
-        $timeInterval = Location::orderTimeInterval();
-        $periods = Location::orderTimePeriods();
-        foreach ($periods as $date => $workingHours) {
-            $weekDate = $workingHours->getWeekDate()->format($this->property('dayFormat'));
-            if ($workingHours->open->isToday())
-                $workingHours->opening_time = Carbon::now()->addMinutes($timeInterval)->format('H:i');
-
-            foreach ($workingHours->generateTimes($timeInterval) as $dateTime) {
-                $key = $dateTime->format($this->property('hourFormat'));
-                $generated[$weekDate][$key][] = $dateTime->format('i');
-            }
-        }
-
-        return $generated;
     }
 
     public function hashCode()
@@ -220,7 +198,8 @@ class Checkout extends BaseComponent
                 return;
 
             return Redirect::to($this->pageUrl($successPage, ['hash' => $order->hash]));
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             flash()->warning($ex->getMessage());
 
             return Redirect::back()->withInput();
@@ -283,9 +262,14 @@ class Checkout extends BaseComponent
             if (!Location::checkOrderType($orderType = Location::orderType()))
                 throw new ApplicationException(lang('sampoyigi.cart::default.alert_'.$orderType.'_unavailable'));
 
+            $orderDateTime = Location::orderDateTime();
+            if (!$orderDateTime OR !Location::checkOrderTime($orderDateTime))
+                throw new ApplicationException(lang('sampoyigi.cart::default.checkout.alert_no_delivery_time'));
+
             if ($orderType == 'delivery' AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
                 throw new ApplicationException(lang('sampoyigi.local::default.alert_no_search_query'));
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             if ($throwException)
                 throw $ex;
 
@@ -320,8 +304,6 @@ class Checkout extends BaseComponent
 
     protected function createRules()
     {
-        $orderType = Location::orderType();
-
         $namedRules = [
             ['first_name', 'lang:sampoyigi.cart::default.checkout.label_first_name', 'required|min:2|max:32'],
             ['last_name', 'lang:sampoyigi.cart::default.checkout.label_last_name', 'required|min:2|max:32'],
@@ -330,13 +312,10 @@ class Checkout extends BaseComponent
             ['comment', 'lang:sampoyigi.cart::default.checkout.label_comment', 'max:500'],
             ['payment', 'lang:sampoyigi.cart::default.checkout.label_payment_method', 'required|alpha_dash'],
 
-            ['asap', sprintf(lang('sampoyigi.cart::default.checkout.label_order_time_type'), $orderType), 'required|integer'],
-            ['order_date', sprintf(lang('sampoyigi.cart::default.checkout.label_order_time'), $orderType), 'required'],
-            ['order_hour', 'lang:sampoyigi.cart::default.checkout.label_hour', 'required'],
-            ['order_minute', 'lang:sampoyigi.cart::default.checkout.label_minute', 'required'],
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
         ];
 
+        $orderType = Location::orderType();
         if ($orderType == 'delivery') {
             $namedRules[] = ['address_id', 'lang:sampoyigi.cart::default.checkout.label_address', 'integer'];
             $namedRules[] = ['address.address_1', 'lang:sampoyigi.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
@@ -366,32 +345,21 @@ class Checkout extends BaseComponent
         if ($address = array_get($data, 'address', [])) {
             $address['customer_id'] = $customerId;
             $address['address_id'] = $order->address_id;
-            $addressId = Addresses_model::createOrUpdateFromPost($address)->getKey();
+            $addressId = Addresses_model::createOrUpdateFromRequest($address)->getKey();
         }
-
-        $orderDate = array_get($data, 'order_date');
-        $orderHour = array_get($data, 'order_hour');
-        $orderMinute = array_get($data, 'order_minute');
-        $orderDateTime = Carbon::createFromFormat(
-            "{$this->property('dayFormat')} {$this->property('hourFormat')} i",
-            "{$orderDate} {$orderHour} {$orderMinute}");
 
         $order->fill($data);
         $order->address_id = $addressId;
         $order->customer_id = $customerId;
-        $order->order_date = $orderDateTime->format('Y-m-d');
-        $order->order_time = $orderDateTime->format('H:i');
         $this->setDefaultAttributes($order);
         $order->save();
 
-        $order->addOrderMenus($order->cart);
-        $order->addOrderTotals(Cart::allTotals());
+        $order->addOrderMenus(Cart::content()->toArray());
+        $order->addOrderTotals($this->buildCartTotalsArray());
 
-        if ($couponCondition = Cart::getConditionByName('coupon')) {
-            $code = $couponCondition->getMetaData('code');
-            if ($code AND $coupon = Coupons_model::whereCode($code)->first())
-                $order->addOrderCoupon($coupon, $customer);
-        }
+        $couponCondition = Cart::getCondition('coupon');
+        if ($couponCondition AND $couponModel = $couponCondition->getModel())
+            $order->logCouponHistory($couponModel, $customer);
 
         $this->setCurrentOrderId($order->order_id);
 
@@ -413,11 +381,47 @@ class Checkout extends BaseComponent
     public function setDefaultAttributes($order)
     {
         $order->location_id = Location::current()->getKey();
+
         $order->order_type = Location::orderType();
-        $order->order_total_items = Cart::count();
+
+        $orderDateTime = Location::orderDateTime();
+        $order->order_date = $orderDateTime->format('Y-m-d');
+        $order->order_time = $orderDateTime->format('H:i');
+
+        $order->total_items = Cart::count();
         $order->cart = Cart::content();
         $order->order_total = Cart::total();
+
         $order->ip_address = Request::getClientIp();
+    }
+
+    protected function buildCartTotalsArray()
+    {
+        $totals = [
+            [
+                'code'     => 'subtotal',
+                'title'    => lang('sampoyigi.cart::default.text_sub_total'),
+                'value'    => Cart::subtotal(),
+                'priority' => 0,
+            ],
+            [
+                'code'     => 'total',
+                'title'    => lang('sampoyigi.cart::default.text_order_total'),
+                'value'    => Cart::total(),
+                'priority' => 999,
+            ],
+        ];
+
+        foreach (Cart::conditions() as $name => $condition) {
+            $totals[] = [
+                'code'     => $name,
+                'title'    => $condition->getLabel(),
+                'value'    => $condition->calculatedValue(),
+                'priority' => $condition->getPriority(),
+            ];
+        }
+
+        return $totals;
     }
 
     protected function isCheckoutSuccessPage()

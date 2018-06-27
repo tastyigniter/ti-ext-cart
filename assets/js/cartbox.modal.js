@@ -38,33 +38,13 @@
     }
 
     CartBoxModal.prototype.show = function () {
-        var self = this,
-            handler = this.options.loadItemHandler,
-            $spinner = '<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>',
-            $loadingIndicator = $('<div/>').addClass('loading-fixed')
-                .append($('<span />').addClass('spinner'))
+        this.$modalRootElement.html(
+            '<div class="modal-dialog"><div class="modal-content"><div class="modal-body">'
+            +'<span class="spinner"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></span>'
+            +'</div></div></div>'
+        );
 
-        var data = {
-            // selectMode: this.options.selectMode,
-            rowId: this.options.rowId,
-            menuId: this.options.menuId,
-            // chooseButton: this.options.chooseButton ? 1 : 0,
-        }
-
-        $loadingIndicator.find('.spinner').html($spinner)
-        $(document.body).append($loadingIndicator);
-
-        $.request(handler, {
-            data: data,
-            success: function (json) {
-                self.$modalRootElement.html(json.result);
-                self.$modalRootElement.modal()
-                $loadingIndicator.remove()
-            },
-            error: function (xhr) {
-                $.ti.flashMessage({class: 'danger', text: xhr.responseText})
-            }
-        })
+        this.$modalRootElement.modal()
     }
 
     CartBoxModal.prototype.hide = function () {
@@ -94,13 +74,26 @@
     }
 
     CartBoxModal.prototype.onModalShown = function (event) {
+        var self = this
+
         this.$modalElement = $(event.target)
 
-        var $cartItem = this.$modalElement.find('[data-control="cart-item"]')
+        $.request(this.options.loadItemHandler, {
+            data: {
+                rowId: this.options.rowId,
+                menuId: this.options.menuId,
+            },
+            success: function (json) {
+                self.$modalRootElement.html(json.result);
+                self.$modalRootElement.modal()
 
-        $cartItem.on('submit', 'form', $.proxy(this.submitForm, this))
+                var $cartItem = self.$modalElement.find('[data-control="cart-item"]')
 
-        $cartItem.cartItem()
+                $cartItem.on('submit', 'form', $.proxy(self.submitForm, self))
+
+                $cartItem.cartItem()
+            }
+        })
     }
 
     CartBoxModal.DEFAULTS = {

@@ -11,7 +11,7 @@
 
             <span class="input-group-btn">
                 <a
-                    class="btn btn-default"
+                    class="btn btn-outline-default"
                     data-cart-control="apply-coupon"
                     title="<?= lang('sampoyigi.cart::default.button_apply_coupon'); ?>"
                 ><i class="fa fa-check"></i></a>

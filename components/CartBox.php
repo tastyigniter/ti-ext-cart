@@ -1,17 +1,15 @@
 <?php namespace SamPoyigi\Cart\Components;
 
 use ApplicationException;
-use Auth;
 use Cart;
 use Exception;
-use Igniter\Flame\Cart\CartCondition;
 use Location;
 use Main\Template\Page;
 use Redirect;
 use Request;
+use SamPoyigi\Cart\Models\CartSettings;
 use SamPoyigi\Cart\Models\Coupons_model;
 use SamPoyigi\Cart\Models\Menus_model;
-use SamPoyigi\Cart\Models\Settings_model;
 
 class CartBox extends \System\Classes\BaseComponent
 {
@@ -30,6 +28,11 @@ class CartBox extends \System\Classes\BaseComponent
             ],
             'pageIsCheckout'     => [
                 'label'   => 'Whether this component is loaded on the checkout page',
+                'type'    => 'switch',
+                'default' => FALSE,
+            ],
+            'pageIsCart'         => [
+                'label'   => 'Whether this component is loaded on the cart page',
                 'type'    => 'switch',
                 'default' => FALSE,
             ],
@@ -53,16 +56,13 @@ class CartBox extends \System\Classes\BaseComponent
         $this->addJs('js/cartitem.js', 'cart-item-js');
         $this->addJs('js/cartbox.modal.js', 'cart-box-modal-js');
 
-        Cart::setConditionsPriorities(Settings_model::getConditionPriorities());
-
-        $this->applyConditions();
-
         $this->prepareVars();
     }
 
     protected function prepareVars()
     {
         $this->page['cartBoxTimeFormat'] = $this->property('timeFormat');
+        $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
@@ -80,11 +80,12 @@ class CartBox extends \System\Classes\BaseComponent
 
     protected function prepareVarsFromCart()
     {
+        $this->loadAvailableConditions();
         $this->page['cartItemsCount'] = Cart::count();
         $this->page['cartTotal'] = Cart::total();
         $this->page['cartSubtotal'] = Cart::subtotal();
         $this->page['cartContent'] = Cart::content();
-        $this->page['cartConditions'] = $this->getAppliedConditions();
+        $this->page['cartConditions'] = Cart::conditions();
     }
 
     protected function prepareVarsFromLocation()
@@ -93,6 +94,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['orderType'] = Location::orderType();
         $this->page['canAcceptOrder'] = Location::checkOrderType();
         $this->page['minOrderTotal'] = Location::minimumOrder(Cart::subtotal());
+        $this->page['cartTotalIsAboveMinTotal'] = Location::checkMinimumOrder(Cart::subtotal());
 
         $this->page['hasDelivery'] = Location::current()->hasDelivery();
         $this->page['hasCollection'] = Location::current()->hasCollection();
@@ -100,17 +102,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['collectionMinutes'] = Location::current()->collectionMinutes();
         $this->page['deliverySchedule'] = Location::deliverySchedule();
         $this->page['collectionSchedule'] = Location::collectionSchedule();
-    }
-
-    protected function getAppliedConditions()
-    {
-        $conditions = Cart::conditions();
-
-        $filtered = $conditions->filter(function (CartCondition $condition) {
-            return ($condition->removeable OR $condition->passed);
-        });
-
-        return $filtered;
     }
 
     public function onChangeOrderType()
@@ -127,6 +118,7 @@ class CartBox extends \System\Classes\BaseComponent
             $this->pageCycle();
 
             $partials = [
+                '#notification' => $this->renderPartial('flash'),
                 '#cart-control' => $this->renderPartial('@control'),
                 '#cart-totals'  => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
@@ -135,10 +127,9 @@ class CartBox extends \System\Classes\BaseComponent
             if ($this->property('pageIsCheckout'))
                 return Redirect::to($this->pageUrl($this->property('checkoutPage')));
 
-//                $partials['#checkout-container'] = $this->controller->renderPartial('checkout::checkout_form');
-
             return $partials;
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
             else flash()->danger($ex->getMessage())->now();
         }
@@ -197,7 +188,7 @@ class CartBox extends \System\Classes\BaseComponent
             $options = $this->createCartItemOptionsArray($menuModel, post('menu_options'));
 
             if ($cartItem) {
-                Cart::update($cartItem->rowId, [
+                $cartItem = Cart::update($cartItem->rowId, [
                     'name'    => $menuModel->getBuyableName($options),
                     'price'   => $menuModel->getBuyablePrice($options),
                     'qty'     => $quantity,
@@ -205,16 +196,24 @@ class CartBox extends \System\Classes\BaseComponent
                 ]);
             }
             else {
-                Cart::add($menuModel, $quantity, $options);
+                $cartItem = Cart::add($menuModel, $quantity, $options);
             }
+
+            if (strlen($comment = post('comment')))
+                $cartItem->setComment($comment);
 
             $this->pageCycle();
 
             return [
-                '#cart-items'  => $this->renderPartial('@items'),
-                '#cart-totals' => $this->renderPartial('@totals'),
+                '#notification' => $this->renderPartial('flash'),
+                '#cart-items'   => $this->renderPartial('@items'),
+                '#cart-coupon'  => $this->renderPartial('@coupon_form'),
+                '#cart-totals'  => $this->renderPartial('@totals'),
+                '#cart-total'   => currency_format(Cart::total()),
+                '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
             else flash()->alert($ex->getMessage());
         }
@@ -233,9 +232,11 @@ class CartBox extends \System\Classes\BaseComponent
         $this->pageCycle();
 
         return [
-            '#cart-items'  => $this->renderPartial('@items'),
-            '#cart-coupon' => $this->renderPartial('@coupon_form'),
-            '#cart-totals' => $this->renderPartial('@totals'),
+            '#notification' => $this->renderPartial('flash'),
+            '#cart-items'   => $this->renderPartial('@items'),
+            '#cart-coupon'  => $this->renderPartial('@coupon_form'),
+            '#cart-totals'  => $this->renderPartial('@totals'),
+            '#cart-buttons' => $this->renderPartial('@buttons'),
         ];
     }
 
@@ -247,23 +248,21 @@ class CartBox extends \System\Classes\BaseComponent
             if (!$coupon)
                 throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_invalid'));
 
-            $condition = new CartCondition('coupon', [
-                'label'      => sprintf(lang('sampoyigi.cart::default.text_coupon'), $code),
-                'type'       => 'discount',
-                'target'     => 'subtotal',
-                'removeable' => TRUE,
-            ]);
+            $condition = Cart::getCondition('coupon');
 
             $condition->setMetaData('code', $code);
 
-            Cart::condition($condition);
+            Cart::loadCondition('coupon', $condition);
 
             $this->pageCycle();
 
             return [
-                '#cart-totals' => $this->renderPartial('@totals'),
+                '#notification' => $this->renderPartial('flash'),
+                '#cart-totals'  => $this->renderPartial('@totals'),
+                '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
             else flash()->alert($ex->getMessage());
         }
@@ -273,13 +272,14 @@ class CartBox extends \System\Classes\BaseComponent
     {
         $condition = Cart::getCondition($modifierId = post('conditionId'));
 
-        if ($condition->removeable)
-            Cart::removeCondition($condition->uniqueId);
+        Cart::removeCondition($condition->name);
 
         $this->pageCycle();
 
         return [
-            '#cart-totals' => $this->renderPartial('@totals'),
+            '#notification' => $this->renderPartial('flash'),
+            '#cart-totals'  => $this->renderPartial('@totals'),
+            '#cart-buttons' => $this->renderPartial('@buttons'),
         ];
     }
 
@@ -294,7 +294,8 @@ class CartBox extends \System\Classes\BaseComponent
             $redirectUrl = $this->pageUrl($this->property('checkoutPage'));
 
             return Redirect::to($redirectUrl);
-        } catch (Exception $ex) {
+        }
+        catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
             else flash()->alert($ex->getMessage());
         }
@@ -319,7 +320,7 @@ class CartBox extends \System\Classes\BaseComponent
                 $option['menu_option_id'] = $menuOption->menu_option_id;
                 $option['name'] = $menuOption->option_name;
 
-                $valuesArray = $menuOption->getOptionValues()->keyBy('menu_option_value_id')->map(
+                $valuesArray = $menuOption->menu_option_values->keyBy('menu_option_value_id')->map(
                     function ($optionValue) use ($selectedOption) {
                         if (!in_array($optionValue->menu_option_value_id, $selectedOption['option_values']))
                             return FALSE;
@@ -382,102 +383,15 @@ class CartBox extends \System\Classes\BaseComponent
                 $menuModel->minimum_qty));
     }
 
-    protected function applyConditions()
+    protected function loadAvailableConditions()
     {
-        if (Cart::content()->isEmpty())
-            return;
+        $conditions = CartSettings::get('conditions');
 
-        $this->applyDeliveryToCart();
+        foreach ($conditions as $name => $config) {
+            if (!array_get($config, 'status', FALSE))
+                continue;
 
-        $this->applyTaxToCart();
-
-        $this->applyCouponToCart();
-    }
-
-    protected function applyTaxToCart()
-    {
-        $taxMode = (bool)setting('tax_mode', 1);
-        $taxInclusive = !((bool)setting('tax_menu_price', 1));
-        $taxRate = setting('tax_percentage', 0);
-
-        // Calculate taxes if enabled
-        if (Cart::content()->isEmpty() OR !$taxMode OR !$taxRate) {
-            Cart::removeConditionByName('tax'); // make sure tax is removed if previously added
-
-            return;
+            Cart::loadCondition($name, $config);
         }
-
-        $label = $taxInclusive ? "{$taxRate}% included" : "{$taxRate}%";
-
-        // If apply taxes on menu price, else
-        $condition = new CartCondition('tax', [
-            'label'  => sprintf(lang('sampoyigi.cart::default.text_vat'), $label),
-            'type'   => 'tax',
-            'target' => 'subtotal',
-        ]);
-
-        $condition->setActions([
-            'value'     => "+{$taxRate}%",
-            'inclusive' => $taxInclusive,
-        ]);
-
-        Cart::condition($condition);
-    }
-
-    protected function applyDeliveryToCart()
-    {
-        if (!$condition = Cart::getConditionByName('delivery')) {
-            $condition = new CartCondition('delivery', [
-                'label'  => lang('sampoyigi.cart::default.text_delivery'),
-                'target' => 'subtotal',
-            ]);
-            Cart::condition($condition);
-        }
-
-        $orderType = Location::orderType();
-        $coveredArea = Location::coveredArea();
-        $deliveryCharge = $coveredArea->deliveryAmount(Cart::subtotal());
-        $minimumOrder = (float)$coveredArea->minimumOrderTotal(Cart::subtotal());
-
-        $condition->setActions(['value' => "+{$deliveryCharge}"]);
-        $condition->setRules([
-            "subtotal > {$minimumOrder}",
-            "{$orderType} == delivery",
-        ]);
-
-        $condition->whenInvalid(function () use ($minimumOrder, $orderType) {
-            if ($orderType == 'delivery')
-                flash()->warning(sprintf(
-                    lang('sampoyigi.cart::default.alert_min_delivery_order_total'),
-                    currency_format($minimumOrder)
-                ))->now();
-        });
-    }
-
-    protected function applyCouponToCart()
-    {
-        if (!$condition = Cart::getConditionByName('coupon'))
-            return;
-
-        try {
-            $code = $condition->getMetaData('code');
-            $coupon = Coupons_model::getByCode(
-                $code, Location::orderType(), Auth::getUser()
-            );
-        } catch (Exception $ex) {
-            flash()->alert($ex->getMessage());
-            Cart::removeConditionByName('coupon');
-        }
-
-        $minimumOrder = $coupon->minimumOrderTotal();
-        $condition->setActions(['value' => $coupon->discountWithOperand()]);
-        $condition->setRules(["subtotal > {$minimumOrder}"]);
-
-        $condition->whenInvalid(function () use ($minimumOrder) {
-            flash()->warning(sprintf(
-                lang('sampoyigi.cart::default.alert_coupon_not_applied'),
-                currency_format($minimumOrder)
-            ))->now();
-        });
     }
 }

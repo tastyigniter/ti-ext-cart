@@ -44,11 +44,8 @@
     }
 
     CartItem.prototype.onSubmitForm = function (event) {
-        event.preventDefault()
-        this.$form.request()
-            .fail(function (xhr) {
-                $.ti.flashMessage({class: 'danger', text: xhr.responseText})
-            })
+        // event.preventDefault()
+        // this.$form.submit()
     }
 
     CartItem.prototype.onControlQuantity = function (event) {

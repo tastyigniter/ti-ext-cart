@@ -6,11 +6,27 @@
         this.options = options || {}
 
         this.init()
+        this.initAffix()
     }
 
     CartBox.prototype.init = function () {
         $(document).on('click', '[data-cart-control]', $.proxy(this.onControlClick, this))
         this.$el.on('change', '[data-cart-toggle="order-type"]', $.proxy(this.onOrderTypeToggle, this))
+    }
+
+    CartBox.prototype.initAffix = function () {
+        var $affixEl = this.$el.closest('.affix-cart'),
+            offsetTop = $('.navbar-top').height(),
+            offsetBottom = $('footer.footer').outerHeight(true),
+            cartWidth = $affixEl.parent().width()
+
+        $affixEl.affix({
+            offset: {top: offsetTop, bottom: offsetBottom}
+        })
+
+        $affixEl.on('affixed.bs.affix', function () {
+            $affixEl.css('width', cartWidth)
+        })
     }
 
     CartBox.prototype.refreshCart = function (event) {
@@ -28,17 +44,16 @@
 
     CartBox.prototype.addItem = function ($el) {
         $.request(this.options.updateItemHandler, {
-            data: $el.data()
-        }).fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
+            data: $el.data(),
+            loading: function () {
+                console.log('loading')
+            }
         })
     }
 
     CartBox.prototype.removeItem = function ($el) {
         $.request(this.options.removeItemHandler, {
             data: $el.data()
-        }).fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
         })
     }
 
@@ -47,16 +62,12 @@
 
         $.request(this.options.applyCouponHandler, {
             data: {code: $input.val()}
-        }).fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
         })
     }
 
     CartBox.prototype.removeCondition = function ($el) {
         $.request(this.options.removeConditionHandler, {
             data: {conditionId: $el.data('cartConditionId')}
-        }).fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
         })
     }
 
@@ -67,9 +78,7 @@
         $checkoutForm.trigger(_event)
         if (_event.isDefaultPrevented()) return
 
-        $checkoutForm.request().fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
-        })
+        $checkoutForm.request()
     }
 
     // EVENT HANDLERS
@@ -110,8 +119,6 @@
         var $el = $(event.currentTarget)
         $.request(this.options.changeOrderTypeHandler, {
             data: {'type': $el.val()}
-        }).fail(function (xhr) {
-            $.ti.flashMessage({class: 'danger', text: xhr.responseText})
         })
     }
 
