@@ -11,6 +11,7 @@ class CreateCartTable extends Migration
     public function up()
     {
         Schema::create('sampoyigi_cart_cart', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->string('identifier');
             $table->string('instance');
             $table->longText('content');
