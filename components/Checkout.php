@@ -182,7 +182,7 @@ class Checkout extends BaseComponent
             $data['successPage'] = $successPage = $this->property('successPage');
 //            activity()
 //                ->causedBy(Auth::getUser())
-//                ->log(lang('system::activities.activity_logged_in'));
+//                ->log(lang('system::lang.activities.activity_logged_in'));
 
             $paymentMethod = Payments_model::whereCode($order->payment)->first();
             if ($order->payment AND (!$paymentMethod OR !$paymentMethod->status))

@@ -55,9 +55,9 @@
                             <div>
                                 <?php foreach ($menuItemOptions as $menuItemOption) { ?>
                                     <small>
-                                        <?= lang('main::default.text_plus'); ?>
+                                        <?= lang('main::lang.text_plus'); ?>
                                         <?= $menuItemOption->order_option_name; ?>
-                                        <?= lang('main::default.text_equals'); ?>
+                                        <?= lang('main::lang.text_equals'); ?>
                                         <?= currency_format($menuItemOption->order_option_price); ?>
                                     </small><br>
                                 <?php } ?>
