@@ -1,6 +1,6 @@
 <?php
 
-namespace SamPoyigi\Cart\Conditions;
+namespace Igniter\Cart\Conditions;
 
 use Igniter\Flame\Cart\CartCondition;
 
@@ -39,7 +39,7 @@ class Tax extends CartCondition
     {
         return [
             [
-                'value'     => "+{$this->taxRate}%",
+                'value' => "+{$this->taxRate}%",
                 'inclusive' => $this->taxInclusive,
             ],
         ];

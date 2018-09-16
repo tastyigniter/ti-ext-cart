@@ -2,14 +2,14 @@
 $fullyClosed = FALSE;
 $unAvailable = (!$canAcceptOrder OR ($orderType == 'delivery' AND !$cartTotalIsAboveMinTotal));
 if ($isClosed) {
-    $buttonLang = 'sampoyigi.cart::default.text_is_closed';
+    $buttonLang = 'igniter.cart::default.text_is_closed';
     $fullyClosed = TRUE;
 }
 else if (!$pageIsCheckout) {
-    $buttonLang = 'sampoyigi.cart::default.button_order';
+    $buttonLang = 'igniter.cart::default.button_order';
 }
 else {
-    $buttonLang = 'sampoyigi.cart::default.button_confirm';
+    $buttonLang = 'igniter.cart::default.button_confirm';
 }
 
 if ($unAvailable) {

@@ -1,4 +1,4 @@
-<?php namespace SamPoyigi\Cart\Models;
+<?php namespace Igniter\Cart\Models;
 
 use ApplicationException;
 
@@ -12,17 +12,17 @@ class Coupons_model extends \Admin\Models\Coupons_model
     public function validateCoupon($orderType, $user)
     {
         if ($this->isExpired())
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_expired'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_expired'));
 
         if ($this->hasRestriction($orderType))
             throw new ApplicationException(sprintf(
-                lang('sampoyigi.cart::default.alert_coupon_order_restriction'), $orderType
+                lang('igniter.cart::default.alert_coupon_order_restriction'), $orderType
             ));
 
         if (!$this->hasReachedMaxRedemption())
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_maximum_reached'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_maximum_reached'));
 
         if ($user AND $this->customerHasMaxRedemption($user))
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_maximum_reached'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_maximum_reached'));
     }
 }

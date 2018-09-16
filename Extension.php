@@ -1,50 +1,47 @@
-<?php namespace SamPoyigi\Cart;
+<?php namespace Igniter\Cart;
 
 use Event;
-use Igniter\Flame\Cart\Cart;
+use Igniter\Cart\Models\CartSettings;
 use Illuminate\Foundation\AliasLoader;
-use SamPoyigi\Cart\Models\CartSettings;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension
 {
     public function register()
     {
-        $alias = AliasLoader::getInstance();
-        $alias->alias('Cart', 'Igniter\Flame\Cart\Facades\Cart');
+        $this->app->register(\Igniter\Flame\Cart\CartServiceProvider::class);
 
-        $config = __DIR__.'/config/cart.php';
-        $this->mergeConfigFrom($config, 'cart');
+        AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);
 
-        $this->app->singleton('cart', function ($app) {
-            return new Cart($app['session.store'], $app['events']);
+        $this->app->resolving(\Igniter\Flame\Cart\Cart::class, function ($cart, $container) {
+            $cart->setDestroyOnLogout(CartSettings::get('destroy_on_logout'));
         });
 
         $this->registerCartConditions();
     }
 
-    public function initialize()
+    public function boot()
     {
         Event::listen('admin.order.paymentProcessed', function ($model) {
-            $model->mailSend('sampoyigi.cart::mail.order', 'customer');
-            $model->mailSend('sampoyigi.cart::mail.order_alert', 'location');
-            $model->mailSend('sampoyigi.cart::mail.order_alert', 'admin');
+            $model->mailSend('igniter.cart::mail.order', 'customer');
+            $model->mailSend('igniter.cart::mail.order_alert', 'location');
+            $model->mailSend('igniter.cart::mail.order_alert', 'admin');
         });
     }
 
     public function registerCartConditions()
     {
         CartSettings::registerConditions(function (CartSettings $settingsModel) {
-            $settingsModel->registerCondition('SamPoyigi\Cart\Conditions\Coupon', [
-                'name'        => 'coupon',
-                'label'       => 'lang:sampoyigi.cart::default.text_coupon',
-                'description' => 'lang:sampoyigi.cart::default.help_coupon_condition',
+            $settingsModel->registerCondition('Igniter\Cart\Conditions\Coupon', [
+                'name' => 'coupon',
+                'label' => 'lang:igniter.cart::default.text_coupon',
+                'description' => 'lang:igniter.cart::default.help_coupon_condition',
             ]);
 
-            $settingsModel->registerCondition('SamPoyigi\Cart\Conditions\Tax', [
-                'name'        => 'tax',
-                'label'       => 'lang:sampoyigi.cart::default.text_vat',
-                'description' => 'lang:sampoyigi.cart::default.help_tax_condition',
+            $settingsModel->registerCondition('Igniter\Cart\Conditions\Tax', [
+                'name' => 'tax',
+                'label' => 'lang:igniter.cart::default.text_vat',
+                'description' => 'lang:igniter.cart::default.help_tax_condition',
             ]);
         });
     }
@@ -52,15 +49,15 @@ class Extension extends BaseExtension
     public function registerComponents()
     {
         return [
-            'SamPoyigi\Cart\Components\CartBox'  => [
-                'code'        => 'cartBox',
-                'name'        => 'lang:sampoyigi.cart::default.text_component_title',
-                'description' => 'lang:sampoyigi.cart::default.text_component_desc',
+            'Igniter\Cart\Components\CartBox' => [
+                'code' => 'cartBox',
+                'name' => 'lang:igniter.cart::default.text_component_title',
+                'description' => 'lang:igniter.cart::default.text_component_desc',
             ],
-            'SamPoyigi\Cart\Components\Checkout' => [
-                'code'        => 'checkout',
-                'name'        => 'lang:sampoyigi.cart::default.text_checkout_component_title',
-                'description' => 'lang:sampoyigi.cart::default.text_checkout_component_desc',
+            'Igniter\Cart\Components\Checkout' => [
+                'code' => 'checkout',
+                'name' => 'lang:igniter.cart::default.text_checkout_component_title',
+                'description' => 'lang:igniter.cart::default.text_checkout_component_desc',
             ],
         ];
     }
@@ -70,7 +67,7 @@ class Extension extends BaseExtension
         return [
             'Module.CartModule' => [
                 'description' => 'Ability to manage cart module',
-                'action'      => ['manage'],
+                'action' => ['manage'],
             ],
         ];
     }
@@ -79,10 +76,10 @@ class Extension extends BaseExtension
     {
         return [
             'cartsettings' => [
-                'label'       => 'Cart Settings',
+                'label' => 'Cart Settings',
                 'description' => 'Manage cart settings.',
-                'icon'        => '',
-                'model'       => 'SamPoyigi\Cart\Models\CartSettings',
+                'icon' => '',
+                'model' => 'Igniter\Cart\Models\CartSettings',
                 'permissions' => ['Module.Cart'],
             ],
         ];
@@ -91,8 +88,8 @@ class Extension extends BaseExtension
     public function registerMailTemplates()
     {
         return [
-            'sampoyigi.cart::mail.order'       => 'Order confirmation email to customer',
-            'sampoyigi.cart::mail.order_alert' => 'New order alert email to admin',
+            'igniter.cart::mail.order' => 'Order confirmation email to customer',
+            'igniter.cart::mail.order_alert' => 'New order alert email to admin',
         ];
     }
 }

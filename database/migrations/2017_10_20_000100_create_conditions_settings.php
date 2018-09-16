@@ -1,7 +1,7 @@
-<?php
+<?php namespace Igniter\Cart\Database\Migrations;
 
+use Igniter\Cart\Models\CartSettings;
 use Illuminate\Database\Migrations\Migration;
-use SamPoyigi\Cart\Models\CartSettings;
 use System\Models\Extensions_model;
 
 /**
@@ -20,7 +20,7 @@ class CreateConditionsSettings extends Migration
             if (!is_array($data))
                 $data = unserialize($data);
 
-            $conditions[$data['priority']] = $data['name'];
+            $conditions[$data['priority']] = array_get($data, 'name');
         }
 
         if (!CartSettings::get('conditions'))
@@ -41,25 +41,25 @@ class CreateConditionsSettings extends Migration
                 [
                     'data' => [
                         'priority' => '3',
-                        'name'     => 'coupon',
-                        'title'    => 'Coupon {coupon}',
-                        'status'   => '1',
+                        'name' => 'coupon',
+                        'title' => 'Coupon {coupon}',
+                        'status' => '1',
                     ],
                 ],
                 [
                     'data' => [
                         'priority' => '4',
-                        'name'     => 'delivery',
-                        'title'    => 'Delivery',
-                        'status'   => '1',
+                        'name' => 'delivery',
+                        'title' => 'Delivery',
+                        'status' => '1',
                     ],
                 ],
                 [
                     'data' => [
                         'priority' => '5',
-                        'name'     => 'taxes',
-                        'title'    => 'VAT {tax}',
-                        'status'   => '1',
+                        'name' => 'taxes',
+                        'title' => 'VAT {tax}',
+                        'status' => '1',
                     ],
                 ],
             ];

@@ -18,7 +18,7 @@
                         <?= $paymentGateway->name; ?>
                         <?php if (!$paymentGateway->isApplicable($order->order_total, $paymentGateway)) { ?>
                             <span class="text-info"><?= sprintf(
-                                    lang('sampoyigi.payregister::default.alert_min_order_total'),
+                                    lang('igniter.payregister::default.alert_min_order_total'),
                                     currency_format($paymentGateway->order_total),
                                     $paymentGateway->name
                                 ); ?></span>

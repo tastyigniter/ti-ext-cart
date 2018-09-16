@@ -7,7 +7,7 @@
                 <tr>
                     <td>
                     <span class="text-muted">
-                        <?= lang('sampoyigi.cart::default.text_sub_total'); ?>:
+                        <?= lang('igniter.cart::default.text_sub_total'); ?>:
                    </span>
                     </td>
                     <td class="text-right">
@@ -41,7 +41,7 @@
                 <tr>
                     <td>
                     <span class="text-muted">
-                        <?= lang('sampoyigi.cart::default.text_order_total'); ?>:
+                        <?= lang('igniter.cart::default.text_order_total'); ?>:
                    </span>
                     </td>
                     <td class="text-right">

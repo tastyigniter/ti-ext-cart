@@ -1,4 +1,4 @@
-<?php namespace SamPoyigi\Cart\Models;
+<?php namespace Igniter\Cart\Models;
 
 use Model;
 
@@ -7,7 +7,7 @@ class CartSettings extends Model
     public $implement = ['System\Actions\SettingsModel'];
 
     // A unique code
-    public $settingsCode = 'sampoyigi_cart_settings';
+    public $settingsCode = 'igniter_cart_settings';
 
     // Reference to field configuration
     public $settingsFieldsConfig = 'cartsettings';
@@ -98,8 +98,8 @@ class CartSettings extends Model
             self::$registeredConditions = [];
 
         $defaults = [
-            'name'        => 'default',
-            'label'       => '',
+            'name' => 'default',
+            'label' => '',
             'description' => '',
         ];
 

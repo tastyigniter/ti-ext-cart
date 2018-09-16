@@ -7,13 +7,13 @@
                 name="coupon_code"
                 class="form-control"
                 value=""
-                placeholder="<?= lang('sampoyigi.cart::default.text_apply_coupon'); ?>"/>
+                placeholder="<?= lang('igniter.cart::default.text_apply_coupon'); ?>"/>
 
             <span class="input-group-btn">
                 <a
                     class="btn btn-outline-default"
                     data-cart-control="apply-coupon"
-                    title="<?= lang('sampoyigi.cart::default.button_apply_coupon'); ?>"
+                    title="<?= lang('igniter.cart::default.button_apply_coupon'); ?>"
                 ><i class="fa fa-check"></i></a>
             </span>
         </div>

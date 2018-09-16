@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group">
-            <label for="first-name"><?= lang('sampoyigi.cart::default.checkout.label_first_name'); ?></label>
+            <label for="first-name"><?= lang('igniter.cart::default.checkout.label_first_name'); ?></label>
             <input
                 type="text"
                 name="first_name"
@@ -13,7 +13,7 @@
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <label for="last-name"><?= lang('sampoyigi.cart::default.checkout.label_last_name'); ?></label>
+            <label for="last-name"><?= lang('igniter.cart::default.checkout.label_last_name'); ?></label>
             <input
                 type="text"
                 name="last_name"

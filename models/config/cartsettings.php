@@ -19,31 +19,31 @@ return [
         ],
         'fields'  => [
             'conditions' => [
-                'label'            => 'lang:sampoyigi.cart::default.label_cart_conditions',
+                'label'            => 'lang:igniter.cart::default.label_cart_conditions',
                 'type'             => 'repeater',
                 'sortable'         => TRUE,
                 'showAddButton'    => FALSE,
                 'showRemoveButton' => FALSE,
-                'commentAbove'     => 'lang:sampoyigi.cart::default.help_cart_conditions',
+                'commentAbove'     => 'lang:igniter.cart::default.help_cart_conditions',
                 'form'             => [
                     'fields' => [
                         'priority' => [
-                            'label' => 'lang:sampoyigi.cart::default.column_condition_priority',
+                            'label' => 'lang:igniter.cart::default.column_condition_priority',
                             'type'  => 'hidden',
                         ],
                         'name'     => [
-                            'label'      => 'lang:sampoyigi.cart::default.column_condition_name',
+                            'label'      => 'lang:igniter.cart::default.column_condition_name',
                             'type'       => 'text',
                             'attributes' => [
                                 'readonly' => TRUE,
                             ],
                         ],
                         'label'    => [
-                            'label' => 'lang:sampoyigi.cart::default.column_condition_title',
+                            'label' => 'lang:igniter.cart::default.column_condition_title',
                             'type'  => 'text',
                         ],
                         'status'   => [
-                            'label' => 'lang:sampoyigi.cart::default.column_condition_status',
+                            'label' => 'lang:igniter.cart::default.column_condition_status',
                             'type'  => 'switch',
                         ],
                     ],

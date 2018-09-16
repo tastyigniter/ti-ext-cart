@@ -41,8 +41,8 @@
                                         <label class="font-weight-bold"><?= $menuOption->option_name; ?></label>
 
                                         <?= partial('@item_option_'.$menuOption->display_type, [
-                                            'index'      => $index,
-                                            'cartItem'   => $cartItem,
+                                            'index' => $index,
+                                            'cartItem' => $cartItem,
                                             'menuOption' => $menuOption,
                                         ]); ?>
                                     </div>
@@ -57,7 +57,7 @@
                         name="comment"
                         class="form-control"
                         rows="2"
-                        placeholder="<?= lang('sampoyigi.cart::default.label_add_comment'); ?>"
+                        placeholder="<?= lang('igniter.cart::default.label_add_comment'); ?>"
                     ><?= $cartItem ? $cartItem->comment : null; ?></textarea>
                 </div>
             </div>
@@ -91,8 +91,8 @@
                     <div class="col-sm-7 pl-sm-2">
                         <button type="submit" class="btn btn-primary btn-block">
                             <?= $cartItem
-                                ? lang('sampoyigi.cart::default.button_update')
-                                : lang('sampoyigi.cart::default.button_add_to_order');
+                                ? lang('igniter.cart::default.button_update')
+                                : lang('igniter.cart::default.button_add_to_order');
                             ?>
                             <span class="small ml-4">
                                 <?= currency_format($cartItem

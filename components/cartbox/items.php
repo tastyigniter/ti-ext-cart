@@ -20,7 +20,7 @@
                         <span class="name">
                             <?php if ($cartItem->qty > 1) { ?>
                                 <span class="quantity font-weight-bold">
-                                    <?= $cartItem->qty.' '.lang('sampoyigi.cart::default.text_times'); ?>
+                                    <?= $cartItem->qty.' '.lang('igniter.cart::default.text_times'); ?>
                                 </span>
                             <?php } ?>
                             <?= $cartItem->name; ?>
@@ -42,5 +42,5 @@
     </div>
 <?php }
 else { ?>
-    <div class="panel-body"><?= lang('sampoyigi.cart::default.text_no_cart_items'); ?></div>
+    <div class="panel-body"><?= lang('igniter.cart::default.text_no_cart_items'); ?></div>
 <?php } ?>

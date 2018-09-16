@@ -1,6 +1,6 @@
 <?php
 
-namespace SamPoyigi\Cart\Components;
+namespace Igniter\Cart\Components;
 
 use Admin\Models\Addresses_model;
 use Admin\Models\Payments_model;
@@ -9,13 +9,13 @@ use ApplicationException;
 use Auth;
 use Cart;
 use Exception;
+use Igniter\Cart\Models\Orders_model;
+use Igniter\Pages\Models\Pages_model;
 use Illuminate\Http\RedirectResponse;
 use Location;
 use Main\Template\Page;
 use Redirect;
 use Request;
-use SamPoyigi\Cart\Models\Orders_model;
-use SamPoyigi\Pages\Models\Pages_model;
 use Session;
 use System\Classes\BaseComponent;
 
@@ -23,55 +23,55 @@ class Checkout extends BaseComponent
 {
     use ValidatesForm;
 
-    protected $sessionKey = 'sampoyigi.checkout.order.id';
+    protected $sessionKey = 'igniter.cart.checkout.order.id';
 
     protected $order;
 
     public function defineProperties()
     {
         return [
-            'orderDateFormat'  => [
+            'orderDateFormat' => [
                 'label' => 'Date format to display order date on the checkout success page',
-                'type'  => 'text',
+                'type' => 'text',
             ],
-            'orderTimeFormat'  => [
+            'orderTimeFormat' => [
                 'label' => 'Time format to display order time on the checkout success page',
-                'type'  => 'text',
+                'type' => 'text',
             ],
-            'agreeTermsPage'   => [
-                'label'   => 'lang:sampoyigi.cart::default.checkout.label_checkout_terms',
-                'type'    => 'select',
+            'agreeTermsPage' => [
+                'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
+                'type' => 'select',
                 'options' => [static::class, 'getPagesOptions'],
-                'comment' => 'lang:sampoyigi.cart::default.checkout.help_checkout_terms',
+                'comment' => 'lang:igniter.cart::default.checkout.help_checkout_terms',
             ],
-            'menusPage'        => [
-                'label'   => 'lang:sampoyigi.cart::default.checkout.label_checkout_terms',
-                'type'    => 'select',
+            'menusPage' => [
+                'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
+                'type' => 'select',
                 'default' => 'local/menus',
                 'options' => [static::class, 'getPageOptions'],
                 'comment' => 'Page to redirect to when checkout can not be performed.',
             ],
-            'redirectPage'     => [
-                'label'   => 'Page to redirect to when checkout fails',
-                'type'    => 'select',
+            'redirectPage' => [
+                'label' => 'Page to redirect to when checkout fails',
+                'type' => 'select',
                 'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/checkout',
             ],
-            'ordersPage'       => [
-                'label'   => 'Account orders page',
-                'type'    => 'select',
+            'ordersPage' => [
+                'label' => 'Account orders page',
+                'type' => 'select',
                 'options' => [static::class, 'getPageOptions'],
                 'default' => 'account/orders',
             ],
-            'successPage'      => [
-                'label'   => 'Page to redirect to when checkout is successful',
-                'type'    => 'select',
+            'successPage' => [
+                'label' => 'Page to redirect to when checkout is successful',
+                'type' => 'select',
                 'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/success',
             ],
             'successParamCode' => [
-                'label'   => 'The parameter name used for the order hash code',
-                'type'    => 'text',
+                'label' => 'The parameter name used for the order hash code',
+                'type' => 'text',
                 'default' => 'hash',
             ],
         ];
@@ -251,23 +251,23 @@ class Checkout extends BaseComponent
     {
         try {
             if (!Cart::count())
-                throw new ApplicationException(lang('sampoyigi.cart::default.checkout.alert_no_menu_to_order'));
+                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
 
             if (!$location = Location::current())
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
 
             if (Location::isClosed())
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_closed'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
 
             if (!Location::checkOrderType($orderType = Location::orderType()))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_'.$orderType.'_unavailable'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
 
             $orderDateTime = Location::orderDateTime();
             if (!$orderDateTime OR !Location::checkOrderTime($orderDateTime))
-                throw new ApplicationException(lang('sampoyigi.cart::default.checkout.alert_no_delivery_time'));
+                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_delivery_time'));
 
             if ($orderType == 'delivery' AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
-                throw new ApplicationException(lang('sampoyigi.local::default.alert_no_search_query'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
         }
         catch (Exception $ex) {
             if ($throwException)
@@ -291,38 +291,38 @@ class Checkout extends BaseComponent
 
         $userPosition = app('geocoder')->geocode(['address' => $address]);
         if (!$userPosition OR !$userPosition->isValid())
-            throw new ApplicationException(lang('sampoyigi.local::default.alert_invalid_search_query'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_invalid_search_query'));
 
         if (!$area = Location::current()->filterDeliveryArea($userPosition))
-            throw new ApplicationException(lang('sampoyigi.cart::default.checkout.error_covered_area'));
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
 
         if (!Location::isCurrentAreaId($area->area_id)) {
             Location::setCoveredArea($area);
-            throw new ApplicationException(lang('sampoyigi.cart::default.checkout.alert_delivery_area_changed'));
+            throw new ApplicationException(lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
         }
     }
 
     protected function createRules()
     {
         $namedRules = [
-            ['first_name', 'lang:sampoyigi.cart::default.checkout.label_first_name', 'required|min:2|max:32'],
-            ['last_name', 'lang:sampoyigi.cart::default.checkout.label_last_name', 'required|min:2|max:32'],
-            ['email', 'lang:sampoyigi.cart::default.checkout.label_email', 'sometimes|required|email|max:96|unique:customers'],
-            ['telephone', 'lang:sampoyigi.cart::default.checkout.label_telephone', ''],
-            ['comment', 'lang:sampoyigi.cart::default.checkout.label_comment', 'max:500'],
-            ['payment', 'lang:sampoyigi.cart::default.checkout.label_payment_method', 'required|alpha_dash'],
+            ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|min:2|max:32'],
+            ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|min:2|max:32'],
+            ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email|max:96|unique:customers'],
+            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
+            ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
+            ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'required|alpha_dash'],
 
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
         ];
 
         $orderType = Location::orderType();
         if ($orderType == 'delivery') {
-            $namedRules[] = ['address_id', 'lang:sampoyigi.cart::default.checkout.label_address', 'integer'];
-            $namedRules[] = ['address.address_1', 'lang:sampoyigi.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:sampoyigi.cart::default.checkout.label_city', 'required|min:2|max:128'];
-            $namedRules[] = ['address.state', 'lang:sampoyigi.cart::default.checkout.label_state', 'max:128'];
-            $namedRules[] = ['address.postcode', 'lang:sampoyigi.cart::default.checkout.label_postcode', 'required|min:2|max:10'];
-            $namedRules[] = ['address.country_id', 'lang:sampoyigi.cart::default.checkout.label_country', 'required|integer'];
+            $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'integer'];
+            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'required|min:2|max:128'];
+            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
+            $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'required|min:2|max:10'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
         }
 
         return $namedRules;
@@ -372,9 +372,9 @@ class Checkout extends BaseComponent
 
         return [
             'first_name' => $customer ? $customer->first_name : null,
-            'last_name'  => $customer ? $customer->last_name : null,
-            'email'      => $customer ? $customer->email : null,
-            'telephone'  => $customer ? $customer->telephone : null,
+            'last_name' => $customer ? $customer->last_name : null,
+            'email' => $customer ? $customer->email : null,
+            'telephone' => $customer ? $customer->telephone : null,
         ];
     }
 
@@ -399,24 +399,24 @@ class Checkout extends BaseComponent
     {
         $totals = [
             [
-                'code'     => 'subtotal',
-                'title'    => lang('sampoyigi.cart::default.text_sub_total'),
-                'value'    => Cart::subtotal(),
+                'code' => 'subtotal',
+                'title' => lang('igniter.cart::default.text_sub_total'),
+                'value' => Cart::subtotal(),
                 'priority' => 0,
             ],
             [
-                'code'     => 'total',
-                'title'    => lang('sampoyigi.cart::default.text_order_total'),
-                'value'    => Cart::total(),
+                'code' => 'total',
+                'title' => lang('igniter.cart::default.text_order_total'),
+                'value' => Cart::total(),
                 'priority' => 999,
             ],
         ];
 
         foreach (Cart::conditions() as $name => $condition) {
             $totals[] = [
-                'code'     => $name,
-                'title'    => $condition->getLabel(),
-                'value'    => $condition->calculatedValue(),
+                'code' => $name,
+                'title' => $condition->getLabel(),
+                'value' => $condition->calculatedValue(),
                 'priority' => $condition->getPriority(),
             ];
         }

@@ -1,44 +1,44 @@
-<?php namespace SamPoyigi\Cart\Components;
+<?php namespace Igniter\Cart\Components;
 
 use ApplicationException;
 use Cart;
 use Exception;
+use Igniter\Cart\Models\CartSettings;
+use Igniter\Cart\Models\Coupons_model;
+use Igniter\Cart\Models\Menus_model;
 use Location;
 use Main\Template\Page;
 use Redirect;
 use Request;
-use SamPoyigi\Cart\Models\CartSettings;
-use SamPoyigi\Cart\Models\Coupons_model;
-use SamPoyigi\Cart\Models\Menus_model;
 
 class CartBox extends \System\Classes\BaseComponent
 {
     public function defineProperties()
     {
         return [
-            'timeFormat'         => [
-                'label'   => 'Time format',
-                'type'    => 'text',
+            'timeFormat' => [
+                'label' => 'Time format',
+                'type' => 'text',
                 'default' => 'D H:i a',
             ],
             'checkStockCheckout' => [
-                'label'   => 'lang:sampoyigi.cart::default.help_stock_checkout',
-                'type'    => 'switch',
+                'label' => 'lang:igniter.cart::default.help_stock_checkout',
+                'type' => 'switch',
                 'default' => FALSE,
             ],
-            'pageIsCheckout'     => [
-                'label'   => 'Whether this component is loaded on the checkout page',
-                'type'    => 'switch',
+            'pageIsCheckout' => [
+                'label' => 'Whether this component is loaded on the checkout page',
+                'type' => 'switch',
                 'default' => FALSE,
             ],
-            'pageIsCart'         => [
-                'label'   => 'Whether this component is loaded on the cart page',
-                'type'    => 'switch',
+            'pageIsCart' => [
+                'label' => 'Whether this component is loaded on the cart page',
+                'type' => 'switch',
                 'default' => FALSE,
             ],
-            'checkoutPage'       => [
-                'label'   => 'Checkout Page',
-                'type'    => 'select',
+            'checkoutPage' => [
+                'label' => 'Checkout Page',
+                'type' => 'select',
                 'default' => 'checkout/checkout',
             ],
         ];
@@ -57,6 +57,10 @@ class CartBox extends \System\Classes\BaseComponent
         $this->addJs('js/cartbox.modal.js', 'cart-box-modal-js');
 
         $this->prepareVars();
+
+        $this->prepareVarsFromCart();
+
+        $this->prepareVarsFromLocation();
     }
 
     protected function prepareVars()
@@ -72,10 +76,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
         $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
-
-        $this->prepareVarsFromCart();
-
-        $this->prepareVarsFromLocation();
     }
 
     protected function prepareVarsFromCart()
@@ -108,10 +108,10 @@ class CartBox extends \System\Classes\BaseComponent
     {
         try {
             if (!$location = Location::current())
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
 
             if (!Location::checkOrderType($orderType = post('type')))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_'.$orderType.'_unavailable'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
 
             Location::updateOrderType($orderType);
 
@@ -120,7 +120,7 @@ class CartBox extends \System\Classes\BaseComponent
             $partials = [
                 '#notification' => $this->renderPartial('flash'),
                 '#cart-control' => $this->renderPartial('@control'),
-                '#cart-totals'  => $this->renderPartial('@totals'),
+                '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
 
@@ -138,10 +138,10 @@ class CartBox extends \System\Classes\BaseComponent
     public function onLoadItemPopup()
     {
         if (!is_numeric($menuId = post('menuId')))
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_no_menu_selected'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
 
         if (!$menuItem = Menus_model::find($menuId))
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_menu_not_found'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
 
         $cartItem = null;
         if ($rowId = post('rowId')) {
@@ -151,8 +151,8 @@ class CartBox extends \System\Classes\BaseComponent
 
         return $this->renderPartial('@item_modal', [
             'formHandler' => $this->getEventHandler('onUpdateCart'),
-            'cartItem'    => $cartItem,
-            'menuItem'    => $menuItem,
+            'cartItem' => $cartItem,
+            'menuItem' => $menuItem,
         ]);
     }
 
@@ -160,19 +160,19 @@ class CartBox extends \System\Classes\BaseComponent
     {
         try {
             if (!$location = Location::current())
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
 
             if (Location::isClosed())
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_closed'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
 
             if (!Location::checkOrderType($orderType = Location::orderType()))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_'.$orderType.'_unavailable'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
 
             if ($orderType == 'delivery' AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
-                throw new ApplicationException(lang('sampoyigi.local::default.alert_no_search_query'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
 
             if (!is_numeric($menuId = post('menuId')))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_no_menu_selected'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
 
             $menuModel = Menus_model::find($menuId);
 
@@ -189,9 +189,9 @@ class CartBox extends \System\Classes\BaseComponent
 
             if ($cartItem) {
                 $cartItem = Cart::update($cartItem->rowId, [
-                    'name'    => $menuModel->getBuyableName($options),
-                    'price'   => $menuModel->getBuyablePrice($options),
-                    'qty'     => $quantity,
+                    'name' => $menuModel->getBuyableName($options),
+                    'price' => $menuModel->getBuyablePrice($options),
+                    'qty' => $quantity,
                     'options' => $options,
                 ]);
             }
@@ -206,10 +206,10 @@ class CartBox extends \System\Classes\BaseComponent
 
             return [
                 '#notification' => $this->renderPartial('flash'),
-                '#cart-items'   => $this->renderPartial('@items'),
-                '#cart-coupon'  => $this->renderPartial('@coupon_form'),
-                '#cart-totals'  => $this->renderPartial('@totals'),
-                '#cart-total'   => currency_format(Cart::total()),
+                '#cart-items' => $this->renderPartial('@items'),
+                '#cart-coupon' => $this->renderPartial('@coupon_form'),
+                '#cart-totals' => $this->renderPartial('@totals'),
+                '#cart-total' => currency_format(Cart::total()),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
         }
@@ -224,7 +224,7 @@ class CartBox extends \System\Classes\BaseComponent
         $cartItem = Cart::get($rowId = post('rowId'));
 
         if (!$menuItem = Menus_model::find($cartItem->id))
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_menu_not_found'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
 
         $quantity = $cartItem->qty - $menuItem->minimum_qty;
         Cart::update($rowId, post('quantity', $quantity));
@@ -233,9 +233,9 @@ class CartBox extends \System\Classes\BaseComponent
 
         return [
             '#notification' => $this->renderPartial('flash'),
-            '#cart-items'   => $this->renderPartial('@items'),
-            '#cart-coupon'  => $this->renderPartial('@coupon_form'),
-            '#cart-totals'  => $this->renderPartial('@totals'),
+            '#cart-items' => $this->renderPartial('@items'),
+            '#cart-coupon' => $this->renderPartial('@coupon_form'),
+            '#cart-totals' => $this->renderPartial('@totals'),
             '#cart-buttons' => $this->renderPartial('@buttons'),
         ];
     }
@@ -246,7 +246,7 @@ class CartBox extends \System\Classes\BaseComponent
             $coupon = Coupons_model::isEnabled()->whereCode($code = post('code'))->first();
 
             if (!$coupon)
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_invalid'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
 
             $condition = Cart::getCondition('coupon');
 
@@ -258,7 +258,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             return [
                 '#notification' => $this->renderPartial('flash'),
-                '#cart-totals'  => $this->renderPartial('@totals'),
+                '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
         }
@@ -278,7 +278,7 @@ class CartBox extends \System\Classes\BaseComponent
 
         return [
             '#notification' => $this->renderPartial('flash'),
-            '#cart-totals'  => $this->renderPartial('@totals'),
+            '#cart-totals' => $this->renderPartial('@totals'),
             '#cart-buttons' => $this->renderPartial('@buttons'),
         ];
     }
@@ -287,7 +287,7 @@ class CartBox extends \System\Classes\BaseComponent
     {
         try {
             if (!is_numeric($id = post('locationId')) OR !$location = Location::getById($id))
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_location_required'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
 
             Location::setCurrent($location);
 
@@ -311,7 +311,7 @@ class CartBox extends \System\Classes\BaseComponent
                 $selectedOption = $selectedOptions->get($menuOptionId);
 
                 if ($menuOption->isRequired() AND !isset($selectedOption['option_values']))
-                    throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_option_required'),
+                    throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_option_required'),
                         $menuOption->option_name));
 
                 if (!isset($selectedOption['option_values']) OR !count($selectedOption['option_values']))
@@ -346,11 +346,11 @@ class CartBox extends \System\Classes\BaseComponent
     protected function validateMenuItem($menuModel, $quantity)
     {
         if (!$menuModel)
-            throw new ApplicationException(lang('sampoyigi.cart::default.alert_menu_not_found'));
+            throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
 
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuModel->isAvailable())
-            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_menu_not_within_mealtime'),
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_menu_not_within_mealtime'),
                 $menuModel->menu_name,
                 $menuModel->mealtime->mealtime_name,
                 $menuModel->mealtime->start_time,
@@ -361,25 +361,25 @@ class CartBox extends \System\Classes\BaseComponent
 
         // Quantity is valid if its divisive by the minimum quantity
         if (($quantity % $menuModel->minimum_qty) > 0)
-            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_qty_is_invalid'),
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_qty_is_invalid'),
                 $menuModel->minimum_qty));
 
         // checks if stock quantity is less than or equal to zero
         if ($menuModel->outOfStock())
-            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_out_of_stock'),
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_out_of_stock'),
                 $menuModel->menu_name));
 
         $checkStock = $this->property('checkStockCheckout', 1);
 
         // checks if stock quantity is less than the cart quantity
         if ($checkStock AND !$menuModel->checkStockLevel($quantity))
-            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_low_on_stock'),
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_low_on_stock'),
                 $menuModel->menu_name,
                 $menuModel->stock_qty));
 
         // if cart quantity is less than minimum quantity
         if (!$menuModel->checkMinQuantity($quantity))
-            throw new ApplicationException(sprintf(lang('sampoyigi.cart::default.alert_qty_is_below_min_qty'),
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_qty_is_below_min_qty'),
                 $menuModel->minimum_qty));
     }
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace SamPoyigi\Cart\Conditions;
+namespace Igniter\Cart\Conditions;
 
 use ApplicationException;
 use Auth;
 use Exception;
+use Igniter\Cart\Models\Coupons_model;
 use Igniter\Flame\Cart\CartCondition;
 use Location;
-use SamPoyigi\Cart\Models\Coupons_model;
 
 class Coupon extends CartCondition
 {
@@ -43,7 +43,7 @@ class Coupon extends CartCondition
 
         try {
             if (!$this->couponModel)
-                throw new ApplicationException(lang('sampoyigi.cart::default.alert_coupon_invalid'));
+                throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
 
             $this->couponModel->validateCoupon(Location::orderType(), Auth::getUser());
         }
@@ -72,7 +72,7 @@ class Coupon extends CartCondition
     {
         $minimumOrder = $this->couponModel->minimumOrderTotal();
         flash()->warning(sprintf(
-            lang('sampoyigi.cart::default.alert_coupon_not_applied'),
+            lang('igniter.cart::default.alert_coupon_not_applied'),
             currency_format($minimumOrder)
         ))->now();
 

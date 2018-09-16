@@ -1,4 +1,4 @@
-<?php namespace SamPoyigi\Cart\Models;
+<?php namespace Igniter\Cart\Models;
 
 use Admin\Models\Menus_model as BaseMenus_model;
 use Carbon\Carbon;

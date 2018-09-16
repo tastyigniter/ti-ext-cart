@@ -42,7 +42,7 @@
         class="btn btn-primary btn-block cart-toggle text-nowrap"
         href="<?= site_url('cart') ?>"
     >
-        <?= lang('sampoyigi.cart::default.text_heading'); ?>:
+        <?= lang('igniter.cart::default.text_heading'); ?>:
         <span id="cart-total" class="font-weight-bold"><?= currency_format($cartTotal); ?></span>
     </a>
 </div>
