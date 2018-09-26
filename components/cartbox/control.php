@@ -1,22 +1,22 @@
-<?php if ($hasDelivery OR $hasCollection) { ?>
+<?php if ($locationCurrent->hasDelivery() OR $locationCurrent->hasCollection()) { ?>
     <div class="btn-group btn-group-toggle w-100 text-center order-type" data-toggle="buttons">
-        <?php if ($hasDelivery) { ?>
+        <?php if ($locationCurrent->hasDelivery()) { ?>
             <label
-                class="btn btn-light <?= ($orderType == 'delivery') ? 'active' : ''; ?>">
+                class="btn btn-light <?= $location->orderTypeIsDelivery() ? 'active' : ''; ?>">
                 <input
                     type="radio"
                     name="order_type"
                     data-cart-toggle="order-type"
-                    value="delivery" <?= ($orderType == 'delivery') ? 'checked="checked"' : ''; ?>
+                    value="delivery" <?= $location->orderTypeIsDelivery() ? 'checked="checked"' : ''; ?>
                 >&nbsp;&nbsp;
                 <strong><?= lang('igniter.cart::default.text_delivery'); ?></strong>
                 <span
                     class="small center-block">
-                        <?php if ($deliverySchedule->isOpen()) { ?>
-                            <?= sprintf(lang('igniter.cart::default.text_in_minutes'), $deliveryMinutes); ?>
+                        <?php if ($location->deliverySchedule()->isOpen()) { ?>
+                            <?= sprintf(lang('igniter.cart::default.text_in_minutes'), $locationCurrent->deliveryMinutes()); ?>
                         <?php }
-                        else if ($deliverySchedule->isOpening()) { ?>
-                            <?= sprintf(lang('igniter.cart::default.text_starts'), $deliverySchedule->getOpenTime($cartBoxTimeFormat)); ?>
+                        else if ($location->deliverySchedule()->isOpening()) { ?>
+                            <?= sprintf(lang('igniter.cart::default.text_starts'), $location->deliverySchedule()->getOpenTime($cartBoxTimeFormat)); ?>
                         <?php }
                         else { ?>
                             <?= lang('igniter.cart::default.text_is_closed'); ?>
@@ -24,23 +24,23 @@
                     </span>
             </label>
         <?php } ?>
-        <?php if ($hasCollection) { ?>
+        <?php if ($locationCurrent->hasCollection()) { ?>
             <label
-                class="btn btn-light <?= ($orderType == 'collection') ? 'active' : ''; ?>">
+                class="btn btn-light <?= ($location->orderType() == 'collection') ? 'active' : ''; ?>">
                 <input
                     type="radio"
                     name="order_type"
                     data-cart-toggle="order-type"
-                    value="collection" <?= ($orderType == 'collection') ? 'checked="checked"' : ''; ?>
+                    value="collection" <?= ($location->orderType() == 'collection') ? 'checked="checked"' : ''; ?>
                 >&nbsp;&nbsp;
                 <strong><?= lang('igniter.cart::default.text_collection'); ?></strong>
                 <span
                     class="small center-block">
-                        <?php if ($collectionSchedule->isOpen()) { ?>
-                            <?= sprintf(lang('igniter.cart::default.text_in_minutes'), $collectionMinutes); ?>
+                        <?php if ($location->collectionSchedule()->isOpen()) { ?>
+                            <?= sprintf(lang('igniter.cart::default.text_in_minutes'), $locationCurrent->collectionMinutes()); ?>
                         <?php }
-                        else if ($collectionSchedule->isOpening()) { ?>
-                            <?= sprintf(lang('igniter.cart::default.text_starts'), $collectionSchedule->getOpenTime($cartBoxTimeFormat)); ?>
+                        else if ($location->collectionSchedule()->isOpening()) { ?>
+                            <?= sprintf(lang('igniter.cart::default.text_starts'), $location->collectionSchedule()->getOpenTime($cartBoxTimeFormat)); ?>
                         <?php }
                         else { ?>
                             <?= lang('igniter.cart::default.text_is_closed'); ?>
@@ -49,9 +49,9 @@
             </label>
         <?php } ?>
     </div>
-    <?php if ($orderType == 'delivery') { ?>
+    <?php if ($location->orderTypeIsDelivery()) { ?>
         <p class="text-muted text-center">
-            <?= $minOrderTotal
+            <?= $minOrderTotal = $location->minimumOrder($cart->subtotal())
                 ? lang('igniter.cart::default.text_min_total').': '.currency_format($minOrderTotal)
                 : lang('igniter.cart::default.text_no_min_total');
             ?>

@@ -43,6 +43,6 @@
         href="<?= site_url('cart') ?>"
     >
         <?= lang('igniter.cart::default.text_heading'); ?>:
-        <span id="cart-total" class="font-weight-bold"><?= currency_format($cartTotal); ?></span>
+        <span id="cart-total" class="font-weight-bold"><?= currency_format($cart->total()); ?></span>
     </a>
 </div>

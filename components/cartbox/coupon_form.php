@@ -1,4 +1,4 @@
-<?php if ($cartItemsCount) { ?>
+<?php if ($cart->count()) { ?>
     <div class="cart-coupon">
         <div
             class="input-group">

@@ -1,4 +1,4 @@
-<?php if ($cartItemsCount) { ?>
+<?php if ($cart->count()) { ?>
     <div class="cart-total">
         <div class="table-responsive">
             <table class="table table-none">
@@ -11,11 +11,11 @@
                    </span>
                     </td>
                     <td class="text-right">
-                        <?= currency_format($subTotal = $cartSubtotal); ?>
+                        <?= currency_format($cart->subtotal()); ?>
                     </td>
                 </tr>
 
-                <?php foreach ($cartConditions as $id => $condition) { ?>
+                <?php foreach ($cart->conditions() as $id => $condition) { ?>
                     <tr>
                         <td>
                         <span class="text-muted">
@@ -45,7 +45,7 @@
                    </span>
                     </td>
                     <td class="text-right">
-                        <?= currency_format($cartTotal); ?>
+                        <?= currency_format($cart->total()); ?>
                     </td>
                 </tr>
                 </tbody>

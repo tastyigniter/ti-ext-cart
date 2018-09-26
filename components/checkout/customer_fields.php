@@ -28,7 +28,7 @@
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group">
-            <label for="email"><?= lang('sampoyigi.cart::default.checkout.label_email'); ?></label>
+            <label for="email"><?= lang('igniter.cart::default.checkout.label_email'); ?></label>
             <input
                 type="text"
                 name="email"
@@ -41,7 +41,7 @@
     </div>
     <div class="col-sm-6">
         <div class="form-group">
-            <label for="telephone"><?= lang('sampoyigi.cart::default.checkout.label_telephone'); ?></label>
+            <label for="telephone"><?= lang('igniter.cart::default.checkout.label_telephone'); ?></label>
             <input
                 type="text"
                 name="telephone"

@@ -10,10 +10,9 @@ use Auth;
 use Cart;
 use Exception;
 use Igniter\Cart\Models\Orders_model;
-use Igniter\Pages\Models\Pages_model;
 use Illuminate\Http\RedirectResponse;
 use Location;
-use Main\Template\Page;
+use Main\Traits\HasPageOptions;
 use Redirect;
 use Request;
 use Session;
@@ -22,6 +21,7 @@ use System\Classes\BaseComponent;
 class Checkout extends BaseComponent
 {
     use ValidatesForm;
+    use HasPageOptions;
 
     protected $sessionKey = 'igniter.cart.checkout.order.id';
 
@@ -77,16 +77,6 @@ class Checkout extends BaseComponent
         ];
     }
 
-    public static function getPageOptions()
-    {
-        return Page::lists('baseFileName', 'baseFileName');
-    }
-
-    public static function getPagesOptions()
-    {
-        return Pages_model::dropdown('name');
-    }
-
     public function onRun()
     {
         $this->addJs('js/vendor/trigger.js', 'trigger-js');
@@ -112,8 +102,6 @@ class Checkout extends BaseComponent
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
-        $this->page['orderTotal'] = Cart::total();
-        $this->page['orderType'] = Location::orderType();
         $this->page['paymentGateways'] = Location::current()->listAvailablePayments();
     }
 
@@ -197,7 +185,7 @@ class Checkout extends BaseComponent
             if (!$successPage)
                 return;
 
-            return Redirect::to($this->pageUrl($successPage, ['hash' => $order->hash]));
+            return Redirect::to($this->controller->pageUrl($successPage, ['hash' => $order->hash]));
         }
         catch (Exception $ex) {
             flash()->warning($ex->getMessage());

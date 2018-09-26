@@ -1,42 +1,42 @@
 <p>
     <?= sprintf(
-        lang('sampoyigi.cart::default.checkout.text_success_message'),
+        lang('igniter.cart::default.checkout.text_success_message'),
         $order->order_id, site_url($ordersPage, ['orderId' => $order->order_id])
     ); ?>
 </p>
 
 <div class="panel-heading">
     <h4 class="panel-title">
-        <strong><?= lang('sampoyigi.cart::default.checkout.text_order_details'); ?></strong>
+        <strong><?= lang('igniter.cart::default.checkout.text_order_details'); ?></strong>
     </h4>
 </div>
 <p>
     <?= sprintf(
-        lang('sampoyigi.cart::default.checkout.text_order_info'),
+        lang('igniter.cart::default.checkout.text_order_info'),
         $order->order_type,
         mdate($orderDateFormat, strtotime($order->date_added)),
         ucwords($order->order_type),
         mdate("{$orderDateFormat} {$orderTimeFormat}", strtotime("{$order->order_date} {$order->order_time}")),
         $order->payment_method
             ? $order->payment_method->name
-            : lang('sampoyigi.cart::default.checkout.text_no_payment')
+            : lang('igniter.cart::default.checkout.text_no_payment')
     ); ?>
 </p>
 <p>
-<?php if ($order->address) { ?>
-    <strong><?= lang('sampoyigi.cart::default.checkout.text_delivery_address'); ?>:</strong>
-    <address><?= format_address($order->address->toArray()); ?></address>
+    <?php if ($order->address) { ?>
+    <strong><?= lang('igniter.cart::default.checkout.text_delivery_address'); ?>:</strong>
+<address><?= format_address($order->address->toArray()); ?></address>
 <?php } ?>
 </p>
-<span class="h5"><?= lang('sampoyigi.cart::default.checkout.text_your_local'); ?></span><br/>
+<span class="h5"><?= lang('igniter.cart::default.checkout.text_your_local'); ?></span><br/>
 <p>
     <strong><?= $order->location->location_name; ?></strong><br/>
-    <address><?= format_address($order->location->getAddress()); ?></address>
+<address><?= format_address($order->location->getAddress()); ?></address>
 </p>
 
 <div class="panel-heading">
     <h3 class="panel-title">
-        <strong><?= lang('sampoyigi.cart::default.checkout.text_order_items'); ?></strong>
+        <strong><?= lang('igniter.cart::default.checkout.text_order_items'); ?></strong>
     </h3>
 </div>
 
@@ -91,5 +91,5 @@
 <?php } ?>
 
 <div class="card-footer">
-    <p><?= lang('sampoyigi.cart::default.checkout.text_thank_you'); ?></p>
+    <p><?= lang('igniter.cart::default.checkout.text_thank_you'); ?></p>
 </div>

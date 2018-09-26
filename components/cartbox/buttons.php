@@ -1,7 +1,8 @@
 <?php
 $fullyClosed = FALSE;
-$unAvailable = (!$canAcceptOrder OR ($orderType == 'delivery' AND !$cartTotalIsAboveMinTotal));
-if ($isClosed) {
+$cartTotalIsAboveMinTotal = $location->checkMinimumOrder($cart->subtotal());
+$unAvailable = (!$location->checkOrderType() OR ($location->orderTypeIsDelivery() AND !$cartTotalIsAboveMinTotal));
+if ($location->isClosed()) {
     $buttonLang = 'igniter.cart::default.text_is_closed';
     $fullyClosed = TRUE;
 }
@@ -23,6 +24,6 @@ if ($unAvailable) {
         data-request-form="#checkout-form"
     <?php } else if (!$fullyClosed) { ?>
         data-request="<?= $checkoutEventHandler; ?>"
-        data-request-data="locationId: '<?= $currentLocation->getKey() ?>'"
+        data-request-data="locationId: '<?= $location->getId() ?>'"
     <?php } ?>
 ><?= lang($buttonLang); ?></button>

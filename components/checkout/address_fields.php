@@ -16,7 +16,7 @@
                 <span
                     class="edit-address pull-right"
                     data-form="#address-form-<?= $index; ?>"
-                ><?= lang('sampoyigi.cart::default.checkout.text_edit'); ?></span>
+                ><?= lang('igniter.cart::default.checkout.text_edit'); ?></span>
                     <input
                         type="radio"
                         name="address_id"
@@ -42,7 +42,7 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for=""><?= lang('sampoyigi.cart::default.checkout.label_address_1'); ?></label>
+                <label for=""><?= lang('igniter.cart::default.checkout.label_address_1'); ?></label>
                 <input
                     type="text"
                     name="address[address_1]"
@@ -53,7 +53,7 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label for=""><?= lang('sampoyigi.cart::default.checkout.label_address_2'); ?></label>
+                <label for=""><?= lang('igniter.cart::default.checkout.label_address_2'); ?></label>
                 <input
                     type="text"
                     name="address[address_2]"
@@ -66,7 +66,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <label for=""><?= lang('sampoyigi.cart::default.checkout.label_city'); ?></label>
+                <label for=""><?= lang('igniter.cart::default.checkout.label_city'); ?></label>
                 <input
                     type="text"
                     name="address[city]"
@@ -77,7 +77,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                <label for=""><?= lang('sampoyigi.cart::default.checkout.label_state'); ?></label>
+                <label for=""><?= lang('igniter.cart::default.checkout.label_state'); ?></label>
                 <input
                     type="text"
                     name="address[state]"
@@ -88,7 +88,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                <label for=""><?= lang('sampoyigi.cart::default.checkout.label_postcode'); ?></label>
+                <label for=""><?= lang('igniter.cart::default.checkout.label_postcode'); ?></label>
                 <input
                     type="text"
                     name="address[postcode]"
@@ -99,7 +99,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for=""><?= lang('sampoyigi.cart::default.checkout.label_country'); ?></label>
+        <label for=""><?= lang('igniter.cart::default.checkout.label_country'); ?></label>
         <select
             name="address[country_id]"
             class="form-control"

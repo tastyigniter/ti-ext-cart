@@ -1,7 +1,7 @@
-<?php if ($cartItemsCount) { ?>
+<?php if ($cart->count()) { ?>
     <div class="cart-items">
         <ul>
-            <?php foreach ($cartContent->reverse() as $cartItem) { ?>
+            <?php foreach ($cart->content()->reverse() as $cartItem) { ?>
                 <li>
                     <a
                         class="cart-btn btn btn-light btn-sm text-muted"

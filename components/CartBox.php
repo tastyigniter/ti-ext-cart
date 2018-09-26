@@ -57,10 +57,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->addJs('js/cartbox.modal.js', 'cart-box-modal-js');
 
         $this->prepareVars();
-
-        $this->prepareVarsFromCart();
-
-        $this->prepareVarsFromLocation();
     }
 
     protected function prepareVars()
@@ -76,32 +72,11 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
         $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
-    }
 
-    protected function prepareVarsFromCart()
-    {
         $this->loadAvailableConditions();
-        $this->page['cartItemsCount'] = Cart::count();
-        $this->page['cartTotal'] = Cart::total();
-        $this->page['cartSubtotal'] = Cart::subtotal();
-        $this->page['cartContent'] = Cart::content();
-        $this->page['cartConditions'] = Cart::conditions();
-    }
-
-    protected function prepareVarsFromLocation()
-    {
-        $this->page['isClosed'] = Location::isClosed();
-        $this->page['orderType'] = Location::orderType();
-        $this->page['canAcceptOrder'] = Location::checkOrderType();
-        $this->page['minOrderTotal'] = Location::minimumOrder(Cart::subtotal());
-        $this->page['cartTotalIsAboveMinTotal'] = Location::checkMinimumOrder(Cart::subtotal());
-
-        $this->page['hasDelivery'] = Location::current()->hasDelivery();
-        $this->page['hasCollection'] = Location::current()->hasCollection();
-        $this->page['deliveryMinutes'] = Location::current()->deliveryMinutes();
-        $this->page['collectionMinutes'] = Location::current()->collectionMinutes();
-        $this->page['deliverySchedule'] = Location::deliverySchedule();
-        $this->page['collectionSchedule'] = Location::collectionSchedule();
+        $this->page['cart'] = Cart::instance();
+        $this->page['location'] = Location::instance();
+        $this->page['locationCurrent'] = Location::current();
     }
 
     public function onChangeOrderType()
@@ -125,7 +100,7 @@ class CartBox extends \System\Classes\BaseComponent
             ];
 
             if ($this->property('pageIsCheckout'))
-                return Redirect::to($this->pageUrl($this->property('checkoutPage')));
+                return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
 
             return $partials;
         }
@@ -168,7 +143,7 @@ class CartBox extends \System\Classes\BaseComponent
             if (!Location::checkOrderType($orderType = Location::orderType()))
                 throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
 
-            if ($orderType == 'delivery' AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
+            if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
                 throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
 
             if (!is_numeric($menuId = post('menuId')))
@@ -291,7 +266,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             Location::setCurrent($location);
 
-            $redirectUrl = $this->pageUrl($this->property('checkoutPage'));
+            $redirectUrl = $this->controller->pageUrl($this->property('checkoutPage'));
 
             return Redirect::to($redirectUrl);
         }
