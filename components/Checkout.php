@@ -2,20 +2,19 @@
 
 namespace Igniter\Cart\Components;
 
-use Admin\Models\Addresses_model;
-use Admin\Models\Payments_model;
+use Admin\Models\Customers_model;
 use Admin\Traits\ValidatesForm;
 use ApplicationException;
 use Auth;
 use Cart;
 use Exception;
+use Igniter\Cart\Classes\OrderManager;
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Orders_model;
 use Illuminate\Http\RedirectResponse;
 use Location;
 use Main\Traits\HasPageOptions;
 use Redirect;
-use Request;
-use Session;
 use System\Classes\BaseComponent;
 
 class Checkout extends BaseComponent
@@ -23,9 +22,17 @@ class Checkout extends BaseComponent
     use ValidatesForm;
     use HasPageOptions;
 
-    protected $sessionKey = 'igniter.cart.checkout.order.id';
+    /**
+     * @var \Igniter\Cart\Classes\OrderManager
+     */
+    protected $orderManager;
 
     protected $order;
+
+    public function initialize()
+    {
+        $this->orderManager = OrderManager::instance();
+    }
 
     public function defineProperties()
     {
@@ -79,12 +86,18 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
-        $this->addJs('js/vendor/trigger.js', 'trigger-js');
+        $this->storeUserCart();
 
-        if ($this->isCheckoutSuccessPage())
-            $this->clearCurrentOrderId();
-        elseif (!$this->validateCart())
-            return Redirect::to(restaurant_url($this->property('menusPage')));
+        if (!$this->isCheckoutSuccessPage()) {
+            if ($redirect = $this->isOrderMarkedAsProcessed())
+                return $redirect;
+
+            if ($redirect = $this->validateCart(FALSE))
+                return $redirect;
+        }
+        else {
+            $this->orderManager->clearOrder();
+        }
 
         $this->prepareVars();
     }
@@ -102,7 +115,7 @@ class Checkout extends BaseComponent
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
-        $this->page['paymentGateways'] = Location::current()->listAvailablePayments();
+        $this->page['paymentGateways'] = $this->orderManager->getPaymentGateways();
     }
 
     /**
@@ -113,25 +126,22 @@ class Checkout extends BaseComponent
         if (!is_null($this->order))
             return $this->order;
 
-        if ($this->isCheckoutSuccessPage()) {
-            $order = $this->getOrderByHash();
+        if (!$this->isCheckoutSuccessPage()) {
+            $order = $this->orderManager->getOrder();
+
+            if (!$order->isPaymentProcessed())
+                $this->orderManager->applyRequiredAttributes($order);
         }
         else {
-            $order = Orders_model::find($this->getCurrentOrderId());
+            $order = $this->orderManager->getOrderByHash($this->hashCode());
         }
-
-        $customer = $this->customer();
-        $customerId = $customer ? $customer->customer_id : null;
-
-        // Only users can view their own orders
-        if (!$order OR $order->customer_id != $customerId)
-            $order = Orders_model::make($this->getDefaultAttributes());
-
-        $this->setDefaultAttributes($order);
 
         return $this->order = $order;
     }
 
+    /**
+     * @return Customers_model|\Igniter\Flame\Auth\Models\User
+     */
     public function customer()
     {
         if (!Auth::check()) {
@@ -154,38 +164,32 @@ class Checkout extends BaseComponent
 
     public function onConfirm()
     {
+        if ($redirect = $this->isOrderMarkedAsProcessed())
+            return $redirect;
+
         try {
             $data = post();
+            $data['cancelPage'] = $this->property('redirectPage');
+            $data['successPage'] = $this->property('successPage');
 
-            $this->validateCart(TRUE);
+            $this->validateCart();
 
             $this->validate($data, $this->createRules());
 
             if ($address = array_get($data, 'address', []))
                 $this->validateAddress($address);
 
-            $order = $this->createOrder($data);
+            $order = $this->getOrder();
+            $this->orderManager->saveOrder($order, $data);
 
-            $data['cancelPage'] = $this->property('redirectPage');
-            $data['successPage'] = $successPage = $this->property('successPage');
-//            activity()
-//                ->causedBy(Auth::getUser())
-//                ->log(lang('system::lang.activities.activity_logged_in'));
-
-            $paymentMethod = Payments_model::whereCode($order->payment)->first();
-            if ($order->payment AND (!$paymentMethod OR !$paymentMethod->status))
-                throw new ApplicationException('Selected payment method is inactive, try a different one.');
-
-            if (($redirect = $paymentMethod->processPaymentForm($data, $paymentMethod, $order)) === FALSE)
+            if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
                 return;
 
             if ($redirect instanceof RedirectResponse)
                 return $redirect;
 
-            if (!$successPage)
-                return;
-
-            return Redirect::to($this->controller->pageUrl($successPage, ['hash' => $order->hash]));
+            if ($redirect = $this->isOrderMarkedAsProcessed())
+                return $redirect;
         }
         catch (Exception $ex) {
             flash()->warning($ex->getMessage());
@@ -194,52 +198,29 @@ class Checkout extends BaseComponent
         }
     }
 
-    /**
-     * Set the current order id.
-     *
-     * @param $orderId
-     */
-    public function setCurrentOrderId($orderId)
+    protected function storeUserCart()
     {
-        Session::put($this->sessionKey, $orderId);
+        if (!CartSettings::get('abandoned_cart'))
+            return;
+
+        if (!$customer = $this->customer())
+            return;
+
+        if (Cart::content()->isEmpty())
+            return;
+
+        Cart::store($customer->getKey());
     }
 
-    /**
-     * Get the current order id.
-     *
-     * @return mixed
-     */
-    public function getCurrentOrderId()
+    protected function validateCart($throwException = TRUE)
     {
-        return Session::get($this->sessionKey);
-    }
-
-    /**
-     * Clear the current order id.
-     */
-    public function clearCurrentOrderId()
-    {
-        Session::forget($this->sessionKey);
-        Cart::destroy();
-    }
-
-    /**
-     * Check if the given order id is the current order id.
-     *
-     * @param $orderId
-     *
-     * @return bool
-     */
-    public function isCurrentOrderId($orderId)
-    {
-        return $this->getCurrentOrderId() == $orderId;
-    }
-
-    protected function validateCart($throwException = FALSE)
-    {
+        $failed = FALSE;
         try {
             if (!Cart::count())
                 throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
+
+            if (!setting('allow_guest_order') AND !$this->customer())
+                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
 
             if (!$location = Location::current())
                 throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
@@ -254,7 +235,7 @@ class Checkout extends BaseComponent
             if (!$orderDateTime OR !Location::checkOrderTime($orderDateTime))
                 throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_delivery_time'));
 
-            if ($orderType == 'delivery' AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
+            if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
                 throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
         }
         catch (Exception $ex) {
@@ -262,20 +243,22 @@ class Checkout extends BaseComponent
                 throw $ex;
 
             flash()->warning($ex->getMessage())->now();
-
-            return FALSE;
+            $failed = TRUE;
         }
 
-        if ($orderType == 'delivery' AND !Location::checkMinimumOrder(Cart::total()))
-            return FALSE;
+        if (!$failed AND Location::orderTypeIsDelivery() AND !Location::checkMinimumOrder(Cart::total()))
+            $failed = TRUE;
 
-        return TRUE;
+        if ($failed)
+            return Redirect::to(restaurant_url($this->property('menusPage')));
+
+        return FALSE;
     }
 
     protected function validateAddress($address)
     {
         $address['country'] = app('country')->getCountryNameById($address['country_id']);
-        $address = implode(" ", array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
+        $address = implode(' ', array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
 
         $userPosition = app('geocoder')->geocode(['address' => $address]);
         if (!$userPosition OR !$userPosition->isValid())
@@ -299,12 +282,10 @@ class Checkout extends BaseComponent
             ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
             ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'required|alpha_dash'],
-
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
         ];
 
-        $orderType = Location::orderType();
-        if ($orderType == 'delivery') {
+        if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'integer'];
             $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
             $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'required|min:2|max:128'];
@@ -316,109 +297,18 @@ class Checkout extends BaseComponent
         return $namedRules;
     }
 
-    /**
-     * @param $data
-     *
-     * @return Orders_model
-     */
-    protected function createOrder($data)
-    {
-        $order = $this->getOrder();
-        $customerId = ($customer = Auth::customer()) ? $customer->getKey() : null;
-
-        if ($customer)
-            $data['email'] = $customer->email;
-
-        $addressId = null;
-        if ($address = array_get($data, 'address', [])) {
-            $address['customer_id'] = $customerId;
-            $address['address_id'] = $order->address_id;
-            $addressId = Addresses_model::createOrUpdateFromRequest($address)->getKey();
-        }
-
-        $order->fill($data);
-        $order->address_id = $addressId;
-        $order->customer_id = $customerId;
-        $this->setDefaultAttributes($order);
-        $order->save();
-
-        $order->addOrderMenus(Cart::content()->toArray());
-        $order->addOrderTotals($this->buildCartTotalsArray());
-
-        $couponCondition = Cart::getCondition('coupon');
-        if ($couponCondition AND $couponModel = $couponCondition->getModel())
-            $order->logCouponHistory($couponModel, $customer);
-
-        $this->setCurrentOrderId($order->order_id);
-
-        return $order;
-    }
-
-    protected function getDefaultAttributes()
-    {
-        $customer = Auth::getUser();
-
-        return [
-            'first_name' => $customer ? $customer->first_name : null,
-            'last_name' => $customer ? $customer->last_name : null,
-            'email' => $customer ? $customer->email : null,
-            'telephone' => $customer ? $customer->telephone : null,
-        ];
-    }
-
-    public function setDefaultAttributes($order)
-    {
-        $order->location_id = Location::current()->getKey();
-
-        $order->order_type = Location::orderType();
-
-        $orderDateTime = Location::orderDateTime();
-        $order->order_date = $orderDateTime->format('Y-m-d');
-        $order->order_time = $orderDateTime->format('H:i');
-
-        $order->total_items = Cart::count();
-        $order->cart = Cart::content();
-        $order->order_total = Cart::total();
-
-        $order->ip_address = Request::getClientIp();
-    }
-
-    protected function buildCartTotalsArray()
-    {
-        $totals = [
-            [
-                'code' => 'subtotal',
-                'title' => lang('igniter.cart::default.text_sub_total'),
-                'value' => Cart::subtotal(),
-                'priority' => 0,
-            ],
-            [
-                'code' => 'total',
-                'title' => lang('igniter.cart::default.text_order_total'),
-                'value' => Cart::total(),
-                'priority' => 999,
-            ],
-        ];
-
-        foreach (Cart::conditions() as $name => $condition) {
-            $totals[] = [
-                'code' => $name,
-                'title' => $condition->getLabel(),
-                'value' => $condition->calculatedValue(),
-                'priority' => $condition->getPriority(),
-            ];
-        }
-
-        return $totals;
-    }
-
     protected function isCheckoutSuccessPage()
     {
         return $this->page->getBaseFileName() == $this->property('successPage');
     }
 
-    protected function getOrderByHash()
+    protected function isOrderMarkedAsProcessed()
     {
-        return Orders_model::whereHash($this->hashCode())->first();
+        $order = $this->getOrder();
+        if (!$order->isPaymentProcessed())
+            return FALSE;
+
+        $successPage = $this->property('successPage');
+        return Redirect::to($order->getUrl($successPage));
     }
 }

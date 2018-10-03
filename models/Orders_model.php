@@ -1,33 +1,24 @@
 <?php namespace Igniter\Cart\Models;
 
 use Admin\Models\Orders_model as BaseOrders_model;
-use Admin\Models\Statuses_model;
+use Main\Classes\MainController;
 
 class Orders_model extends BaseOrders_model
 {
     protected $fillable = ['customer_id', 'first_name', 'last_name', 'email', 'telephone', 'comment', 'payment'];
 
-    /**
-     * Complete order by sending email confirmation and,
-     * updating order status
-     *
-     * @param $status
-     *
-     * @return bool
-     */
-    public function completeOrder($status)
+    public function getUrl($page, $params = [])
     {
-        if (!$status instanceof Statuses_model)
-            return FALSE;
+        $defaults = [
+            'id' => $this->getKey(),
+            'hash' => $this->hash
+        ];
 
-        $this->status_id = $status->getKey();
-        $this->save();
+        $params = !is_null($params)
+            ? array_merge($defaults, $params)
+            : [];
 
-        $this->mailSend('igniter.cart::mail.order', 'customer');
-        $this->mailSend('igniter.cart::mail.order_alert', 'location');
-        $this->mailSend('igniter.cart::mail.order_alert', 'admin');
-
-        $this->addStatusHistory(['notify' => 1]);
-        // @todo: fire order.completed event
+        $controller = MainController::getController() ?: new MainController;
+        return $controller->pageUrl($page, $params);
     }
 }

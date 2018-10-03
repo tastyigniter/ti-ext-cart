@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Schema;
 
 /**
- * Create cart and fill with records from cart field on customers table
+ * Create cart table
  */
 class CreateCartTable extends Migration
 {

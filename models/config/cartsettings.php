@@ -18,6 +18,11 @@ return [
             ],
         ],
         'fields' => [
+            'abandoned_cart' => [
+                'label' => 'lang:igniter.cart::default.label_abandoned_cart',
+                'type' => 'switch',
+                'default' => FALSE,
+            ],
             'destroy_on_logout' => [
                 'label' => 'lang:igniter.cart::default.label_destroy_on_logout',
                 'type' => 'switch',

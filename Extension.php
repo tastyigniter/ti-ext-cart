@@ -1,6 +1,10 @@
 <?php namespace Igniter\Cart;
 
+use Auth;
+use Cart;
+use Config;
 use Event;
+use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
 use Illuminate\Foundation\AliasLoader;
 use System\Classes\BaseExtension;
@@ -14,36 +18,31 @@ class Extension extends BaseExtension
         AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);
 
         $this->app->resolving(\Igniter\Flame\Cart\Cart::class, function ($cart, $container) {
-            $cart->setDestroyOnLogout(CartSettings::get('destroy_on_logout'));
+            Config::set('cart.model', CartStore::class);
+            Config::set('cart.conditions', CartSettings::get('conditions'));
         });
-
-        $this->registerCartConditions();
     }
 
     public function boot()
     {
-        Event::listen('admin.order.paymentProcessed', function ($model) {
-            $model->mailSend('igniter.cart::mail.order', 'customer');
-            $model->mailSend('igniter.cart::mail.order_alert', 'location');
-            $model->mailSend('igniter.cart::mail.order_alert', 'admin');
-        });
+        $this->registerCartEvents();
+        $this->registerCheckoutEvents();
     }
 
     public function registerCartConditions()
     {
-        CartSettings::registerConditions(function (CartSettings $settingsModel) {
-            $settingsModel->registerCondition('Igniter\Cart\Conditions\Coupon', [
+        return [
+            'Igniter\Cart\Conditions\Coupon' => [
                 'name' => 'coupon',
                 'label' => 'lang:igniter.cart::default.text_coupon',
                 'description' => 'lang:igniter.cart::default.help_coupon_condition',
-            ]);
-
-            $settingsModel->registerCondition('Igniter\Cart\Conditions\Tax', [
+            ],
+            'Igniter\Cart\Conditions\Tax' => [
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',
-            ]);
-        });
+            ]
+        ];
     }
 
     public function registerComponents()
@@ -91,5 +90,43 @@ class Extension extends BaseExtension
             'igniter.cart::mail.order' => 'Order confirmation email to customer',
             'igniter.cart::mail.order_alert' => 'New order alert email to admin',
         ];
+    }
+
+    protected function registerCartEvents()
+    {
+        Event::listen('igniter.user.login', function () {
+            if (CartSettings::get('abandoned_cart')
+                AND Cart::content()->isEmpty()
+            ) {
+                Cart::restore(Auth::getId());
+            }
+        });
+
+        Event::listen('igniter.user.logout', function () {
+            if (CartSettings::get('destroy_on_logout'))
+                Cart::destroy();
+        });
+    }
+
+    protected function registerCheckoutEvents()
+    {
+        Event::listen('igniter.checkout.beforePayment', function ($orderModel) {
+            $couponCondition = Cart::getCondition('coupon');
+
+            if ($couponCondition AND $couponModel = $couponCondition->getModel())
+                $orderModel->logCouponHistory($couponModel, Auth::customer());
+        });
+
+        Event::listen('admin.order.paymentProcessed', function ($model) {
+            if ($user = Auth::user()) {
+                activity()->causedBy($user)->log(
+                    lang('system::lang.activities.activity_logged_in')
+                );
+            }
+
+            $model->mailSend('igniter.cart::mail.order', 'customer');
+            $model->mailSend('igniter.cart::mail.order_alert', 'location');
+            $model->mailSend('igniter.cart::mail.order_alert', 'admin');
+        });
     }
 }
