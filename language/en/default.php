@@ -110,6 +110,7 @@ return [
         'text_heading' => 'Checkout',
         'text_checkout' => 'Almost there, Please confirm your details and proceed to payment.',
         'text_payments' => 'Please choose your payment method.',
+        'text_address' => 'Enter a new or an existing delivery address.',
         'text_step_one' => 'Step 1',
         'text_step_one_summary' => 'Your Details',
         'text_step_two' => 'Step 2',

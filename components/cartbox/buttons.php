@@ -2,7 +2,7 @@
 $fullyClosed = FALSE;
 $cartTotalIsAboveMinTotal = $location->checkMinimumOrder($cart->subtotal());
 $unAvailable = (!$location->checkOrderType() OR ($location->orderTypeIsDelivery() AND !$cartTotalIsAboveMinTotal));
-if ($location->isClosed()) {
+if ($location->workingSchedule($location->orderType())->isClosed()) {
     $buttonLang = 'igniter.cart::default.text_is_closed';
     $fullyClosed = TRUE;
 }

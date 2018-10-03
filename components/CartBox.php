@@ -1,9 +1,9 @@
 <?php namespace Igniter\Cart\Components;
 
+use Admin\Models\Menu_item_options_model;
 use ApplicationException;
 use Cart;
 use Exception;
-use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Coupons_model;
 use Igniter\Cart\Models\Menus_model;
 use Location;
@@ -13,6 +13,11 @@ use Request;
 
 class CartBox extends \System\Classes\BaseComponent
 {
+    public function initialize()
+    {
+        Cart::loadConditions();
+    }
+
     public function defineProperties()
     {
         return [
@@ -73,7 +78,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
 
-        $this->loadAvailableConditions();
         $this->page['cart'] = Cart::instance();
         $this->page['location'] = Location::instance();
         $this->page['locationCurrent'] = Location::current();
@@ -90,7 +94,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             Location::updateOrderType($orderType);
 
-            $this->pageCycle();
+            $this->controller->pageCycle();
 
             $partials = [
                 '#notification' => $this->renderPartial('flash'),
@@ -158,26 +162,25 @@ class CartBox extends \System\Classes\BaseComponent
             }
 
             $quantity = post('quantity');
+            $comment = post('comment');
             $this->validateMenuItem($menuModel, $quantity);
 
             $options = $this->createCartItemOptionsArray($menuModel, post('menu_options'));
 
             if ($cartItem) {
-                $cartItem = Cart::update($cartItem->rowId, [
+                Cart::update($cartItem->rowId, [
                     'name' => $menuModel->getBuyableName($options),
                     'price' => $menuModel->getBuyablePrice($options),
                     'qty' => $quantity,
                     'options' => $options,
+                    'comment' => $comment,
                 ]);
             }
             else {
-                $cartItem = Cart::add($menuModel, $quantity, $options);
+                Cart::add($menuModel, $quantity, $options, $comment);
             }
 
-            if (strlen($comment = post('comment')))
-                $cartItem->setComment($comment);
-
-            $this->pageCycle();
+            $this->controller->pageCycle();
 
             return [
                 '#notification' => $this->renderPartial('flash'),
@@ -204,7 +207,7 @@ class CartBox extends \System\Classes\BaseComponent
         $quantity = $cartItem->qty - $menuItem->minimum_qty;
         Cart::update($rowId, post('quantity', $quantity));
 
-        $this->pageCycle();
+        $this->controller->pageCycle();
 
         return [
             '#notification' => $this->renderPartial('flash'),
@@ -227,9 +230,9 @@ class CartBox extends \System\Classes\BaseComponent
 
             $condition->setMetaData('code', $code);
 
-            Cart::loadCondition('coupon', $condition);
+            Cart::condition($condition);
 
-            $this->pageCycle();
+            $this->controller->pageCycle();
 
             return [
                 '#notification' => $this->renderPartial('flash'),
@@ -249,7 +252,7 @@ class CartBox extends \System\Classes\BaseComponent
 
         Cart::removeCondition($condition->name);
 
-        $this->pageCycle();
+        $this->controller->pageCycle();
 
         return [
             '#notification' => $this->renderPartial('flash'),
@@ -276,12 +279,17 @@ class CartBox extends \System\Classes\BaseComponent
         }
     }
 
+    /**
+     * @param $menuModel Menus_model
+     * @param $options
+     * @return mixed
+     */
     protected function createCartItemOptionsArray($menuModel, $options)
     {
         $selectedOptions = collect($options)->keyBy('menu_option_id');
 
         $optionsArray = $menuModel->menu_options->keyBy('menu_option_id')->map(
-            function ($menuOption) use ($selectedOptions) {
+            function (Menu_item_options_model $menuOption) use ($selectedOptions) {
                 $menuOptionId = $menuOption->getKey();
                 $selectedOption = $selectedOptions->get($menuOptionId);
 
@@ -318,6 +326,11 @@ class CartBox extends \System\Classes\BaseComponent
         return $optionsArray->filter()->toArray();
     }
 
+    /**
+     * @param $menuModel Menus_model
+     * @param $quantity
+     * @throws ApplicationException
+     */
     protected function validateMenuItem($menuModel, $quantity)
     {
         if (!$menuModel)
@@ -356,17 +369,5 @@ class CartBox extends \System\Classes\BaseComponent
         if (!$menuModel->checkMinQuantity($quantity))
             throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_qty_is_below_min_qty'),
                 $menuModel->minimum_qty));
-    }
-
-    protected function loadAvailableConditions()
-    {
-        $conditions = CartSettings::get('conditions');
-
-        foreach ($conditions as $name => $config) {
-            if (!array_get($config, 'status', FALSE))
-                continue;
-
-            Cart::loadCondition($name, $config);
-        }
     }
 }

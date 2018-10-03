@@ -6,8 +6,6 @@ use Igniter\Flame\Cart\CartCondition;
 
 class Tax extends CartCondition
 {
-//    public $removeable = TRUE;
-
     protected $taxMode;
 
     protected $taxInclusive;

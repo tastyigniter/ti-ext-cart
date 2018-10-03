@@ -1,6 +1,7 @@
 <?php namespace Igniter\Cart\Models;
 
 use Model;
+use System\Classes\ExtensionManager;
 
 class CartSettings extends Model
 {
@@ -28,15 +29,15 @@ class CartSettings extends Model
 
     public function getConditionsAttribute($value)
     {
+        $result = [];
         $registeredConditions = $this->listRegisteredConditions();
-
         foreach ($registeredConditions as $registeredCondition) {
             $name = array_get($registeredCondition, 'name');
             $dbCondition = $value[$name] ?? [];
-            $value[$name] = array_merge($registeredCondition, $dbCondition);
+            $result[$name] = array_merge($registeredCondition, $dbCondition);
         }
 
-        return $value;
+        return $result;
     }
 
     //
@@ -75,9 +76,7 @@ class CartSettings extends Model
     public function listRegisteredConditions()
     {
         if (self::$registeredConditions === null) {
-            foreach (self::$registeredConditionsCallbacks as $callback) {
-                $callback($this);
-            }
+            $this->loadRegisteredConditions();
         }
 
         if (!is_array(self::$registeredConditions)) {
@@ -87,9 +86,35 @@ class CartSettings extends Model
         return self::$registeredConditions;
     }
 
-    public static function registerConditions(callable $definitions)
+    public function loadRegisteredConditions()
     {
-        self::$registeredConditionsCallbacks[] = $definitions;
+        foreach (self::$registeredConditionsCallbacks as $callback) {
+            $callback($this);
+        }
+
+        // Load extensions cart conditions
+        $extensions = ExtensionManager::instance()->getExtensions();
+        foreach ($extensions as $extension) {
+            if (!method_exists($extension, 'registerCartConditions'))
+                continue;
+
+            $cartConditions = $extension->registerCartConditions();
+            if (!is_array($cartConditions)) {
+                continue;
+            }
+
+            $this->registerConditions($cartConditions);
+        }
+    }
+
+    public function registerConditions(array $conditions)
+    {
+        if (self::$registeredConditions === null)
+            self::$registeredConditions = [];
+
+        foreach ($conditions as $className => $condition) {
+            $this->registerCondition($className, $condition);
+        }
     }
 
     public function registerCondition($className, $conditionInfo = null)
@@ -109,5 +134,10 @@ class CartSettings extends Model
 
         self::$registeredConditions[$className] = $condition;
         self::$registeredConditionHints[$conditionName] = $className;
+    }
+
+    public static function registerConditionsCallback(callable $definitions)
+    {
+        self::$registeredConditionsCallbacks[] = $definitions;
     }
 }

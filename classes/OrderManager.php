@@ -52,7 +52,6 @@ class OrderManager
     }
 
     /**
-     * @param $id
      * @return \Igniter\Cart\Models\Orders_model
      */
     public function getOrder()
@@ -111,11 +110,16 @@ class OrderManager
             $address['customer_id'] = $customerId;
             $address['address_id'] = $order->address_id;
             $addressId = Addresses_model::createOrUpdateFromRequest($address)->getKey();
+
+            // Update customer default address
+            if ($this->customer) {
+                $this->customer->address_id = $addressId;
+                $this->customer->save();
+            }
         }
 
         $order->fill($data);
         $order->address_id = $addressId;
-        $order->customer_id = $customerId;
         $this->applyRequiredAttributes($order);
         $order->save();
 
@@ -143,22 +147,6 @@ class OrderManager
         return $result;
     }
 
-    public function applyRequiredAttributes($order)
-    {
-        $order->location_id = $this->location->current()->getKey();
-        $order->order_type = $this->location->orderType();
-
-        $orderDateTime = $this->location->orderDateTime();
-        $order->order_date = $orderDateTime->format('Y-m-d');
-        $order->order_time = $orderDateTime->format('H:i');
-
-        $order->total_items = $this->cart->count();
-        $order->cart = $this->cart->content();
-        $order->order_total = $this->cart->total();
-
-        $order->ip_address = Request::getClientIp();
-    }
-
     protected function getCustomerAttributes()
     {
         $customer = $this->customer;
@@ -168,7 +156,26 @@ class OrderManager
             'last_name' => $customer ? $customer->last_name : null,
             'email' => $customer ? $customer->email : null,
             'telephone' => $customer ? $customer->telephone : null,
+            'address_id' => $customer ? $customer->address_id : null,
         ];
+    }
+
+    public function applyRequiredAttributes($order)
+    {
+        $order->customer = $this->customer;
+        $order->location = $this->location->current();
+        $order->order_type = $this->location->orderType();
+
+        if ($orderDateTime = $this->location->orderDateTime()) {
+            $order->order_date = $orderDateTime->format('Y-m-d');
+            $order->order_time = $orderDateTime->format('H:i');
+        }
+
+        $order->total_items = $this->cart->count();
+        $order->cart = $this->cart->content();
+        $order->order_total = $this->cart->total();
+
+        $order->ip_address = Request::getClientIp();
     }
 
     protected function getCartTotals()

@@ -31,7 +31,7 @@
                        </span>
                         </td>
                         <td class="text-right">
-                            <?= is_numeric($result = $condition->calculatedValue())
+                            <?= is_numeric($result = $condition->getValue())
                                 ? currency_format($result)
                                 : '--'; ?>
                         </td>
