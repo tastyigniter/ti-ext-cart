@@ -11,6 +11,9 @@ class CreateCartTable extends Migration
 {
     public function up()
     {
+        if (Schema::hasTable('sampoyigi_cart_cart'))
+            Schema::rename('sampoyigi_cart_cart', 'igniter_cart_cart');
+
         if (Schema::hasTable('igniter_cart_cart'))
             return;
 
