@@ -45,6 +45,11 @@ class Checkout extends BaseComponent
                 'label' => 'Time format to display order time on the checkout success page',
                 'type' => 'text',
             ],
+            'showCountryField' => [
+                'label' => 'Whether to display the country form field',
+                'type' => 'switch',
+                'default' => FALSE,
+            ],
             'agreeTermsPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
@@ -106,6 +111,7 @@ class Checkout extends BaseComponent
     {
         $this->page['orderDateFormat'] = $this->property('orderDateFormat', setting('date_format'));
         $this->page['orderTimeFormat'] = $this->property('orderTimeFormat', setting('time_format'));
+        $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
         $this->page['agreeTermsPage'] = $this->property('agreeTermsPage');
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');

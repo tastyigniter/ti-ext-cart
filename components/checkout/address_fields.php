@@ -1,39 +1,35 @@
-<div>
-    <div
-        class="btn-group btn-group-md col-xs-12"
-        data-toggle="buttons"
-    >
+<div class="form-group">
+    <label for=""><?= lang('igniter.cart::default.checkout.text_delivery_address'); ?></label>
+    <div class="input-group">
         <?php if (count($customerAddresses = $order->listCustomerAddresses())) { ?>
-            <?php $index = 0;
-            foreach ($customerAddresses as $address) { ?>
-                <?php
-                $isDefaultAddress = ($order->address_id == $address->address_id);
-                ?>
-                <label
-                    class="btn <?= $isDefaultAddress ? 'btn-primary active' : 'btn-default'; ?>"
-                    data-btn="btn-primary"
-                >
-                <span
-                    class="edit-address pull-right"
-                    data-form="#address-form-<?= $index; ?>"
-                ><?= lang('igniter.cart::default.checkout.text_edit'); ?></span>
-                    <input
-                        type="radio"
-                        name="address_id"
+            <select
+                class="form-control" name="address_id"
+                id="">
+                <option value="0"><?= lang('igniter.cart::default.checkout.text_address'); ?></option>
+                <?php $index = 0;
+                foreach ($customerAddresses as $address) { ?>
+                    <?php
+                    $isDefaultAddress = ($order->address_id == $address->address_id);
+                    ?>
+                    <option
                         value="<?= $address->address_id; ?>"
-                        <?= $isDefaultAddress ? 'checked="checked"' : ''; ?> />
-                    <address class="text-left"><?= $address->formatted; ?></address>
-                </label>
-                <?php $index++; ?>
-            <?php } ?>
+                        data-address-1=""
+                        data-address-2=""
+                        data-city=""
+                        data-state=""
+                        data-postcode=""
+                        data-country=""
+                        <?= $isDefaultAddress ? 'selected="selected"' : ''; ?>
+                    ><?= $address->formatted_address; ?></option>
+                    <?php $index++; ?>
+                <?php } ?>
+            </select>
         <?php } ?>
     </div>
-    <div class="col-xs-12">
-        <?= form_error('address_id', '<span class="text-danger">', '</span>'); ?>
-    </div>
+    <?= form_error('address_id', '<span class="text-danger">', '</span>'); ?>
 </div>
 
-<div>
+<div class="mt-3">
     <input
         type="hidden"
         name="address[address_id]"
@@ -98,19 +94,21 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <label for=""><?= lang('igniter.cart::default.checkout.label_country'); ?></label>
-        <select
-            name="address[country_id]"
-            class="form-control"
-        >
-            <?php foreach (countries('country_name') as $key => $value) { ?>
-                <option
-                    value="<?= $key; ?>"
-                    <?= ($key == $order->address['country_id']) ? 'selected="selected"' : '' ?>
-                ><?= e($value); ?></option>
-            <?php } ?>
-        </select>
-        <?= form_error('address.country_id', '<span class="text-danger">', '</span>'); ?>
-    </div>
+    <?php if ($showCountryField) { ?>
+        <div class="form-group">
+            <label for=""><?= lang('igniter.cart::default.checkout.label_country'); ?></label>
+            <select
+                name="address[country_id]"
+                class="form-control"
+            >
+                <?php foreach (countries('country_name') as $key => $value) { ?>
+                    <option
+                        value="<?= $key; ?>"
+                        <?= ($key == $order->address['country_id']) ? 'selected="selected"' : '' ?>
+                    ><?= e($value); ?></option>
+                <?php } ?>
+            </select>
+            <?= form_error('address.country_id', '<span class="text-danger">', '</span>'); ?>
+        </div>
+    <?php } ?>
 </div>
