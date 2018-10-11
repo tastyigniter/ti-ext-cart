@@ -225,7 +225,7 @@ class Checkout extends BaseComponent
             if (!Cart::count())
                 throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
 
-            if (!setting('allow_guest_order') AND !$this->customer())
+            if (!setting('guest_order') AND !$this->customer())
                 throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
 
             if (!$location = Location::current())

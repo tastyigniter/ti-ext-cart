@@ -162,8 +162,8 @@ class OrderManager
 
     public function applyRequiredAttributes($order)
     {
-        $order->customer = $this->customer;
-        $order->location = $this->location->current();
+        $order->customer_id = $this->customer ? $this->customer->getKey() : null;
+        $order->location_id = $this->location->current()->getKey();
         $order->order_type = $this->location->orderType();
 
         if ($orderDateTime = $this->location->orderDateTime()) {

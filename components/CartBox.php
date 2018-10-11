@@ -357,7 +357,7 @@ class CartBox extends \System\Classes\BaseComponent
             throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_out_of_stock'),
                 $menuModel->menu_name));
 
-        $checkStock = $this->property('checkStockCheckout', 1);
+        $checkStock = $this->property('checkStockCheckout', FALSE);
 
         // checks if stock quantity is less than the cart quantity
         if ($checkStock AND !$menuModel->checkStockLevel($quantity))

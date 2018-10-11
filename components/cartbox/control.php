@@ -51,7 +51,7 @@
     </div>
     <?php if ($location->orderTypeIsDelivery()) { ?>
         <p class="text-muted text-center">
-            <?= $minOrderTotal = $location->minimumOrder($cart->subtotal())
+            <?= ($minOrderTotal = $location->minimumOrder($cart->subtotal()))
                 ? lang('igniter.cart::default.text_min_total').': '.currency_format($minOrderTotal)
                 : lang('igniter.cart::default.text_no_min_total');
             ?>

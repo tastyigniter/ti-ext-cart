@@ -8,6 +8,7 @@
   "homepage": "https://github.com/tastyigniter/ti-ext-cart",
   "require": {
     "igniter.local": "*",
+    "igniter.user": "*",
     "igniter.payregister": "*"
   }
 }

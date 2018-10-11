@@ -32,12 +32,12 @@ class Extension extends BaseExtension
     public function registerCartConditions()
     {
         return [
-            'Igniter\Cart\Conditions\Coupon' => [
+            \Igniter\Cart\Conditions\Coupon::class => [
                 'name' => 'coupon',
                 'label' => 'lang:igniter.cart::default.text_coupon',
                 'description' => 'lang:igniter.cart::default.help_coupon_condition',
             ],
-            'Igniter\Cart\Conditions\Tax' => [
+            \Igniter\Cart\Conditions\Tax::class => [
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',
