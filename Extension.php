@@ -45,6 +45,25 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerEventRules()
+    {
+        return [
+            'events' => [
+                'admin.order.paymentProcessed' => \Igniter\Cart\EventRules\Events\OrderPlaced::class,
+            ],
+            'actions' => [],
+            'conditions' => [],
+            'presets' => [
+                'order_confirmation_email' => [
+
+                ],
+                'order_update_email' => [
+
+                ],
+            ],
+        ];
+    }
+
     public function registerComponents()
     {
         return [
