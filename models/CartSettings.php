@@ -93,16 +93,8 @@ class CartSettings extends Model
         }
 
         // Load extensions cart conditions
-        $extensions = ExtensionManager::instance()->getExtensions();
-        foreach ($extensions as $extension) {
-            if (!method_exists($extension, 'registerCartConditions'))
-                continue;
-
-            $cartConditions = $extension->registerCartConditions();
-            if (!is_array($cartConditions)) {
-                continue;
-            }
-
+        $registeredConditions = ExtensionManager::instance()->getRegistrationMethodValues('registerCartConditions');
+        foreach ($registeredConditions as $extensionCode => $cartConditions) {
             $this->registerConditions($cartConditions);
         }
     }

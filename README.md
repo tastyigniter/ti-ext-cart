@@ -67,6 +67,7 @@ permalink: /checkout
 ### Checkout Component
 
 **Properties**
+
 | Property                 | Description              | Example Value | Default Value |
 | ------------------------ | ------------------------ | ------------- | ------------- |
 | orderDateFormat                     | Order date format            | d-m-Y        | System default         |

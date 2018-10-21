@@ -25,8 +25,8 @@ class Extension extends BaseExtension
 
     public function boot()
     {
-        $this->registerCartEvents();
-        $this->registerCheckoutEvents();
+        $this->bindCartEvents();
+        $this->bindCheckoutEvents();
     }
 
     public function registerCartConditions()
@@ -98,10 +98,10 @@ class Extension extends BaseExtension
     public function registerSettings()
     {
         return [
-            'cartsettings' => [
+            'settings' => [
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart settings.',
-                'icon' => '',
+                'icon' => 'fa fa-cart-plus',
                 'model' => 'Igniter\Cart\Models\CartSettings',
                 'permissions' => ['Module.Cart'],
             ],
@@ -116,7 +116,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    protected function registerCartEvents()
+    protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function () {
             if (CartSettings::get('abandoned_cart')
@@ -132,7 +132,7 @@ class Extension extends BaseExtension
         });
     }
 
-    protected function registerCheckoutEvents()
+    protected function bindCheckoutEvents()
     {
         Event::listen('igniter.checkout.beforePayment', function ($orderModel) {
             $couponCondition = Cart::getCondition('coupon');
