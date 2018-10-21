@@ -6,4 +6,9 @@ class Coupons_model extends \Admin\Models\Coupons_model
     {
         return self::isEnabled()->whereCode($code)->first();
     }
+
+    public function getMorphClass()
+    {
+        return 'coupons';
+    }
 }

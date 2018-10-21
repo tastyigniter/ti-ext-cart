@@ -21,4 +21,9 @@ class Orders_model extends BaseOrders_model
         $controller = MainController::getController() ?: new MainController;
         return $controller->pageUrl($page, $params);
     }
+
+    public function getMorphClass()
+    {
+        return 'orders';
+    }
 }

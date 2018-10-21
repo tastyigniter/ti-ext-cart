@@ -8,6 +8,11 @@ class Menus_model extends BaseMenus_model implements Buyable
 {
     public $with = ['special', 'mealtime', 'menu_options', 'menu_options.option'];
 
+    public function getMorphClass()
+    {
+        return 'menus';
+    }
+
     public function isAvailable()
     {
         if (!$mealtime = $this->mealtime()->first())
