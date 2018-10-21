@@ -58,6 +58,11 @@ class Extension extends BaseExtension
                 'name' => 'lang:igniter.cart::default.text_checkout_component_title',
                 'description' => 'lang:igniter.cart::default.text_checkout_component_desc',
             ],
+            'Igniter\Cart\Components\Orders' => [
+                'code' => 'accountOrders',
+                'name' => 'lang:igniter.cart::default.orders.component_title',
+                'description' => 'lang:igniter.cart::default.orders.component_desc',
+            ],
         ];
     }
 
