@@ -26,6 +26,11 @@ class CartBox extends \System\Classes\BaseComponent
                 'type' => 'text',
                 'default' => 'D H:i a',
             ],
+            'showCartItemThumb' => [
+                'label' => 'Show cart menu item image in the popup',
+                'type' => 'switch',
+                'default' => FALSE,
+            ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
@@ -66,6 +71,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     protected function prepareVars()
     {
+        $this->page['showCartItemThumb'] = $this->property('showCartItemThumb', FALSE);
         $this->page['cartBoxTimeFormat'] = $this->property('timeFormat');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
@@ -127,6 +133,8 @@ class CartBox extends \System\Classes\BaseComponent
             $cartItem = Cart::get($rowId);
             $menuItem = $cartItem->model;
         }
+
+        $this->controller->pageCycle();
 
         return $this->renderPartial('@item_modal', [
             'formHandler' => $this->getEventHandler('onUpdateCart'),

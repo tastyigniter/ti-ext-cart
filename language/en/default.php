@@ -100,7 +100,7 @@ return [
     'help_total_admin_title' => 'Enter the total title to be used internally by admin.',
     'help_total_title' => 'Enter the total title as it should be displayed in storefront.',
     'help_total_display' => 'Set whether to display the total.',
-    'help_stock_checkout' => 'Set whether to check and display a warning message if a cart item is out of stock.',
+    'help_stock_checkout' => 'Set whether to check and display a warning message when a cart item is out of stock.',
     'help_show_stock_warning' => 'Display a out of stock warning message.',
     'help_cart_conditions' => 'Customise cart condition labels and the order in which they are displayed',
     'help_coupon_condition' => 'Applies coupon to cart.',

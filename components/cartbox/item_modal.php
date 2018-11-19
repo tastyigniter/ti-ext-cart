@@ -4,9 +4,12 @@
 >
     <div class="modal-content">
         <form method="POST" data-request="<?= $formHandler; ?>">
-            <?php if (!empty($menuItem->menu_photo)) { ?>
+            <?php if ($showCartItemThumb AND $menuItem->hasMedia('thumb')) { ?>
                 <div class="modal-top">
-                    <img class="img-fluid" src="<?= $menuItem->getThumb(); ?>">
+                    <img class="img-fluid" src="<?= $menuItem->getThumb([
+                        'width' => $cartItemThumbWidth,
+                        'height' => $cartItemThumbHeight,
+                    ]); ?>">
                 </div>
             <?php } ?>
 
