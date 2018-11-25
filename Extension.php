@@ -53,14 +53,6 @@ class Extension extends BaseExtension
             ],
             'actions' => [],
             'conditions' => [],
-            'presets' => [
-                'order_confirmation_email' => [
-
-                ],
-                'order_update_email' => [
-
-                ],
-            ],
         ];
     }
 

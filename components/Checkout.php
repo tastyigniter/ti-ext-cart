@@ -235,13 +235,13 @@ class Checkout extends BaseComponent
                 throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
 
             if (!Location::checkOrderType($orderType = Location::orderType()))
-                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
+                throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
 
             $orderDateTime = Location::orderDateTime();
             if (!$orderDateTime OR !Location::checkOrderTime($orderDateTime))
                 throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_delivery_time'));
 
-            if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
+            if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->hasCoordinates())
                 throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
         }
         catch (Exception $ex) {
@@ -266,11 +266,11 @@ class Checkout extends BaseComponent
         $address['country'] = app('country')->getCountryNameById($address['country_id']);
         $address = implode(' ', array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
 
-        $userPosition = app('geocoder')->geocode(['address' => $address]);
-        if (!$userPosition OR !$userPosition->isValid())
+        $collection = app('geocoder')->geocode($address);
+        if (!$collection OR $collection->isEmpty())
             throw new ApplicationException(lang('igniter.cart::default.alert_invalid_search_query'));
 
-        if (!$area = Location::current()->searchDeliveryArea($userPosition))
+        if (!$area = Location::current()->searchDeliveryArea($collection->first()->getCoordinates()))
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
 
         if (!Location::isCurrentAreaId($area->area_id)) {
@@ -315,6 +315,7 @@ class Checkout extends BaseComponent
             return FALSE;
 
         $successPage = $this->property('successPage');
+
         return Redirect::to($order->getUrl($successPage));
     }
 }

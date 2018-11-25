@@ -84,7 +84,7 @@ class Orders extends \System\Classes\BaseComponent
                 }
 
                 flash()->success(sprintf(
-                    lang('igniter.cart:default.orders.alert_reorder_success'), $orderId
+                    lang('igniter.cart::default.orders.alert_reorder_success'), $orderId
                 ));
 
                 $reorderPage = $this->property('reorderPage');

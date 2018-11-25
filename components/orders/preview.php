@@ -1,36 +1,36 @@
 <div class="table-responsive">
     <table class="table table-borderless">
         <tr>
-            <td style="width:20%;"><b><?= lang('igniter.cart:default.orders.column_id'); ?>:</b></td>
+            <td style="width:20%;"><b><?= lang('igniter.cart::default.orders.column_id'); ?>:</b></td>
             <td><?= $customerOrder->order_id; ?></td>
         </tr>
         <tr>
-            <td><b><?= lang('igniter.cart:default.orders.column_date'); ?>:</b></td>
+            <td><b><?= lang('igniter.cart::default.orders.column_date'); ?>:</b></td>
             <td><?= day_elapsed($customerOrder->order_date).' - '.$customerOrder->order_time; ?></td>
         </tr>
         <tr>
-            <td><b><?= lang('igniter.cart:default.orders.column_date_added'); ?>:</b></td>
+            <td><b><?= lang('igniter.cart::default.orders.column_date_added'); ?>:</b></td>
             <td><?= day_elapsed($customerOrder->date_added); ?></td>
         </tr>
         <tr>
-            <td><b><?= lang('igniter.cart:default.orders.column_order'); ?>:</b></td>
+            <td><b><?= lang('igniter.cart::default.orders.column_order'); ?>:</b></td>
             <td><?= $customerOrder->order_type_name; ?></td>
         </tr>
         <?php if ($customerOrder->isDeliveryType()) { ?>
             <tr>
-                <td><b><?= lang('igniter.cart:default.orders.column_delivery'); ?>:</b></td>
+                <td><b><?= lang('igniter.cart::default.orders.column_delivery'); ?>:</b></td>
                 <td><?= format_address($customerOrder->address); ?></td>
             </tr>
         <?php } ?>
         <tr>
-            <td><b><?= lang('igniter.cart:default.orders.column_payment'); ?>:</b></td>
+            <td><b><?= lang('igniter.cart::default.orders.column_payment'); ?>:</b></td>
             <td><?= $customerOrder->payment_method
                     ? $customerOrder->payment_method->name
                     : lang('igniter.cart::default.checkout.text_no_payment');
                 ?></td>
         </tr>
         <tr>
-            <td><b><?= lang('igniter.cart:default.orders.column_location'); ?>:</b></td>
+            <td><b><?= lang('igniter.cart::default.orders.column_location'); ?>:</b></td>
             <td>
                 <?= $customerOrder->location->location_name; ?><br/>
                 <?= format_address($customerOrder->location->getAddress()); ?>
@@ -40,7 +40,7 @@
 </div>
 
 <div class="text-center">
-    <h4><?= lang('igniter.cart:default.orders.text_order_menus'); ?></h4>
+    <h4><?= lang('igniter.cart::default.orders.text_order_menus'); ?></h4>
 </div>
 <div class="table-responsive">
     <table class="table table-striped">
@@ -48,9 +48,9 @@
         <tr>
             <th style="width:7%"></th>
             <th class="text-left"
-                width="65%"><?= lang('igniter.cart:default.orders.column_menu_name'); ?></th>
-            <th class="text-right"><?= lang('igniter.cart:default.orders.column_menu_price'); ?></th>
-            <th class="text-right"><?= lang('igniter.cart:default.orders.column_menu_subtotal'); ?></th>
+                width="65%"><?= lang('igniter.cart::default.orders.column_menu_name'); ?></th>
+            <th class="text-right"><?= lang('igniter.cart::default.orders.column_menu_price'); ?></th>
+            <th class="text-right"><?= lang('igniter.cart::default.orders.column_menu_subtotal'); ?></th>
         </tr>
         </thead>
         <tbody>
@@ -114,7 +114,7 @@
         data-request-data="orderId: <?= $customerOrder->order_id; ?>"
     >
         <i class="fa fa-mail-reply"></i>
-        <?= lang('igniter.cart:default.orders.button_reorder'); ?>
+        <?= lang('igniter.cart::default.orders.button_reorder'); ?>
     </a>
     <?php if ($showReviews) { ?>
         <td>
@@ -126,7 +126,7 @@
                 ]); ?>"
             >
                 <i class="fa fa-heart"></i>
-                <?= lang('igniter.cart:default.orders.text_leave_review'); ?>
+                <?= lang('igniter.cart::default.orders.text_leave_review'); ?>
             </a>
         </td>
     <?php } ?>

@@ -157,7 +157,7 @@
         return this
     }
 
-    $(document).ready(function () {
+    $(document).render(function () {
         $('[data-control="cart-box"]').cartBox()
     })
 

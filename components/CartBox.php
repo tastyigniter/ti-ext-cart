@@ -153,7 +153,7 @@ class CartBox extends \System\Classes\BaseComponent
                 throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
 
             if (!Location::checkOrderType($orderType = Location::orderType()))
-                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
+                throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
 
             if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->isValid())
                 throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
