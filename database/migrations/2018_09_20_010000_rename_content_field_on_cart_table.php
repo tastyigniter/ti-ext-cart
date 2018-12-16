@@ -18,8 +18,5 @@ class RenameContentFieldOnCartTable extends Migration
 
     public function down()
     {
-        Schema::table('igniter_cart_cart', function (Blueprint $table) {
-            $table->renameColumn('data', 'content');
-        });
     }
 }
