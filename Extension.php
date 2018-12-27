@@ -136,7 +136,7 @@ class Extension extends BaseExtension
         Event::listen('admin.order.paymentProcessed', function ($model) {
             if ($user = Auth::user()) {
                 activity()->causedBy($user)->log(
-                    lang('system::lang.activities.activity_logged_in')
+                    lang('igniter.cart::default.checkout.activity_order_created')
                 );
             }
 
