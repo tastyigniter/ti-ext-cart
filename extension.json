@@ -2,7 +2,7 @@
   "code": "igniter.cart",
   "name": "Cart",
   "description": "Easily add a shopping cart to your site. The most powerful way to sell your menu items.",
-  "version": "2.0.0-beta.2",
+  "version": "v2.0.0-beta.6",
   "author": "SamPoyigi",
   "icon": "fa-shopping-cart",
   "homepage": "https://github.com/tastyigniter/ti-ext-cart",
