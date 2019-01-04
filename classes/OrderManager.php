@@ -189,14 +189,14 @@ class OrderManager
             ];
         })->all();
 
-        $totals[] = [
+        $totals['subtotal'] = [
             'code' => 'subtotal',
             'title' => lang('igniter.cart::default.text_sub_total'),
             'value' => $this->cart->subtotal(),
             'priority' => 0,
         ];
 
-        $totals[] = [
+        $totals['total'] = [
             'code' => 'total',
             'title' => lang('igniter.cart::default.text_order_total'),
             'value' => $this->cart->total(),

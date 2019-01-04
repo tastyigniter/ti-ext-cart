@@ -91,7 +91,7 @@ return [
     'alert_coupon_expired' => 'Your coupon is either invalid or expired.',
     'alert_coupon_not_applied' => 'Your coupon can not be applied to orders below %s.',
     'alert_coupon_maximum_reached' => 'Maximum number of redemption for the coupon has been reached.',
-    'alert_coupon_order_restriction' => 'Your coupon can ONLY be applied to <b>%s</b> orders',
+    'alert_coupon_order_restriction' => 'Your coupon can not be applied to <b>%s</b> orders',
     'alert_menu_not_within_mealtime' => '%s is available for %s ONLY between (%s - %s)',
 
     'help_show_cart_images' => 'Show or hide cart menu images',

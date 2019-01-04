@@ -12,6 +12,8 @@ class Tax extends CartCondition
 
     protected $taxRate;
 
+    public $priority = 300;
+
     public function getLabel()
     {
         $label = $this->taxInclusive ? "{$this->taxRate}% included" : "{$this->taxRate}%";

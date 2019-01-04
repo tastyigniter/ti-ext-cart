@@ -263,7 +263,7 @@ class Checkout extends BaseComponent
 
     protected function validateAddress($address)
     {
-        $address['country'] = app('country')->getCountryNameById($address['country_id']);
+        $address['country'] = app('country')->getCountryNameById($address['country_id'] ?? setting('country_id'));
         $address = implode(' ', array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
 
         $collection = app('geocoder')->geocode($address);
@@ -297,7 +297,7 @@ class Checkout extends BaseComponent
             $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'required|min:2|max:128'];
             $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'required|min:2|max:10'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|required|integer'];
         }
 
         return $namedRules;

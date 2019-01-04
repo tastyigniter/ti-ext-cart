@@ -6,7 +6,7 @@
                 type="text"
                 name="coupon_code"
                 class="form-control"
-                value=""
+                value="<?= ($coupon = $cart->getCondition('coupon')) ? $coupon->getMetaData('code') : '' ?>"
                 placeholder="<?= lang('igniter.cart::default.text_apply_coupon'); ?>"/>
 
             <span class="input-group-btn">

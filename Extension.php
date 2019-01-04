@@ -41,7 +41,7 @@ class Extension extends BaseExtension
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',
-            ]
+            ],
         ];
     }
 
@@ -82,7 +82,7 @@ class Extension extends BaseExtension
         return [
             'Module.CartModule' => [
                 'description' => 'Ability to manage cart module',
-                'action' => ['manage'],
+                'group' => 'module',
             ],
         ];
     }
@@ -126,13 +126,6 @@ class Extension extends BaseExtension
 
     protected function bindCheckoutEvents()
     {
-        Event::listen('igniter.checkout.beforePayment', function ($orderModel) {
-            $couponCondition = Cart::getCondition('coupon');
-
-            if ($couponCondition AND $couponModel = $couponCondition->getModel())
-                $orderModel->logCouponHistory($couponModel, Auth::customer());
-        });
-
         Event::listen('admin.order.paymentProcessed', function ($model) {
             if ($user = Auth::user()) {
                 activity()->causedBy($user)->log(

@@ -6,7 +6,7 @@
         <form method="POST" data-request="<?= $formHandler; ?>">
             <?php if ($showCartItemThumb AND $menuItem->hasMedia('thumb')) { ?>
                 <div class="modal-top">
-                    <img class="img-fluid" src="<?= $menuItem->getThumb([
+                    <img class="img-fluid" src="<?= $menuItem->thumb->getThumb([
                         'width' => $cartItemThumbWidth,
                         'height' => $cartItemThumbHeight,
                     ]); ?>">

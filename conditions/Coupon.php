@@ -13,6 +13,8 @@ class Coupon extends CartCondition
 {
     public $removeable = TRUE;
 
+    public $priority = 200;
+
     protected $couponCode;
 
     /**
@@ -32,8 +34,8 @@ class Coupon extends CartCondition
 
     public function onLoad()
     {
-        $this->couponCode = $this->getMetaData('code');
-        $this->couponModel = Coupons_model::getByCode($this->couponCode);
+        if ($this->couponCode = $this->getMetaData('code'))
+            $this->couponModel = Coupons_model::getByCode($this->couponCode);
     }
 
     public function beforeApply()
@@ -49,6 +51,7 @@ class Coupon extends CartCondition
         }
         catch (Exception $ex) {
             flash()->alert($ex->getMessage())->now();
+            $this->removeMetaData('code');
 
             return FALSE;
         }

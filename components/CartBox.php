@@ -31,6 +31,18 @@ class CartBox extends \System\Classes\BaseComponent
                 'type' => 'switch',
                 'default' => FALSE,
             ],
+            'cartItemThumbWidth' => [
+                'label' => 'Cart item image width',
+                'type' => 'number',
+                'span' => 'left',
+                'default' => 720,
+            ],
+            'cartItemThumbHeight' => [
+                'label' => 'Cart item image height',
+                'type' => 'number',
+                'span' => 'right',
+                'default' => 300,
+            ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
@@ -72,6 +84,8 @@ class CartBox extends \System\Classes\BaseComponent
     protected function prepareVars()
     {
         $this->page['showCartItemThumb'] = $this->property('showCartItemThumb', FALSE);
+        $this->page['cartItemThumbWidth'] = $this->property('cartItemThumbWidth');
+        $this->page['cartItemThumbHeight'] = $this->property('cartItemThumbHeight');
         $this->page['cartBoxTimeFormat'] = $this->property('timeFormat');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
