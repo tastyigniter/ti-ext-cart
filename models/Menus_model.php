@@ -87,7 +87,7 @@ class Menus_model extends BaseMenus_model implements Buyable
     {
         $price = $this->iSpecial() ? $this->special->special_price : $this->menu_price;
 
-        if (count($options)) {
+        if (is_array($options)) {
             $price += collect($options)->sum('price');
         }
 
