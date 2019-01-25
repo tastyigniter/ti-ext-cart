@@ -47,7 +47,7 @@ class Coupon extends CartCondition
             if (!$this->couponModel)
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
 
-            $this->validateCoupon(Location::orderType(), Auth::getUser());
+            $this->validateCoupon();
         }
         catch (Exception $ex) {
             flash()->alert($ex->getMessage())->now();
@@ -82,8 +82,12 @@ class Coupon extends CartCondition
         $this->removeMetaData('code');
     }
 
-    protected function validateCoupon($orderType, $user)
+    protected function validateCoupon()
     {
+        $user = Auth::getUser();
+        $locationId = Location::getId();
+        $orderType = Location::orderType();
+
         if ($this->couponModel->isExpired())
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_expired'));
 
@@ -91,6 +95,9 @@ class Coupon extends CartCondition
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_coupon_order_restriction'), $orderType
             ));
+
+        if ($this->couponModel->hasLocationRestriction($locationId))
+            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_location_restricted'));
 
         if (!$this->couponModel->hasReachedMaxRedemption())
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_maximum_reached'));
