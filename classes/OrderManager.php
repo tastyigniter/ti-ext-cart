@@ -135,7 +135,7 @@ class OrderManager
     {
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
-        if (!strlen($order->payment))
+        if (!strlen($order->payment) AND $this->processPaymentLessForm($order))
             return;
 
         $paymentMethod = $this->getPayment($order->payment);
@@ -145,19 +145,6 @@ class OrderManager
         $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
 
         return $result;
-    }
-
-    protected function getCustomerAttributes()
-    {
-        $customer = $this->customer;
-
-        return [
-            'first_name' => $customer ? $customer->first_name : null,
-            'last_name' => $customer ? $customer->last_name : null,
-            'email' => $customer ? $customer->email : null,
-            'telephone' => $customer ? $customer->telephone : null,
-            'address_id' => $customer ? $customer->address_id : null,
-        ];
     }
 
     public function applyRequiredAttributes($order)
@@ -176,6 +163,19 @@ class OrderManager
         $order->order_total = $this->cart->total();
 
         $order->ip_address = Request::getClientIp();
+    }
+
+    protected function getCustomerAttributes()
+    {
+        $customer = $this->customer;
+
+        return [
+            'first_name' => $customer ? $customer->first_name : null,
+            'last_name' => $customer ? $customer->last_name : null,
+            'email' => $customer ? $customer->email : null,
+            'telephone' => $customer ? $customer->telephone : null,
+            'address_id' => $customer ? $customer->address_id : null,
+        ];
     }
 
     protected function getCartTotals()
@@ -204,6 +204,18 @@ class OrderManager
         ];
 
         return $totals;
+    }
+
+    protected function processPaymentLessForm($order)
+    {
+        if ($order->order_total > 0)
+            return FALSE;
+
+        if ($order->markAsPaymentProcessed()) {
+            $order->updateOrderStatus(setting('default_order_status'), ['notify' => FALSE]);
+        }
+
+        return TRUE;
     }
 
     //

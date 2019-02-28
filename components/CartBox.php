@@ -13,11 +13,6 @@ use Request;
 
 class CartBox extends \System\Classes\BaseComponent
 {
-    public function initialize()
-    {
-        Cart::loadConditions();
-    }
-
     public function defineProperties()
     {
         return [

@@ -17,9 +17,12 @@ class Extension extends BaseExtension
 
         AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);
 
-        $this->app->resolving(\Igniter\Flame\Cart\Cart::class, function ($cart, $container) {
+        $this->app->singleton('cart', function ($app) {
             Config::set('cart.model', CartStore::class);
             Config::set('cart.conditions', CartSettings::get('conditions'));
+            Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
+
+            return $app->make(\Igniter\Flame\Cart\Cart::class);
         });
     }
 

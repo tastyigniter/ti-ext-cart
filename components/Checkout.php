@@ -9,7 +9,6 @@ use Auth;
 use Cart;
 use Exception;
 use Igniter\Cart\Classes\OrderManager;
-use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Orders_model;
 use Illuminate\Http\RedirectResponse;
 use Location;
@@ -91,8 +90,6 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
-        $this->storeUserCart();
-
         if (!$this->isCheckoutSuccessPage()) {
             if ($redirect = $this->isOrderMarkedAsProcessed())
                 return $redirect;
@@ -121,7 +118,7 @@ class Checkout extends BaseComponent
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
-        $this->page['paymentGateways'] = $this->orderManager->getPaymentGateways();
+        $this->page['paymentGateways'] = $this->getPaymentGateways();
     }
 
     /**
@@ -143,6 +140,14 @@ class Checkout extends BaseComponent
         }
 
         return $this->order = $order;
+    }
+
+    public function getPaymentGateways()
+    {
+        $order = $this->getOrder();
+
+        return $order->order_total > 0
+            ? $this->orderManager->getPaymentGateways() : null;
     }
 
     /**
@@ -287,7 +292,7 @@ class Checkout extends BaseComponent
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email|max:96|unique:customers'],
             ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
-            ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'required|alpha_dash'],
+            ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'],
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
         ];
 
