@@ -315,31 +315,16 @@ class CartBox extends \System\Classes\BaseComponent
                 $menuOptionId = $menuOption->getKey();
                 $selectedOption = $selectedOptions->get($menuOptionId);
 
-                if ($menuOption->isRequired() AND !isset($selectedOption['option_values']))
-                    throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_option_required'),
-                        $menuOption->option_name));
-
-                if (!isset($selectedOption['option_values']) OR !count($selectedOption['option_values']))
+                if (!$this->validateMenuItemOption($menuOption, $selectedOption))
                     return FALSE;
 
                 $option['menu_option_id'] = $menuOption->menu_option_id;
                 $option['name'] = $menuOption->option_name;
 
-                $valuesArray = $menuOption->menu_option_values->keyBy('menu_option_value_id')->map(
-                    function ($optionValue) use ($selectedOption) {
-                        if (!in_array($optionValue->menu_option_value_id, $selectedOption['option_values']))
-                            return FALSE;
+                $optionValues = $this->mapMenuOptionValues($menuOption, $selectedOption);
 
-                        return array_only($optionValue->toArray(), [
-                            'menu_option_value_id',
-                            'name',
-                            'price',
-                        ]);
-                    }
-                );
-
-                $option['price'] = $valuesArray->sum('price');
-                $option['values'] = $valuesArray->filter()->all();
+                $option['price'] = $optionValues->sum('price');
+                $option['values'] = $optionValues->filter()->all();
 
                 return $option;
             }
@@ -391,5 +376,32 @@ class CartBox extends \System\Classes\BaseComponent
         if (!$menuModel->checkMinQuantity($quantity))
             throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_qty_is_below_min_qty'),
                 $menuModel->minimum_qty));
+    }
+
+    protected function validateMenuItemOption($menuOption, $selectedOption)
+    {
+        $selectedOptionValues = array_get($selectedOption, 'option_values', []);
+
+        if ($menuOption->isRequired() AND !array_filter($selectedOptionValues))
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_option_required'),
+                $menuOption->option_name));
+
+        return count($selectedOptionValues);
+    }
+
+    protected function mapMenuOptionValues($menuOption, $selectedOption)
+    {
+        return $menuOption->menu_option_values->keyBy('menu_option_value_id')->map(
+            function ($optionValue) use ($selectedOption) {
+                if (!in_array($optionValue->menu_option_value_id, $selectedOption['option_values']))
+                    return FALSE;
+
+                return array_only($optionValue->toArray(), [
+                    'menu_option_value_id',
+                    'name',
+                    'price',
+                ]);
+            }
+        );
     }
 }
