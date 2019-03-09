@@ -209,20 +209,6 @@ class Checkout extends BaseComponent
         }
     }
 
-    protected function storeUserCart()
-    {
-        if (!CartSettings::get('abandoned_cart'))
-            return;
-
-        if (!$customer = $this->customer())
-            return;
-
-        if (Cart::content()->isEmpty())
-            return;
-
-        Cart::store($customer->getKey());
-    }
-
     protected function validateCart($throwException = TRUE)
     {
         $failed = FALSE;

@@ -24,6 +24,9 @@ class Extension extends BaseExtension
 
             return $app->make(\Igniter\Flame\Cart\Cart::class);
         });
+
+        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
+                  ->pushMiddleware(\Igniter\Cart\Middleware\CartMiddleware::class);
     }
 
     public function boot()
