@@ -33,7 +33,7 @@
                         <td class="text-right">
                             <?= is_numeric($result = $condition->getValue())
                                 ? currency_format($result)
-                                : '--'; ?>
+                                : $result; ?>
                         </td>
                     </tr>
                 <?php } ?>

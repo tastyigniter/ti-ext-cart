@@ -32,16 +32,13 @@ class Coupon extends CartCondition
         return $this->couponModel;
     }
 
-    public function onLoad()
-    {
-        if ($this->couponCode = $this->getMetaData('code'))
-            $this->couponModel = Coupons_model::getByCode($this->couponCode);
-    }
-
     public function beforeApply()
     {
-        if (!strlen($this->couponCode))
+        if (!strlen($couponCode = $this->getMetaData('code')))
             return FALSE;
+
+        if (is_null($this->couponModel))
+            $this->couponModel = Coupons_model::getByCode($couponCode);
 
         try {
             if (!$this->couponModel)
