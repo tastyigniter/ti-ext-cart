@@ -96,7 +96,7 @@ class Coupon extends CartCondition
         if ($this->couponModel->hasLocationRestriction($locationId))
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_location_restricted'));
 
-        if (!$this->couponModel->hasReachedMaxRedemption())
+        if ($this->couponModel->hasReachedMaxRedemption())
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_maximum_reached'));
 
         if ($user AND $this->couponModel->customerHasMaxRedemption($user))
