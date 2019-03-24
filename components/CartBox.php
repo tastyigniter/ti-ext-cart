@@ -346,7 +346,7 @@ class CartBox extends \System\Classes\BaseComponent
                 $menuModel->mealtime->start_time,
                 $menuModel->mealtime->end_time));
 
-        if ($quantity == 0)
+        if ($quantity == 0 OR $menuModel->minimum_qty == 0)
             return;
 
         // Quantity is valid if its divisive by the minimum quantity
