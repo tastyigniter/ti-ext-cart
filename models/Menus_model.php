@@ -44,7 +44,7 @@ class Menus_model extends BaseMenus_model implements Buyable
 
     public function outOfStock()
     {
-        return $this->stock_qty < 1;
+        return $this->stock_qty < 0;
     }
 
     public function checkStockLevel($quantity = 0)
