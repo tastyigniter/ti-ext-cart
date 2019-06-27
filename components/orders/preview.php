@@ -60,7 +60,7 @@
             <tr id="<?= $menu->menu_id; ?>">
                 <td><?= $menu->quantity; ?> x</td>
                 <td class="text-left"><?= $menu->name; ?><br/>
-                    <?php if ($menuItemOptions = $menuItemsOptions->get($menu->menu_id)) { ?>
+                    <?php if ($menuItemOptions = $menuItemsOptions->get($menu->order_menu_id)) { ?>
                         <div>
                             <?php foreach ($menuItemOptions as $menuItemOption) { ?>
                                 <small>
