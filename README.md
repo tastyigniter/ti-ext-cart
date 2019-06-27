@@ -38,12 +38,12 @@ In the admin user interface you can manage the cart conditions.
 
 | Variable                  | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| $cartBoxTimeFormat | Delivery and pick-up time format                                                |
-| $pageIsCart | Display the standalone cartbox                                         |
-| $pageIsCheckout | CartBox is loaded on the checkout page                             |
-| $cart | Cart Class instance                                                |
-| $location | Location Class instance |
-| $locationCurrent | Location Model instance                                          |
+| `$cartBoxTimeFormat` | Delivery and pick-up time format                                                |
+| `$pageIsCart` | Display the standalone cartbox                                         |
+| `$pageIsCheckout` | CartBox is loaded on the checkout page                             |
+| `$cart` | Cart Class instance                                                |
+| `$location` | Location Class instance |
+| `$locationCurrent` | Location Model instance                                          |
 
 **Example:**
 
@@ -84,16 +84,16 @@ permalink: /checkout
 
 | Variable                  | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| $orderDateFormat | Success page order date format                                                |
-| $orderTimeFormat | Success page order time format                                                |
-| $showCountryField | Display the country form field                             |
-| $agreeTermsPage | Link to thenterms & conditions page                                                |
-| $redirectPage | Link to the checkout cancel page                                                |
-| $menusPage | Link to the menus page                                                |
-| $ordersPage | Link to the order view page                                                |
-| $successPage | Link to the confirmation page                                                |
-| $order | Order Model instance                                          |
-| $paymentGateways | Instances of available payment gateways                                          |
+| `$orderDateFormat` | Success page order date format                                                |
+| `$orderTimeFormat` | Success page order time format                                                |
+| `$showCountryField` | Display the country form field                             |
+| `$agreeTermsPage` | Link to thenterms & conditions page                                                |
+| `$redirectPage` | Link to the checkout cancel page                                                |
+| `$menusPage` | Link to the menus page                                                |
+| `$ordersPage` | Link to the order view page                                                |
+| `$successPage` | Link to the confirmation page                                                |
+| `$order` | Order Model instance                                          |
+| `$paymentGateways` | Instances of available payment gateways                                          |
 
 **Example:**
 
@@ -141,16 +141,16 @@ The Cart Library used with this extension will fire some global events that can 
 
 | Event | Description | Parameters |
 | ----- | ----------- | ---------- |
-| cart.created |    When cart instance is created.    |           |
-| cart.added |      When an item has been added to the cart.       |      The `CartItem` instance     |
-| cart.updated |     When an item has been updated in the cart.     |      The `CartItem` instance     |
-| cart.removed |    When an item has been removed from the cart.      |     The `CartItem` instance      |
-| cart.cleared |     When all items has been cleared from the cart.     |           |
-| cart.condition.loaded |      When a condition has been loaded to the cart.    |      The `CartCondition` instance     |
-| cart.condition.removed |     When a condition has been removed from the cart.     |     The `CartCondition` instance      |
-| cart.condition.cleared |      When all condition has been cleared from the cart.    |           |
-| cart.stored |    When the content of a cart was stored.      |           |
-| cart.restored |      When the content of a cart was restored.    |           |
+| `cart.created` |    When cart instance is created.    |           |
+| `cart.added` |      When an item has been added to the cart.       |      The `CartItem` instance     |
+| `cart.updated` |     When an item has been updated in the cart.     |      The `CartItem` instance     |
+| `cart.removed` |    When an item has been removed from the cart.      |     The `CartItem` instance      |
+| `cart.cleared` |     When all items has been cleared from the cart.     |           |
+| `cart.condition.loaded` |      When a condition has been loaded to the cart.    |      The `CartCondition` instance     |
+| `cart.condition.removed` |     When a condition has been removed from the cart.     |     The `CartCondition` instance      |
+| `cart.condition.cleared` |      When all condition has been cleared from the cart.    |           |
+| `cart.stored` |    When the content of a cart was stored.      |           |
+| `cart.restored` |      When the content of a cart was restored.    |           |
 
 **Example of hooking an event**
 
