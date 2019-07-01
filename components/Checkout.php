@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Components;
 
+use Admin\Models\Addresses_model;
 use Admin\Models\Customers_model;
 use Admin\Traits\ValidatesForm;
 use ApplicationException;
@@ -10,6 +11,7 @@ use Cart;
 use Exception;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Orders_model;
+use Igniter\Local\Classes\CoveredArea;
 use Illuminate\Http\RedirectResponse;
 use Location;
 use Main\Traits\HasPageOptions;
@@ -187,7 +189,7 @@ class Checkout extends BaseComponent
 
             $this->validate($data, $this->createRules());
 
-            if ($address = array_get($data, 'address', []))
+            if ($address = $this->getAddressFromRequest($data))
                 $this->validateAddress($address);
 
             $order = $this->getOrder();
@@ -254,7 +256,10 @@ class Checkout extends BaseComponent
 
     protected function validateAddress($address)
     {
-        $address['country'] = app('country')->getCountryNameById($address['country_id'] ?? setting('country_id'));
+        if (!Location::requiresUserPosition())
+            return;
+
+        $address['country'] = app('country')->getCountryNameById($address['country_id']);
         $address = implode(' ', array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
 
         $collection = app('geocoder')->geocode($address);
@@ -265,7 +270,7 @@ class Checkout extends BaseComponent
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
 
         if (!Location::isCurrentAreaId($area->area_id)) {
-            Location::setCoveredArea($area);
+            Location::setCoveredArea(new CoveredArea($area));
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
         }
     }
@@ -283,12 +288,12 @@ class Checkout extends BaseComponent
         ];
 
         if (Location::orderTypeIsDelivery()) {
-            $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'integer'];
-            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'required|min:2|max:128'];
+            $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'sometimes|required|integer'];
+            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'requiredIf:address_id,0|min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'requiredIf:address_id,0|min:2|max:128'];
             $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
-            $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'required|min:2|max:10'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|required|integer'];
+            $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'requiredIf:address_id,0|min:2|max:10'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|requiredIf:address_id,0|integer'];
         }
 
         return $namedRules;
@@ -308,5 +313,21 @@ class Checkout extends BaseComponent
         $successPage = $this->property('successPage');
 
         return Redirect::to($order->getUrl($successPage));
+    }
+
+    protected function getAddressFromRequest(&$data)
+    {
+        $addressId = array_get($data, 'address_id');
+        if (empty($addressId)) {
+            if (isset($data['address']))
+                $data['address']['country_id'] = $data['address']['country_id'] ?? setting('country_id');
+
+            return array_get($data, 'address', []);
+        }
+
+        $data['address'] = ($model = Addresses_model::find($addressId))
+            ? $model->toArray() : null;
+
+        return $data['address'];
     }
 }

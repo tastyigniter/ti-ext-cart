@@ -1,10 +1,12 @@
 <div class="form-group">
     <label for=""><?= lang('igniter.cart::default.checkout.text_delivery_address'); ?></label>
     <div class="input-group">
-        <?php if (count($customerAddresses = $order->listCustomerAddresses())) { ?>
+        <?php $customerAddresses = $order->listCustomerAddresses(); ?>
+        <?php if (count($customerAddresses)) { ?>
             <select
-                class="form-control" name="address_id"
-                id="">
+                class="form-control"
+                name="address_id"
+            >
                 <option value="0"><?= lang('igniter.cart::default.checkout.text_address'); ?></option>
                 <?php $index = 0;
                 foreach ($customerAddresses as $address) { ?>
@@ -19,7 +21,7 @@
                         data-state=""
                         data-postcode=""
                         data-country=""
-                        <?= $isDefaultAddress ? 'selected="selected"' : ''; ?>
+                        <?= set_select('address_id', $address->address_id, $isDefaultAddress); ?>
                     ><?= $address->formatted_address; ?></option>
                     <?php $index++; ?>
                 <?php } ?>
@@ -29,7 +31,13 @@
     <?= form_error('address_id', '<span class="text-danger">', '</span>'); ?>
 </div>
 
-<div class="mt-3">
+<div class="mt-3"
+    <?php if (count($customerAddresses)) { ?>
+        data-trigger="[name='address_id']" data-trigger-action="show"
+        data-trigger-condition="value[0]"
+        data-trigger-closest-parent="form"
+    <?php } ?>
+>
     <input
         type="hidden"
         name="address[address_id]"

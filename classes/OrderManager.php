@@ -108,8 +108,9 @@ class OrderManager
         $addressId = null;
         if ($address = array_get($data, 'address', [])) {
             $address['customer_id'] = $customerId;
-            $address['address_id'] = $order->address_id;
-            $addressId = Addresses_model::createOrUpdateFromRequest($address)->getKey();
+
+            $addressId = array_get($data, 'address_id');
+            $addressId = !empty($addressId) ? $addressId : Addresses_model::createOrUpdateFromRequest($address)->getKey();
 
             // Update customer default address
             if ($this->customer) {
