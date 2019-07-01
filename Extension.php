@@ -114,6 +114,13 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerPrintTemplates()
+    {
+        return [
+            'igniter.cart::print.order' => 'Default order print template',
+        ];
+    }
+
     protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function () {
