@@ -6,7 +6,6 @@ use Config;
 use Event;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Flame\ActivityLog\Models\Activity;
 use Illuminate\Foundation\AliasLoader;
 use System\Classes\BaseExtension;
 
@@ -28,8 +27,6 @@ class Extension extends BaseExtension
 
         $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
                   ->pushMiddleware(\Igniter\Cart\Middleware\CartMiddleware::class);
-
-        $this->registerActivityTypes();
     }
 
     public function boot()
@@ -124,6 +121,13 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerActivityTypes()
+    {
+        return [
+            ActivityTypes\OrderCreated::class,
+        ];
+    }
+
     protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function () {
@@ -148,15 +152,6 @@ class Extension extends BaseExtension
             $model->mailSend('igniter.cart::mail.order', 'customer');
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
-        });
-    }
-
-    protected function registerActivityTypes()
-    {
-        Activity::registerCallback(function (Activity $manager) {
-            $manager->registerActivityTypes([
-                ActivityTypes\OrderCreated::class => ['alert'],
-            ]);
         });
     }
 }
