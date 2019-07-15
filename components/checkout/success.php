@@ -14,9 +14,9 @@
     <?= sprintf(
         lang('igniter.cart::default.checkout.text_order_info'),
         $order->order_type,
-        mdate($orderDateFormat, strtotime($order->date_added)),
+        mdate("{$orderDateFormat} {$orderTimeFormat}", strtotime($order->date_added)),
         ucwords($order->order_type),
-        mdate("{$orderDateFormat} {$orderTimeFormat}", strtotime("{$order->order_date} {$order->order_time}")),
+        $order->order_date->setTimeFromTimeString($order->order_time)->format("{$orderDateFormat} {$orderTimeFormat}"),
         $order->payment_method
             ? $order->payment_method->name
             : lang('igniter.cart::default.checkout.text_no_payment')
