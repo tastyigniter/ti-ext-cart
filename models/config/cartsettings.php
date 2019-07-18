@@ -55,6 +55,7 @@ return [
                         'status' => [
                             'label' => 'lang:igniter.cart::default.column_condition_status',
                             'type' => 'switch',
+                            'default' => TRUE,
                         ],
                     ],
                 ],

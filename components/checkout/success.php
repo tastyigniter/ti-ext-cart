@@ -76,8 +76,7 @@
                 <?php $thickLine = ($total->code == 'order_total' OR $total->code == 'total'); ?>
                 <tr>
                     <td class="<?= $thickLine ? 'thick' : 'no'; ?>-line" width="1"></td>
-                    <td class="<?= $thickLine ? 'thick' : 'no'; ?>-line"></td>
-                    <td class="<?= $thickLine ? 'thick' : 'no'; ?>-line text-left">
+                    <td class="<?= $thickLine ? 'thick' : 'no'; ?>-line text-right" colspan="2">
                         <?= $total->title; ?>
                     </td>
                     <td class="<?= $thickLine ? 'thick' : 'no'; ?>-line text-right">

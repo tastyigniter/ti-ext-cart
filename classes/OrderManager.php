@@ -182,11 +182,13 @@ class OrderManager
     protected function getCartTotals()
     {
         $totals = $this->cart->conditions()->map(function (CartCondition $condition) {
+            $priority = $condition->getPriority();
+
             return [
                 'code' => $condition->name,
                 'title' => $condition->getLabel(),
                 'value' => $condition->getValue(),
-                'priority' => $condition->getPriority(),
+                'priority' => $priority > 0 ? $priority : 1,
             ];
         })->all();
 

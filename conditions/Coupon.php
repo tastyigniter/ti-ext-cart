@@ -27,6 +27,11 @@ class Coupon extends CartCondition
         return sprintf(lang($this->label), $this->getMetaData('code'));
     }
 
+    public function getValue()
+    {
+        return 0 - $this->calculatedValue;
+    }
+
     public function getModel()
     {
         return $this->couponModel;
