@@ -1,7 +1,6 @@
 <?php namespace Igniter\Cart\Models;
 
 use Admin\Models\Menus_model as BaseMenus_model;
-use Carbon\Carbon;
 use Igniter\Flame\Cart\Contracts\Buyable;
 
 class Menus_model extends BaseMenus_model implements Buyable
@@ -29,12 +28,7 @@ class Menus_model extends BaseMenus_model implements Buyable
         if (!$special = $this->special()->first())
             return FALSE;
 
-        if (!$special->special_status)
-            return FALSE;
-
-        $now = Carbon::now();
-
-        return $special->start_date->lte($now) AND $special->end_date->gte($now);
+        return $special->active();
     }
 
     public function checkMinQuantity($quantity = 0)
@@ -85,7 +79,8 @@ class Menus_model extends BaseMenus_model implements Buyable
      */
     public function getBuyablePrice($options = null)
     {
-        $price = $this->iSpecial() ? $this->special->special_price : $this->menu_price;
+        $price = $this->iSpecial()
+            ? $this->special->getMenuPrice($this->menu_price) : $this->menu_price;
 
         if (is_array($options)) {
             $price += collect($options)->sum('price');
