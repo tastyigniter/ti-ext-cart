@@ -41,7 +41,7 @@ class CartBox extends \System\Classes\BaseComponent
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => TRUE,
             ],
             'pageIsCheckout' => [
                 'label' => 'Whether this component is loaded on the checkout page',
@@ -354,12 +354,12 @@ class CartBox extends \System\Classes\BaseComponent
             throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_qty_is_invalid'),
                 $menuModel->minimum_qty));
 
+        $checkStock = (bool)$this->property('checkStockCheckout', TRUE);
+
         // checks if stock quantity is less than or equal to zero
-        if ($menuModel->outOfStock())
+        if ($checkStock AND $menuModel->outOfStock())
             throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_out_of_stock'),
                 $menuModel->menu_name));
-
-        $checkStock = $this->property('checkStockCheckout', FALSE);
 
         // checks if stock quantity is less than the cart quantity
         if ($checkStock AND !$menuModel->checkStockLevel($quantity))
