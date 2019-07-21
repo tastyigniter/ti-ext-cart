@@ -5,13 +5,13 @@ namespace Igniter\Cart\EventRules\Events;
 use Admin\Models\Orders_model;
 use Igniter\EventRules\Classes\BaseEvent;
 
-class OrderPlaced extends BaseEvent
+class OrderAssigned extends BaseEvent
 {
     public function eventDetails()
     {
         return [
-            'name' => 'Order Placed Event',
-            'description' => 'When an order is placed (after successful payment)',
+            'name' => 'Order Assigned Event',
+            'description' => 'When an order is assigned to a staff',
             'group' => 'order',
         ];
     }
@@ -24,6 +24,7 @@ class OrderPlaced extends BaseEvent
             $params = $order->mailGetData();
 
         $params['order'] = $order;
+        $params['assignee'] = $order->assignee;
 
         return $params;
     }

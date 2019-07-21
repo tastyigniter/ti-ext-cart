@@ -1,5 +1,7 @@
 <?php namespace Igniter\Cart;
 
+use Admin\Models\Orders_model;
+use Admin\Models\Status_history_model;
 use Auth;
 use Cart;
 use Config;
@@ -56,9 +58,14 @@ class Extension extends BaseExtension
         return [
             'events' => [
                 'admin.order.paymentProcessed' => \Igniter\Cart\EventRules\Events\OrderPlaced::class,
+                'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\EventRules\Events\NewOrderStatus::class,
+                'admin.order.assigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
             ],
             'actions' => [],
-            'conditions' => [],
+            'conditions' => [
+                \Igniter\Cart\EventRules\Conditions\OrderAttribute::class,
+                \Igniter\Cart\EventRules\Conditions\OrderStatusAttribute::class,
+            ],
         ];
     }
 
@@ -128,6 +135,17 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerNotifications()
+    {
+        return [
+            'templates' => [
+                'igniter.cart::notification.orderPlaced' => \Igniter\Cart\Notifications\OrderPlaced::class,
+                'igniter.cart::notification.orderStatusChanged' => \Igniter\Cart\Notifications\OrderStatusChanged::class,
+                'igniter.cart::notification.orderAssigned' => \Igniter\Cart\Notifications\OrderAssigned::class,
+            ],
+        ];
+    }
+
     protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function () {
@@ -146,12 +164,25 @@ class Extension extends BaseExtension
 
     protected function bindCheckoutEvents()
     {
-        Event::listen('admin.order.paymentProcessed', function ($model) {
+        Event::listen('admin.order.paymentProcessed', function (Orders_model $model) {
             ActivityTypes\OrderCreated::pushActivityLog($model);
 
             $model->mailSend('igniter.cart::mail.order', 'customer');
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
+        });
+    }
+
+    protected function bindOrderStatusEvent()
+    {
+        Event::listen('admin.statusHistory.beforeAddStatus', function ($model, $object, $statusId, $previousStatus) {
+            if (!$object instanceof Orders_model)
+                return;
+
+            if (Status_history_model::alreadyExists($object, $statusId))
+                return;
+
+            Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
         });
     }
 }

@@ -129,6 +129,10 @@ class OrderManager
         $order->addOrderMenus(Cart::content()->toArray());
         $order->addOrderTotals($this->getCartTotals());
 
+        // Lets log the coupon so we can redeem it later
+        if ($couponCondition = Cart::conditions()->get('coupon'))
+            $order->logCouponHistory($couponCondition, $this->customer);
+
         return $order;
     }
 

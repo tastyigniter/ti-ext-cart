@@ -135,6 +135,23 @@ public function registerCartConditions()
 }
 ```
 
+### Event Rules
+
+## Events
+- Order Placed Event
+- Order Status Update Event
+- Order Assigned Event
+
+## Conditions
+- Order Attributes
+- Order Status Attributes
+
+### Notifications
+
+- Order confirmation notification
+- Order status update notification
+- Order assigned notification
+
 ### Events
 
 The Cart Library used with this extension will fire some global events that can be useful for interacting with other extensions.
