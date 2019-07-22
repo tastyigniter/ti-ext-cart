@@ -205,7 +205,7 @@ class Checkout extends BaseComponent
                 return $redirect;
         }
         catch (Exception $ex) {
-            flash()->warning($ex->getMessage());
+            flash()->warning($ex->getMessage())->important();
 
             return Redirect::back()->withInput();
         }

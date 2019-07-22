@@ -24,6 +24,7 @@ class NewOrderStatus extends BaseEvent
         if ($order instanceof Orders_model)
             $params = $order->mailGetData();
 
+        $status->save();
         $params['order'] = $order;
         $params['status'] = $status;
 
