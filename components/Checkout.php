@@ -224,7 +224,7 @@ class Checkout extends BaseComponent
             if (!$location = Location::current())
                 throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
 
-            if (Location::isClosed())
+            if (!$location->hasFutureOrder() AND Location::isClosed())
                 throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
 
             if (!Location::checkOrderType($orderType = Location::orderType()))
