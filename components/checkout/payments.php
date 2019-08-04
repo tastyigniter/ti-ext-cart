@@ -29,8 +29,8 @@
                                     ); ?>
                                 </p>
                             <?php } ?>
-                            <?= $paymentGateway->renderPaymentForm($this->controller); ?>
                         </div>
+                        <?= $paymentGateway->renderPaymentForm($this->controller); ?>
                     <?php } ?>
                 </div>
                 <?= form_error('payment', '<span class="text-danger">', '</span>'); ?>
