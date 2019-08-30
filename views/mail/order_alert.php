@@ -1,6 +1,5 @@
 subject = "New order on {site_name}"
 ==
-
 You received an order!
 
 You just received an order from {location_name}.
@@ -32,80 +31,52 @@ Restaurant: {location_name}
 {order_total_value}
 
 {/order_totals}
-
 ==
+## You just received a {order_type} order ({order_number}) from {location_name}.
 
-<!-- BODY -->
-<table class="body-wrap">
+**Customer name:** {first_name} {last_name}<br>
+**Order date:** {order_date}<br>
+**Requested {order_type} time:** {order_time}<br>
+**Payment Method:** {order_payment}<br>
+**Restaurant:** {location_name}<br>
+**Delivery Address:** {order_address}
+
+{order_comment}
+
+@partial('table')
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
     <tr>
-        <td></td>
-        <td class="container" bgcolor="#FFFFFF">
-            <div class="content">
-                <table>
-                    <tr>
-                        <td>
-                            <h3>You received an order!</h3>
-                            <p class="lead">You just received an order from {location_name}.</p>
-                            <p>The order number is {order_number}<br>This is a {order_type} order.</p>
-                            <p>
-                                <strong>Customer name:</strong> {first_name} {last_name}<br>
-                                <strong>Order date:</strong> {order_date}<br>
-                                <strong>Requested {order_type} time:</strong> {order_time}<br>
-                                <strong>Payment Method:</strong> {order_payment}
-                            </p>
-                            <p>
-                                {order_address}<br>
-                                <strong>Restaurant:</strong> {location_name}
-                            </p>
-                            <p>{order_comment}</p>
-
-                            <table border="0" cellpadding="0" cellspacing="0" width="90%">
-                                <tbody>
-                                <tr>
-                                    <td width="300">Name/Description</td>
-                                    <td width="163">Unit Price</td>
-                                    <td width="97">Sub Total</td>
-                                </tr>
-                                <tr>
-                                    <td>{order_menus}<br></td>
-                                    <td><br></td>
-                                    <td><br></td>
-                                </tr>
-                                <tr>
-                                    <td>{menu_quantity} x {menu_name}
-                                        <p>{menu_options}</p>
-                                        <p>{menu_comment}</p>
-                                    </td>
-                                    <td>{menu_price}</td>
-                                    <td>{menu_subtotal}</td>
-                                </tr>
-                                <tr>
-                                    <td>{/order_menus}</td>
-                                    <td><br></td>
-                                    <td><br></td>
-                                </tr>
-                                <tr>
-                                    <td><br></td>
-                                    <td>{order_totals}</td>
-                                    <td><br></td>
-                                </tr>
-                                <tr>
-                                    <td><br></td>
-                                    <td>{order_total_title}</td>
-                                    <td>{order_total_value}</td>
-                                </tr>
-                                <tr>
-                                    <td><br></td>
-                                    <td>{/order_totals}<br></td>
-                                    <td><br></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div><!-- /content -->
-        </td>
-        <td></td>
+        <th width="50%" align="left">Name/Description</th>
+        <th align="right">Unit Price</th>
+        <th align="right">Sub Total</th>
     </tr>
-</table><!-- /BODY -->
+    </thead>
+    <tbody>
+    @if(!empty($order_menus))
+    @foreach($order_menus as $order_menu)
+    <tr>
+        <td>{{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}<br>
+            {!! $order_menu['menu_options'] !!}<br>
+            {{ $order_menu['menu_comment'] }}
+        </td>
+        <td align="right">{{ $order_menu['menu_price'] }}</td>
+        <td align="right">{{ $order_menu['menu_subtotal'] }}</td>
+    </tr>
+    @endforeach
+    @endif
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+    @if(!empty($order_totals))
+    @foreach($order_totals as $order_total)
+    <tr>
+        <td><br></td>
+        <td align="right">{{ $order_total['order_total_title'] }}</td>
+        <td align="right">{{ $order_total['order_total_value'] }}</td>
+    </tr>
+    @endforeach
+    @endif
+    </tbody>
+</table>
+@endpartial

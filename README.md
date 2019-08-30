@@ -21,6 +21,7 @@ In the admin user interface you can manage the cart conditions.
 | -------- | ------------------------------ | ------------------------------------------------ |
 | CartBox  | `<?= component('cartBox') ?>`  | Show the contents of and manages the user's cart |
 | Checkout | `<?= component('checkout') ?>` | Displays Checkout form on the page               |
+| Orders | `<?= component('orders') ?>` | Displays a list of orders on the page               |
 
 ### CartBox Component
 
