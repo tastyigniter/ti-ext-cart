@@ -2,12 +2,12 @@
     <label for=""><?= lang('igniter.cart::default.checkout.text_delivery_address'); ?></label>
     <div class="input-group">
         <?php $customerAddresses = $order->listCustomerAddresses(); ?>
-        <?php if (count($customerAddresses)) { ?>
-            <select
-                class="form-control"
-                name="address_id"
-            >
-                <option value="0"><?= lang('igniter.cart::default.checkout.text_address'); ?></option>
+        <select
+            class="form-control"
+            name="address_id"
+        >
+            <option value="0"><?= lang('igniter.cart::default.checkout.text_address'); ?></option>
+            <?php if (count($customerAddresses)) { ?>
                 <?php $index = 0;
                 foreach ($customerAddresses as $address) { ?>
                     <?php
@@ -25,8 +25,8 @@
                     ><?= $address->formatted_address; ?></option>
                     <?php $index++; ?>
                 <?php } ?>
-            </select>
-        <?php } ?>
+            <?php } ?>
+        </select>
     </div>
     <?= form_error('address_id', '<span class="text-danger">', '</span>'); ?>
 </div>
