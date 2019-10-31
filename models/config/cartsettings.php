@@ -53,7 +53,7 @@ return [
                             'type' => 'text',
                         ],
                         'status' => [
-                            'label' => 'lang:igniter.cart::default.column_condition_status',
+                            'label' => 'lang:admin::lang.label_status',
                             'type' => 'switch',
                             'default' => TRUE,
                         ],

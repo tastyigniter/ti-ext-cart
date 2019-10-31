@@ -46,7 +46,6 @@ return [
     'column_condition_name' => 'Name',
     'column_condition_priority' => 'Priority',
     'column_condition_title' => 'Label',
-    'column_condition_status' => 'Status',
 
     'label_menu_quantity' => 'Menu Quantity',
     'label_add_comment' => 'Add Comment',
