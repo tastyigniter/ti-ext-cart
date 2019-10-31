@@ -29,6 +29,6 @@ class CreateCartTable extends Migration
 
     public function down()
     {
-        Schema::drop('igniter_cart_cart');
+        Schema::dropIfExists('igniter_cart_cart');
     }
 }

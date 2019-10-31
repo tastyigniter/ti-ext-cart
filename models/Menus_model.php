@@ -14,7 +14,7 @@ class Menus_model extends BaseMenus_model implements Buyable
 
     public function isAvailable()
     {
-        if (!$mealtime = $this->mealtime()->first())
+        if (!$mealtime = $this->mealtime)
             return TRUE;
 
         if (!$mealtime->mealtime_status)
@@ -25,7 +25,7 @@ class Menus_model extends BaseMenus_model implements Buyable
 
     public function iSpecial()
     {
-        if (!$special = $this->special()->first())
+        if (!$special = $this->special)
             return FALSE;
 
         return $special->active();
@@ -43,11 +43,8 @@ class Menus_model extends BaseMenus_model implements Buyable
 
     public function checkStockLevel($quantity = 0)
     {
-        if ($this->stock_qty < $this->minimum_qty)
-            return FALSE;
-
-        if ($quantity < $this->minimum_qty)
-            return FALSE;
+        if ($this->stock_qty == 0)
+            return TRUE;
 
         return $this->stock_qty > $quantity;
     }
