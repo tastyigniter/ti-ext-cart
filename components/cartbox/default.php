@@ -36,13 +36,17 @@
 </div>
 <div
     id="cart-mobile-buttons"
-    class="<?= ($pageIsCart OR $pageIsCheckout) ? 'hide' : 'fixed-bottom d-block d-sm-none'; ?>"
+    class="<?= (!$pageIsCheckout ? 'fixed-bottom' : 'mt-3').($pageIsCart ? 'hide' : ' d-block d-sm-none'); ?>"
 >
-    <a
-        class="btn btn-primary btn-block cart-toggle text-nowrap"
-        href="<?= site_url('cart') ?>"
-    >
-        <?= lang('igniter.cart::default.text_heading'); ?>:
-        <span id="cart-total" class="font-weight-bold"><?= currency_format($cart->total()); ?></span>
-    </a>
+    <?php if ($pageIsCheckout) { ?>
+        <?= partial('@buttons'); ?>
+    <?php } else { ?>
+        <a
+            class="btn btn-primary btn-block cart-toggle text-nowrap"
+            href="<?= site_url('cart') ?>"
+        >
+            <?= lang('igniter.cart::default.text_heading'); ?>:
+            <span id="cart-total" class="font-weight-bold"><?= currency_format($cart->total()); ?></span>
+        </a>
+    <?php } ?>
 </div>
