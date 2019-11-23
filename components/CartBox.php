@@ -68,7 +68,6 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function onRun()
     {
-        $this->addCss('css/cartbox.css', 'cart-box-css');
         $this->addJs('js/cartbox.js', 'cart-box-js');
         $this->addJs('js/cartitem.js', 'cart-item-js');
         $this->addJs('js/cartbox.modal.js', 'cart-box-modal-js');
