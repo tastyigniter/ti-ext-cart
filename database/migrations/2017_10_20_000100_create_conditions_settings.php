@@ -24,7 +24,7 @@ class CreateConditionsSettings extends Migration
 
         $table = DB::table('extension_settings')->where('item', 'igniter_cart_settings');
         if (!$table->exists())
-            $table->update(['conditions' => $conditions]);
+            $table->update(['data' => serialize(['conditions' => $conditions])]);
     }
 
     public function down()
