@@ -72,6 +72,7 @@ return [
     'alert_unknown_error' => 'Error occurred, please check and try again.',
     'alert_menu_not_found' => '%s not found, please add from the local menus page.',
     'alert_no_menu_selected' => 'Please select a menu to add to your order.',
+    'alert_menu_order_restriction' => 'The selected menu item is not available for <b>%s</b>',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
     'alert_qty_is_invalid' => 'Selected quantity is not divisive by the minimum quantity of %s.',
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',

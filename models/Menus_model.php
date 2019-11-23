@@ -2,6 +2,7 @@
 
 use Admin\Models\Menus_model as BaseMenus_model;
 use Igniter\Flame\Cart\Contracts\Buyable;
+use Igniter\Flame\Location\Models\AbstractLocation;
 
 class Menus_model extends BaseMenus_model implements Buyable
 {
@@ -47,6 +48,16 @@ class Menus_model extends BaseMenus_model implements Buyable
             return TRUE;
 
         return $this->stock_qty > $quantity;
+    }
+
+    public function hasOrderTypeRestriction($orderType)
+    {
+        if (empty($this->order_restriction))
+            return FALSE;
+
+        $orderTypes = [AbstractLocation::DELIVERY => 1, AbstractLocation::COLLECTION => 2];
+
+        return array_get($orderTypes, $orderType, $orderType) != $this->order_restriction;
     }
 
     /**
