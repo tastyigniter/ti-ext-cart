@@ -85,14 +85,9 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
-        if (!$this->isCheckoutSuccessPage()) {
-            if ($redirect = $this->isOrderMarkedAsProcessed())
-                return $redirect;
+        if ($redirect = $this->isOrderMarkedAsProcessed())
+            return $redirect;
 
-        }
-        else {
-            $this->orderManager->clearOrder();
-        }
         if ($this->checkCheckoutSecurity())
             return Redirect::to(restaurant_url($this->property('menusPage')));
 
@@ -115,23 +110,15 @@ class Checkout extends BaseComponent
         $this->page['paymentGateways'] = $this->getPaymentGateways();
     }
 
-    /**
-     * @return Orders_model
-     */
     public function getOrder()
     {
         if (!is_null($this->order))
             return $this->order;
 
-        if (!$this->isCheckoutSuccessPage()) {
-            $order = $this->orderManager->getOrder();
+        $order = $this->orderManager->loadOrder();
 
-            if (!$order->isPaymentProcessed())
-                $this->orderManager->applyRequiredAttributes($order);
-        }
-        else {
-            $order = $this->orderManager->getOrderByHash($this->hashCode());
-        }
+        if (!$order->isPaymentProcessed())
+            $this->orderManager->applyRequiredAttributes($order);
 
         return $this->order = $order;
     }
@@ -243,9 +230,11 @@ class Checkout extends BaseComponent
         if (!$order->isPaymentProcessed())
             return FALSE;
 
-        $successPage = $this->property('successPage');
+        $redirectUrl = $order->getUrl($this->property('successPage'));
+        if ($this->isCheckoutSuccessPage())
+            $redirectUrl = $this->controller->pageUrl($this->property('redirectPage'));
 
-        return Redirect::to($order->getUrl($successPage));
+        return Redirect::to($redirectUrl);
     }
 
     protected function setDeliveryAddress($data)
