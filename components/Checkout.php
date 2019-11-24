@@ -9,6 +9,7 @@ use ApplicationException;
 use Auth;
 use Cart;
 use Exception;
+use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Orders_model;
 use Igniter\Local\Classes\CoveredArea;
@@ -24,6 +25,11 @@ class Checkout extends BaseComponent
     use HasPageOptions;
 
     /**
+     * @var \Igniter\Cart\Classes\CartManager
+     */
+    protected $cartManager;
+
+    /**
      * @var \Igniter\Cart\Classes\OrderManager
      */
     protected $orderManager;
@@ -33,6 +39,7 @@ class Checkout extends BaseComponent
     public function initialize()
     {
         $this->orderManager = OrderManager::instance();
+        $this->cartManager = CartManager::instance();
     }
 
     public function defineProperties()
@@ -201,6 +208,8 @@ class Checkout extends BaseComponent
 
             if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->hasCoordinates())
                 throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
+            if ($this->cartManager->cartTotalIsBelowMinimumOrder())
+                return TRUE;
         }
         catch (Exception $ex) {
             if ($throwException)
@@ -210,8 +219,6 @@ class Checkout extends BaseComponent
             $failed = TRUE;
         }
 
-        if (!$failed AND Location::orderTypeIsDelivery() AND !Location::checkMinimumOrder(Cart::total()))
-            $failed = TRUE;
 
         if ($failed)
             return Redirect::to(restaurant_url($this->property('menusPage')));
@@ -219,25 +226,14 @@ class Checkout extends BaseComponent
         return FALSE;
     }
 
-    protected function validateAddress($address)
+    protected function validateCheckoutSecurity()
     {
-        if (!Location::requiresUserPosition())
-            return;
+        $this->cartManager->validateContents();
 
-        $address['country'] = app('country')->getCountryNameById($address['country_id']);
-        $address = implode(' ', array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']));
 
-        $collection = app('geocoder')->geocode($address);
-        if (!$collection OR $collection->isEmpty())
-            throw new ApplicationException(lang('igniter.cart::default.alert_invalid_search_query'));
+        $this->cartManager->validateLocation();
 
-        if (!$area = Location::current()->searchDeliveryArea($collection->first()->getCoordinates()))
-            throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
-
-        if (!Location::isCurrentAreaId($area->area_id)) {
-            Location::setCoveredArea(new CoveredArea($area));
-            throw new ApplicationException(lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
-        }
+        $this->cartManager->validateOrderTime();
     }
 
     protected function createRules()
