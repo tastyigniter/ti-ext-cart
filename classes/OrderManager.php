@@ -11,6 +11,7 @@ use Event;
 use Igniter\Cart\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Traits\Singleton;
+use Igniter\Local\Classes\CoveredArea;
 use Location;
 use Request;
 use Session;
@@ -88,6 +89,46 @@ class OrderManager
     public function getPaymentGateways()
     {
         return $this->location->current()->listAvailablePayments()->sortBy('priority');
+    }
+
+    public function findDeliveryAddress($addressId)
+    {
+        if (empty($addressId))
+            return null;
+
+        return Addresses_model::find($addressId);
+    }
+
+    //
+    //
+    //
+
+    public function validateCustomer($customer)
+    {
+        if (!setting('guest_order') AND !$customer)
+            throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
+    }
+
+    public function validateDeliveryAddress(array $address)
+    {
+        if (!array_get($address, 'country'))
+            $address['country'] = app('country')->getCountryNameById($address['country_id']);
+
+        $addressString = implode(' ', array_only($address, [
+            'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
+        ]));
+
+        $collection = app('geocoder')->geocode($addressString);
+        if (!$collection OR $collection->isEmpty())
+            throw new ApplicationException(lang('igniter.cart::default.alert_invalid_search_query'));
+
+        if (!$area = $this->location->current()->searchDeliveryArea($collection->first()->getCoordinates()))
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
+
+        if (!$this->location->isCurrentAreaId($area->area_id)) {
+            $this->location->setCoveredArea(new CoveredArea($area));
+            throw new ApplicationException(lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
+        }
     }
 
     /**

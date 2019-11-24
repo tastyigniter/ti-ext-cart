@@ -2,17 +2,11 @@
 
 namespace Igniter\Cart\Components;
 
-use Admin\Models\Addresses_model;
-use Admin\Models\Customers_model;
 use Admin\Traits\ValidatesForm;
-use ApplicationException;
 use Auth;
-use Cart;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
-use Igniter\Cart\Models\Orders_model;
-use Igniter\Local\Classes\CoveredArea;
 use Illuminate\Http\RedirectResponse;
 use Location;
 use Main\Traits\HasPageOptions;
@@ -34,6 +28,9 @@ class Checkout extends BaseComponent
      */
     protected $orderManager;
 
+    /**
+     * @var  \Igniter\Cart\Models\Orders_model
+     */
     protected $order;
 
     public function initialize()
@@ -92,12 +89,12 @@ class Checkout extends BaseComponent
             if ($redirect = $this->isOrderMarkedAsProcessed())
                 return $redirect;
 
-            if ($redirect = $this->validateCart(FALSE))
-                return $redirect;
         }
         else {
             $this->orderManager->clearOrder();
         }
+        if ($this->checkCheckoutSecurity())
+            return Redirect::to(restaurant_url($this->property('menusPage')));
 
         $this->prepareVars();
     }
@@ -152,17 +149,19 @@ class Checkout extends BaseComponent
         if ($redirect = $this->isOrderMarkedAsProcessed())
             return $redirect;
 
+        $data = post();
+        $data['cancelPage'] = $this->property('redirectPage');
+        $data['successPage'] = $this->property('successPage');
+
+        $data = $this->setDeliveryAddress($data);
+
+        $this->validateCheckoutSecurity();
+
         try {
-            $data = post();
-            $data['cancelPage'] = $this->property('redirectPage');
-            $data['successPage'] = $this->property('successPage');
-
-            $this->validateCart();
-
             $this->validate($data, $this->createRules());
 
-            if ($address = $this->getAddressFromRequest($data))
-                $this->validateAddress($address);
+            if (Location::requiresUserPosition())
+                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
 
             $order = $this->getOrder();
             $this->orderManager->saveOrder($order, $data);
@@ -183,53 +182,26 @@ class Checkout extends BaseComponent
         }
     }
 
-    protected function validateCart($throwException = TRUE)
+    protected function checkCheckoutSecurity()
     {
-        $failed = FALSE;
         try {
-            if (!Cart::count())
-                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
+            $this->validateCheckoutSecurity();
 
-            if (!setting('guest_order') AND !$this->customer())
-                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
-
-            if (!$location = Location::current())
-                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
-
-            if (!$location->hasFutureOrder() AND Location::isClosed())
-                throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
-
-            if (!Location::checkOrderType($orderType = Location::orderType()))
-                throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
-
-            $orderDateTime = Location::orderDateTime();
-            if (!$orderDateTime OR !Location::checkOrderTime($orderDateTime))
-                throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_delivery_time'));
-
-            if (Location::orderTypeIsDelivery() AND Location::requiresUserPosition() AND !Location::userPosition()->hasCoordinates())
-                throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
             if ($this->cartManager->cartTotalIsBelowMinimumOrder())
                 return TRUE;
         }
         catch (Exception $ex) {
-            if ($throwException)
-                throw $ex;
-
             flash()->warning($ex->getMessage())->now();
-            $failed = TRUE;
+
+            return TRUE;
         }
-
-
-        if ($failed)
-            return Redirect::to(restaurant_url($this->property('menusPage')));
-
-        return FALSE;
     }
 
     protected function validateCheckoutSecurity()
     {
         $this->cartManager->validateContents();
 
+        $this->orderManager->validateCustomer(Auth::getUser());
 
         $this->cartManager->validateLocation();
 
@@ -276,19 +248,17 @@ class Checkout extends BaseComponent
         return Redirect::to($order->getUrl($successPage));
     }
 
-    protected function getAddressFromRequest(&$data)
+    protected function setDeliveryAddress($data)
     {
         $addressId = array_get($data, 'address_id');
-        if (empty($addressId)) {
-            if (isset($data['address']))
-                $data['address']['country_id'] = $data['address']['country_id'] ?? setting('country_id');
-
-            return array_get($data, 'address', []);
+        if ($address = $this->orderManager->findDeliveryAddress($addressId)) {
+            $data['address'] = $address->toArray();
         }
 
-        $data['address'] = ($model = Addresses_model::find($addressId))
-            ? $model->toArray() : null;
+        if (isset($data['address']) AND !isset($data['address']['country_id'])) {
+            $data['address']['country_id'] = setting('country_id');
+        }
 
-        return $data['address'];
+        return $data;
     }
 }
