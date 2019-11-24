@@ -167,7 +167,7 @@ class OrderManager
 
         $this->setCurrentOrderId($order->order_id);
 
-        $order->addOrderMenus(Cart::content()->toArray());
+        $order->addOrderMenus(Cart::content());
         $order->addOrderTotals($this->getCartTotals());
 
         // Lets log the coupon so we can redeem it later
