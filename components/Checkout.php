@@ -70,22 +70,11 @@ class Checkout extends BaseComponent
                 'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/checkout',
             ],
-            'ordersPage' => [
-                'label' => 'Account orders page',
-                'type' => 'select',
-                'options' => [static::class, 'getPageOptions'],
-                'default' => 'account/orders',
-            ],
             'successPage' => [
                 'label' => 'Page to redirect to when checkout is successful',
                 'type' => 'select',
                 'options' => [static::class, 'getPageOptions'],
                 'default' => 'checkout/success',
-            ],
-            'successParamCode' => [
-                'label' => 'The parameter name used for the order hash code',
-                'type' => 'text',
-                'default' => 'hash',
             ],
         ];
     }
@@ -114,7 +103,6 @@ class Checkout extends BaseComponent
         $this->page['agreeTermsPage'] = $this->property('agreeTermsPage');
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');
-        $this->page['ordersPage'] = $this->property('ordersPage');
         $this->page['successPage'] = $this->property('successPage');
 
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
@@ -150,29 +138,6 @@ class Checkout extends BaseComponent
 
         return $order->order_total > 0
             ? $this->orderManager->getPaymentGateways() : null;
-    }
-
-    /**
-     * @return Customers_model|\Igniter\Flame\Auth\Models\User
-     */
-    public function customer()
-    {
-        if (!Auth::check()) {
-            return null;
-        }
-
-        return Auth::getUser();
-    }
-
-    public function hashCode()
-    {
-        $routeParameter = $this->property('successParamCode');
-
-        if ($code = $this->param($routeParameter)) {
-            return $code;
-        }
-
-        return get('success');
     }
 
     public function onConfirm()

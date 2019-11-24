@@ -77,7 +77,7 @@ permalink: /checkout
 | agreeTermsPage                     | Terms and conditions page            |    page/terms     |          |
 | menusPage                     | Menus page            |    page/menus     |          |
 | redirectPage                     | Redirect page name           |    checkout/checkout    |    checkout/checkout      |
-| ordersPage                     | Orders page name            |    account/orders     |     account/orders     |
+| orderPage                     | Order page name            |    account/order     |     account/order     |
 | successPage                     | Order confirmation page name           |    checkout/success     |     checkout/success     |
 | successParamCode                     | URL routing code used for displaying the order confirmation page            | hash       | hash         |
 
@@ -91,7 +91,6 @@ permalink: /checkout
 | `$agreeTermsPage` | Link to thenterms & conditions page                                                |
 | `$redirectPage` | Link to the checkout cancel page                                                |
 | `$menusPage` | Link to the menus page                                                |
-| `$ordersPage` | Link to the order view page                                                |
 | `$successPage` | Link to the confirmation page                                                |
 | `$order` | Order Model instance                                          |
 | `$paymentGateways` | Instances of available payment gateways                                          |
@@ -109,7 +108,6 @@ permalink: /checkout
     showCountryField: 0
     menusPage: local/menus
     redirectPage: checkout/checkout
-    ordersPage: account/orders
     successPage: checkout/success
     successParamCode: 'hash'
 ---

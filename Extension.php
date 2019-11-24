@@ -79,6 +79,11 @@ class Extension extends BaseExtension
                 'name' => 'lang:igniter.cart::default.orders.component_title',
                 'description' => 'lang:igniter.cart::default.orders.component_desc',
             ],
+            'Igniter\Cart\Components\Order' => [
+                'code' => 'orderPage',
+                'name' => 'lang:igniter.cart::default.orders.order_component_title',
+                'description' => 'lang:igniter.cart::default.orders.order_component_desc',
+            ],
         ];
     }
 
