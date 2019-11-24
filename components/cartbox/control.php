@@ -9,7 +9,7 @@
                     data-cart-toggle="order-type"
                     value="delivery" <?= $location->orderTypeIsDelivery() ? 'checked="checked"' : ''; ?>
                 >&nbsp;&nbsp;
-                <strong><?= lang('igniter.cart::default.text_delivery'); ?></strong>
+                <strong><?= lang('igniter.local::default.text_delivery'); ?></strong>
                 <span
                     class="small center-block">
                         <?php if ($location->deliverySchedule()->isOpen()) { ?>
@@ -33,7 +33,7 @@
                     data-cart-toggle="order-type"
                     value="collection" <?= ($location->orderType() == 'collection') ? 'checked="checked"' : ''; ?>
                 >&nbsp;&nbsp;
-                <strong><?= lang('igniter.cart::default.text_collection'); ?></strong>
+                <strong><?= lang('igniter.local::default.text_collection'); ?></strong>
                 <span
                     class="small center-block">
                         <?php if ($location->collectionSchedule()->isOpen()) { ?>
