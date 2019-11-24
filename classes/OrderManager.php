@@ -87,7 +87,7 @@ class OrderManager
 
     public function getPaymentGateways()
     {
-        return $this->location->current()->listAvailablePayments();
+        return $this->location->current()->listAvailablePayments()->sortBy('priority');
     }
 
     /**
