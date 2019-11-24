@@ -27,6 +27,7 @@ class Extension extends BaseExtension
     {
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
+        $this->bindOrderStatusEvent();
     }
 
     public function registerCartConditions()

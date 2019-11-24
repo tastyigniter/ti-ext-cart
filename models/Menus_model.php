@@ -65,7 +65,7 @@ class Menus_model extends BaseMenus_model implements Buyable
      *
      * @return int|string
      */
-    public function getBuyableIdentifier($options = null)
+    public function getBuyableIdentifier()
     {
         return $this->getKey();
     }
@@ -75,7 +75,7 @@ class Menus_model extends BaseMenus_model implements Buyable
      *
      * @return string
      */
-    public function getBuyableName($options = null)
+    public function getBuyableName()
     {
         return $this->menu_name;
     }
@@ -85,14 +85,10 @@ class Menus_model extends BaseMenus_model implements Buyable
      *
      * @return float
      */
-    public function getBuyablePrice($options = null)
+    public function getBuyablePrice()
     {
         $price = $this->iSpecial()
             ? $this->special->getMenuPrice($this->menu_price) : $this->menu_price;
-
-        if (is_array($options)) {
-            $price += collect($options)->sum('price');
-        }
 
         return $price;
     }

@@ -52,10 +52,15 @@ class OrderManager
         return $this->customer->getKey();
     }
 
+    public function getOrder()
+    {
+        return $this->loadOrder();
+    }
+
     /**
      * @return \Igniter\Cart\Models\Orders_model
      */
-    public function getOrder()
+    public function loadOrder()
     {
         $id = $this->getCurrentOrderId();
 
@@ -72,9 +77,14 @@ class OrderManager
         return $order;
     }
 
-    public function getOrderByHash($code)
+    public function getOrderByHash($hash, $customer = null)
     {
-        return Orders_model::whereHash($code)->first();
+        $query = Orders_model::whereHash($hash);
+
+        if (!is_null($customer))
+            $query->where('customer_id', $customer->getKey());
+
+        return $query->first();
     }
 
     /**
@@ -137,7 +147,7 @@ class OrderManager
      *
      * @return Orders_model
      */
-    public function saveOrder($order, $data)
+    public function saveOrder($order, array $data)
     {
         Event::fire('igniter.checkout.beforeSaveOrder', [$order, $data]);
 
@@ -177,7 +187,7 @@ class OrderManager
         return $order;
     }
 
-    public function processPayment($order, $data)
+    public function processPayment($order, array $data)
     {
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
@@ -259,9 +269,8 @@ class OrderManager
         if ($order->order_total > 0)
             return FALSE;
 
-        if ($order->markAsPaymentProcessed()) {
-            $order->updateOrderStatus(setting('default_order_status'), ['notify' => FALSE]);
-        }
+        $order->updateOrderStatus(setting('default_order_status'), ['notify' => FALSE]);
+        $order->markAsPaymentProcessed();
 
         return TRUE;
     }

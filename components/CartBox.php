@@ -120,17 +120,15 @@ class CartBox extends \System\Classes\BaseComponent
 
             $this->controller->pageCycle();
 
-            $partials = [
+            if ($this->property('pageIsCheckout'))
+                return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
+
+            return [
                 '#notification' => $this->renderPartial('flash'),
                 '#cart-control' => $this->renderPartial('@control'),
                 '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
-
-            if ($this->property('pageIsCheckout'))
-                return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
-
-            return $partials;
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
