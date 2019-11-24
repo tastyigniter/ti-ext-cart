@@ -31,6 +31,9 @@ return [
     'text_starts' => ' starts %s',
     'text_in_minutes' => 'in %s min',
     'text_empty' => 'There are no cart totals available.',
+    'text_sizes' => 'Sizes',
+    'text_required' => 'Required',
+    'text_option_summary' => 'Choose between %s and %s',
 
     'button_add_to_order' => 'ADD TO ORDER',
     'button_update' => 'UPDATE',
@@ -71,6 +74,7 @@ return [
     'alert_no_menu_selected' => 'Please select a menu to add to your order.',
     'alert_menu_order_restriction' => 'The selected menu item is not available for <b>%s</b>',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
+    'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',
     'alert_qty_is_invalid' => 'Selected quantity is not divisive by the minimum quantity of %s.',
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',
     'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',

@@ -19,7 +19,7 @@ if ($unAvailable) {
 }
 ?>
 <button
-    class="btn btn-primary <?= ($fullyClosed) ? 'disabled' : ''; ?> btn-block btn-lg"
+    class="checkout-btn btn btn-primary <?= ($fullyClosed) ? 'disabled' : ''; ?> btn-block btn-lg"
     <?php if ($pageIsCheckout) { ?>
         data-cart-control="confirm-checkout"
         data-request-form="#checkout-form"

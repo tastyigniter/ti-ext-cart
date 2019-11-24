@@ -12,6 +12,17 @@
     CartBox.prototype.init = function () {
         $(document).on('click', '[data-cart-control]', $.proxy(this.onControlClick, this))
         this.$el.on('change', '[data-cart-toggle="order-type"]', $.proxy(this.onOrderTypeToggle, this))
+
+        $(document).on('change', 'input[name="payment"]', $.proxy(this.onChoosePayment, this))
+        $('input[name="payment"]:checked', document).trigger('change')
+
+        $('.checkout-btn', this.$el)
+            .on('ajaxPromise', function () {
+                $(this).prop('disabled', true)
+            })
+            .on('ajaxFail ajaxDone', function () {
+                $(this).prop('disabled', false)
+            })
     }
 
     CartBox.prototype.initAffix = function () {
@@ -34,7 +45,7 @@
 
     CartBox.prototype.loadItem = function ($el) {
         var modalOptions = $.extend({}, this.options, $el.data(), {
-            onSubmit: function () {
+            onSuccess: function () {
                 this.hide()
             }
         })
@@ -45,9 +56,6 @@
     CartBox.prototype.addItem = function ($el) {
         $.request(this.options.updateItemHandler, {
             data: $el.data(),
-            loading: function () {
-                console.log('loading')
-            }
         })
     }
 
@@ -78,7 +86,10 @@
         $checkoutForm.trigger(_event)
         if (_event.isDefaultPrevented()) return
 
-        $checkoutForm.request()
+        $el.prop('disabled', true)
+        $checkoutForm.request().always(function () {
+            $el.prop('disabled', false)
+        })
     }
 
     // EVENT HANDLERS
@@ -116,10 +127,25 @@
     }
 
     CartBox.prototype.onOrderTypeToggle = function (event) {
-        var $el = $(event.currentTarget)
+        var $el = $(event.currentTarget),
+            $parentEl = $el.closest('#cart-control')
+
+        $parentEl.find('[data-cart-toggle="order-type"]').attr('disabled', true)
+        $parentEl.find('.btn').addClass('disabled')
         $.request(this.options.changeOrderTypeHandler, {
             data: {'type': $el.val()}
+        }).always(function () {
+            $parentEl.find('[data-cart-toggle="order-type"]').attr('disabled', false)
+            $parentEl.find('.btn').removeClass('disabled')
         })
+    }
+
+    CartBox.prototype.onChoosePayment = function (event) {
+        var $el = $(event.currentTarget),
+            $parentEl = $el.closest('.list-group')
+
+        $parentEl.find('.list-group-item').removeClass('bg-light')
+        $el.closest('.list-group-item').addClass('bg-light')
     }
 
     CartBox.DEFAULTS = {

@@ -44,8 +44,6 @@
     }
 
     CartItem.prototype.onSubmitForm = function (event) {
-        // event.preventDefault()
-        // this.$form.submit()
     }
 
     CartItem.prototype.onControlQuantity = function (event) {

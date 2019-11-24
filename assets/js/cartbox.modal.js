@@ -39,9 +39,9 @@
 
     CartBoxModal.prototype.show = function () {
         this.$modalRootElement.html(
-            '<div class="modal-dialog"><div class="modal-content"><div class="modal-body">'
-            +'<span class="spinner"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></span>'
-            +'</div></div></div>'
+            '<div class="modal-dialog"><div class="modal-content"><div class="modal-body"><div class="text-center">'
+            + '<span class="spinner"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><div class="mt-2">Loading...</div></span>'
+            + '</div></div></div></div>'
         );
 
         this.$modalRootElement.modal()
@@ -56,9 +56,19 @@
         return this.$modalElement.find('[data-control="cart-options"]')
     }
 
-    CartBoxModal.prototype.submitForm = function () {
+    CartBoxModal.prototype.onSubmitForm = function () {
         if (this.options.onSubmit !== undefined)
             this.options.onSubmit.call(this)
+    }
+
+    CartBoxModal.prototype.onSuccessForm = function () {
+        if (this.options.onSuccess !== undefined)
+            this.options.onSuccess.call(this)
+    }
+
+    CartBoxModal.prototype.onFailedForm = function () {
+        if (this.options.onFail !== undefined)
+            this.options.onFail.call(this)
     }
 
     CartBoxModal.prototype.onModalHidden = function (event) {
@@ -74,33 +84,36 @@
     }
 
     CartBoxModal.prototype.onModalShown = function (event) {
-        var self = this
-
         this.$modalElement = $(event.target)
 
         $.request(this.options.loadItemHandler, {
             data: {
                 rowId: this.options.rowId,
                 menuId: this.options.menuId,
-            },
-            success: function (json) {
-                self.$modalRootElement.html(json.result);
-                self.$modalRootElement.modal()
-
-                var $cartItem = self.$modalElement.find('[data-control="cart-item"]')
-
-                $cartItem.on('submit', 'form', $.proxy(self.submitForm, self))
-
-                $cartItem.cartItem()
             }
-        })
+        }).done($.proxy(this.onFetchModalContent, this))
+    }
+
+    CartBoxModal.prototype.onFetchModalContent = function (json) {
+        this.$modalRootElement.html(json.result);
+        this.$modalRootElement.modal()
+
+        var $cartItem = this.$modalElement.find('[data-control="cart-item"]')
+
+        $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
+        $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
+        $cartItem.on('ajaxFail', 'form', $.proxy(this.onFailedForm, this))
+
+        $cartItem.cartItem()
     }
 
     CartBoxModal.DEFAULTS = {
         alias: undefined,
         menuItem: undefined,
         onSubmit: undefined,
-        onClose: undefined
+        onClose: undefined,
+        onSuccess: undefined,
+        onFail: undefined
     }
 
     $.fn.cartBox.modal = CartBoxModal

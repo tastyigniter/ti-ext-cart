@@ -23,9 +23,10 @@
                             <?php if ($condition->removeable) { ?>
                                 <button
                                     type="button"
-                                    class="btn btn-light btn-sm"
-                                    data-cart-condition-id="<?= $id; ?>"
-                                    data-cart-control="remove-condition"
+                                    class="btn btn-sm"
+                                    data-request="<?= $removeConditionEventHandler; ?>"
+                                    data-request-data="conditionId: '<?= $id; ?>'"
+                                    data-replace-loading="fa fa-spinner fa-spin"
                                 ><i class="fa fa-times"></i></button>
                             <?php } ?>
                        </span>
