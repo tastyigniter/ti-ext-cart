@@ -26,17 +26,17 @@ class Orders extends \System\Classes\BaseComponent
                 'type' => 'string',
                 'default' => 'account/order',
             ],
-            'dateTimeFormat' => [
-                'label' => 'Date time format to display order date time',
+            'orderDateTimeFormat' => [
+                'label' => 'Date time format to display the order date time',
                 'type' => 'text',
-                'default' => 'd M \a\t H:i',
+                'default' => 'DD MMM \a\t HH:mm',
             ],
         ];
     }
 
     public function onRun()
     {
-        $this->page['orderDateTimeFormat'] = $this->property('dateTimeFormat');
+        $this->page['orderDateTimeFormat'] = $this->property('orderDateTimeFormat');
         $this->page['orderPage'] = $this->property('orderPage');
         $this->page['customerOrders'] = $this->loadOrders();
     }

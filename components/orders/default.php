@@ -15,7 +15,7 @@
                 <tr>
                     <td><?= $order->location ? $order->location->location_name : ''; ?></td>
                     <td><b><?= $order->status ? $order->status->status_name : ''; ?></b></td>
-                    <td><?= $order->order_date->setTimeFromTimeString($order->order_time)->format($orderDateTimeFormat); ?></td>
+                    <td><?= $order->order_date->setTimeFromTimeString($order->order_time)->isoFormat($orderDateTimeFormat); ?></td>
                     <td><?= currency_format($order->order_total); ?>
                         (<?= $order->total_items.' '.lang('igniter.cart::default.orders.column_items'); ?>)
                     </td>

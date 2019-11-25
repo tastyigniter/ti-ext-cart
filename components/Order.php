@@ -33,10 +33,10 @@ class Order extends \System\Classes\BaseComponent
                 'type' => 'string',
                 'default' => 'local/menus',
             ],
-            'dateTimeFormat' => [
+            'orderDateTimeFormat' => [
                 'label' => 'Date time format to display order date time',
                 'type' => 'text',
-                'default' => 'd M \a\t H:i',
+                'default' => 'DD MMM \a\t HH:mm',
             ],
             'hideReorderBtn' => [
                 'label' => 'Whether to hide the reorder button, should be enabled on the checkout success page',
@@ -56,7 +56,7 @@ class Order extends \System\Classes\BaseComponent
         $this->page['ordersPage'] = $this->property('ordersPage');
         $this->page['hideReorderBtn'] = $this->property('hideReorderBtn');
         $this->page['showReviews'] = setting('allow_reviews') == 1;
-        $this->page['orderDateTimeFormat'] = $this->property('dateTimeFormat');
+        $this->page['orderDateTimeFormat'] = $this->property('orderDateTimeFormat');
 
         $this->page['hashParam'] = $this->param('hash');
         $this->page['order'] = $order = $this->getOrder();

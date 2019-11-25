@@ -1,7 +1,7 @@
 <div class="label label-light mb-3">
     <span class="h6">
         <i class="fa fa-clock"></i>&nbsp;
-        <?= $order->order_date->setTimeFromTimeString($order->order_time)->format($orderDateTimeFormat); ?>
+        <?= $order->order_date->setTimeFromTimeString($order->order_time)->isoFormat($orderDateTimeFormat); ?>
     </span>
 </div>
 <h5><?= lang('igniter.cart::default.checkout.text_order_no').$order->order_id; ?></h5>
