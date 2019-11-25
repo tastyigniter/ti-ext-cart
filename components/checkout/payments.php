@@ -20,7 +20,6 @@
                                     name="payment"
                                     value="<?= $paymentGateway->code ?>"
                                     autocomplete="off"
-                                    <?= set_radio('payment', $paymentGateway->code) ?>
                                 />
                                 <label
                                     class="custom-control-label d-block"

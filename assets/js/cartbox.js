@@ -16,12 +16,16 @@
         $(document).on('change', 'input[name="payment"]', $.proxy(this.onChoosePayment, this))
         $('input[name="payment"]:checked', document).trigger('change')
 
-        $('.checkout-btn', this.$el)
-            .on('ajaxPromise', function () {
+        $(document)
+            .on('ajaxPromise', '.checkout-btn', function () {
                 $(this).prop('disabled', true)
             })
-            .on('ajaxFail ajaxDone', function () {
+            .on('ajaxFail ajaxDone', '.checkout-btn', function () {
                 $(this).prop('disabled', false)
+            })
+            .on('ajaxBeforeUpdate', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
+            .on('ajaxFail ajaxDone', '#checkout-form', function () {
+                $('.checkout-btn').prop('disabled', false)
             })
     }
 
@@ -80,16 +84,9 @@
     }
 
     CartBox.prototype.confirmCheckout = function ($el) {
-        var _event = jQuery.Event('submitCheckoutForm'),
-            $checkoutForm = $($el.data('request-form'))
+        var $checkoutForm = $($el.data('request-form'))
 
-        $checkoutForm.trigger(_event)
-        if (_event.isDefaultPrevented()) return
-
-        $el.prop('disabled', true)
-        $checkoutForm.request().always(function () {
-            $el.prop('disabled', false)
-        })
+        $checkoutForm.request()
     }
 
     // EVENT HANDLERS
@@ -146,6 +143,20 @@
 
         $parentEl.find('.list-group-item').removeClass('bg-light')
         $el.closest('.list-group-item').addClass('bg-light')
+    }
+
+    CartBox.prototype.onSubmitCheckoutForm = function (event) {
+        var _event = jQuery.Event('submitCheckoutForm'),
+            $checkoutForm = $(event.target),
+            $checkoutBtn = $('.checkout-btn')
+
+        $checkoutBtn.prop('disabled', true)
+
+        $checkoutForm.trigger(_event)
+        if (_event.isDefaultPrevented()) {
+            $checkoutBtn.prop('disabled', false)
+            return false;
+        }
     }
 
     CartBox.DEFAULTS = {
