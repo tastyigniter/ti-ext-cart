@@ -23,7 +23,7 @@
             .on('ajaxFail ajaxDone', '.checkout-btn', function () {
                 $(this).prop('disabled', false)
             })
-            .on('ajaxBeforeUpdate', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
+            .on('ajaxPromise', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
             .on('ajaxFail ajaxDone', '#checkout-form', function () {
                 $('.checkout-btn').prop('disabled', false)
             })
