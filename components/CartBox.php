@@ -26,10 +26,10 @@ class CartBox extends \System\Classes\BaseComponent
     public function defineProperties()
     {
         return [
-            'timeFormat' => [
-                'label' => 'Time format',
+            'cartBoxTimeFormat' => [
+                'label' => 'Time format for the delivery and pickup time',
                 'type' => 'text',
-                'default' => 'D H:i a',
+                'default' => 'ddd hh:mm a',
             ],
             'showCartItemThumb' => [
                 'label' => 'Show cart menu item image in the popup',
@@ -90,7 +90,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['showCartItemThumb'] = $this->property('showCartItemThumb', FALSE);
         $this->page['cartItemThumbWidth'] = $this->property('cartItemThumbWidth');
         $this->page['cartItemThumbHeight'] = $this->property('cartItemThumbHeight');
-        $this->page['cartBoxTimeFormat'] = $this->property('timeFormat');
+        $this->page['cartBoxTimeFormat'] = $this->property('cartBoxTimeFormat');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
 

@@ -12,7 +12,7 @@
     <h3>--</h3>
 <?php } ?>
 
-<p class="mb-0"><?= sprintf(lang('igniter.cart::default.checkout.text_success_message')); ?></p>
+<p class="mb-0"><?= lang('igniter.cart::default.checkout.text_success_message'); ?></p>
 
 <div class="mt-3">
     <?php if (!$hideReorderBtn) { ?>

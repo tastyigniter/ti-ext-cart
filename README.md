@@ -29,7 +29,7 @@ In the admin user interface you can manage the cart conditions.
 
 | Property                 | Description              | Example Value | Default Value |
 | ------------------------ | ------------------------ | ------------- | ------------- |
-| timeFormat                     | Time format            | D H:i a        | D H:i a         |
+| cartBoxTimeFormat                     | Time format            | ddd hh:mm a        | ddd hh:mm a         |
 | checkStockCheckout                     | Check cart item stock quantity            | true/false         | false         |
 | pageIsCheckout                     | Value to determine if the user is on a checkout page             | true/false         | false         |
 | pageIsCart                     | Display a standalone cart             | true/false         | false         |
@@ -54,7 +54,7 @@ title: 'Checkout'
 permalink: /checkout
 
 '[cartBox]':
-    timeFormat: 'D H:i a'
+    cartBoxTimeFormat: 'ddd hh:mm a'
     checkStockCheckout: 0
     pageIsCheckout: 0
     pageIsCart: 0
@@ -71,8 +71,6 @@ permalink: /checkout
 
 | Property                 | Description              | Example Value | Default Value |
 | ------------------------ | ------------------------ | ------------- | ------------- |
-| orderDateFormat                     | Order date format            | d-m-Y        | System default         |
-| orderTimeFormat                     | Order time format            | H:i a        | System default         |
 | showCountryField                     | Show/hide the country checkout field            | true/false        | false         |
 | agreeTermsPage                     | Terms and conditions page            |    page/terms     |          |
 | menusPage                     | Menus page            |    page/menus     |          |
@@ -85,8 +83,6 @@ permalink: /checkout
 
 | Variable                  | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| `$orderDateFormat` | Success page order date format                                                |
-| `$orderTimeFormat` | Success page order time format                                                |
 | `$showCountryField` | Display the country form field                             |
 | `$agreeTermsPage` | Link to thenterms & conditions page                                                |
 | `$redirectPage` | Link to the checkout cancel page                                                |
@@ -103,8 +99,6 @@ title: 'Checkout'
 permalink: /checkout
 
 '[checkout]':
-    orderDateFormat: 'd M'
-    orderTimeFormat: 'H:i'
     showCountryField: 0
     menusPage: local/menus
     redirectPage: checkout/checkout
