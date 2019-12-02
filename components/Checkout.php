@@ -89,7 +89,7 @@ class Checkout extends BaseComponent
     protected function prepareVars()
     {
         $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
-        $this->page['agreeTermsPage'] = $this->property('agreeTermsPage');
+        $this->page['agreeTermsSlug'] = $this->getAgreeTermsPageSlug();
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');
         $this->page['successPage'] = $this->property('successPage');
@@ -239,5 +239,10 @@ class Checkout extends BaseComponent
         }
 
         return $data;
+    }
+
+    protected function getAgreeTermsPageSlug()
+    {
+        return $this->getPageSlug($this->property('agreeTermsPage'));
     }
 }

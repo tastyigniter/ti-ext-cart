@@ -15,7 +15,7 @@
 
 <?= partial('@payments'); ?>
 
-<div class="form-group wrap-top">
+<div class="form-group">
     <label for="comment"><?= lang('igniter.cart::default.checkout.label_comment'); ?></label>
     <textarea
         name="comment"
@@ -25,7 +25,7 @@
     ><?= set_value('comment', $order->comment); ?></textarea>
 </div>
 
-<?php if ($agreeTermsPage) { ?>
+<?php if ($agreeTermsSlug) { ?>
     <div class="form-group">
         <div class="custom-control custom-checkbox">
             <input
@@ -36,7 +36,7 @@
                 class="custom-control-input" <?= set_checkbox('terms_condition', '1'); ?>
             >
             <label class="custom-control-label" for="terms-condition">
-                <?= sprintf(lang('igniter.cart::default.checkout.label_terms'), page_url($agreeTermsPage)); ?>
+                <?= sprintf(lang('igniter.cart::default.checkout.label_terms'), url($agreeTermsSlug)); ?>
             </label>
         </div>
         <?= form_error('terms_condition', '<span class="text-danger col-xs-12">', '</span>'); ?>
