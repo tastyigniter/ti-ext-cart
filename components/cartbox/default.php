@@ -40,9 +40,9 @@
 >
     <?php if ($pageIsCheckout) { ?>
         <?= partial('@buttons'); ?>
-    <?php } else { ?>
+    <?php } else if (!$pageIsCart) { ?>
         <a
-            class="btn btn-primary btn-block cart-toggle text-nowrap"
+            class="btn btn-primary btn-block btn-lg radius-none cart-toggle text-nowrap"
             href="<?= site_url('cart') ?>"
         >
             <?= lang('igniter.cart::default.text_heading'); ?>:

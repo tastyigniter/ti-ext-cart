@@ -15,7 +15,7 @@ class CreateConditionsSettings extends Migration
 
         foreach ($seedConditions as $condition) {
 
-            $data = array_get($condition, 'data');
+            $data = array_get((array)$condition, 'data');
             if (!is_array($data))
                 $data = unserialize($data);
 
