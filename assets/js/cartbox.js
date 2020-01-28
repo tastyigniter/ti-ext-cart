@@ -23,7 +23,7 @@
             .on('ajaxFail ajaxDone', '.checkout-btn', function () {
                 $(this).prop('disabled', false)
             })
-            .on('ajaxPromise', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
+            .on('submit', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
             .on('ajaxFail ajaxDone', '#checkout-form', function () {
                 $('.checkout-btn').prop('disabled', false)
             })
@@ -84,9 +84,8 @@
     }
 
     CartBox.prototype.confirmCheckout = function ($el) {
-        var $checkoutForm = $($el.data('request-form'))
-
-        $checkoutForm.request()
+        $('.checkout-btn').prop('disabled', true)
+        $($el.data('request-form')).submit()
     }
 
     // EVENT HANDLERS
@@ -146,17 +145,21 @@
     }
 
     CartBox.prototype.onSubmitCheckoutForm = function (event) {
-        var _event = jQuery.Event('submitCheckoutForm'),
-            $checkoutForm = $(event.target),
+        var $checkoutForm = $(event.target),
             $checkoutBtn = $('.checkout-btn')
 
         $checkoutBtn.prop('disabled', true)
 
+        event.preventDefault();
+
+        var _event = jQuery.Event('submitCheckoutForm')
         $checkoutForm.trigger(_event)
         if (_event.isDefaultPrevented()) {
             $checkoutBtn.prop('disabled', false)
             return false;
         }
+
+        $checkoutForm.request($checkoutForm.data('handler'))
     }
 
     CartBox.DEFAULTS = {
