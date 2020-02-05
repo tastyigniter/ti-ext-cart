@@ -92,7 +92,7 @@ class Extension extends BaseExtension
     {
         return [
             'Module.CartModule' => [
-                'description' => 'Ability to manage cart module',
+                'description' => 'Manage cart extension settings',
                 'group' => 'module',
             ],
         ];
@@ -106,7 +106,7 @@ class Extension extends BaseExtension
                 'description' => 'Manage cart settings.',
                 'icon' => 'fa fa-cart-plus',
                 'model' => 'Igniter\Cart\Models\CartSettings',
-                'permissions' => ['Module.Cart'],
+                'permissions' => ['Module.CartModule'],
             ],
         ];
     }

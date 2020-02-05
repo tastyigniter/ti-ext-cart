@@ -168,8 +168,8 @@ class CartBox extends \System\Classes\BaseComponent
                 '#notification' => $this->renderPartial('flash'),
                 '#cart-items' => $this->renderPartial('@items'),
                 '#cart-coupon' => $this->renderPartial('@coupon_form'),
-                '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-total' => currency_format(Cart::total()),
+                '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
             ];
         }
@@ -211,9 +211,9 @@ class CartBox extends \System\Classes\BaseComponent
             $this->controller->pageCycle();
 
             return [
-                '#notification' => $this->renderPartial('flash'),
                 '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
+                '#notification' => $this->renderPartial('flash'),
             ];
         }
         catch (Exception $ex) {
