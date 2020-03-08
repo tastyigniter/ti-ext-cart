@@ -15,22 +15,19 @@ class OrderCreated implements ActivityInterface
 
     public $user;
 
-    public function __construct(Orders_model $order, User $user)
+    public function __construct(Orders_model $order, User $user = null)
     {
         $this->order = $order;
         $this->user = $user;
     }
 
-    public static function pushActivityLog($model)
+    public static function log($model)
     {
-        if (!$user = Auth::user())
-            return;
-
         $recipients = Staffs_model::isEnabled()->get()->map(function ($model) {
             return $model->user;
         })->all();
 
-        activity()->pushLog(new static($model, $user), $recipients);
+        activity()->pushLog(new static($model, Auth::user()), $recipients);
     }
 
     /**

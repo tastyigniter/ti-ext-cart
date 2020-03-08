@@ -167,7 +167,7 @@ return [
         'alert_customer_not_logged' => 'Almost there, Please login or register to complete checkout.',
         'alert_delivery_area_changed' => 'Your delivery area has changed, please confirm the delivery cost.',
 
-        'activity_order_created' => '<b>:causer.full_name</b> created an order.',
+        'activity_order_created' => '<b>:properties.full_name</b> created an order.',
     ],
 
     'orders' => [

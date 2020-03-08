@@ -10,7 +10,7 @@ title = Order {order_number}
                             <img src="{site_logo}" style="width:100%; max-width:300px;">
                         </td>
                         <td>
-                            Invoice #: {invoice_id}<br>
+                            Invoice #: {invoice_number}<br>
                             Invoice Date: {invoice_date}<br>
                             Order Date: {order_date}
                         </td>
