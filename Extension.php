@@ -52,7 +52,7 @@ class Extension extends BaseExtension
             'events' => [
                 'admin.order.paymentProcessed' => \Igniter\Cart\EventRules\Events\OrderPlaced::class,
                 'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\EventRules\Events\NewOrderStatus::class,
-                'admin.order.assigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
+                'admin.assignable.assigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
             ],
             'actions' => [],
             'conditions' => [
