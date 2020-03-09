@@ -46,13 +46,29 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerAutomationRules()
+    {
+        return [
+            'events' => [
+                'admin.order.paymentProcessed' => \Igniter\Cart\AutomationRules\Events\OrderPlaced::class,
+                'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\AutomationRules\Events\NewOrderStatus::class,
+                'igniter.cart.orderAssigned' => \Igniter\Cart\AutomationRules\Events\OrderAssigned::class,
+            ],
+            'actions' => [],
+            'conditions' => [
+                \Igniter\Cart\AutomationRules\Conditions\OrderAttribute::class,
+                \Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute::class,
+            ],
+        ];
+    }
+
     public function registerEventRules()
     {
         return [
             'events' => [
                 'admin.order.paymentProcessed' => \Igniter\Cart\EventRules\Events\OrderPlaced::class,
                 'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\EventRules\Events\NewOrderStatus::class,
-                'admin.assignable.assigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
+                'igniter.cart.orderAssigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
             ],
             'actions' => [],
             'conditions' => [
@@ -187,6 +203,13 @@ class Extension extends BaseExtension
                 return;
 
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
+        });
+
+        Event::listen('admin.assignable.assigned', function ($model) {
+            if (!$model instanceof Orders_model)
+                return;
+
+            Event::fire('igniter.cart.orderAssigned', [$model], TRUE);
         });
     }
 }
