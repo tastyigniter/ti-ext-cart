@@ -121,7 +121,7 @@ class OrderManager
 
     public function validateDeliveryAddress(array $address)
     {
-        if (!array_get($address, 'country'))
+        if (!array_get($address, 'country') AND isset($address['country_id']))
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
 
         $addressString = implode(' ', array_only($address, [

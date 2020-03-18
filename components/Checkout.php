@@ -130,17 +130,18 @@ class Checkout extends BaseComponent
         $data['cancelPage'] = $this->property('redirectPage');
         $data['successPage'] = $this->property('successPage');
 
-        $data = $this->setDeliveryAddress($data);
-
         $this->validateCheckoutSecurity();
 
         try {
             $this->validate($data, $this->createRules());
 
-            if (Location::requiresUserPosition())
-                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
-
             $order = $this->getOrder();
+
+            if ($order->isDeliveryType() AND Location::requiresUserPosition()) {
+                $data = $this->processDeliveryAddress($data);
+                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
+            }
+
             $this->orderManager->saveOrder($order, $data);
 
             if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
@@ -198,12 +199,19 @@ class Checkout extends BaseComponent
         ];
 
         if (Location::orderTypeIsDelivery()) {
-            $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'sometimes|required|integer'];
-            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'requiredIf:address_id,0|min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'requiredIf:address_id,0|min:2|max:128'];
-            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
-            $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'requiredIf:address_id,0'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|requiredIf:address_id,0|integer'];
+            if (!empty(post('address_id'))) {
+                $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
+            }
+            else {
+                $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'min:3|max:128'];
+                $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'min:2|max:128'];
+                $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
+                $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
+            }
+
+            if ((bool)$this->property('showCountryField', 1)) {
+                $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
+            }
         }
 
         return $namedRules;
@@ -227,7 +235,7 @@ class Checkout extends BaseComponent
         return Redirect::to($redirectUrl);
     }
 
-    protected function setDeliveryAddress($data)
+    protected function processDeliveryAddress($data)
     {
         $addressId = array_get($data, 'address_id');
         if ($address = $this->orderManager->findDeliveryAddress($addressId)) {
