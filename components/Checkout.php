@@ -10,14 +10,13 @@ use Igniter\Cart\Classes\OrderManager;
 use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Http\RedirectResponse;
 use Location;
-use Main\Traits\HasPageOptions;
 use Redirect;
 use System\Classes\BaseComponent;
 
 class Checkout extends BaseComponent
 {
     use ValidatesForm;
-    use HasPageOptions;
+    use \Main\Traits\UsesPage;
 
     /**
      * @var \Igniter\Cart\Classes\CartManager
@@ -51,26 +50,26 @@ class Checkout extends BaseComponent
             'agreeTermsPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
-                'options' => [static::class, 'getPagesOptions'],
+                'options' => [static::class, 'getStaticPageOptions'],
                 'comment' => 'lang:igniter.cart::default.checkout.help_checkout_terms',
             ],
             'menusPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
                 'default' => 'local/menus',
-                'options' => [static::class, 'getPageOptions'],
+                'options' => [static::class, 'getThemePageOptions'],
                 'comment' => 'Page to redirect to when checkout can not be performed.',
             ],
             'redirectPage' => [
                 'label' => 'Page to redirect to when checkout fails',
                 'type' => 'select',
-                'options' => [static::class, 'getPageOptions'],
+                'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/checkout',
             ],
             'successPage' => [
                 'label' => 'Page to redirect to when checkout is successful',
                 'type' => 'select',
-                'options' => [static::class, 'getPageOptions'],
+                'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/success',
             ],
         ];
@@ -277,6 +276,6 @@ class Checkout extends BaseComponent
 
     protected function getAgreeTermsPageSlug()
     {
-        return $this->getPageSlug($this->property('agreeTermsPage'));
+        return $this->getStaticPagePermalink($this->property('agreeTermsPage'));
     }
 }
