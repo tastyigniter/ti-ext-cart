@@ -38,6 +38,11 @@ class Extension extends BaseExtension
                 'label' => 'lang:igniter.cart::default.text_coupon',
                 'description' => 'lang:igniter.cart::default.help_coupon_condition',
             ],
+            \Igniter\Cart\Conditions\PaymentFee::class => [
+                'name' => 'paymentFee',
+                'label' => 'lang:igniter.cart::default.text_payment_fee',
+                'description' => 'lang:igniter.cart::default.help_payment_fee',
+            ],
             \Igniter\Cart\Conditions\Tax::class => [
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',

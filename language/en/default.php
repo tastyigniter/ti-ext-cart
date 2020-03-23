@@ -16,6 +16,7 @@ return [
     'text_apply_coupon' => 'Enter coupon code',
     'text_sub_total' => 'Sub Total',
     'text_coupon' => 'Coupon [%s]',
+    'text_payment_fee' => 'Payment Fee',
     'text_vat' => 'VAT [%s]',
     'text_min_total' => 'Min. Order Amount',
     'text_no_min_total' => 'No Min. Order Amount',
@@ -107,6 +108,7 @@ return [
     'help_cart_conditions' => 'Customise cart condition labels and the order in which they are displayed',
     'help_coupon_condition' => 'Applies coupon to cart.',
     'help_tax_condition' => 'Applies tax to cart',
+    'help_payment_fee' => 'Applies payment fee to cart',
 
     'checkout' => [
         'text_heading' => 'Checkout',
