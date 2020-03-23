@@ -77,6 +77,8 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
+        $this->addJs('js/checkout.js', 'checkout-js');
+
         if ($redirect = $this->isOrderMarkedAsProcessed())
             return $redirect;
 

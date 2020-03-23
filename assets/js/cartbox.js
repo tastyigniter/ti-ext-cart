@@ -12,21 +12,6 @@
     CartBox.prototype.init = function () {
         $(document).on('click', '[data-cart-control]', $.proxy(this.onControlClick, this))
         this.$el.on('change', '[data-cart-toggle="order-type"]', $.proxy(this.onOrderTypeToggle, this))
-
-        $(document).on('change', 'input[name="payment"]', $.proxy(this.onChoosePayment, this))
-        $('input[name="payment"]:checked', document).trigger('change')
-
-        $(document)
-            .on('ajaxPromise', '.checkout-btn', function () {
-                $(this).prop('disabled', true)
-            })
-            .on('ajaxFail ajaxDone', '.checkout-btn', function () {
-                $(this).prop('disabled', false)
-            })
-            .on('submit', '#checkout-form', $.proxy(this.onSubmitCheckoutForm, this))
-            .on('ajaxFail ajaxDone', '#checkout-form', function () {
-                $('.checkout-btn').prop('disabled', false)
-            })
     }
 
     CartBox.prototype.initAffix = function () {
@@ -44,7 +29,7 @@
         })
     }
 
-    CartBox.prototype.refreshCart = function (event) {
+    CartBox.prototype.refreshCart = function ($el) {
     }
 
     CartBox.prototype.loadItem = function ($el) {
@@ -83,11 +68,6 @@
         })
     }
 
-    CartBox.prototype.confirmCheckout = function ($el) {
-        $('.checkout-btn').prop('disabled', true)
-        $($el.data('request-form')).submit()
-    }
-
     // EVENT HANDLERS
     // ============================
 
@@ -103,7 +83,7 @@
                 this.addItem($el)
                 break
             case 'refresh':
-                this.refresh($el)
+                this.refreshCart($el)
                 break
             case 'remove-item':
                 this.removeItem($el)
@@ -113,9 +93,6 @@
                 break
             case 'apply-coupon':
                 this.applyCoupon($el)
-                break
-            case 'confirm-checkout':
-                this.confirmCheckout($el)
                 break
         }
 
@@ -136,35 +113,8 @@
         })
     }
 
-    CartBox.prototype.onChoosePayment = function (event) {
-        var $el = $(event.currentTarget),
-            $parentEl = $el.closest('.list-group')
-
-        $parentEl.find('.list-group-item').removeClass('bg-light')
-        $el.closest('.list-group-item').addClass('bg-light')
-    }
-
-    CartBox.prototype.onSubmitCheckoutForm = function (event) {
-        var $checkoutForm = $(event.target),
-            $checkoutBtn = $('.checkout-btn')
-
-        $checkoutBtn.prop('disabled', true)
-
-        event.preventDefault();
-
-        var _event = jQuery.Event('submitCheckoutForm')
-        $checkoutForm.trigger(_event)
-        if (_event.isDefaultPrevented()) {
-            $checkoutBtn.prop('disabled', false)
-            return false;
-        }
-
-        $checkoutForm.request($checkoutForm.data('handler'))
-    }
-
     CartBox.DEFAULTS = {
         alias: 'cart',
-        checkoutHandler: null,
         loadItemHandler: null,
         updateItemHandler: null,
         removeItemHandler: null,
