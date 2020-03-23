@@ -7,6 +7,7 @@ use Auth;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
+use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Http\RedirectResponse;
 use Location;
 use Main\Traits\HasPageOptions;
@@ -96,6 +97,7 @@ class Checkout extends BaseComponent
         $this->page['menusPage'] = $this->property('menusPage');
         $this->page['successPage'] = $this->property('successPage');
 
+        $this->page['choosePaymentEventHandler'] = $this->getEventHandler('onChoosePayment');
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
@@ -121,6 +123,28 @@ class Checkout extends BaseComponent
 
         return $order->order_total > 0
             ? $this->orderManager->getPaymentGateways() : null;
+    }
+
+    public function onChoosePayment()
+    {
+        $paymentCode = post('code');
+
+        if (!$payment = $this->orderManager->getPayment($paymentCode))
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+
+        $this->orderManager->setCurrentPaymentCode($payment->code);
+
+        $this->cartManager->applyCondition('paymentFee', [
+            'code' => $payment->code,
+        ]);
+
+        if ($cartBox = $this->controller->findComponentByAlias('cartBox')) {
+            $cartBox->onRun();
+
+            return [
+                '#cart-totals' => $cartBox->renderPartial('@totals'),
+            ];
+        }
     }
 
     public function onConfirm()
