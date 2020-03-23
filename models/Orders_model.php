@@ -11,7 +11,7 @@ class Orders_model extends BaseOrders_model
     {
         $defaults = [
             'id' => $this->getKey(),
-            'hash' => $this->hash
+            'hash' => $this->hash,
         ];
 
         $params = !is_null($params)
@@ -19,6 +19,7 @@ class Orders_model extends BaseOrders_model
             : [];
 
         $controller = MainController::getController() ?: new MainController;
+
         return $controller->pageUrl($page, $params);
     }
 
