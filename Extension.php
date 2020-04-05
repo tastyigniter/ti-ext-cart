@@ -154,17 +154,6 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerNotifications()
-    {
-        return [
-            'templates' => [
-                'igniter.cart::notification.orderPlaced' => \Igniter\Cart\Notifications\OrderPlaced::class,
-                'igniter.cart::notification.orderStatusChanged' => \Igniter\Cart\Notifications\OrderStatusChanged::class,
-                'igniter.cart::notification.orderAssigned' => \Igniter\Cart\Notifications\OrderAssigned::class,
-            ],
-        ];
-    }
-
     protected function bindCartEvents()
     {
         Event::listen('cart.beforeRegister', function () {
