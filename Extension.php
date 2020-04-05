@@ -8,6 +8,7 @@ use Config;
 use Event;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
+use Igniter\Local\Facades\Location;
 use Illuminate\Foundation\AliasLoader;
 use System\Classes\BaseExtension;
 
@@ -160,6 +161,13 @@ class Extension extends BaseExtension
             Config::set('cart.model', CartStore::class);
             Config::set('cart.conditions', CartSettings::get('conditions'));
             Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
+        });
+
+        Event::listen('cart.afterRegister', function ($cart) {
+            if (Location::current())
+                $cart->instance('location-'.Location::getId());
+
+            $cart->loadConditions();
         });
 
         Event::listen('igniter.user.login', function () {

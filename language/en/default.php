@@ -94,6 +94,7 @@ return [
     'alert_coupon_order_restriction' => 'Your coupon can not be applied to <b>%s</b> orders',
     'alert_menu_not_within_mealtime' => '%s is available for %s ONLY between (%s - %s)',
     'alert_coupon_location_restricted' => 'Your coupon can not be applied on the selected order location.',
+    'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',

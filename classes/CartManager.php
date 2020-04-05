@@ -172,6 +172,8 @@ class CartManager
 
         if ($this->checkStock)
             $this->validateMenuItemStockQty($menuItem, $quantity);
+
+        $this->validateMenuItemLocation($menuItem);
     }
 
     protected function prepareCartMenuItemOptions(Collection $menuOptions, array $selected)
@@ -342,6 +344,18 @@ class CartManager
             }
         }
     }
+
+    public function validateMenuItemLocation(Menus_model $menuItem)
+    {
+        if ($menuItem->locations AND $menuItem->locations->isNotEmpty()) {
+            if (!$menuItem->locations->keyBy('location_id')->has($this->location->getId())) {
+                throw new ApplicationException(sprintf(
+                    lang('igniter.cart::default.alert_menu_location_restricted'), $menuItem->menu_name
+                ));
+            }
+        }
+    }
+
 
     //
     //

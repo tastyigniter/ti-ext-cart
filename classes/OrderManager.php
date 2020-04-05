@@ -12,7 +12,7 @@ use Igniter\Cart\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Traits\Singleton;
 use Igniter\Local\Classes\CoveredArea;
-use Location;
+use Illuminate\Support\Facades\App;
 use Request;
 use System\Traits\SessionMaker;
 
@@ -40,8 +40,8 @@ class OrderManager
 
     public function initialize()
     {
-        $this->cart = Cart::instance();
-        $this->location = Location::instance();
+        $this->cart = App::make('cart');
+        $this->location = App::make('location');
         $this->customer = Auth::customer();
     }
 
