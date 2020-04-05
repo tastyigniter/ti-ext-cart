@@ -119,7 +119,7 @@ Here is an example of an extension registering a cart condition
 public function registerCartConditions()
 {
     return [
-        \Igniter\Local\Conditions\Tip::class => [
+        \Igniter\Local\CartConditions\Tip::class => [
             'name' => 'tip',
             'label' => 'Tip',
             'description' => 'Applies tips to cart total',

@@ -33,17 +33,17 @@ class Extension extends BaseExtension
     public function registerCartConditions()
     {
         return [
-            \Igniter\Cart\Conditions\Coupon::class => [
+            \Igniter\Cart\CartConditions\Coupon::class => [
                 'name' => 'coupon',
                 'label' => 'lang:igniter.cart::default.text_coupon',
                 'description' => 'lang:igniter.cart::default.help_coupon_condition',
             ],
-            \Igniter\Cart\Conditions\PaymentFee::class => [
+            \Igniter\Cart\CartConditions\PaymentFee::class => [
                 'name' => 'paymentFee',
                 'label' => 'lang:igniter.cart::default.text_payment_fee',
                 'description' => 'lang:igniter.cart::default.help_payment_fee',
             ],
-            \Igniter\Cart\Conditions\Tax::class => [
+            \Igniter\Cart\CartConditions\Tax::class => [
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\Cart\Conditions;
+namespace Igniter\Cart\CartConditions;
 
 use Admin\Models\Payments_model;
 use Igniter\Flame\Cart\CartCondition;

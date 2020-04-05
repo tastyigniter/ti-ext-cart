@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\Cart\Conditions;
+namespace Igniter\Cart\CartConditions;
 
 use ApplicationException;
 use Auth;
