@@ -3,6 +3,7 @@
 namespace Igniter\Cart\CartConditions;
 
 use Igniter\Flame\Cart\CartCondition;
+use Igniter\Local\Facades\Location;
 
 class Tax extends CartCondition
 {
@@ -26,6 +27,7 @@ class Tax extends CartCondition
         $this->taxMode = (bool)setting('tax_mode', 1);
         $this->taxInclusive = !((bool)setting('tax_menu_price', 1));
         $this->taxRate = setting('tax_percentage', 0);
+        $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
 
     public function beforeApply()
@@ -43,5 +45,15 @@ class Tax extends CartCondition
                 'inclusive' => $this->taxInclusive,
             ],
         ];
+    }
+
+    protected function processValue($total)
+    {
+        if ($this->taxDelivery) {
+            $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
+            $total += (float)$deliveryCharge;
+        }
+
+        parent::processValue($total);
     }
 }
