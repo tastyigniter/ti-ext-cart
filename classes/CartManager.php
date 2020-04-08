@@ -149,13 +149,11 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
-        if (!strlen($code))
-            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
-
-        $coupon = Coupons_model::isEnabled()->whereCode($code)->first();
-
-        if (!$coupon)
-            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
+        if (strlen($code)) {
+            $coupon = Coupons_model::isEnabled()->whereCode($code)->first();
+            if (!$coupon)
+                throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
+        }
 
         return $this->applyCondition('coupon', ['code' => $code]);
     }

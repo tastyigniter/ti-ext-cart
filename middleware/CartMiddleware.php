@@ -12,14 +12,12 @@ class CartMiddleware
 
     public function terminate($request, $response)
     {
-        $this->storeUserCart();
+        if (config('cart.abandonedCart'))
+            $this->storeUserCart();
     }
 
     protected function storeUserCart()
     {
-        if (!config('cart.abandonedCart'))
-            return;
-
         if (!Auth::check())
             return;
 

@@ -101,7 +101,9 @@
             return false;
         }
 
-        $checkoutForm.request($checkoutForm.data('handler'))
+        $checkoutForm.request($checkoutForm.data('handler')).always(function () {
+            $checkoutBtn.prop('disabled', false)
+        })
     }
 
     Checkout.prototype.onFailCheckoutForm = function (event) {
