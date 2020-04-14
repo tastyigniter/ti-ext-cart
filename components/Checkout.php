@@ -155,6 +155,8 @@ class Checkout extends BaseComponent
         $data['cancelPage'] = $this->property('redirectPage');
         $data['successPage'] = $this->property('successPage');
 
+        $data = $this->processDeliveryAddress($data);
+
         $this->validateCheckoutSecurity();
 
         try {
@@ -162,8 +164,7 @@ class Checkout extends BaseComponent
 
             $order = $this->getOrder();
 
-            if ($order->isDeliveryType() AND Location::requiresUserPosition()) {
-                $data = $this->processDeliveryAddress($data);
+            if ($order->isDeliveryType()) {
                 $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
             }
 
@@ -224,19 +225,12 @@ class Checkout extends BaseComponent
         ];
 
         if (Location::orderTypeIsDelivery()) {
-            if (!empty(post('address_id'))) {
-                $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
-            }
-            else {
-                $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'min:3|max:128'];
-                $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'min:2|max:128'];
-                $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
-                $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
-            }
-
-            if ((bool)$this->property('showCountryField', 1)) {
-                $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
-            }
+            $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
+            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'min:2|max:128'];
+            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
+            $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
         }
 
         return $namedRules;

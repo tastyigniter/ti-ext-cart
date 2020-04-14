@@ -163,7 +163,7 @@ class Extension extends BaseExtension
             Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
         });
 
-        Event::listen('cart.afterRegister', function ($cart) {
+        Event::listen('cart.afterRegister', function ($cart, $instance) {
             if (Location::current())
                 $cart->instance('location-'.Location::getId());
 

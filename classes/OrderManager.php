@@ -134,6 +134,9 @@ class OrderManager
             'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
         ]));
 
+        if (!$this->location->requiresUserPosition())
+            return;
+
         $collection = app('geocoder')->geocode($addressString);
         if (!$collection OR $collection->isEmpty())
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
