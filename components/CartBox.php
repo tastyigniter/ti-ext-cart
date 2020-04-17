@@ -128,6 +128,7 @@ class CartBox extends \System\Classes\BaseComponent
                 '#cart-control' => $this->renderPartial('@control'),
                 '#cart-totals' => $this->renderPartial('@totals'),
                 '#cart-buttons' => $this->renderPartial('@buttons'),
+		'#local-timeslot' => $this->renderPartial('localBox::timeslot'), // update the timepicker values in localBox
             ];
         }
         catch (Exception $ex) {
