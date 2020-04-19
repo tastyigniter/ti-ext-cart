@@ -123,13 +123,19 @@ class CartBox extends \System\Classes\BaseComponent
             if ($this->property('pageIsCheckout'))
                 return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
 
-            return [
-                '#notification' => $this->renderPartial('flash'),
-                '#cart-control' => $this->renderPartial('@control'),
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-		'#local-timeslot' => $this->renderPartial('localBox::timeslot'), // update the timepicker values in localBox
+	    // check if localbox is present
+            $hasLocalBox = $this->controller->findComponentByAlias('localBox') !== null;
+            $renderedPartials = [
+               '#notification' => $this->renderPartial('flash'),
+               '#cart-items' => $this->renderPartial('@items'),
+               '#cart-control' => $this->renderPartial('@control'),
+               '#cart-totals' => $this->renderPartial('@totals'),
+               '#cart-buttons' => $this->renderPartial('@buttons')
             ];
+            if ($hasLocalBox){
+                $renderedPartials['#local-timeslot'] = $this->renderPartial('localBox::timeslot');
+            }
+            return $renderedPartials;
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
