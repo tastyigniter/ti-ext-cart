@@ -90,6 +90,9 @@ class CartManager
         $comment = array_get($postData, 'comment');
         $menuOptions = array_get($postData, 'menu_options', []);
 
+        if ($quantity < 1)
+            return $this->updateCartItemQty($rowId, $quantity);
+
         $this->validateLocation();
 
         $cartItem = null;
