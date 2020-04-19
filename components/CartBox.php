@@ -68,6 +68,11 @@ class CartBox extends \System\Classes\BaseComponent
                 'type' => 'select',
                 'default' => 'checkout/checkout',
             ],
+	    'localBoxAlias' => [
+                 'label' => 'Specify the LocalBox component alias used to refresh the localbox after the order type is changed',
+                 'type' => 'text',
+                 'default' => 'localBox',
+            ],
         ];
     }
 
@@ -123,19 +128,17 @@ class CartBox extends \System\Classes\BaseComponent
             if ($this->property('pageIsCheckout'))
                 return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
 
-	    // check if localbox is present
-            $hasLocalBox = $this->controller->findComponentByAlias('localBox') !== null;
-            $renderedPartials = [
+	    $result = [
                '#notification' => $this->renderPartial('flash'),
                '#cart-items' => $this->renderPartial('@items'),
                '#cart-control' => $this->renderPartial('@control'),
                '#cart-totals' => $this->renderPartial('@totals'),
                '#cart-buttons' => $this->renderPartial('@buttons')
             ];
-            if ($hasLocalBox){
-                $renderedPartials['#local-timeslot'] = $this->renderPartial('localBox::timeslot');
+            if ($localBox = $this->controller->findComponentByAlias($this->property('localBoxAlias'))) {
+                $result['#local-timeslot'] = $localBox->renderPartial('@timeslot');
             }
-            return $renderedPartials;
+            return $result;
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
