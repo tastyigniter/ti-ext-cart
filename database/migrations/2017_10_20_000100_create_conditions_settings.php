@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Add new cart total extension records as type 'total' in extensions table
@@ -34,8 +35,11 @@ class CreateConditionsSettings extends Migration
 
     protected function getConditions()
     {
-        $existingConditions = DB::table('extensions')->select('data')
-                                ->where('type', 'cart_total')->get();
+        $existingConditions = [];
+        if (Schema::hasColumn('extensions', 'data')) {
+            $existingConditions = DB::table('extensions')->select('data')->where('type', 'cart_total')->get();
+        }
+
         if (!count($existingConditions))
             return [
                 [
