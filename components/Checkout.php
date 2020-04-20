@@ -72,6 +72,11 @@ class Checkout extends BaseComponent
                 'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/success',
             ],
+            'cartBoxAlias' => [
+                'label' => 'Specify the CartBox component alias used to refresh the cart after a payment is selected',
+                'type' => 'text',
+                'default' => 'cartBox',
+            ],
         ];
     }
 
@@ -137,13 +142,17 @@ class Checkout extends BaseComponent
             'code' => $payment->code,
         ]);
 
-        if ($cartBox = $this->controller->findComponentByAlias('cartBox')) {
-            $cartBox->onRun();
+        $this->controller->pageCycle();
 
-            return [
-                '#cart-totals' => $cartBox->renderPartial('@totals'),
-            ];
+        $result = [
+            '[data-partial="checkoutPayments"]' => $this->renderPartial('@payments'),
+        ];
+
+        if ($cartBox = $this->controller->findComponentByAlias('cartBox')) {
+            $result['#cart-totals'] = $cartBox->renderPartial('@totals');
         }
+
+        return $result;
     }
 
     public function onConfirm()
