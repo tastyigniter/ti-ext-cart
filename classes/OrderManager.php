@@ -219,7 +219,12 @@ class OrderManager
             ));
         }
 
-        $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
+        if (array_get($data, 'pay_from_profile') == 1) {
+            $result = $paymentMethod->payFromPaymentProfile($order, $data);
+        }
+        else {
+            $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
+        }
 
         return $result;
     }

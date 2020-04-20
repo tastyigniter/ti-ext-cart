@@ -82,8 +82,6 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
-        $this->addJs('js/checkout.js', 'checkout-js');
-
         if ($redirect = $this->isOrderMarkedAsProcessed())
             return $redirect;
 
@@ -91,6 +89,15 @@ class Checkout extends BaseComponent
             return Redirect::to(restaurant_url($this->property('menusPage')));
 
         $this->prepareVars();
+    }
+
+    public function onRender()
+    {
+        foreach ($this->getPaymentGateways() as $paymentGateway) {
+            $paymentGateway->beforeRenderPaymentForm($paymentGateway, $this->controller);
+        }
+
+        $this->addJs('js/checkout.js', 'checkout-js');
     }
 
     protected function prepareVars()
@@ -102,6 +109,7 @@ class Checkout extends BaseComponent
         $this->page['successPage'] = $this->property('successPage');
 
         $this->page['choosePaymentEventHandler'] = $this->getEventHandler('onChoosePayment');
+        $this->page['deletePaymentEventHandler'] = $this->getEventHandler('onDeletePaymentProfile');
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
 
         $this->page['order'] = $this->getOrder();
@@ -126,7 +134,7 @@ class Checkout extends BaseComponent
         $order = $this->getOrder();
 
         return $order->order_total > 0
-            ? $this->orderManager->getPaymentGateways() : null;
+            ? $this->orderManager->getPaymentGateways() : [];
     }
 
     public function onChoosePayment()
@@ -193,6 +201,29 @@ class Checkout extends BaseComponent
 
             return Redirect::back()->withInput();
         }
+    }
+
+    public function onDeletePaymentProfile()
+    {
+        $customer = Auth::customer();
+        $payment = $this->orderManager->getPayment(post('code'));
+
+        if (!$payment OR !$payment->paymentProfileExists($customer))
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+
+        $payment->deletePaymentProfile($customer);
+
+        $this->controller->pageCycle();
+
+        $result = [
+            '[data-partial="checkoutPayments"]' => $this->renderPartial('@payments'),
+        ];
+
+        if ($cartBox = $this->controller->findComponentByAlias($this->property('cartBoxAlias'))) {
+            $result['#cart-totals'] = $cartBox->renderPartial('@totals');
+        }
+
+        return $result;
     }
 
     protected function checkCheckoutSecurity()

@@ -1,18 +1,21 @@
 +function ($) {
     "use strict"
 
+    if ($.fn.checkout === undefined)
+        $.fn.checkout = {}
+
     var Checkout = function (element, options) {
         this.$el = $(element)
         this.options = options || {}
         this.$checkoutBtn = $(document).find(this.options.buttonSelector)
+        this.paymentInputSelector = 'input[name='+this.options.paymentInputName+']'
 
         this.init()
     }
 
     Checkout.prototype.init = function () {
         $(document).on('click', '[data-checkout-control]', $.proxy(this.onControlClick, this))
-        $(document).on('change', 'input[name="payment"]', $.proxy(this.onChoosePayment, this))
-        $('input[name="' + this.options.paymentInputName + '"]:checked', document).trigger('change')
+        $(this.paymentInputSelector + ':checked', document).trigger('change')
 
         $(document)
             .on('ajaxPromise', this.options.buttonSelector, function () {
@@ -25,39 +28,48 @@
             .on('ajaxFail ajaxDone', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
     }
 
+    Checkout.prototype.confirmCheckout = function ($el) {
+        this.$checkoutBtn.prop('disabled', true)
+        $($el.data('request-form')).submit()
+    }
+
     Checkout.prototype.choosePayment = function ($el) {
         var self = this,
-            $groupEl = $el.closest('.list-group'),
-            $groupItemEl = $el.closest('.list-group-item'),
-            $groupItems = $groupEl.find('.list-group-item'),
-            $inputItems = $groupEl.find('.list-group-item input[name="' + this.options.paymentInputName + '"]'),
-            $triggerItems = $groupEl.find('.list-group-item [data-trigger]'),
-            $input = $el.find('input[name="' + this.options.paymentInputName + '"]')
+            $paymentToggle = $el.closest('[data-toggle="payments"]')
 
-        if ($groupItemEl.hasClass('loading') || $input.is(':checked'))
+        if ($paymentToggle.hasClass('in-progress') || $el.find(this.paymentInputSelector).is(':checked'))
             return
 
-        self.$checkoutBtn.addClass('disabled')
-        $groupEl.addClass('loading')
-        $groupItems.css('opacity', '0.7').removeClass('bg-light')
-        $inputItems.prop('checked', false).prop('readOnly', true)
-        $triggerItems.addClass('hide')
-
-        $.request(this.options.choosePaymentHandler, {
+        this.$checkoutBtn.prop('disabled', true)
+        $el.request(this.options.choosePaymentHandler, {
             data: {code: $el.data('paymentCode')}
         }).done(function (json) {
-            $input.prop('checked', true).trigger('change')
+            $paymentToggle.find('.list-group-item').removeClass('bg-light')
+            $el.closest('.list-group-item').addClass('bg-light')
+            self.triggerPaymentInputChange($el)
         }).always(function () {
-            self.$checkoutBtn.removeClass('disabled')
-            $groupEl.removeClass('loading')
-            $groupItems.css('opacity', '1')
-            $inputItems.prop('readOnly', false)
+            self.$checkoutBtn.prop('disabled', false)
         })
     }
 
-    Checkout.prototype.confirmCheckout = function ($el) {
-        $(this.options.buttonSelector).prop('disabled', true)
-        $($el.data('request-form')).submit()
+    Checkout.prototype.deletePaymentProfile = function ($el) {
+        var self = this
+
+        this.$checkoutBtn.prop('disabled', true)
+        $el.request(this.options.deletePaymentHandler, {
+            data: {code: $el.data('paymentCode')}
+        }).done(function (json) {
+            self.triggerPaymentInputChange($el)
+        }).always(function () {
+            self.$checkoutBtn.prop('disabled', false)
+        })
+    }
+
+    Checkout.prototype.triggerPaymentInputChange = function ($el) {
+        var paymentInputSelector = this.paymentInputSelector + '[value=' + $el.data('paymentCode') + ']';
+        setTimeout(function () {
+            $(paymentInputSelector, document).prop('checked', true).trigger('change')
+        }, 1)
     }
 
     // EVENT HANDLERS
@@ -74,16 +86,12 @@
             case 'confirm-checkout':
                 this.confirmCheckout($el)
                 break
+            case 'delete-payment-profile':
+                this.deletePaymentProfile($el)
+                break
         }
 
         return false
-    }
-
-    Checkout.prototype.onChoosePayment = function (event) {
-        var $el = $(event.currentTarget)
-
-        $el.closest('.list-group').find('.list-group-item').removeClass('bg-light')
-        $el.closest('.list-group-item').addClass('bg-light')
     }
 
     Checkout.prototype.onSubmitCheckoutForm = function (event) {
@@ -115,7 +123,8 @@
         formSelector: '#checkout-form',
         buttonSelector: '.checkout-btn',
         paymentInputName: 'payment',
-        choosePaymentHandler: null,
+        choosePaymentHandler: undefined,
+        deletePaymentHandler: undefined,
     }
 
     // PLUGIN DEFINITION
@@ -145,4 +154,16 @@
     $(document).render(function () {
         $('[data-control="checkout"]').checkout()
     })
+
+    $(document)
+        .on('ajaxPromise', '[data-payment-code]', function() {
+            var $indicatorContainer = $(this).closest('.progress-indicator-container')
+            $indicatorContainer.prepend('<div class="progress-indicator"></div>')
+            $indicatorContainer.addClass('is-loading')
+        })
+        .on('ajaxFail ajaxDone', '[data-payment-code]', function() {
+            var $indicatorContainer = $(this).closest('.progress-indicator-container')
+            $('div.progress-indicator', $indicatorContainer).remove()
+            $indicatorContainer.removeClass('is-loading')
+        })
 }(window.jQuery)
