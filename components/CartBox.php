@@ -138,6 +138,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             if ($localBox = $this->controller->findComponentByAlias($this->property('localBoxAlias'))) {
                 $result['#local-timeslot'] = $localBox->renderPartial('@timeslot');
+                $result['#local-box-two'] = $localBox->renderPartial('@box_two');
             }
 
             return $result;
@@ -271,5 +272,31 @@ class CartBox extends \System\Classes\BaseComponent
             if (Request::ajax()) throw $ex;
             else flash()->alert($ex->getMessage());
         }
+    }
+
+    public function locationIsClosed()
+    {
+        $location = Location::instance();
+        $workingSchedule = $location->workingSchedule($location->orderType());
+        if ($workingSchedule->isClosed() AND !$location->current()->hasFutureOrder())
+            return TRUE;
+
+        if (!$location->checkOrderType())
+            return TRUE;
+
+        $subtotal = $this->cartManager->getCart()->subtotal();
+
+        return ($location->orderTypeIsDelivery() AND !$location->checkMinimumOrder($subtotal));
+    }
+
+    public function buttonLabel()
+    {
+        if ($this->locationIsClosed())
+            return lang('igniter.cart::default.text_is_closed');
+
+        if (!$this->property('pageIsCheckout'))
+            return lang('igniter.cart::default.button_order');
+
+        return lang('igniter.cart::default.button_confirm');
     }
 }
