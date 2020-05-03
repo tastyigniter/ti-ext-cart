@@ -260,7 +260,7 @@ class CartBox extends \System\Classes\BaseComponent
     {
         try {
             if (!is_numeric($id = post('locationId')) OR !$location = Location::getById($id))
-                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
+                throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
             Location::setCurrent($location);
 

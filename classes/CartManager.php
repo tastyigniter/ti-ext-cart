@@ -246,7 +246,7 @@ class CartManager
     public function validateLocation()
     {
         if (!$this->location->current())
-            throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
+            throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
         if (!$this->location->current()->hasFutureOrder() AND $this->location->isClosed())
             throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
