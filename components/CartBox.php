@@ -100,7 +100,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
-        $this->page['changeOrderTypeEventHandler'] = $this->getEventHandler('onChangeOrderType');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
         $this->page['applyCouponEventHandler'] = $this->getEventHandler('onApplyCoupon');
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
@@ -130,43 +129,6 @@ class CartBox extends \System\Classes\BaseComponent
     public function onRefresh()
     {
         return $this->fetchPartials();
-    }
-
-    public function onChangeOrderType()
-    {
-        try {
-            if (!$location = Location::current())
-                throw new ApplicationException(lang('igniter.cart::default.alert_location_required'));
-
-            if (!Location::checkOrderType($orderType = post('type')))
-                throw new ApplicationException(lang('igniter.cart::default.alert_'.$orderType.'_unavailable'));
-
-            Location::updateOrderType($orderType);
-
-            $this->controller->pageCycle();
-
-            if ($this->property('pageIsCheckout'))
-                return Redirect::to($this->controller->pageUrl($this->property('checkoutPage')));
-
-            $result = [
-                '#notification' => $this->renderPartial('flash'),
-                '#cart-items' => $this->renderPartial('@items'),
-                '#cart-control' => $this->renderPartial('@control'),
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-            ];
-
-            if ($localBox = $this->controller->findComponentByAlias($this->property('localBoxAlias'))) {
-                $result['#local-timeslot'] = $localBox->renderPartial('@timeslot');
-                $result['#local-box-two'] = $localBox->renderPartial('@box_two');
-            }
-
-            return $result;
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->danger($ex->getMessage())->now();
-        }
     }
 
     public function onLoadItemPopup()

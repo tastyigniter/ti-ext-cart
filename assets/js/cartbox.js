@@ -11,7 +11,6 @@
 
     CartBox.prototype.init = function () {
         $(document).on('click', '[data-cart-control]', $.proxy(this.onControlClick, this))
-        this.$el.on('change', '[data-cart-toggle="order-type"]', $.proxy(this.onOrderTypeToggle, this))
     }
 
     CartBox.prototype.initAffix = function () {
@@ -100,20 +99,6 @@
         return false
     }
 
-    CartBox.prototype.onOrderTypeToggle = function (event) {
-        var $el = $(event.currentTarget),
-            $parentEl = $el.closest('#cart-control')
-
-        $parentEl.find('[data-cart-toggle="order-type"]').attr('disabled', true)
-        $parentEl.find('.btn').addClass('disabled')
-        $.request(this.options.changeOrderTypeHandler, {
-            data: {'type': $el.val()}
-        }).always(function () {
-            $parentEl.find('[data-cart-toggle="order-type"]').attr('disabled', false)
-            $parentEl.find('.btn').removeClass('disabled')
-        })
-    }
-
     CartBox.DEFAULTS = {
         alias: 'cart',
         loadItemHandler: null,
@@ -121,7 +106,6 @@
         removeItemHandler: null,
         applyCouponHandler: null,
         removeConditionHandler: null,
-        changeOrderTypeHandler: null,
     }
 
     // PLUGIN DEFINITION
