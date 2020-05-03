@@ -106,10 +106,30 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
         $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
+        $this->page['refreshCartEventHandler'] = $this->getEventHandler('onRefresh');
 
         $this->page['cart'] = $this->cartManager->getCart();
         $this->page['location'] = Location::instance();
         $this->page['locationCurrent'] = Location::current();
+    }
+
+    public function fetchPartials()
+    {
+        $this->prepareVars();
+
+        return [
+            '#notification' => $this->renderPartial('flash'),
+            '#cart-items' => $this->renderPartial('@items'),
+            '#cart-coupon' => $this->renderPartial('@coupon_form'),
+            '#cart-totals' => $this->renderPartial('@totals'),
+            '#cart-buttons' => $this->renderPartial('@buttons'),
+            '[data-cart-total]' => currency_format(Cart::total()),
+        ];
+    }
+
+    public function onRefresh()
+    {
+        return $this->fetchPartials();
     }
 
     public function onChangeOrderType()
@@ -177,14 +197,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             $this->controller->pageCycle();
 
-            return [
-                '#notification' => $this->renderPartial('flash'),
-                '#cart-items' => $this->renderPartial('@items'),
-                '#cart-coupon' => $this->renderPartial('@coupon_form'),
-                '#cart-total' => currency_format(Cart::total()),
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-            ];
+            return $this->fetchPartials();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
@@ -202,13 +215,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             $this->controller->pageCycle();
 
-            return [
-                '#notification' => $this->renderPartial('flash'),
-                '#cart-items' => $this->renderPartial('@items'),
-                '#cart-coupon' => $this->renderPartial('@coupon_form'),
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-            ];
+            return $this->fetchPartials();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
@@ -223,11 +230,7 @@ class CartBox extends \System\Classes\BaseComponent
 
             $this->controller->pageCycle();
 
-            return [
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-                '#notification' => $this->renderPartial('flash'),
-            ];
+            return $this->fetchPartials();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
@@ -244,11 +247,7 @@ class CartBox extends \System\Classes\BaseComponent
             $this->cartManager->removeCondition($conditionId);
             $this->controller->pageCycle();
 
-            return [
-                '#notification' => $this->renderPartial('flash'),
-                '#cart-totals' => $this->renderPartial('@totals'),
-                '#cart-buttons' => $this->renderPartial('@buttons'),
-            ];
+            return $this->fetchPartials();
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;

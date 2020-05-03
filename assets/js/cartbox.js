@@ -30,6 +30,7 @@
     }
 
     CartBox.prototype.refreshCart = function ($el) {
+        $.request(this.options.refreshCartHandler)
     }
 
     CartBox.prototype.loadItem = function ($el) {

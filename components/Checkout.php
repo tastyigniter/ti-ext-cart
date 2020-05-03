@@ -116,6 +116,15 @@ class Checkout extends BaseComponent
         $this->page['paymentGateways'] = $this->getPaymentGateways();
     }
 
+    public function fetchPartials()
+    {
+        $this->prepareVars();
+
+        return [
+            '[data-partial="checkoutPayments"]' => $this->renderPartial('@payments'),
+        ];
+    }
+
     public function getOrder()
     {
         if (!is_null($this->order))
@@ -152,12 +161,10 @@ class Checkout extends BaseComponent
 
         $this->controller->pageCycle();
 
-        $result = [
-            '[data-partial="checkoutPayments"]' => $this->renderPartial('@payments'),
-        ];
+        $result = $this->fetchPartials();
 
-        if ($cartBox = $this->controller->findComponentByAlias('cartBox')) {
-            $result['#cart-totals'] = $cartBox->renderPartial('@totals');
+        if ($cartBox = $this->controller->findComponentByAlias($this->property('cartBoxAlias'))) {
+            $result = array_merge($result, $cartBox->fetchPartials());
         }
 
         return $result;
@@ -215,12 +222,10 @@ class Checkout extends BaseComponent
 
         $this->controller->pageCycle();
 
-        $result = [
-            '[data-partial="checkoutPayments"]' => $this->renderPartial('@payments'),
-        ];
+        $result = $this->fetchPartials();
 
         if ($cartBox = $this->controller->findComponentByAlias($this->property('cartBoxAlias'))) {
-            $result['#cart-totals'] = $cartBox->renderPartial('@totals');
+            $result = array_merge($result, $cartBox->fetchPartials());
         }
 
         return $result;
