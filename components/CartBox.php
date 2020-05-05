@@ -5,7 +5,6 @@ use Cart;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Location;
-use Main\Template\Page;
 use Redirect;
 use Request;
 
@@ -66,6 +65,7 @@ class CartBox extends \System\Classes\BaseComponent
             'checkoutPage' => [
                 'label' => 'Checkout Page',
                 'type' => 'select',
+                'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/checkout',
             ],
             'localBoxAlias' => [
@@ -74,11 +74,6 @@ class CartBox extends \System\Classes\BaseComponent
                 'default' => 'localBox',
             ],
         ];
-    }
-
-    public static function getCheckoutPageOptions()
-    {
-        return Page::lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()

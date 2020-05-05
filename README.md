@@ -128,7 +128,7 @@ public function registerCartConditions()
 }
 ```
 
-### Event Rules
+### Automations
 
 ## Events
 - Order Placed Event
