@@ -56,6 +56,8 @@
         } else {
             $input.val((oldValue > 0) ? oldValue - this.options.minQuantity : 0)
         }
+        
+        $input.trigger('input');
     }
 
     CartItem.DEFAULTS = {
