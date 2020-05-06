@@ -56,6 +56,16 @@
         return this.$modalElement.find('[data-control="cart-options"]')
     }
 
+    CartBoxModal.prototype.onQuantityChanged = function (event) {
+        var inputEl = event.currentTarget,
+            $cartItem = this.$modalElement.find('[data-control="cart-item"]');
+
+        var price = ($cartItem.data('priceAmount') * inputEl.value).toFixed(2);
+
+        $cartItem.find('[data-item-subtotal]')
+            .html($cartItem.data('priceFormat').replace('0.00', price));
+    }
+
     CartBoxModal.prototype.onSubmitForm = function () {
         if (this.options.onSubmit !== undefined)
             this.options.onSubmit.call(this)
@@ -97,20 +107,10 @@
     CartBoxModal.prototype.onFetchModalContent = function (json) {
         this.$modalRootElement.html(json.result);
         this.$modalRootElement.modal()
-        
+
         var $cartItem = this.$modalElement.find('[data-control="cart-item"]');
-              
-        if ($cartItem.find('[data-output="lineprice"]').length > 0){
-                
-	        $cartItem.find('[name="quantity"]')
-	        .on('input', function(ev) {
-			        
-		        var price = ($cartItem.attr('data-price') * this.value).toFixed(2);
-		        $cartItem.find('[data-output="lineprice"]').html($cartItem.attr('data-price-format').replace('0.00', price));
-		        
-	        });
-        
-        }
+
+        $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityChanged, this))
 
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
