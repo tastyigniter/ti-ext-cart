@@ -262,7 +262,7 @@ class OrderManager
         ];
     }
 
-    protected function getCartTotals()
+    public function getCartTotals()
     {
         $totals = $this->cart->conditions()->map(function (CartCondition $condition) {
             $priority = $condition->getPriority();
