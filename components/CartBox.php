@@ -10,6 +10,8 @@ use Request;
 
 class CartBox extends \System\Classes\BaseComponent
 {
+    use \Main\Traits\UsesPage;
+
     /**
      * @var \Igniter\Cart\Classes\CartManager
      */
