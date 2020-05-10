@@ -60,7 +60,7 @@
         var inputEl = this.$modalElement.find('[name="quantity"]'),
             $cartItem = this.$modalElement.find('[data-control="cart-item"]');
 
-        var price = ($cartItem.data('priceAmount') * inputEl.val());
+        var price = $cartItem.data('priceAmount');
                 
 		this.$modalElement.find('input[data-option-price]:checked')
             .each(function(idx, option){
@@ -71,6 +71,8 @@
             .each(function(idx, option){
 			    price += $(option).data('optionPrice');
             });
+		
+		price *= inputEl.val();
 		
 		var decimals = $cartItem.data('priceFormat').split('.').pop();
 				
