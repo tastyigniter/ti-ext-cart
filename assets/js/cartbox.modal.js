@@ -55,15 +55,27 @@
     CartBoxModal.prototype.getCartBoxElement = function () {
         return this.$modalElement.find('[data-control="cart-options"]')
     }
-
-    CartBoxModal.prototype.onQuantityChanged = function (event) {
-        var inputEl = event.currentTarget,
+    
+    CartBoxModal.prototype.onQuantityOrOptionChanged = function (event) {
+        var inputEl = this.$modalElement.find('[name="quantity"]'),
             $cartItem = this.$modalElement.find('[data-control="cart-item"]');
 
-        var price = ($cartItem.data('priceAmount') * inputEl.value).toFixed(2);
-
+        var price = ($cartItem.data('priceAmount') * inputEl.val());
+                
+		this.$modalElement.find('input[data-option-price]:checked')
+            .each(function(idx, option){
+			    price += $(option).data('optionPrice');
+            });
+		
+		this.$modalElement.find('select[data-option-price] option:selected')
+            .each(function(idx, option){
+			    price += $(option).data('optionPrice');
+            });
+		
+		var decimals = $cartItem.data('priceFormat').split('.').pop();
+				
         $cartItem.find('[data-item-subtotal]')
-            .html($cartItem.data('priceFormat').replace('0.00', price));
+            .html($cartItem.data('priceFormat').replace('0.' + decimals, price.toFixed(decimals.length)));
     }
 
     CartBoxModal.prototype.onSubmitForm = function () {
@@ -110,7 +122,8 @@
 
         var $cartItem = this.$modalElement.find('[data-control="cart-item"]');
 
-        $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityChanged, this))
+        $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityOrOptionChanged, this))
+        $cartItem.on('change', '[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
 
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
