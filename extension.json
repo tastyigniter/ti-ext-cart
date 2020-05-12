@@ -9,7 +9,7 @@
     "color": "#FFF",
     "backgroundColor": "#ED561A"
   },
-  "homepage": "https://github.com/tastyigniter/ti-ext-cart",
+  "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart",
   "require": {
     "igniter.local": "*",
     "igniter.user": "*",
