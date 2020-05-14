@@ -64,7 +64,7 @@ class CartBox extends \System\Classes\BaseComponent
                 'type' => 'switch',
                 'default' => FALSE,
             ],
-            'hideFreeOptionPrices' => [
+            'hideZeroOptionPrices' => [
                 'label' => 'Whether to hide zero prices on options',
                 'type' => 'switch',
                 'default' => FALSE,
@@ -100,7 +100,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['cartBoxTimeFormat'] = $this->property('cartBoxTimeFormat');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
-        $this->page['hideFreeOptionPrices'] = $this->property('hideFreeOptionPrices');        
+        $this->page['hideZeroOptionPrices'] = (bool)$this->property('hideZeroOptionPrices');        
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
