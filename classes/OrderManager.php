@@ -3,7 +3,6 @@
 namespace Igniter\Cart\Classes;
 
 use Admin\Models\Addresses_model;
-use Admin\Models\Payments_model;
 use ApplicationException;
 use Auth;
 use Cart;
@@ -93,13 +92,18 @@ class OrderManager
         return $query->first();
     }
 
+    public function getDefaultPayment()
+    {
+        return $this->getPaymentGateways()->where('is_default', TRUE)->first();
+    }
+
     /**
      * @param $code
      * @return \Admin\Models\Payments_model|\Admin\Classes\BasePaymentGateway
      */
     public function getPayment($code)
     {
-        return Payments_model::whereCode($code)->first();
+        return $this->getPaymentGateways()->where('code', $code)->first();
     }
 
     public function getPaymentGateways()
@@ -364,6 +368,6 @@ class OrderManager
 
     public function getCurrentPaymentCode()
     {
-        return $this->getSession('paymentCode');
+        return $this->getSession('paymentCode', optional($this->getDefaultPayment())->code);
     }
 }
