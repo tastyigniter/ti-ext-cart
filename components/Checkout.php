@@ -260,8 +260,8 @@ class Checkout extends BaseComponent
     protected function createRules()
     {
         $namedRules = [
-            ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|min:2|max:32'],
-            ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|min:2|max:32'],
+            ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|min:1|max:48'],
+            ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|min:1|max:48'],
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email|max:96|unique:customers'],
             ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
