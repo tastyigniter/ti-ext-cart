@@ -1,7 +1,6 @@
 <?php
 
 return [
-    '_text_title' => 'Cart',
     'text_tab_general' => 'General',
     'text_component_title' => 'Cart Component',
     'text_component_desc' => 'Displays cart for menu to be added',
