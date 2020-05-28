@@ -135,7 +135,7 @@ class Extension extends BaseExtension
     public function registerActivityTypes()
     {
         return [
-            ActivityTypes\OrderCreated::class,
+            ActivityTypes\OrderCreated::class => 'orderCreated',
         ];
     }
 

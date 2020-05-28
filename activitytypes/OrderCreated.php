@@ -4,30 +4,36 @@ namespace Igniter\Cart\ActivityTypes;
 
 use Admin\Models\Orders_model;
 use Admin\Models\Staffs_model;
-use Auth;
 use Igniter\Flame\ActivityLog\Contracts\ActivityInterface;
 use Igniter\Flame\ActivityLog\Models\Activity;
-use Igniter\Flame\Auth\Models\User;
 
 class OrderCreated implements ActivityInterface
 {
-    public $order;
+    public $type;
 
-    public $user;
+    public $subject;
 
-    public function __construct(Orders_model $order, User $user = null)
+    public function __construct(string $type, Orders_model $subject)
     {
-        $this->order = $order;
-        $this->user = $user;
+        $this->type = $type;
+        $this->subject = $subject;
     }
 
-    public static function log($model)
+    public static function log($order)
     {
-        $recipients = Staffs_model::isEnabled()->get()->map(function ($model) {
-            return $model->user;
+        $recipients = Staffs_model::isEnabled()->get()->map(function ($staff) {
+            return $staff->user;
         })->all();
 
-        activity()->pushLog(new static($model, Auth::user()), $recipients);
+        activity()->pushLog(new static('orderCreated', $order), $recipients);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -35,7 +41,7 @@ class OrderCreated implements ActivityInterface
      */
     public function getCauser()
     {
-        return $this->user;
+        return $this->subject->customer;
     }
 
     /**
@@ -43,7 +49,7 @@ class OrderCreated implements ActivityInterface
      */
     public function getSubject()
     {
-        return $this->order;
+        return $this->subject;
     }
 
     /**
@@ -52,31 +58,9 @@ class OrderCreated implements ActivityInterface
     public function getProperties()
     {
         return [
-            'order_id' => $this->order->order_id,
-            'full_name' => $this->order->customer_name,
+            'order_id' => $this->subject->getKey(),
+            'full_name' => $this->subject->customer_name,
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getType()
-    {
-        return 'orderCreated';
-    }
-
-    public static function getUrl(Activity $activity)
-    {
-        $url = 'orders';
-        if ($activity->subject)
-            $url .= '/edit/'.$activity->subject->order_id;
-
-        return admin_url($url);
-    }
-
-    public static function getMessage(Activity $activity)
-    {
-        return lang('igniter.cart::default.checkout.activity_order_created');
     }
 
     /**
@@ -85,5 +69,24 @@ class OrderCreated implements ActivityInterface
     public static function getSubjectModel()
     {
         return Orders_model::class;
+    }
+
+    public static function getTitle(Activity $activity)
+    {
+        return lang('igniter.cart::default.checkout.activity_order_created_title');
+    }
+
+    public static function getUrl(Activity $activity)
+    {
+        $url = 'orders';
+        if ($activity->subject)
+            $url .= '/edit/'.$activity->subject->getKey();
+
+        return admin_url($url);
+    }
+
+    public static function getMessage(Activity $activity)
+    {
+        return lang('igniter.cart::default.checkout.activity_order_created');
     }
 }
