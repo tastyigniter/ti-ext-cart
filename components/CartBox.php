@@ -249,9 +249,12 @@ class CartBox extends \System\Classes\BaseComponent
         if ($workingSchedule->isClosed() AND !$location->current()->hasFutureOrder())
             return TRUE;
 
-        if (!$location->checkOrderType())
-            return TRUE;
+        return !$location->checkOrderType() ? TRUE : FALSE;
+    }
 
+    public function hasMinimumOrder()
+    {
+        $location = Location::instance();
         $subtotal = $this->cartManager->getCart()->subtotal();
 
         return ($location->orderTypeIsDelivery() AND !$location->checkMinimumOrder($subtotal));

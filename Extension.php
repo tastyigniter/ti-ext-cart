@@ -19,13 +19,15 @@ class Extension extends BaseExtension
         $this->app->register(\Igniter\Flame\Cart\CartServiceProvider::class);
 
         AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);
-
-        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
-                  ->pushMiddleware(\Igniter\Cart\Middleware\CartMiddleware::class);
     }
 
     public function boot()
     {
+        if (!$this->app->runningInAdmin()) {
+            $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
+                ->appendMiddlewareToGroup('web', \Igniter\Cart\Middleware\CartMiddleware::class);
+        }
+
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
