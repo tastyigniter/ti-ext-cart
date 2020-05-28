@@ -153,11 +153,7 @@ class Checkout extends BaseComponent
         if (!$payment = $this->orderManager->getPayment($paymentCode))
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
 
-        $this->orderManager->setCurrentPaymentCode($payment->code);
-
-        $this->cartManager->applyCondition('paymentFee', [
-            'code' => $payment->code,
-        ]);
+        $this->orderManager->applyCurrentPaymentFee($payment->code);
 
         $this->controller->pageCycle();
 

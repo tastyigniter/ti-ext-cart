@@ -244,7 +244,7 @@ class OrderManager
             $order->order_time = $orderDateTime->format('H:i');
         }
 
-        $order->payment = $this->getCurrentPaymentCode();
+        $this->applyCurrentPaymentFee($order->payment = $this->getCurrentPaymentCode());
 
         $order->total_items = $this->cart->count();
         $order->cart = $this->cart->content();
@@ -369,5 +369,19 @@ class OrderManager
     public function getCurrentPaymentCode()
     {
         return $this->getSession('paymentCode', optional($this->getDefaultPayment())->code);
+    }
+
+    public function applyCurrentPaymentFee($code)
+    {
+        $this->setCurrentPaymentCode($code);
+
+        if (!$condition = $this->cart->getCondition('paymentFee'))
+            return;
+
+        $condition->setMetaData(['code' => $code]);
+
+        $this->cart->loadCondition($condition);
+
+        return $condition;
     }
 }

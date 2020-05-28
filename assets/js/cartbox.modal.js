@@ -108,6 +108,7 @@
     }
 
     CartBoxModal.prototype.onModalShown = function (event) {
+        var self = this
         this.$modalElement = $(event.target)
 
         $.request(this.options.loadItemHandler, {
@@ -116,6 +117,9 @@
                 menuId: this.options.menuId,
             }
         }).done($.proxy(this.onFetchModalContent, this))
+        .fail(function () {
+            self.$modalElement.modal('hide')
+        })
     }
 
     CartBoxModal.prototype.onFetchModalContent = function (json) {
