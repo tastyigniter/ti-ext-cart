@@ -68,22 +68,6 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerEventRules()
-    {
-        return [
-            'events' => [
-                'admin.order.paymentProcessed' => \Igniter\Cart\EventRules\Events\OrderPlaced::class,
-                'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\EventRules\Events\NewOrderStatus::class,
-                'igniter.cart.orderAssigned' => \Igniter\Cart\EventRules\Events\OrderAssigned::class,
-            ],
-            'actions' => [],
-            'conditions' => [
-                \Igniter\Cart\EventRules\Conditions\OrderAttribute::class,
-                \Igniter\Cart\EventRules\Conditions\OrderStatusAttribute::class,
-            ],
-        ];
-    }
-
     public function registerComponents()
     {
         return [
