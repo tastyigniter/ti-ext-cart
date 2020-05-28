@@ -144,6 +144,10 @@ class CartBox extends \System\Classes\BaseComponent
             $menuItem = $cartItem->model;
         }
 
+        $this->cartManager->validateMenuItem($menuItem);
+
+        $this->cartManager->validateMenuItemStockQty($menuItem, $cartItem ? $cartItem->qty : 0);
+
         $this->controller->pageCycle();
 
         return $this->renderPartial('@item_modal', [
