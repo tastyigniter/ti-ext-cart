@@ -61,7 +61,15 @@
             data: {code: $input.val()}
         })
     }
+    
+    CartBox.prototype.applyTip = function ($el) {
+        var $input = this.$el.find('[name="tip_amount"]')
 
+        $.request(this.options.applyTipHandler, {
+            data: {code: $input.val()}
+        })
+    }
+    
     CartBox.prototype.removeCondition = function ($el) {
         $.request(this.options.removeConditionHandler, {
             data: {conditionId: $el.data('cartConditionId')}
@@ -105,7 +113,8 @@
         updateItemHandler: null,
         removeItemHandler: null,
         applyCouponHandler: null,
-        removeConditionHandler: null,
+        applyTipHandler: null,
+        removeConditionHandler: null
     }
 
     // PLUGIN DEFINITION

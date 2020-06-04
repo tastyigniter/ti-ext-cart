@@ -105,6 +105,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
         $this->page['applyCouponEventHandler'] = $this->getEventHandler('onApplyCoupon');
+        $this->page['applyTipEventHandler'] = $this->getEventHandler('onApplyTip');
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
         $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
@@ -123,6 +124,7 @@ class CartBox extends \System\Classes\BaseComponent
             '#notification' => $this->renderPartial('flash'),
             '#cart-items' => $this->renderPartial('@items'),
             '#cart-coupon' => $this->renderPartial('@coupon_form'),
+            '#cart-tip' => $this->renderPartial('@tip_form'),
             '#cart-totals' => $this->renderPartial('@totals'),
             '#cart-buttons' => $this->renderPartial('@buttons'),
             '[data-cart-total]' => currency_format(Cart::total()),
@@ -206,6 +208,22 @@ class CartBox extends \System\Classes\BaseComponent
             else flash()->alert($ex->getMessage());
         }
     }
+    
+    public function onApplyTip()
+    {
+        try {
+            $this->cartManager->applyCondition('tip', [ 'amount' => post('tip_amount') ]);
+
+            $this->controller->pageCycle();
+
+            return $this->fetchPartials();
+
+        }
+        catch (Exception $ex) {
+            if (Request::ajax()) throw $ex;
+            else flash()->alert($ex->getMessage());
+        }
+    }    
 
     public function onRemoveCondition()
     {
