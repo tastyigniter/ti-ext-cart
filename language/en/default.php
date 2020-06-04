@@ -13,8 +13,10 @@ return [
     'text_add_heading' => 'Adding menu choices',
     'text_no_cart_items' => '<p class="text-center">Add menu items to your cart.</p>',
     'text_apply_coupon' => 'Enter coupon code',
+    'text_apply_tip' => 'Enter tip amount',
     'text_sub_total' => 'Sub Total',
     'text_coupon' => 'Coupon [%s]',
+    'text_tip' => 'Tip',
     'text_payment_fee' => 'Payment Fee',
     'text_vat' => 'VAT [%s]',
     'text_order_total' => 'Order Total',
@@ -37,6 +39,7 @@ return [
     'button_payment' => 'Payment',
     'button_confirm' => 'Confirm',
     'button_apply_coupon' => 'Apply Coupon',
+    'button_apply_tip' => 'Apply Tip',
     'button_view_cart' => 'Back to My Order',
 
     'column_condition_name' => 'Name',
@@ -89,6 +92,7 @@ return [
     'alert_menu_not_within_mealtime' => '%s is available for %s ONLY between (%s - %s)',
     'alert_coupon_location_restricted' => 'Your coupon can not be applied on the selected order location.',
     'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
+    'alert_tip_not_applied' => 'Please enter a valid tip amount.',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',
@@ -102,6 +106,7 @@ return [
     'help_coupon_condition' => 'Applies coupon to cart.',
     'help_tax_condition' => 'Applies tax to cart',
     'help_payment_fee' => 'Applies payment fee to cart',
+    'help_tip_condition' => 'Applies tips to cart.',
 
     'checkout' => [
         'text_heading' => 'Checkout',
