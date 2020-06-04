@@ -51,6 +51,11 @@ class Extension extends BaseExtension
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',
             ],
+            \Igniter\Cart\CartConditions\Tip::class => [
+                'name' => 'tip',
+                'label' => 'lang:igniter.cart::default.text_tip',
+                'description' => 'lang:igniter.cart::default.help_tip_condition',
+            ], 
         ];
     }
 
