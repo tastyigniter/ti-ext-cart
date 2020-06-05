@@ -70,6 +70,10 @@
         })
     }
     
+    CartBox.prototype.applyTipPercentage = function ($el) {
+        this.$el.find('[name="tip_amount"]').val($el.val());
+    }
+    
     CartBox.prototype.removeCondition = function ($el) {
         $.request(this.options.removeConditionHandler, {
             data: {conditionId: $el.data('cartConditionId')}
@@ -101,6 +105,9 @@
                 break
             case 'apply-coupon':
                 this.applyCoupon($el)
+                break
+            case 'tip-percentage':
+                this.applyTipPercentage($el)
                 break
         }
 
