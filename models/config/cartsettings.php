@@ -28,6 +28,11 @@ return [
                 'type' => 'switch',
                 'default' => FALSE,
             ],
+            'enable_tipping' => [
+                'label' => 'lang:igniter.cart::default.label_enable_tipping',
+                'type' => 'switch',
+                'default' => FALSE,
+            ],            
             'conditions' => [
                 'label' => 'lang:igniter.cart::default.label_cart_conditions',
                 'type' => 'repeater',

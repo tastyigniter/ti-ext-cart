@@ -152,7 +152,8 @@ class Extension extends BaseExtension
             Config::set('cart.model', CartStore::class);
             Config::set('cart.conditions', CartSettings::get('conditions'));
             Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
-        });
+            Config::set('cart.tippingEnabled', CartSettings::get('enable_tipping'));
+         });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
             if (Location::current())
