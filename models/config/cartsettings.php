@@ -82,11 +82,11 @@ return [
                             'type' => 'hidden',
                         ],
                         'label' => [
-                            'label' => 'lang:igniter.cart::default.column_percentage',
+                            'label' => 'lang:igniter.cart::default.column_tip_percentage',
                             'type' => 'text',
                         ],
                         'amount' => [
-                            'label' => 'lang:igniter.cart::default.column_amount',
+                            'label' => 'lang:igniter.cart::default.column_tip_amount',
                             'type' => 'text',
                         ]
                     ],
