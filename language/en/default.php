@@ -45,6 +45,9 @@ return [
     'column_condition_name' => 'Name',
     'column_condition_priority' => 'Priority',
     'column_condition_title' => 'Label',
+    'column_tip_percentage' => 'Percentage',
+    'column_tip_amount' => 'Amount',
+
 
     'label_menu_quantity' => 'Menu Quantity',
     'label_add_comment' => 'Add Comment',
@@ -61,6 +64,8 @@ return [
     'label_cart_conditions' => 'Cart Conditions',
     'label_stock_checkout' => 'Stock Checkout',
     'label_show_stock_warning' => 'Show Stock Warning',
+    'label_enable_tipping' => 'Enable tipping',
+    'label_tip_percentages' => 'Tip percentages',
 
     'alert_menu_added' => 'Menu has been added to your order.',
     'alert_menu_updated' => 'Menu has been updated successfully',
