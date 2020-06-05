@@ -27,12 +27,7 @@ return [
                 'label' => 'lang:igniter.cart::default.label_destroy_on_logout',
                 'type' => 'switch',
                 'default' => FALSE,
-            ],
-            'enable_tipping' => [
-                'label' => 'lang:igniter.cart::default.label_enable_tipping',
-                'type' => 'switch',
-                'default' => FALSE,
-            ],            
+            ],      
             'conditions' => [
                 'label' => 'lang:igniter.cart::default.label_cart_conditions',
                 'type' => 'repeater',
@@ -64,6 +59,39 @@ return [
                         ],
                     ],
                 ],
+            ],
+            'enable_tipping' => [
+                'label' => 'lang:igniter.cart::default.label_enable_tipping',
+	            'type' => 'radio',
+	            'default' => false,
+	            'options' => [
+	                true => 'lang:admin::lang.text_yes',
+	                false => 'lang:admin::lang.text_no',
+	            ],
+            ],     
+            'tip_percentages' => [
+                'label' => 'lang:igniter.cart::default.label_tip_percentages',
+                'type' => 'repeater',
+                'sortable' => TRUE,
+                'showAddButton' => TRUE,
+                'showRemoveButton' => TRUE,
+                'form' => [
+                    'fields' => [
+                        'priority' => [
+                            'label' => 'lang:igniter.cart::default.column_condition_priority',
+                            'type' => 'hidden',
+                        ],
+                        'label' => [
+                            'label' => 'lang:igniter.cart::default.column_percentage',
+                            'type' => 'text',
+                        ]
+                    ],
+                ],
+	            'trigger' => [
+	                'action' => 'show',
+	                'field' => 'enable_tipping',
+	                'condition' => 'value[1]',
+	            ],
             ],
         ],
     ],
