@@ -84,6 +84,10 @@ return [
                         'label' => [
                             'label' => 'lang:igniter.cart::default.column_percentage',
                             'type' => 'text',
+                        ],
+                        'amount' => [
+                            'label' => 'lang:igniter.cart::default.column_amount',
+                            'type' => 'text',
                         ]
                     ],
                 ],
