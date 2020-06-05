@@ -9,7 +9,7 @@ class Tip extends CartCondition
 {
     public $priority = 100;
     public $removeable = TRUE;
-
+    
     public function getLabel()
     {
         return lang($this->label);
@@ -17,15 +17,25 @@ class Tip extends CartCondition
     
     public function getValue()
     {
-        return $this->getMetaData('amount');
+	    $amount = $this->getMetaData('amount');
+		return $amount;
     }
 
     public function beforeApply()
     {
 	    $value = $this->getMetaData('amount');
-	    if (preg_match('/^\d+([\.\d]{2})?$/', $value) === false) {
+	    if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === false) {
 		    $this->removeMetaData('amount');
 	        flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();		    
 	    }
     }
+    
+    public function getActions()
+    {
+	    $amount = $this->getMetaData('amount');
+        return [
+            ['value' => "+{$amount}"],
+        ];
+    }
+    
 }
