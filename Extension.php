@@ -153,7 +153,8 @@ class Extension extends BaseExtension
             Config::set('cart.conditions', CartSettings::get('conditions'));
             Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
             Config::set('cart.tippingEnabled', CartSettings::get('enable_tipping'));
-         });
+            Config::set('cart.tipPercentages', CartSettings::get('tip_percentages'));
+        });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
             if (Location::current())
