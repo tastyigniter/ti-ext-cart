@@ -21,81 +21,99 @@ return [
             'abandoned_cart' => [
                 'label' => 'lang:igniter.cart::default.label_abandoned_cart',
                 'type' => 'switch',
+                'span' => 'left',
                 'default' => FALSE,
             ],
             'destroy_on_logout' => [
                 'label' => 'lang:igniter.cart::default.label_destroy_on_logout',
                 'type' => 'switch',
+                'span' => 'right',
                 'default' => FALSE,
-            ],      
-            'conditions' => [
-                'label' => 'lang:igniter.cart::default.label_cart_conditions',
-                'type' => 'repeater',
-                'sortable' => TRUE,
-                'showAddButton' => FALSE,
-                'showRemoveButton' => FALSE,
-                'commentAbove' => 'lang:igniter.cart::default.help_cart_conditions',
-                'form' => [
-                    'fields' => [
-                        'priority' => [
-                            'label' => 'lang:igniter.cart::default.column_condition_priority',
-                            'type' => 'hidden',
-                        ],
-                        'name' => [
-                            'label' => 'lang:igniter.cart::default.column_condition_name',
-                            'type' => 'text',
-                            'attributes' => [
-                                'readonly' => TRUE,
+            ],
+        ],
+        'tabs' => [
+            'fields' => [
+                'conditions' => [
+                    'tab' => 'lang:igniter.cart::default.label_cart_conditions',
+                    'type' => 'repeater',
+                    'sortable' => TRUE,
+                    'showAddButton' => FALSE,
+                    'showRemoveButton' => FALSE,
+                    'commentAbove' => 'lang:igniter.cart::default.help_cart_conditions',
+                    'form' => [
+                        'fields' => [
+                            'priority' => [
+                                'label' => 'lang:igniter.cart::default.column_condition_priority',
+                                'type' => 'hidden',
+                            ],
+                            'name' => [
+                                'label' => 'lang:igniter.cart::default.column_condition_name',
+                                'type' => 'text',
+                                'attributes' => [
+                                    'readonly' => TRUE,
+                                ],
+                            ],
+                            'label' => [
+                                'label' => 'lang:igniter.cart::default.column_condition_title',
+                                'type' => 'text',
+                            ],
+                            'status' => [
+                                'label' => 'lang:admin::lang.label_status',
+                                'type' => 'switch',
+                                'default' => TRUE,
                             ],
                         ],
-                        'label' => [
-                            'label' => 'lang:igniter.cart::default.column_condition_title',
-                            'type' => 'text',
-                        ],
-                        'status' => [
-                            'label' => 'lang:admin::lang.label_status',
-                            'type' => 'switch',
-                            'default' => TRUE,
-                        ],
                     ],
                 ],
-            ],
-            'enable_tipping' => [
-                'label' => 'lang:igniter.cart::default.label_enable_tipping',
-	            'type' => 'radio',
-	            'default' => false,
-	            'options' => [
-	                true => 'lang:admin::lang.text_yes',
-	                false => 'lang:admin::lang.text_no',
-	            ],
-            ],     
-            'tip_percentages' => [
-                'label' => 'lang:igniter.cart::default.label_tip_percentages',
-                'type' => 'repeater',
-                'sortable' => TRUE,
-                'showAddButton' => TRUE,
-                'showRemoveButton' => TRUE,
-                'form' => [
-                    'fields' => [
-                        'priority' => [
-                            'label' => 'lang:igniter.cart::default.column_condition_priority',
-                            'type' => 'hidden',
-                        ],
-                        'label' => [
-                            'label' => 'lang:igniter.cart::default.column_tip_percentage',
-                            'type' => 'text',
-                        ],
-                        'amount' => [
-                            'label' => 'lang:igniter.cart::default.column_tip_amount',
-                            'type' => 'text',
-                        ]
+                'enable_tipping' => [
+                    'tab' => 'lang:igniter.cart::default.label_tipping',
+                    'label' => 'lang:igniter.cart::default.label_enable_tipping',
+                    'type' => 'switch',
+                    'default' => FALSE,
+                    'on' => 'lang:admin::lang.text_yes',
+                    'off' => 'lang:admin::lang.text_no',
+                ],
+                'tip_value_type' => [
+                    'tab' => 'lang:igniter.cart::default.label_tipping',
+                    'label' => 'lang:igniter.cart::default.label_tip_value_type',
+                    'type' => 'radiotoggle',
+                    'default' => 'F',
+                    'options' => [
+                        'F' => 'lang:admin::lang.coupons.text_fixed_amount',
+                        'P' => 'lang:admin::lang.coupons.text_percentage',
+                    ],
+                    'trigger' => [
+                        'action' => 'show',
+                        'field' => 'enable_tipping',
+                        'condition' => 'checked',
                     ],
                 ],
-	            'trigger' => [
-	                'action' => 'show',
-	                'field' => 'enable_tipping',
-	                'condition' => 'value[1]',
-	            ],
+                'tip_amounts' => [
+                    'tab' => 'lang:igniter.cart::default.label_tipping',
+                    'label' => 'lang:igniter.cart::default.label_tip_amounts',
+                    'type' => 'repeater',
+                    'span' => 'left',
+                    'sortable' => TRUE,
+                    'showAddButton' => TRUE,
+                    'showRemoveButton' => TRUE,
+                    'form' => [
+                        'fields' => [
+                            'priority' => [
+                                'label' => 'lang:igniter.cart::default.column_condition_priority',
+                                'type' => 'hidden',
+                            ],
+                            'value' => [
+                                'label' => 'lang:igniter.cart::default.column_tip_amount',
+                                'type' => 'money',
+                            ],
+                        ],
+                    ],
+                    'trigger' => [
+                        'action' => 'show',
+                        'field' => 'enable_tipping',
+                        'condition' => 'checked',
+                    ],
+                ],
             ],
         ],
     ],

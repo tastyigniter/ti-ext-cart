@@ -2,40 +2,53 @@
 
 namespace Igniter\Cart\CartConditions;
 
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Flame\Cart\CartCondition;
-use Igniter\Local\Facades\Location;
 
 class Tip extends CartCondition
 {
+    protected $tippingEnabled = FALSE;
+
+    protected $tipValueType;
+
     public $priority = 100;
-    public $removeable = TRUE;
-    
+
+    public function onLoad()
+    {
+        $this->tippingEnabled = (bool)CartSettings::get('enable_tipping');
+        $this->tipValueType = CartSettings::get('tip_value_type', 'F');
+    }
+
     public function getLabel()
     {
         return lang($this->label);
     }
-    
-    public function getValue()
-    {
-	    $amount = $this->getMetaData('amount');
-		return $amount;
-    }
 
     public function beforeApply()
     {
-	    $value = $this->getMetaData('amount');
-	    if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === false) {
-		    $this->removeMetaData('amount');
-	        flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();		    
-	    }
+        if (!$this->tippingEnabled)
+            return FALSE;
+
+        // if amount is not set, empty or 0
+        if (!$tipAmount = $this->getMetaData('amount'))
+            return FALSE;
+
+//        $value = $this->getMetaData('amount');
+//        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE) {
+//            $this->removeMetaData('amount');
+//            flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
+//        }
     }
-    
+
     public function getActions()
     {
-	    $amount = $this->getMetaData('amount');
+        $amountType = $this->getMetaData('amountType');
+        $amount = $this->getMetaData('amount');
+        if ($amountType == 'amount' AND $this->tipValueType != 'F')
+            $amount .= '%';
+
         return [
             ['value' => "+{$amount}"],
         ];
     }
-    
 }
