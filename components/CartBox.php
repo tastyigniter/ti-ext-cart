@@ -4,6 +4,7 @@ use ApplicationException;
 use Cart;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
+use Igniter\Cart\Models\CartSettings;
 use Location;
 use Redirect;
 use Request;
@@ -208,22 +209,32 @@ class CartBox extends \System\Classes\BaseComponent
             else flash()->alert($ex->getMessage());
         }
     }
-    
+
     public function onApplyTip()
     {
         try {
-            $this->cartManager->applyCondition('tip', [ 'amount' => post('tip_amount') ]);
+            $amountType = post('amount_type');
+            if (!in_array($amountType, ['none', 'amount', 'custom']))
+                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+
+            $amount = post('amount');
+//            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === FALSE)
+//                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+
+            $this->cartManager->applyCondition('tip', [
+                'amountType' => $amountType,
+                'amount' => $amount,
+            ]);
 
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-
         }
         catch (Exception $ex) {
             if (Request::ajax()) throw $ex;
             else flash()->alert($ex->getMessage());
         }
-    }    
+    }
 
     public function onRemoveCondition()
     {
@@ -287,5 +298,27 @@ class CartBox extends \System\Classes\BaseComponent
             return lang('igniter.cart::default.button_order');
 
         return lang('igniter.cart::default.button_confirm');
+    }
+
+    public function tippingEnabled()
+    {
+        return (bool)CartSettings::get('enable_tipping');
+    }
+
+    public function tippingAmounts()
+    {
+        $result = [];
+
+        $tipValueType = CartSettings::get('tip_value_type', 'F');
+        $amounts = (array)CartSettings::get('tip_amounts', []);
+
+        $amounts = sort_array($amounts, 'priority');
+
+        foreach ($amounts as $index => $amount) {
+            $amount['valueType'] = $tipValueType;
+            $result[$index] = (object)$amount;
+        }
+
+        return $result;
     }
 }

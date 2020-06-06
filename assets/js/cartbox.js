@@ -61,19 +61,39 @@
             data: {code: $input.val()}
         })
     }
-    
+
     CartBox.prototype.applyTip = function ($el) {
-        var $input = this.$el.find('[name="tip_amount"]')
+        var $input = this.$el.find('[name="amount"]'),
+            amountType = this.$el.find('[name="amount_type"]').val()
 
         $.request(this.options.applyTipHandler, {
-            data: {code: $input.val()}
+            data: {amount: $input.val(), amount_type: amountType}
         })
     }
-    
-    CartBox.prototype.applyTipPercentage = function ($el) {
-        this.$el.find('[name="tip_amount"]').val($el.val());
+
+    CartBox.prototype.updateTipAmount = function ($el) {
+        var tipAmountType = $el.data('tipAmountType'),
+            tipValue = $el.data('tipValue'),
+            $tipCustomInput = this.$el.find('[data-tip-custom]')
+
+        if ($el.hasClass('active'))
+            return
+
+        $tipCustomInput.hide();
+        this.$el.find('[name="amount_type"]').val(tipAmountType);
+        this.$el.find('[name="amount"]').val(tipValue !== undefined ? tipValue : 0);
+
+        if (tipAmountType === 'custom') {
+            $tipCustomInput.show();
+            this.$el.find('[data-tip-amount-type]').removeClass('active')
+            this.$el.find('[data-tip-amount-type="custom"]').addClass('active')
+            return
+        }
+
+        this.$el.find('[data-cart-control="tip-amount"]').prop('disabled', true)
+        this.applyTip()
     }
-    
+
     CartBox.prototype.removeCondition = function ($el) {
         $.request(this.options.removeConditionHandler, {
             data: {conditionId: $el.data('cartConditionId')}
@@ -106,8 +126,11 @@
             case 'apply-coupon':
                 this.applyCoupon($el)
                 break
-            case 'tip-percentage':
-                this.applyTipPercentage($el)
+            case 'apply-tip':
+                this.applyTip($el)
+                break
+            case 'tip-amount':
+                this.updateTipAmount($el)
                 break
         }
 
