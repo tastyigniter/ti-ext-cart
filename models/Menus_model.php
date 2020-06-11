@@ -6,7 +6,7 @@ use Igniter\Flame\Location\Models\AbstractLocation;
 
 class Menus_model extends BaseMenus_model implements Buyable
 {
-    public $with = ['special', 'mealtime', 'menu_options', 'menu_options.option'];
+    public $with = ['special', 'mealtimes', 'menu_options', 'menu_options.option'];
 
     public function getMorphClass()
     {
@@ -15,13 +15,7 @@ class Menus_model extends BaseMenus_model implements Buyable
 
     public function isAvailable()
     {
-        if (!$mealtime = $this->mealtime)
-            return TRUE;
-
-        if (!$mealtime->mealtime_status)
-            return TRUE;
-
-        return $mealtime->isAvailableNow();
+        return $this->isAvailable();
     }
 
     public function iSpecial()
