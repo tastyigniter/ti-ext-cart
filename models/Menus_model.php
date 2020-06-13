@@ -13,11 +13,6 @@ class Menus_model extends BaseMenus_model implements Buyable
         return 'menus';
     }
 
-    public function isAvailable()
-    {
-        return $this->isAvailable();
-    }
-
     public function iSpecial()
     {
         if (!$special = $this->special)
