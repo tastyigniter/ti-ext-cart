@@ -71,6 +71,14 @@
             .each(function(idx, option){
 			    price += $(option).data('optionPrice');
             });
+            
+		this.$modalElement.find('input[data-option-price][type="text"]')
+            .each(function(idx, option){
+	            var val = parseInt($(option).val());
+	            if (val > 0){
+			    	price += val * $(option).data('optionPrice');
+			    }
+            });            
 		
 		price *= inputEl.val();
 		

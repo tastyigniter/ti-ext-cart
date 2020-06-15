@@ -181,7 +181,21 @@ class CartManager
     {
         $selected = collect($selected)->keyBy('menu_option_id');
         $menuOptions = $menuOptions->keyBy('menu_option_id')->sortBy('priority');
-
+        
+        foreach ($selected as $selI=>$selJ){
+	        if (isset($selJ['option_values']['quantities'])){
+		        $values = [];
+		        foreach ($selJ['option_values']['quantities'] as $qKey => $qQty){
+			        $qQty = intval($qQty);
+			        for ($i=1; $i<=$qQty; $i++){
+				        $values[] = $qKey.'';
+		        	}
+		        }
+		        $selJ['option_values'] = $values;
+		        $selected->put($selI, $selJ);
+	        }
+        }
+        
         return $menuOptions->map(function (Menu_item_options_model $menuOption) use ($selected) {
             $selectedOption = $selected->get($menuOption->getKey());
             $selectedValues = array_filter(array_get($selectedOption, 'option_values', []));
@@ -212,6 +226,7 @@ class CartManager
 
                 return [
                     'id' => $optionValue->menu_option_value_id,
+                    'qty' => array_count_values($selectedValues)[$optionValue->menu_option_value_id],
                     'name' => $optionValue->name,
                     'price' => $optionValue->price,
                 ];
