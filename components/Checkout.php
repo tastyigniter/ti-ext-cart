@@ -142,7 +142,7 @@ class Checkout extends BaseComponent
     {
         $order = $this->getOrder();
 
-        return $order->order_total > 0
+        return $order->order_total >= 0
             ? $this->orderManager->getPaymentGateways() : [];
     }
 
