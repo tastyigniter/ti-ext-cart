@@ -64,13 +64,24 @@
                 
 		this.$modalElement.find('input[data-option-price]:checked')
             .each(function(idx, option){
-			    price += $(option).data('optionPrice');
+                var optionPrice = $(option).data('optionPrice')
+			    price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 		
 		this.$modalElement.find('select[data-option-price] option:selected')
             .each(function(idx, option){
-			    price += $(option).data('optionPrice');
+                var optionPrice = $(option).data('optionPrice')
+                price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
+            
+		this.$modalElement.find('input[data-option-price][type="number"]')
+            .each(function(idx, option){
+	            var val = parseInt($(option).val()),
+                    optionPrice = $(option).data('optionPrice');
+	            if (val > 0){
+			    	price += val * parseFloat(optionPrice === undefined ? 0 : optionPrice);
+			    }
+            });            
 		
 		price *= inputEl.val();
 		

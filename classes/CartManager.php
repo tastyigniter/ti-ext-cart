@@ -185,7 +185,10 @@ class CartManager
         return $menuOptions->map(function (Menu_item_options_model $menuOption) use ($selected) {
             $selectedOption = $selected->get($menuOption->getKey());
             $selectedValues = array_filter(array_get($selectedOption, 'option_values', []));
-            $selectedValues = array_filter($selectedValues, 'ctype_digit');
+
+            if ($menuOption->option->display_type != 'quantity') {
+                $selectedValues = array_filter($selectedValues, 'ctype_digit');
+            }
 
             $this->validateMenuItemOption($menuOption, $selectedValues);
 
@@ -207,11 +210,15 @@ class CartManager
 
         return $menuOptionValues
             ->map(function (Menu_item_option_values_model $optionValue) use ($selectedValues) {
-                if (!in_array($optionValue->menu_option_value_id, $selectedValues))
+                $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
+                if (!in_array($optionValue->menu_option_value_id, $selectedIds))
                     return;
+
+                $selectedValue = collect($selectedValues)->firstWhere('id', $optionValue->menu_option_value_id);
 
                 return [
                     'id' => $optionValue->menu_option_value_id,
+                    'qty' => (int)array_get($selectedValue, 'qty', 1),
                     'name' => $optionValue->name,
                     'price' => $optionValue->price,
                 ];
