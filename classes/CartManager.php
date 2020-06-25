@@ -269,7 +269,9 @@ class CartManager
     {
         $orderDateTime = $this->location->orderDateTime();
         if (!$orderDateTime OR !$this->location->checkOrderTime($orderDateTime))
-            throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_delivery_time'));
+            throw new ApplicationException(sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'),
+                $this->location->orderType()
+            ));
     }
 
     public function validateMenuItem(Menus_model $menuItem)
