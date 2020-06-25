@@ -125,7 +125,7 @@ class OrderManager
 
     public function validateCustomer($customer)
     {
-        if (!setting('guest_order') AND !$customer)
+        if (!setting('guest_order') AND (!$customer OR !$customer->is_activated))
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
     }
 

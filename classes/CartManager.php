@@ -75,10 +75,10 @@ class CartManager
         ]));
     }
 
-    public function updateCartItem($menuId, array $properties = [])
+    public function updateCartItem($rowId, array $properties = [])
     {
         return $this->addOrUpdateCartItem(array_merge($properties, [
-            'menuId' => $menuId,
+            'rowId' => $rowId,
         ]));
     }
 
