@@ -60,7 +60,9 @@ class Order extends \System\Classes\BaseComponent
 
         $this->page['hashParam'] = $this->param('hash');
         $this->page['order'] = $order = $this->getOrder();
-
+        
+        $this->addJs('js/order.js', 'checkout-js');
+        
         if (!$order OR !$order->isPaymentProcessed())
             return Redirect::to($this->property('ordersPage'));
 
