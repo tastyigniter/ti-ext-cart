@@ -101,7 +101,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['cartBoxTimeFormat'] = $this->property('cartBoxTimeFormat');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
-        $this->page['hideZeroOptionPrices'] = (bool)$this->property('hideZeroOptionPrices');        
+        $this->page['hideZeroOptionPrices'] = (bool)$this->property('hideZeroOptionPrices');
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
@@ -273,12 +273,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function locationIsClosed()
     {
-        $location = Location::instance();
-        $workingSchedule = $location->workingSchedule($location->orderType());
-        if ($workingSchedule->isClosed() AND !$location->current()->hasFutureOrder())
-            return TRUE;
-
-        return !$location->checkOrderType() ? TRUE : FALSE;
+        return !Location::instance()->checkOrderTime();
     }
 
     public function hasMinimumOrder()

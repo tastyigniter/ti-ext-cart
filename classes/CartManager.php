@@ -95,6 +95,8 @@ class CartManager
 
         $this->validateLocation();
 
+        $this->validateOrderTime();
+
         $cartItem = null;
         $menuItem = $this->findMenuItem($menuId);
         if ($rowId AND $cartItem = $this->getCartItem($rowId))
@@ -255,20 +257,21 @@ class CartManager
         if (!$this->location->current())
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
-        if (!$this->location->current()->hasFutureOrder() AND $this->location->isClosed())
-            throw new ApplicationException(lang('igniter.cart::default.alert_location_closed'));
-
-        if (!$this->location->checkOrderType($orderType = $this->location->orderType()))
-            throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
-
         if ($this->location->orderTypeIsDelivery() AND $this->location->requiresUserPosition() AND !$this->location->userPosition()->isValid())
             throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
     }
 
     public function validateOrderTime()
     {
-        $orderDateTime = $this->location->orderDateTime();
-        if (!$orderDateTime OR !$this->location->checkOrderTime($orderDateTime))
+        if (!$this->location->current())
+            throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
+
+        $orderType = $this->location->orderType();
+
+        if (!$this->location->checkOrderType())
+            throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
+
+        if (!$this->location->checkOrderTime())
             throw new ApplicationException(sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'),
                 $this->location->orderType()
             ));
