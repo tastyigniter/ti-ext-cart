@@ -19,7 +19,7 @@ Restaurant: {location_name}
 
 {order_menus}
 {menu_quantity} x {menu_name}
-{menu_options}
+{menu_options}+ {menu_option_quantity} x {menu_option_name}{/menu_options}
 {menu_comment}
 - {menu_price}
 - {menu_subtotal}
@@ -56,7 +56,15 @@ Restaurant: {location_name}
     @if(!empty($order_menus))
     @foreach($order_menus as $order_menu)
     <tr>
-        <td>{{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}<br>{!! $order_menu['menu_options'] !!}<br>{{ $order_menu['menu_comment'] }}</td>
+        <td>
+	        {{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}
+	        @if(!empty($order_menus['menu_options']))
+			@foreach($order_menus['menu_options'] as $order_menu_option)
+	        <br>+ $order_menu_option['menu_option_quantity'] x $order_menu_option['menu_option_name']
+			@endforeach
+			@endif
+	        <br>{{!! $order_menu['menu_comment'] !!}}
+	    </td>
         <td align="right">{{ $order_menu['menu_price'] }}</td>
         <td align="right">{{ $order_menu['menu_subtotal'] }}</td>
     </tr>
