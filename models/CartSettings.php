@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Models;
+<?php
+
+namespace Igniter\Cart\Models;
 
 use Igniter\Cart\Classes\CartConditionManager;
 use Model;

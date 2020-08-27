@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Models;
+<?php
+
+namespace Igniter\Cart\Models;
 
 use Admin\Models\Menus_model as BaseMenus_model;
 use Igniter\Flame\Cart\Contracts\Buyable;

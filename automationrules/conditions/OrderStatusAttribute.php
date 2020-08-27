@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\AutomationRules\Conditions;
+<?php
+
+namespace Igniter\Cart\AutomationRules\Conditions;
 
 use ApplicationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;

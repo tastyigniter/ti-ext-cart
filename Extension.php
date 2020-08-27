@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart;
+<?php
+
+namespace Igniter\Cart;
 
 use Admin\Models\Orders_model;
 use Admin\Models\Status_history_model;
@@ -55,7 +57,7 @@ class Extension extends BaseExtension
                 'name' => 'tip',
                 'label' => 'lang:igniter.cart::default.text_tip',
                 'description' => 'lang:igniter.cart::default.help_tip_condition',
-            ], 
+            ],
         ];
     }
 

@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Middleware;
+<?php
+
+namespace Igniter\Cart\Middleware;
 
 use Auth;
 use Cart;

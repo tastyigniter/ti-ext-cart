@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Models;
+<?php
+
+namespace Igniter\Cart\Models;
 
 class Coupons_model extends \Admin\Models\Coupons_model
 {
