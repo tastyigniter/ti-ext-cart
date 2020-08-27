@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Components;
+<?php
+
+namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
 use Auth;

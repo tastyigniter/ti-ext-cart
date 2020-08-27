@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Models;
+<?php
+
+namespace Igniter\Cart\Models;
 
 use Admin\Models\Orders_model as BaseOrders_model;
 use Main\Classes\MainController;

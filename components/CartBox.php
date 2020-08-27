@@ -1,4 +1,6 @@
-<?php namespace Igniter\Cart\Components;
+<?php
+
+namespace Igniter\Cart\Components;
 
 use ApplicationException;
 use Cart;
@@ -281,7 +283,7 @@ class CartBox extends \System\Classes\BaseComponent
         $location = Location::instance();
         $subtotal = $this->cartManager->getCart()->subtotal();
 
-        return ($location->orderTypeIsDelivery() AND !$location->checkMinimumOrder($subtotal));
+        return $location->orderTypeIsDelivery() AND !$location->checkMinimumOrder($subtotal);
     }
 
     public function buttonLabel()
