@@ -49,7 +49,7 @@ class Tax extends CartCondition
 
     protected function processValue($total)
     {
-        if ($this->taxDelivery) {
+        if (Location::orderTypeIsDelivery() AND $this->taxDelivery) {
             $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
             $total += (float)$deliveryCharge;
         }
