@@ -226,6 +226,9 @@ class OrderManager
         if (array_get($data, 'pay_from_profile') == 1) {
             $result = $paymentMethod->payFromPaymentProfile($order, $data);
         }
+        else if (array_get($data, 'payment_button') == 1) {
+            $result = $paymentMethod->processPaymentButton($data, $paymentMethod, $order);
+        }
         else {
             $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
         }
