@@ -53,6 +53,38 @@ class Order extends \System\Classes\BaseComponent
         ];
     }
 
+    public function getStatusWidthForProgressBars()
+    {
+        $result = [];
+
+        $order = $this->getOrder();
+
+        $result['default'] = 0;
+        $result['processing'] = 0;
+        $result['completed'] = 0;
+
+        if ($order->status_id == setting('default_order_status')) {
+            $result['default'] = 50;
+        }
+        elseif (in_array($order->status_id, setting('processing_order_status', []))
+            OR in_array($order->status_id, setting('completed_order_status', []))) {
+            $result['default'] = 100;
+        }
+
+        if (in_array($order->status_id, setting('processing_order_status', []))) {
+            $result['processing'] = 50;
+        }
+        elseif (in_array($order->status_id, setting('completed_order_status', []))) {
+            $result['processing'] = 100;
+        }
+
+        if (in_array($order->status_id, setting('completed_order_status', []))) {
+            $result['completed'] = 100;
+        }
+
+        return $result;
+    }
+
     public function onRun()
     {
         $this->page['ordersPage'] = $this->property('ordersPage');
@@ -62,6 +94,8 @@ class Order extends \System\Classes\BaseComponent
 
         $this->page['hashParam'] = $this->param('hash');
         $this->page['order'] = $order = $this->getOrder();
+
+        $this->addJs('js/order.js', 'checkout-js');
 
         if (!$order OR !$order->isPaymentProcessed())
             return Redirect::to($this->property('ordersPage'));
