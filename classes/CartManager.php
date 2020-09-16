@@ -218,9 +218,12 @@ class CartManager
 
                 $selectedValue = collect($selectedValues)->firstWhere('id', $optionValue->menu_option_value_id);
 
+                $qty = (int)array_get($selectedValue, 'qty', 1);
+                if ($qty < 1) return;
+
                 return [
                     'id' => $optionValue->menu_option_value_id,
-                    'qty' => (int)array_get($selectedValue, 'qty', 1),
+                    'qty' => $qty,
                     'name' => $optionValue->name,
                     'price' => $optionValue->price,
                 ];
