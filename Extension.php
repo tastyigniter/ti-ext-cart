@@ -190,7 +190,7 @@ class Extension extends BaseExtension
 
     protected function bindOrderStatusEvent()
     {
-        Event::listen('admin.statusHistory.beforeAddStatus', function ($model, $object, $statusId, $previousStatus) {
+        Event::listen('admin.statusHistory.beforeAddStatus', function ($emitter, $model, $object, $statusId, $previousStatus) {
             if (!$object instanceof Orders_model)
                 return;
 
