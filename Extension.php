@@ -3,7 +3,6 @@
 namespace Igniter\Cart;
 
 use Admin\Models\Orders_model;
-use Admin\Models\Status_history_model;
 use Auth;
 use Cart;
 use Config;
