@@ -3,7 +3,6 @@
 namespace Igniter\Cart;
 
 use Admin\Models\Orders_model;
-use Admin\Models\Status_history_model;
 use Auth;
 use Cart;
 use Config;
@@ -192,9 +191,6 @@ class Extension extends BaseExtension
     {
         Event::listen('admin.statusHistory.beforeAddStatus', function ($model, $object, $statusId, $previousStatus) {
             if (!$object instanceof Orders_model)
-                return;
-
-            if (Status_history_model::alreadyExists($object, $statusId))
                 return;
 
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
