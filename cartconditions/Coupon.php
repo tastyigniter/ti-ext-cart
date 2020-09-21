@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\CartConditions;
 
+use Admin\Models\Menus_model;
 use ApplicationException;
 use Auth;
 use Exception;
@@ -62,7 +63,10 @@ class Coupon extends CartCondition
     public function getActions()
     {
         return [
-            ['value' => $this->couponModel->discountWithOperand()],
+            [
+                'value' => $this->couponModel->discountWithOperand(), 
+                'calculateValue' => [$this, 'calculateValue'],
+            ],
         ];
     }
 
@@ -107,4 +111,39 @@ class Coupon extends CartCondition
         if ($user AND $this->couponModel->customerHasMaxRedemption($user))
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_maximum_reached'));
     }
+
+    protected function calculateValue($condition, $actionValue)
+    {
+        $cartContent = $this->getCartContent(); 
+        $limitToMenus = $this->couponModel->menus->pluck('menu_id');
+        $limitToCategories = $this->couponModel->categories->pluck('category_id');
+        
+        if (count($limitToMenus) OR count($limitToCategories))
+        {
+            $total = 0;
+
+            foreach ($limitToMenus as $menuId){
+                foreach ($cartContent as $cartRow){
+                    if ($cartRow->id == $menuId)
+                        $total += $cartRow->subtotal();
+                }
+            }
+
+            foreach ($cartContent as $cartRow){
+                $menu = Menus_model::with(['categories'])->where('menu_id', $cartRow->id)->first();
+                if ($menu AND $menu->categories->pluck('category_id')->intersect($limitToCategories)->count() > 0)
+                    $total += $cartRow->subtotal();
+            }
+          
+            if ($condition->valueIsPercentage($actionValue)) {
+                $cleanValue = $condition->cleanValue($actionValue);
+                $value = ($total * ($cleanValue / 100));
+            }
+            else {
+                $value = (float)$condition->cleanValue($actionValue);
+            }            
+            
+            return $value;    
+        }
+    }    
 }
