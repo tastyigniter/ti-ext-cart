@@ -286,8 +286,8 @@ class CartManager
         if (!$menuItem->isAvailable()) {
             throw new ApplicationException(
                 sprintf(
-                    lang('igniter.cart::default.alert_menu_not_within_mealtime'), 
-                    $menuItem->menu_name, 
+                    lang('igniter.cart::default.alert_menu_not_within_mealtime'),
+                    $menuItem->menu_name,
                     $menuItem->mealtimes->map(function ($mealtime) {
                         return sprintf(
                             lang('igniter.cart::default.alert_menu_not_within_mealtime_option'),
