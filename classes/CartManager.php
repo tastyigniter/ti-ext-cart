@@ -284,7 +284,7 @@ class CartManager
     {
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuItem->isAvailable()) {
-            throw new ApplicationException($menuItem->mealtimes->map(function ($mealtime){
+            throw new ApplicationException($menuItem->mealtimes->map(function ($mealtime) {
                 return sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtime'),
                     $menuItem->menu_name,
