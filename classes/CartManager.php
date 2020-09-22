@@ -284,13 +284,16 @@ class CartManager
     {
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuItem->isAvailable()) {
-            throw new ApplicationException(sprintf(
-                lang('igniter.cart::default.alert_menu_not_within_mealtime'),
-                $menuItem->menu_name,
-                $menuItem->mealtimes->first()->mealtime_name,
-                $menuItem->mealtimes->first()->start_time,
-                $menuItem->mealtimes->first()->end_time
-            ));
+            throw new ApplicationException($menuItem->mealtimes->map(function ($mealtime){
+                return sprintf(
+                    lang('igniter.cart::default.alert_menu_not_within_mealtime'),
+                    $menuItem->menu_name,
+                    $mealtime->mealtime_name,
+                    $mealtime->start_time,
+                    $mealtime->end_time
+                );
+            })
+            ->join(', '));
         }
 
         if ($menuItem->hasOrderTypeRestriction($orderType = $this->location->orderType())) {
