@@ -287,9 +287,9 @@ class CartManager
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_menu_not_within_mealtime'),
                 $menuItem->menu_name,
-                $menuItem->mealtime->mealtime_name,
-                $menuItem->mealtime->start_time,
-                $menuItem->mealtime->end_time
+                $menuItem->mealtimes->first()->mealtime_name,
+                $menuItem->mealtimes->first()->start_time,
+                $menuItem->mealtimes->first()->end_time
             ));
         }
 
