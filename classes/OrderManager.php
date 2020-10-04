@@ -191,7 +191,7 @@ class OrderManager
         $order->addOrderMenus(Cart::content()->all());
         $order->addOrderTotals($this->getCartTotals());
         
-        Event::fire('igniter.checkout.afterSaveOrder', [$order]);
+        Event::fire('igniter.checkout.afterSaveOrder', [$order, $this->customer]);
 
         return $order;
     }
