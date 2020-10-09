@@ -151,12 +151,15 @@ class Extension extends BaseExtension
     {
         Event::listen('cart.beforeRegister', function () {
             Config::set('cart.model', CartStore::class);
+            Config::set('cart.conditions', CartSettings::get('conditions'));
             Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
         });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
             if (Location::current())
                 $cart->instance('location-'.Location::getId());
+
+            $cart->loadConditions();
         });
 
         Event::listen('igniter.user.login', function () {

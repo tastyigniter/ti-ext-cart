@@ -2,8 +2,6 @@
 
 namespace Igniter\Cart\Classes;
 
-use Exception;
-use Igniter\Flame\Cart\Cart;
 use Igniter\Flame\Traits\Singleton;
 use System\Classes\ExtensionManager;
 
@@ -23,23 +21,10 @@ class CartConditionManager
      */
     protected $registeredCallbacks = [];
 
-    public function loadCartConditions(Cart $cart)
-    {
-        $registeredConditions = $this->listRegisteredConditions();
-        foreach ($registeredConditions as $className => $definition) {
-            if (!array_get($definition, 'status', TRUE))
-                continue;
-
-            $condition = $this->makeCondition($className, $definition);
-
-            $cart->loadCondition($condition);
-        }
-    }
-
     public function makeCondition($className, array $config = [])
     {
         if (!class_exists($className))
-            throw new Exception(sprintf("The Cart Condition class '%s' has not been registered", $className));
+            return;
 
         return new $className($config);
     }
