@@ -280,10 +280,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function hasMinimumOrder()
     {
-        $location = Location::instance();
-        $subtotal = $this->cartManager->getCart()->subtotal();
-
-        return $location->orderTypeIsDelivery() AND !$location->checkMinimumOrder($subtotal);
+        return $this->cartManager->cartTotalIsBelowMinimumOrder();
     }
 
     public function buttonLabel()

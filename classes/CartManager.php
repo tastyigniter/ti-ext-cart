@@ -4,6 +4,7 @@ namespace Igniter\Cart\Classes;
 
 use Admin\Models\Menu_item_option_values_model;
 use Admin\Models\Menu_item_options_model;
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Coupons_model;
 use Igniter\Cart\Models\Menus_model;
 use Igniter\Flame\Cart\CartItem;
@@ -27,12 +28,18 @@ class CartManager
      */
     protected $location;
 
+    /**
+     * @var \Igniter\Cart\Models\CartSettings|\System\Actions\SettingsModel
+     */
+    protected $settings;
+
     protected $checkStock = FALSE;
 
     public function initialize()
     {
         $this->cart = App::make('cart');
         $this->location = App::make('location');
+        $this->settings = CartSettings::instance();
     }
 
     public function checkStock(bool $checkStock)
@@ -122,7 +129,7 @@ class CartManager
     {
         $this->getCartItem($rowId);
 
-        return $this->cart->remove($rowId);
+        $this->cart->remove($rowId);
     }
 
     public function updateCartItemQty($rowId, $quantity = 0)
