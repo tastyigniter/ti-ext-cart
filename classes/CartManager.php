@@ -40,6 +40,8 @@ class CartManager
         $this->cart = App::make('cart');
         $this->location = App::make('location');
         $this->settings = CartSettings::instance();
+
+        CartConditionManager::instance()->loadCartConditions($this->cart);
     }
 
     public function checkStock(bool $checkStock)
