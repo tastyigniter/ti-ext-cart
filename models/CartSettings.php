@@ -5,6 +5,9 @@ namespace Igniter\Cart\Models;
 use Igniter\Cart\Classes\CartConditionManager;
 use Model;
 
+/**
+ * @method static instance()
+ */
 class CartSettings extends Model
 {
     public $implement = ['System\Actions\SettingsModel'];

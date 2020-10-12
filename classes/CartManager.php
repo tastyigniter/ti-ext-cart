@@ -4,6 +4,7 @@ namespace Igniter\Cart\Classes;
 
 use Admin\Models\Menu_item_option_values_model;
 use Admin\Models\Menu_item_options_model;
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Coupons_model;
 use Igniter\Cart\Models\Menus_model;
 use Igniter\Flame\Cart\CartItem;
@@ -27,12 +28,20 @@ class CartManager
      */
     protected $location;
 
+    /**
+     * @var \Igniter\Cart\Models\CartSettings|\System\Actions\SettingsModel
+     */
+    protected $settings;
+
     protected $checkStock = FALSE;
 
     public function initialize()
     {
         $this->cart = App::make('cart');
         $this->location = App::make('location');
+        $this->settings = CartSettings::instance();
+
+        CartConditionManager::instance()->loadCartConditions($this->cart);
     }
 
     public function checkStock(bool $checkStock)
@@ -122,7 +131,7 @@ class CartManager
     {
         $this->getCartItem($rowId);
 
-        return $this->cart->remove($rowId);
+        $this->cart->remove($rowId);
     }
 
     public function updateCartItemQty($rowId, $quantity = 0)
@@ -284,13 +293,20 @@ class CartManager
     {
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuItem->isAvailable()) {
-            throw new ApplicationException(sprintf(
-                lang('igniter.cart::default.alert_menu_not_within_mealtime'),
-                $menuItem->menu_name,
-                $menuItem->mealtime->mealtime_name,
-                $menuItem->mealtime->start_time,
-                $menuItem->mealtime->end_time
-            ));
+            throw new ApplicationException(
+                sprintf(
+                    lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
+                    $menuItem->menu_name,
+                    $menuItem->mealtimes->map(function ($mealtime) {
+                        return sprintf(
+                            lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
+                            $mealtime->mealtime_name,
+                            $mealtime->start_time,
+                            $mealtime->end_time
+                        );
+                    })->join(', ')
+                )
+            );
         }
 
         if ($menuItem->hasOrderTypeRestriction($orderType = $this->location->orderType())) {
