@@ -5,8 +5,8 @@ namespace Igniter\Cart\Classes;
 use Admin\Models\Menu_item_option_values_model;
 use Admin\Models\Menu_item_options_model;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Cart\Models\Coupons_model;
 use Igniter\Cart\Models\Menus_model;
+use Igniter\Coupons\Models\Coupons_model;
 use Igniter\Flame\Cart\CartItem;
 use Igniter\Flame\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Flame\Exception\ApplicationException;
@@ -41,7 +41,7 @@ class CartManager
         $this->location = App::make('location');
         $this->settings = CartSettings::instance();
 
-        CartConditionManager::instance()->loadCartConditions($this->cart);
+        $this->loadCartConditions();
     }
 
     public function checkStock(bool $checkStock)
@@ -170,6 +170,22 @@ class CartManager
         }
 
         return $this->applyCondition('coupon', ['code' => $code]);
+    }
+
+    protected function loadCartConditions()
+    {
+        $conditionManager = CartConditionManager::instance();
+
+        $conditions = $this->settings->get('conditions') ?: [];
+        foreach ($conditions as $name => $definition) {
+            if (!(bool)array_get($definition, 'status', TRUE))
+                continue;
+
+            $className = array_get($definition, 'className');
+            $condition = $conditionManager->makeCondition($className, $definition);
+
+            $this->cart->loadCondition($condition);
+        }
     }
 
     //

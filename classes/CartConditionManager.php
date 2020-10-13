@@ -3,7 +3,6 @@
 namespace Igniter\Cart\Classes;
 
 use Exception;
-use Igniter\Flame\Cart\Cart;
 use Igniter\Flame\Traits\Singleton;
 use System\Classes\ExtensionManager;
 
@@ -22,19 +21,6 @@ class CartConditionManager
      * @var array Cache of cart conditions registration callbacks.
      */
     protected $registeredCallbacks = [];
-
-    public function loadCartConditions(Cart $cart)
-    {
-        $registeredConditions = $this->listRegisteredConditions();
-        foreach ($registeredConditions as $className => $definition) {
-            if (!array_get($definition, 'status', TRUE))
-                continue;
-
-            $condition = $this->makeCondition($className, $definition);
-
-            $cart->loadCondition($condition);
-        }
-    }
 
     public function makeCondition($className, array $config = [])
     {
