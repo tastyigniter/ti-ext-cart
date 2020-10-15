@@ -41,7 +41,7 @@ class Order extends \System\Classes\BaseComponent
                 'default' => 'DD MMM \a\t HH:mm',
             ],
             'hideReorderBtn' => [
-                'label' => 'Whether to hide the reorder button, should be enabled on the checkout success page',
+                'label' => 'Whether to hide the reorder button, should be hidden on the checkout success page',
                 'type' => 'switch',
                 'default' => FALSE,
             ],
