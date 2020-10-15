@@ -133,13 +133,6 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerPrintTemplates()
-    {
-        return [
-            'igniter.cart::print.order' => 'Default order print template',
-        ];
-    }
-
     public function registerActivityTypes()
     {
         return [
