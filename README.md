@@ -19,9 +19,10 @@ In the admin user interface you can manage the cart conditions.
 ### Components
 | Name     | Page variable                  | Description                                      |
 | -------- | ------------------------------ | ------------------------------------------------ |
-| CartBox  | `<?= component('cartBox') ?>`  | Show the contents of and manages the user's cart |
-| Checkout | `<?= component('checkout') ?>` | Displays Checkout form on the page               |
-| Orders | `<?= component('orders') ?>` | Displays a list of orders on the page               |
+| CartBox  | `@component('cartBox')`  | Show the contents of and manages the user's cart |
+| Checkout | `@component('checkout')` | Displays Checkout form on the page               |
+| OrderPage | `@component('orderPage')` | Displays a single order on the page               |
+| Orders | `@component('orders')` | Displays a list of orders on the page               |
 
 ### CartBox Component
 
@@ -29,22 +30,21 @@ In the admin user interface you can manage the cart conditions.
 
 | Property                 | Description              | Example Value | Default Value |
 | ------------------------ | ------------------------ | ------------- | ------------- |
-| cartBoxTimeFormat                     | Time format            | ddd hh:mm a        | ddd hh:mm a         |
-| checkStockCheckout                     | Check cart item stock quantity            | true/false         | false         |
-| pageIsCheckout                     | Value to determine if the user is on a checkout page             | true/false         | false         |
-| pageIsCart                     | Display a standalone cart             | true/false         | false         |
-| checkoutPage                     | Checkout page path            | checkout/checkout         | checkout/checkout         |
+| showCartItemThumb     | Show cart menu item image in the popup  | true/false        | false         |
+| cartItemThumbWidth     | Cart item image width   | 720        | 720         |
+| cartItemThumbHeight     | Cart item image height    | 300        | 300         |
+| checkStockCheckout     | Check cart item stock quantity            | true/false         | false         |
+| pageIsCheckout      | Value to determine if the user is on a checkout page             | true/false         | false         |
+| pageIsCart          | Display a standalone cart             | true/false         | false         |
+| hideZeroOptionPrices          | Whether to hide zero prices on options            | true/false         | false         |
+| checkoutPage          | Checkout page path            | checkout/checkout         | checkout/checkout         |
+| localBoxAlias          | Specify the LocalBox component alias used to refresh the localbox after the order type is changed            | localBox         | localBox         |
 
 **Variables available in templates**
 
 | Variable                  | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| `$cartBoxTimeFormat` | Delivery and pick-up time format                                                |
-| `$pageIsCart` | Display the standalone cartbox                                         |
-| `$pageIsCheckout` | CartBox is loaded on the checkout page                             |
-| `$cart` | Cart Class instance                                                |
-| `$location` | Location Class instance |
-| `$locationCurrent` | Location Model instance                                          |
+| `{{ $cart }}` | Cart Class instance                                                |
 
 **Example:**
 
@@ -61,7 +61,7 @@ permalink: /checkout
     checkoutPage: checkout/checkout
 ---
 ...
-<?= component('cartBox') ?>
+@component('cartBox')
 ...
 ```
 
@@ -83,13 +83,8 @@ permalink: /checkout
 
 | Variable                  | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| `$showCountryField` | Display the country form field                             |
-| `$agreeTermsPage` | Link to thenterms & conditions page                                                |
-| `$redirectPage` | Link to the checkout cancel page                                                |
-| `$menusPage` | Link to the menus page                                                |
-| `$successPage` | Link to the confirmation page                                                |
-| `$order` | Order Model instance                                          |
-| `$paymentGateways` | Instances of available payment gateways                                          |
+| `{{ $order }}` | Order Model instance                                          |
+| `{{ $paymentGateways }}` | Instances of available payment gateways                                          |
 
 **Example:**
 
@@ -106,14 +101,13 @@ permalink: /checkout
     successParamCode: 'hash'
 ---
 ...
-<?= component('checkout') ?>
+@component('checkout')
 ...
 ```
 
 ### Registering a new Cart Condition
 
-Here is an example of an extension registering a cart condition
-.
+Here is an example of an extension registering a cart condition.
 
 ```
 public function registerCartConditions()

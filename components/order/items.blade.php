@@ -47,18 +47,18 @@
             <tr>
                 <td class="border-top p-0" colspan="99999"></td>
             </tr>
-            <?php foreach ($order->getOrderTotals() as $orderTotal) { ?>
-            <?php if ($order->isCollectionType() AND $orderTotal->code == 'delivery') continue; ?>
-            <?php $thickLine = ($orderTotal->code == 'order_total' OR $orderTotal->code == 'total'); ?>
-            <tr>
-                <td class="px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'text-muted border-0' }}">
-                    {{ $orderTotal->title }}
-                </td>
-                <td class="text-right px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'border-0' }}">
-                    {{ currency_format($orderTotal->value) }}
-                </td>
-            </tr>
-            <?php } ?>
+            @foreach ($order->getOrderTotals() as $orderTotal)
+                @continue($order->isCollectionType() AND $orderTotal->code == 'delivery')
+                @php($thickLine = ($orderTotal->code == 'order_total' OR $orderTotal->code == 'total'))
+                <tr>
+                    <td class="px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'text-muted border-0' }}">
+                        {{ $orderTotal->title }}
+                    </td>
+                    <td class="text-right px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'border-0' }}">
+                        {{ currency_format($orderTotal->value) }}
+                    </td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>
