@@ -115,8 +115,6 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['refreshCartEventHandler'] = $this->getEventHandler('onRefresh');
 
         $this->page['cart'] = $this->cartManager->getCart();
-        $this->page['location'] = Location::instance();
-        $this->page['locationCurrent'] = Location::current();
     }
 
     public function fetchPartials()
@@ -294,6 +292,11 @@ class CartBox extends \System\Classes\BaseComponent
         return lang('igniter.cart::default.button_confirm');
     }
 
+    public function getLocationId()
+    {
+        return Location::instance()->getId();
+    }
+
     public function tippingEnabled()
     {
         return (bool)CartSettings::get('enable_tipping');
@@ -314,5 +317,32 @@ class CartBox extends \System\Classes\BaseComponent
         }
 
         return $result;
+    }
+
+    public function tippingSelectedAmount()
+    {
+        return optional($this->cartManager->getCart()->getCondition('tip'))->getMetaData('amount', 0) ?? 0;
+    }
+
+    public function tippingSelectedType()
+    {
+        return optional($this->cartManager->getCart()->getCondition('tip'))->getMetaData('amountType', 'none') ?? 'none';
+    }
+
+    public function getOptionQuantityTypeValue($cartItem, $optionValue)
+    {
+        $value = 0;
+        $menuOptionValueId = $optionValue->menu_option_value_id;
+        if ($cartItem AND $cartItem->hasOptionValue($menuOptionValueId)) {
+            $cartItem->options->search(function ($option) use ($menuOptionValueId, &$value) {
+                $option->values->each(function ($opt) use ($menuOptionValueId, &$value) {
+                    if ($opt->id == $menuOptionValueId) {
+                        $value = $opt->qty;
+                    }
+                });
+            });
+        }
+
+        return $value;
     }
 }

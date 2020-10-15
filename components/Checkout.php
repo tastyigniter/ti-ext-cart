@@ -35,8 +35,8 @@ class Checkout extends BaseComponent
 
     public function initialize()
     {
-        $this->cartManager = CartManager::instance();
         $this->orderManager = OrderManager::instance();
+        $this->cartManager = CartManager::instance();
     }
 
     public function defineProperties()

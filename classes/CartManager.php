@@ -99,8 +99,11 @@ class CartManager
         $comment = array_get($postData, 'comment');
         $menuOptions = array_get($postData, 'menu_options', []);
 
-        if ($quantity < 1)
-            return $this->updateCartItemQty($rowId, $quantity);
+        if ($quantity <= 0) {
+            $this->removeCartItem($rowId);
+
+            return;
+        }
 
         $this->validateLocation();
 
@@ -164,8 +167,7 @@ class CartManager
     public function applyCouponCondition($code)
     {
         if (strlen($code)) {
-            $coupon = Coupons_model::isEnabled()->whereCode($code)->first();
-            if (!$coupon)
+            if (!Coupons_model::isEnabled()->whereCode($code)->exists())
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
