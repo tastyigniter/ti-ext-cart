@@ -33,11 +33,11 @@ class Tip extends CartCondition
         if (!$tipAmount = $this->getMetaData('amount'))
             return FALSE;
 
-//        $value = $this->getMetaData('amount');
-//        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE) {
-//            $this->removeMetaData('amount');
-//            flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
-//        }
+        $value = $this->getMetaData('amount');
+        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE) {
+            $this->removeMetaData('amount');
+            flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
+        }
     }
 
     public function getActions()
