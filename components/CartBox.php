@@ -218,8 +218,8 @@ class CartBox extends \System\Classes\BaseComponent
                 throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
 
             $amount = post('amount');
-//            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === FALSE)
-//                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === FALSE)
+                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
 
             $this->cartManager->applyCondition('tip', [
                 'amountType' => $amountType,
