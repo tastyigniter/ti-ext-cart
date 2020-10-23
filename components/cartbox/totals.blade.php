@@ -28,7 +28,7 @@
                                     data-request-data="conditionId: '{{ $id }}'"
                                     data-replace-loading="fa fa-spinner fa-spin"
                                 ><i class="fa fa-times"></i></button>
-                                @endif
+                            @endif
                        </span>
                         </td>
                         <td class="text-right">

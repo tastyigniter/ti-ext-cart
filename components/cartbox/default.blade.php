@@ -18,9 +18,9 @@
         </div>
 
         <?php if ($__SELF__->tippingEnabled()) { ?>
-            <div id="cart-tip">
-                @partial('@tip_form')
-            </div>
+        <div id="cart-tip">
+            @partial('@tip_form')
+        </div>
         <?php } ?>
 
         <div id="cart-totals">

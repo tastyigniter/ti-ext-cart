@@ -108,7 +108,7 @@
                 @foreach (countries('country_name') as $key => $value)
                     <option
                         value="{{ $key }}"
-                    {!! ($key == $order->address['country_id']) ? 'selected="selected"' : '' !!}
+                        {!! ($key == $order->address['country_id']) ? 'selected="selected"' : '' !!}
                     >{{ $value }}</option>
                 @endforeach
             </select>

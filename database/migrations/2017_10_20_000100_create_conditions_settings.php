@@ -17,7 +17,6 @@ class CreateConditionsSettings extends Migration
         $seedConditions = $this->getConditions();
 
         foreach ($seedConditions as $condition) {
-
             $data = array_get((array)$condition, 'data');
             if (!is_array($data))
                 $data = unserialize($data);
@@ -32,7 +31,6 @@ class CreateConditionsSettings extends Migration
 
     public function down()
     {
-
     }
 
     protected function getConditions()
