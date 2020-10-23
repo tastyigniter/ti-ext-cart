@@ -34,49 +34,58 @@ class CartBox extends \System\Classes\BaseComponent
                 'label' => 'Show cart menu item image in the popup',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'cartItemThumbWidth' => [
                 'label' => 'Cart item image width',
                 'type' => 'number',
                 'span' => 'left',
                 'default' => 720,
+                'validationRule' => 'required|integer',
             ],
             'cartItemThumbHeight' => [
                 'label' => 'Cart item image height',
                 'type' => 'number',
                 'span' => 'right',
                 'default' => 300,
+                'validationRule' => 'required|integer',
             ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
                 'default' => TRUE,
+                'validationRule' => 'required|boolean',
             ],
             'pageIsCheckout' => [
                 'label' => 'Whether this component is loaded on the checkout page',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'pageIsCart' => [
                 'label' => 'Whether this component is loaded on the cart page',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'hideZeroOptionPrices' => [
                 'label' => 'Whether to hide zero prices on options',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'checkoutPage' => [
                 'label' => 'Checkout Page',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/checkout',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'localBoxAlias' => [
                 'label' => 'Specify the LocalBox component alias used to refresh the localbox after the order type is changed',
                 'type' => 'text',
                 'default' => 'localBox',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_]+$/i',
             ],
         ];
     }

@@ -79,8 +79,8 @@ return [
                     'type' => 'radiotoggle',
                     'default' => 'F',
                     'options' => [
-                        'F' => 'lang:admin::lang.coupons.text_fixed_amount',
-                        'P' => 'lang:admin::lang.coupons.text_percentage',
+                        'F' => 'lang:admin::lang.menus.text_fixed_amount',
+                        'P' => 'lang:admin::lang.menus.text_percentage',
                     ],
                     'trigger' => [
                         'action' => 'show',

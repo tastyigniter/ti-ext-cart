@@ -4,34 +4,39 @@ namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
 use Auth;
+use Main\Traits\UsesPage;
 
 class Orders extends \System\Classes\BaseComponent
 {
+    use UsesPage;
+
     public function defineProperties()
     {
         return [
-            'pageNumber' => [
-                'label' => 'Page Number',
-                'type' => 'string',
-            ],
             'itemsPerPage' => [
                 'label' => 'Items Per Page',
                 'type' => 'number',
                 'default' => 20,
+                'validationRule' => 'required|integer',
             ],
             'sortOrder' => [
                 'label' => 'Sort order',
-                'type' => 'string',
+                'type' => 'text',
+                'default' => 'date_added desc',
+                'validationRule' => 'required|string',
             ],
             'orderPage' => [
                 'label' => 'Account Order Page',
-                'type' => 'string',
+                'type' => 'select',
                 'default' => 'account/order',
+                'options' => [static::class, 'getThemePageOptions'],
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'orderDateTimeFormat' => [
                 'label' => 'Date time format to display the order date time',
                 'type' => 'text',
                 'default' => 'DD MMM \a\t HH:mm',
+                'validationRule' => 'required|string',
             ],
         ];
     }

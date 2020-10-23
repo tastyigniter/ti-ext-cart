@@ -46,12 +46,14 @@ class Checkout extends BaseComponent
                 'label' => 'Whether to display the country form field',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'agreeTermsPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
                 'options' => [static::class, 'getStaticPageOptions'],
                 'comment' => 'lang:igniter.cart::default.checkout.help_checkout_terms',
+                'validationRule' => 'required|integer',
             ],
             'menusPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
@@ -59,23 +61,27 @@ class Checkout extends BaseComponent
                 'default' => 'local/menus',
                 'options' => [static::class, 'getThemePageOptions'],
                 'comment' => 'Page to redirect to when checkout can not be performed.',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'redirectPage' => [
                 'label' => 'Page to redirect to when checkout fails',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/checkout',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'successPage' => [
                 'label' => 'Page to redirect to when checkout is successful',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
                 'default' => 'checkout/success',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'cartBoxAlias' => [
                 'label' => 'Specify the CartBox component alias used to refresh the cart after a payment is selected',
                 'type' => 'text',
                 'default' => 'cartBox',
+                'validationRule' => 'required|regex:/^[a-z0-9\-_]+$/i',
             ],
         ];
     }

@@ -8,10 +8,13 @@ use Cart;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Menus_model;
 use Illuminate\Contracts\Support\Arrayable;
+use Main\Traits\UsesPage;
 use Redirect;
 
 class Order extends \System\Classes\BaseComponent
 {
+    use UsesPage;
+
     /**
      * @var \Igniter\Cart\Classes\OrderManager
      */
@@ -27,28 +30,35 @@ class Order extends \System\Classes\BaseComponent
         return [
             'ordersPage' => [
                 'label' => 'Account Orders Page',
-                'type' => 'string',
+                'type' => 'select',
                 'default' => 'account/orders',
+                'options' => [static::class, 'getThemePageOptions'],
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'menusPage' => [
                 'label' => 'Menus Page, page to redirect to when a user clicks the re-order button',
-                'type' => 'string',
+                'type' => 'select',
                 'default' => 'local/menus',
+                'options' => [static::class, 'getThemePageOptions'],
+                'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'orderDateTimeFormat' => [
                 'label' => 'Date time format to display order date time',
                 'type' => 'text',
                 'default' => 'DD MMM \a\t HH:mm',
+                'validationRule' => 'required|string',
             ],
             'hideReorderBtn' => [
                 'label' => 'Whether to hide the reorder button, should be hidden on the checkout success page',
                 'type' => 'switch',
                 'default' => FALSE,
+                'validationRule' => 'required|boolean',
             ],
             'hashParamName' => [
                 'label' => 'The parameter name used for the order hash code',
                 'type' => 'text',
                 'default' => 'hash',
+                'validationRule' => 'required|regex:/^[a-z0-9]+$/i',
             ],
         ];
     }
