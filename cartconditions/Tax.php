@@ -47,13 +47,13 @@ class Tax extends CartCondition
         ];
     }
 
-    protected function processValue($total)
+    public function calculate($total)
     {
         if (Location::orderTypeIsDelivery() AND $this->taxDelivery) {
             $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
             $total += (float)$deliveryCharge;
         }
 
-        parent::processValue($total);
+        return parent::calculate($total);
     }
 }

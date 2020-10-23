@@ -37,11 +37,6 @@ class Extension extends BaseExtension
     public function registerCartConditions()
     {
         return [
-            \Igniter\Cart\CartConditions\Coupon::class => [
-                'name' => 'coupon',
-                'label' => 'lang:igniter.cart::default.text_coupon',
-                'description' => 'lang:igniter.cart::default.help_coupon_condition',
-            ],
             \Igniter\Cart\CartConditions\PaymentFee::class => [
                 'name' => 'paymentFee',
                 'label' => 'lang:igniter.cart::default.text_payment_fee',

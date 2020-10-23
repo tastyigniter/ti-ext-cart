@@ -191,9 +191,7 @@ class OrderManager
         $order->addOrderMenus(Cart::content()->all());
         $order->addOrderTotals($this->getCartTotals());
 
-        // Lets log the coupon so we can redeem it later
-        if ($couponCondition = Cart::conditions()->get('coupon'))
-            $order->logCouponHistory($couponCondition, $this->customer);
+        Event::fire('igniter.checkout.afterSaveOrder', [$order]);
 
         return $order;
     }
