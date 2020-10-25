@@ -3,7 +3,7 @@
     data-control="cart-item"
     data-min-quantity="{{ $menuItem->minimum_qty }}"
     data-price-amount="{{ $cartItem ? $cartItem->price : $menuItem->getBuyablePrice() }}"
-    data-price-format="{{ currency_format(0, 0, false) }}"
+    data-price-format="{{ currency_format(0, 0) }}"
 >
     <form method="POST" data-request="{{ $formHandler }}">
         <div class="modal-content">
@@ -11,9 +11,10 @@
                 <div class="modal-top">
                     <img
                         class="img-fluid" src="{!! $menuItem->thumb->getThumb([
-              'width' => $cartItemThumbWidth,
-              'height' => $cartItemThumbHeight,
-          ]) !!}">
+                          'width' => $cartItemThumbWidth,
+                          'height' => $cartItemThumbHeight,
+                        ]) !!}"
+                    />
                 </div>
             @endif
 
@@ -40,12 +41,12 @@
                 </div>
 
                 <div class="menu-comment">
-          <textarea
-              name="comment"
-              class="form-control"
-              rows="2"
-              placeholder="@lang('igniter.cart::default.label_add_comment')"
-          >{{ $cartItem ? $cartItem->comment : null }}</textarea>
+                    <textarea
+                        name="comment"
+                        class="form-control"
+                        rows="2"
+                        placeholder="@lang('igniter.cart::default.label_add_comment')"
+                    >{{ $cartItem ? $cartItem->comment : null }}</textarea>
                 </div>
             </div>
 
@@ -83,10 +84,10 @@
                               ? lang('igniter.cart::default.button_update')
                               : lang('igniter.cart::default.button_add_to_order') !!}
                             <span class="pull-right" data-item-subtotal>
-                {!! currency_format($cartItem
-                  ? $cartItem->subtotal
-                  : $menuItem->getBuyablePrice()) !!}
-              </span>
+                                {!! currency_format($cartItem
+                                    ? $cartItem->subtotal
+                                    : $menuItem->getBuyablePrice()) !!}
+                            </span>
                         </button>
                     </div>
                 </div>
