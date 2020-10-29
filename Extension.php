@@ -60,7 +60,7 @@ class Extension extends BaseExtension
         return [
             'events' => [
                 'admin.order.paymentProcessed' => \Igniter\Cart\AutomationRules\Events\OrderPlaced::class,
-                'igniter.cart.beforeAddOrderStatus' => \Igniter\Cart\AutomationRules\Events\NewOrderStatus::class,
+                'igniter.cart.orderStatusAdded' => \Igniter\Cart\AutomationRules\Events\NewOrderStatus::class,
                 'igniter.cart.orderAssigned' => \Igniter\Cart\AutomationRules\Events\OrderAssigned::class,
             ],
             'actions' => [],
@@ -179,6 +179,13 @@ class Extension extends BaseExtension
                 return;
 
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
+        });
+
+        Event::listen('admin.statusHistory.added', function ($model) {
+            if (!$model instanceof Orders_model)
+                return;
+
+            Event::fire('igniter.cart.orderStatusAdded', [$model], TRUE);
         });
 
         Event::listen('admin.assignable.assigned', function ($model) {
