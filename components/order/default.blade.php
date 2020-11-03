@@ -7,7 +7,7 @@
 @else
     <div class="card mb-1">
         <div class="card-body text-sm-center" id="ti-order-status">
-            @partial('@status')
+            @partial($__SELF__.'::status')
         </div>
     </div>
 
@@ -32,13 +32,13 @@
             <div class="col-sm-7 pr-sm-1">
                 <div class="card mb-1">
                     <div class="card-body">
-                        @partial('@restaurant', ['location' => $order->location])
+                        @partial($__SELF__.'::restaurant', ['location' => $order->location])
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-body">
-                        @partial('@items')
+                        @partial($__SELF__.'::items')
                     </div>
                 </div>
             </div>
