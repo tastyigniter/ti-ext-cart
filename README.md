@@ -1,6 +1,6 @@
 Igniter Cart extension is simple, flexible shopping cart. There are some features:
 - Stock control
-- Cart conditions: Coupon, Tax
+- Cart conditions: Tip, Tax
 - Order types: Delivery, Pick-up
 - Abandoned Checkout
 - Payment method: Cod, Paypal, Stripe 
@@ -9,6 +9,7 @@ Igniter Cart extension is simple, flexible shopping cart. There are some feature
 - Sending order confirmation emails
 
 This extension requires the following extensions:
+- Igniter Coupons
 - Igniter Local
 - Igniter User
 - Igniter PayRegister
