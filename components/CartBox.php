@@ -125,13 +125,13 @@ class CartBox extends \System\Classes\BaseComponent
         $this->prepareVars();
 
         return [
-            '#notification' => $this->renderPartial('flash'),
             '#cart-items' => $this->renderPartial('@items'),
             '#cart-coupon' => $this->renderPartial('@coupon_form'),
             '#cart-tip' => $this->renderPartial('@tip_form'),
             '#cart-totals' => $this->renderPartial('@totals'),
             '#cart-buttons' => $this->renderPartial('@buttons'),
             '[data-cart-total]' => currency_format(Cart::total()),
+            '#notification' => $this->renderPartial('flash'),
         ];
     }
 

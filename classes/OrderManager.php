@@ -5,7 +5,6 @@ namespace Igniter\Cart\Classes;
 use Admin\Models\Addresses_model;
 use ApplicationException;
 use Auth;
-use Cart;
 use Event;
 use Igniter\Cart\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
@@ -39,7 +38,7 @@ class OrderManager
 
     public function initialize()
     {
-        $this->cart = App::make('cart');
+        $this->cart = CartManager::instance()->getCart();
         $this->location = App::make('location');
         $this->customer = Auth::customer();
     }
@@ -188,7 +187,7 @@ class OrderManager
 
         $this->setCurrentOrderId($order->order_id);
 
-        $order->addOrderMenus(Cart::content()->all());
+        $order->addOrderMenus($this->cart->content()->all());
         $order->addOrderTotals($this->getCartTotals());
 
         Event::fire('igniter.checkout.afterSaveOrder', [$order]);
