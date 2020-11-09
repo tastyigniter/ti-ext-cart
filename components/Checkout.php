@@ -53,7 +53,7 @@ class Checkout extends BaseComponent
                 'type' => 'select',
                 'options' => [static::class, 'getStaticPageOptions'],
                 'comment' => 'lang:igniter.cart::default.checkout.help_checkout_terms',
-                'validationRule' => 'required|integer',
+                'validationRule' => 'integer',
             ],
             'menusPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',

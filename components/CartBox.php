@@ -41,14 +41,14 @@ class CartBox extends \System\Classes\BaseComponent
                 'type' => 'number',
                 'span' => 'left',
                 'default' => 720,
-                'validationRule' => 'required|integer',
+                'validationRule' => 'integer',
             ],
             'cartItemThumbHeight' => [
                 'label' => 'Cart item image height',
                 'type' => 'number',
                 'span' => 'right',
                 'default' => 300,
-                'validationRule' => 'required|integer',
+                'validationRule' => 'integer',
             ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
