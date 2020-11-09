@@ -11,6 +11,7 @@
   },
   "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart",
   "require": {
+    "igniter.coupons": "*",
     "igniter.local": "*",
     "igniter.user": "*",
     "igniter.payregister": "*"
