@@ -145,6 +145,8 @@
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
         $cartItem.on('ajaxFail', 'form', $.proxy(this.onFailedForm, this))
+        
+        this.onQuantityOrOptionChanged()
 
         $cartItem.cartItem()
     }
