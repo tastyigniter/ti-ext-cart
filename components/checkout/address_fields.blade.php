@@ -25,8 +25,8 @@
 </div>
 
 <div
-    class="@if(count($customerAddresses)) mt-3 @endif"
     @if (count($customerAddresses))
+    class="mt-3" 
     data-trigger="[name='address_id']"
     data-trigger-action="show"
     data-trigger-condition="value[0]"
