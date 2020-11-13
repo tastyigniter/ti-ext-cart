@@ -85,10 +85,11 @@
 		
 		price *= inputEl.val();
 		
-		var decimals = $cartItem.data('priceFormat').split('.').pop();
+		var decimalSeperator = $cartItem.data('priceFormat').indexOf('.') > -1 ? '.' : ',';
+		var decimals = $cartItem.data('priceFormat').split(decimalSeperator).pop();
 				
         $cartItem.find('[data-item-subtotal]')
-            .html($cartItem.data('priceFormat').replace('0.' + decimals, price.toFixed(decimals.length)));
+            .html($cartItem.data('priceFormat').replace('0' + decimalSeperator + decimals, price.toFixed(decimals.length)));
     }
 
     CartBoxModal.prototype.onSubmitForm = function () {
