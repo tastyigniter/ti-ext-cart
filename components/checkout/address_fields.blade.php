@@ -1,4 +1,5 @@
-<div class="form-group">
+@php $customerAddresses = $order->listCustomerAddresses() @endphp
+<div class="form-group @if(!count($customerAddresses)) d-none @endif">
     <label for="">@lang('igniter.cart::default.checkout.text_delivery_address')</label>
     <div class="input-group">
         <select
@@ -6,28 +7,26 @@
             name="address_id"
         >
             <option value="0">@lang('igniter.cart::default.checkout.text_address')</option>
-            @if (count($customerAddresses = $order->listCustomerAddresses()))
-                @foreach ($customerAddresses as $address)
-                    <option
-                        value="{{ $address->address_id }}"
-                        data-address-1=""
-                        data-address-2=""
-                        data-city=""
-                        data-state=""
-                        data-postcode=""
-                        data-country=""
-                        {!! set_select('address_id', $address->address_id, $order->address_id == $address->address_id) !!}
-                    >{!! $address->formatted_address !!}</option>
-                @endforeach
-            @endif
+            @foreach ($customerAddresses as $address)
+                <option
+                    value="{{ $address->address_id }}"
+                    data-address-1=""
+                    data-address-2=""
+                    data-city=""
+                    data-state=""
+                    data-postcode=""
+                    data-country=""
+                    {!! set_select('address_id', $address->address_id, $order->address_id == $address->address_id) !!}
+                >{!! $address->formatted_address !!}</option>
+            @endforeach
         </select>
     </div>
     {!! form_error('address_id', '<span class="text-danger">', '</span>') !!}
 </div>
 
 <div
-    class="mt-3"
     @if (count($customerAddresses))
+    class="mt-3" 
     data-trigger="[name='address_id']"
     data-trigger-action="show"
     data-trigger-condition="value[0]"
