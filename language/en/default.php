@@ -34,6 +34,7 @@ return [
     'text_sizes' => 'Sizes',
     'text_required' => 'Required',
     'text_option_summary' => 'Choose between %s and %s',
+    'text_add_more_items' => 'Add more items',
 
     'button_add_to_order' => 'ADD TO ORDER',
     'button_update' => 'UPDATE',
