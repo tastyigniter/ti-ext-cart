@@ -42,12 +42,6 @@ class Order extends \System\Classes\BaseComponent
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
-            'orderDateTimeFormat' => [
-                'label' => 'Date time format to display order date time',
-                'type' => 'text',
-                'default' => 'DD MMM \a\t HH:mm',
-                'validationRule' => 'required|string',
-            ],
             'hideReorderBtn' => [
                 'label' => 'Whether to hide the reorder button, should be hidden on the checkout success page',
                 'type' => 'switch',
@@ -100,7 +94,7 @@ class Order extends \System\Classes\BaseComponent
         $this->page['ordersPage'] = $this->property('ordersPage');
         $this->page['hideReorderBtn'] = $this->property('hideReorderBtn');
         $this->page['showReviews'] = setting('allow_reviews') == 1;
-        $this->page['orderDateTimeFormat'] = $this->property('orderDateTimeFormat');
+        $this->page['orderDateTimeFormat'] = convert_php_to_moment_js_format(lang('system::lang.date_time_format_long'));
 
         $this->page['hashParam'] = $this->param('hash');
         $this->page['order'] = $order = $this->getOrder();
