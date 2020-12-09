@@ -1,19 +1,19 @@
 @if (!$order)
     <div class="card mb-1">
-        <div class="card-body text-sm-center" id="ti-order-status">
+        <div class="card-body text-center" id="ti-order-status">
             No order found
         </div>
     </div>
 @else
     <div class="card mb-1">
-        <div class="card-body text-sm-center" id="ti-order-status">
+        <div class="card-body text-center" id="ti-order-status">
             @partial($__SELF__.'::status')
         </div>
     </div>
 
     @if ($session AND !$session->customer())
         <div class="card mb-1">
-            <div class="card-body text-sm-center">
+            <div class="card-body text-center">
                 <a
                     href="{{ $session->loginUrl() }}"
                 >@lang('igniter.cart::default.orders.text_login_to_view_more')</a>
