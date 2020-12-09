@@ -94,7 +94,7 @@ class Order extends \System\Classes\BaseComponent
         $this->page['ordersPage'] = $this->property('ordersPage');
         $this->page['hideReorderBtn'] = $this->property('hideReorderBtn');
         $this->page['showReviews'] = setting('allow_reviews') == 1;
-        $this->page['orderDateTimeFormat'] = convert_php_to_moment_js_format(lang('system::lang.date_time_format_long'));
+        $this->page['orderDateTimeFormat'] = lang('main::lang.date_time_format_long');
 
         $this->page['hashParam'] = $this->param('hash');
         $this->page['order'] = $order = $this->getOrder();
