@@ -37,7 +37,7 @@ class Orders extends \System\Classes\BaseComponent
 
     public function onRun()
     {
-        $this->page['orderDateTimeFormat'] = lang('main::lang.date_time_format_long');
+        $this->page['orderDateTimeFormat'] = lang('system::lang.moment.date_time_format_short');
         $this->page['orderPage'] = $this->property('orderPage');
         $this->page['customerOrders'] = $this->loadOrders();
     }
