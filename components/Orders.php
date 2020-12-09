@@ -32,18 +32,12 @@ class Orders extends \System\Classes\BaseComponent
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
-            'orderDateTimeFormat' => [
-                'label' => 'Date time format to display the order date time',
-                'type' => 'text',
-                'default' => 'DD MMM \a\t HH:mm',
-                'validationRule' => 'required|string',
-            ],
         ];
     }
 
     public function onRun()
     {
-        $this->page['orderDateTimeFormat'] = $this->property('orderDateTimeFormat');
+        $this->page['orderDateTimeFormat'] = lang('system::lang.moment.date_time_format_short');
         $this->page['orderPage'] = $this->property('orderPage');
         $this->page['customerOrders'] = $this->loadOrders();
     }
