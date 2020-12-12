@@ -134,7 +134,7 @@ return [
         'text_collection_order_type' => 'This is a pick-up order',
         'text_no_payment' => 'No payment method selected',
         'text_comment' => 'Your comment',
-        'text_no_comment' => 'You didn\'t leave a comment',
+        'text_no_comment' => 'You did not leave a comment',
 
         'label_customer_name' => 'Customer Name',
         'label_first_name' => 'First Name',
@@ -167,6 +167,7 @@ return [
         'error_covered_area' => 'This restaurant currently does not deliver to your address',
         'error_delivery_less_current_time' => 'The %s Time can not be less than current time!',
         'error_invalid_payment' => 'The selected payment is invalid, please contact us',
+        'error_email_exists' => 'An account exists with this email address. Please login to continue or use a different email address',
 
         'alert_no_menu_to_order' => 'Please, add some menus before you checkout!',
         'alert_no_selected_local' => 'Please select your local restaurant<',

@@ -186,7 +186,9 @@ class Checkout extends BaseComponent
         $this->validateCheckoutSecurity();
 
         try {
-            $this->validate($data, $this->createRules());
+            $this->validate($data, $this->createRules(), [
+                'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
+            ]);
 
             $order = $this->getOrder();
 
