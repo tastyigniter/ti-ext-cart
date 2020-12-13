@@ -3,9 +3,9 @@ Igniter Cart extension is simple, flexible shopping cart. There are some feature
 - Cart conditions: Tip, Tax
 - Order types: Delivery, Pick-up
 - Abandoned Checkout
-- Payment method: Cod, Paypal, Stripe 
-- One page checkout 
-- Easy to extends and customize 
+- Payment method: Cod, Paypal, Stripe
+- One page checkout
+- Easy to extends and customize
 - Sending order confirmation emails
 
 This extension requires the following extensions:
@@ -73,6 +73,9 @@ permalink: /checkout
 | Property                 | Description              | Example Value | Default Value |
 | ------------------------ | ------------------------ | ------------- | ------------- |
 | showCountryField                     | Show/hide the country checkout field            | true/false        | false         |
+| showAddress2Field                     | Show/hide the address 2 checkout field            | true/false        | true         |
+| showCityField                     | Show/hide the city checkout field            | true/false        | true         |
+| showStateField                     | Show/hide the state checkout field            | true/false        | true         |
 | agreeTermsPage                     | Terms and conditions page            |    page/terms     |          |
 | menusPage                     | Menus page            |    page/menus     |          |
 | redirectPage                     | Redirect page name           |    checkout/checkout    |    checkout/checkout      |
@@ -96,6 +99,9 @@ permalink: /checkout
 
 '[checkout]':
     showCountryField: 0
+    showAddress2Field: 1
+    showCityField: 1
+    showStateField: 1
     menusPage: local/menus
     redirectPage: checkout/checkout
     successPage: checkout/success
