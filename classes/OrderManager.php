@@ -200,7 +200,7 @@ class OrderManager
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
         if (!strlen($order->payment) AND $this->processPaymentLessForm($order))
-            return;
+            return TRUE;
 
         $paymentMethod = $this->getPayment($order->payment);
         if (!$paymentMethod OR !$paymentMethod->status)
@@ -245,7 +245,11 @@ class OrderManager
         $order->cart = $this->cart->content();
         $order->order_total = $this->cart->total();
 
-        $order->payment = $order->order_total > 0 ? $this->getCurrentPaymentCode() : '';
+        $paymentCode = $this->getCurrentPaymentCode();
+        if ($order->order_total > 0 AND !$paymentCode)
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+
+        $order->payment = $order->order_total > 0 ? $paymentCode : '';
 
         $this->applyCurrentPaymentFee($order->payment);
 
