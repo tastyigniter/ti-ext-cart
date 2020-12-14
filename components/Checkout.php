@@ -74,11 +74,10 @@ class Checkout extends BaseComponent
                 'validationRule' => 'integer',
             ],
             'menusPage' => [
-                'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
+                'label' => 'Page to redirect to when checkout can not be performed.',
                 'type' => 'select',
                 'default' => 'local/menus',
                 'options' => [static::class, 'getThemePageOptions'],
-                'comment' => 'Page to redirect to when checkout can not be performed.',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'redirectPage' => [
@@ -294,11 +293,11 @@ class Checkout extends BaseComponent
 
         if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
-            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'min:2|max:128'];
-            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
+            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'sometimes|required|min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'sometimes|min:2|max:128'];
+            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'sometimes|max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|required|integer'];
         }
 
         return $namedRules;
