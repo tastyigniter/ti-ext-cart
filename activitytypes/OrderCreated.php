@@ -21,9 +21,12 @@ class OrderCreated implements ActivityInterface
 
     public static function log($order)
     {
-        $recipients = Staffs_model::isEnabled()->get()->map(function ($staff) {
-            return $staff->user;
-        })->all();
+        $recipients = Staffs_model::isEnabled()
+            ->whereHasLocation($order->location->getKey())
+            ->get()
+            ->map(function ($staff) {
+                return $staff->user;
+            })->all();
 
         activity()->pushLog(new static('orderCreated', $order), $recipients);
     }
