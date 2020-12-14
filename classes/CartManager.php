@@ -310,7 +310,7 @@ class CartManager
     public function validateMenuItem(Menus_model $menuItem)
     {
         // if menu mealtime is enabled and menu is outside mealtime
-        if (!$menuItem->isAvailable($this->location->orderDateTime())) {
+        if (!$menuItem->isAvailable()) {
             throw new ApplicationException(
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
@@ -382,7 +382,12 @@ class CartManager
             ));
         }
 
-        $countSelected = count($selectedValues);
+        if ('quantity' == $menuOption->getDisplayTypeAttribute()) {
+            $countSelected = array_reduce($selectedValues, function($qty, $selectedValue) { return $qty + $selectedValue['qty']; });
+        } else {
+            $countSelected = count($selectedValues);
+        }
+
         if ($menuOption->min_selected > 0 OR $menuOption->max_selected > 0) {
             if (!($countSelected >= $menuOption->min_selected AND $countSelected <= $menuOption->max_selected)) {
                 throw new ApplicationException(sprintf(
