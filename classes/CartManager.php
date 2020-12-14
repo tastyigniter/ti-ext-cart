@@ -310,7 +310,7 @@ class CartManager
     public function validateMenuItem(Menus_model $menuItem)
     {
         // if menu mealtime is enabled and menu is outside mealtime
-        if (!$menuItem->isAvailable()) {
+        if (!$menuItem->isAvailable($this->location->orderDateTime())) {
             throw new ApplicationException(
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
