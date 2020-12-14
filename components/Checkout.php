@@ -74,7 +74,7 @@ class Checkout extends BaseComponent
                 'validationRule' => 'integer',
             ],
             'menusPage' => [
-                'label' => 'Page to redirect to when checkout can not be performed.',
+                'label' => 'Page to redirect to when checkout can not be performed',
                 'type' => 'select',
                 'default' => 'local/menus',
                 'options' => [static::class, 'getThemePageOptions'],
