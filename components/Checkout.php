@@ -293,7 +293,8 @@ class Checkout extends BaseComponent
 
         if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
-            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'sometimes|required|min:3|max:128'];
+            $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
+            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', 'sometimes|min:3|max:128'];
             $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'sometimes|min:2|max:128'];
             $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'sometimes|max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
