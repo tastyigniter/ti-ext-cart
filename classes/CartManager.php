@@ -382,7 +382,7 @@ class CartManager
             ));
         }
 
-        if ('quantity' == $menuOption->getDisplayTypeAttribute()) {
+        if ('quantity' == $menuOption->display_type) {
             $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) { return $qty + $selectedValue['qty']; });
         } else {
             $countSelected = count($selectedValues);
