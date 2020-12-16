@@ -48,6 +48,24 @@ class Checkout extends BaseComponent
                 'default' => FALSE,
                 'validationRule' => 'required|boolean',
             ],
+            'showAddress2Field' => [
+                'label' => 'Whether to display the address 2 form field',
+                'type' => 'switch',
+                'default' => TRUE,
+                'validationRule' => 'required|boolean',
+            ],
+            'showCityField' => [
+                'label' => 'Whether to display the city form field',
+                'type' => 'switch',
+                'default' => TRUE,
+                'validationRule' => 'required|boolean',
+            ],
+            'showStateField' => [
+                'label' => 'Whether to display the state form field',
+                'type' => 'switch',
+                'default' => TRUE,
+                'validationRule' => 'required|boolean',
+            ],
             'agreeTermsPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
@@ -56,11 +74,10 @@ class Checkout extends BaseComponent
                 'validationRule' => 'integer',
             ],
             'menusPage' => [
-                'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
+                'label' => 'Page to redirect to when checkout can not be performed',
                 'type' => 'select',
                 'default' => 'local/menus',
                 'options' => [static::class, 'getThemePageOptions'],
-                'comment' => 'Page to redirect to when checkout can not be performed.',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'redirectPage' => [
@@ -109,6 +126,9 @@ class Checkout extends BaseComponent
     protected function prepareVars()
     {
         $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
+        $this->page['showAddress2Field'] = (bool)$this->property('showAddress2Field', 1);
+        $this->page['showCityField'] = (bool)$this->property('showCityField', 1);
+        $this->page['showStateField'] = (bool)$this->property('showStateField', 1);
         $this->page['agreeTermsSlug'] = $this->getAgreeTermsPageSlug();
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');
@@ -276,10 +296,11 @@ class Checkout extends BaseComponent
         if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
             $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'min:2|max:128'];
-            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'max:128'];
+            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', 'sometimes|min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'sometimes|min:2|max:128'];
+            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'sometimes|max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'required|integer'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|required|integer'];
         }
 
         return $namedRules;

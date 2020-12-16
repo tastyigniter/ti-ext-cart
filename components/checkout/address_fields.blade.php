@@ -26,7 +26,7 @@
 
 <div
     @if (count($customerAddresses))
-    class="mt-3" 
+    class="mt-3"
     data-trigger="[name='address_id']"
     data-trigger-action="show"
     data-trigger-condition="value[0]"
@@ -50,41 +50,47 @@
                 {!! form_error('address.address_1', '<span class="text-danger">', '</span>') !!}
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="form-group">
-                <label for="">@lang('igniter.cart::default.checkout.label_address_2')</label>
-                <input
-                    type="text"
-                    name="address[address_2]"
-                    class="form-control"
-                    value="{{ set_value('address[address_2]', $order->address['address_2'] ?? '') }}"/>
-                {!! form_error('address.address_2', '<span class="text-danger">', '</span>') !!}
-            </div>
-        </div>
+        @if ($showAddress2Field)
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label for="">@lang('igniter.cart::default.checkout.label_address_2')</label>
+                  <input
+                      type="text"
+                      name="address[address_2]"
+                      class="form-control"
+                      value="{{ set_value('address[address_2]', $order->address['address_2'] ?? '') }}"/>
+                  {!! form_error('address.address_2', '<span class="text-danger">', '</span>') !!}
+              </div>
+          </div>
+        @endif
     </div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="">@lang('igniter.cart::default.checkout.label_city')</label>
-                <input
-                    type="text"
-                    name="address[city]"
-                    class="form-control"
-                    value="{{ set_value('address[city]', $order->address['city'] ?? '') }}"/>
-                {!! form_error('address.city', '<span class="text-danger">', '</span>') !!}
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="">@lang('igniter.cart::default.checkout.label_state')</label>
-                <input
-                    type="text"
-                    name="address[state]"
-                    class="form-control"
-                    value="{{ set_value('address[state]', $order->address['state'] ?? '') }}"/>
-                {!! form_error('address.state', '<span class="text-danger">', '</span>') !!}
-            </div>
-        </div>
+        @if ($showCityField)
+          <div class="col-sm-4">
+              <div class="form-group">
+                  <label for="">@lang('igniter.cart::default.checkout.label_city')</label>
+                  <input
+                      type="text"
+                      name="address[city]"
+                      class="form-control"
+                      value="{{ set_value('address[city]', $order->address['city'] ?? '') }}"/>
+                  {!! form_error('address.city', '<span class="text-danger">', '</span>') !!}
+              </div>
+          </div>
+        @endif
+        @if ($showStateField)
+          <div class="col-sm-4">
+              <div class="form-group">
+                  <label for="">@lang('igniter.cart::default.checkout.label_state')</label>
+                  <input
+                      type="text"
+                      name="address[state]"
+                      class="form-control"
+                      value="{{ set_value('address[state]', $order->address['state'] ?? '') }}"/>
+                  {!! form_error('address.state', '<span class="text-danger">', '</span>') !!}
+              </div>
+          </div>
+        @endif
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="">@lang('igniter.cart::default.checkout.label_postcode')</label>
