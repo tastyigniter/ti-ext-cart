@@ -29,6 +29,11 @@
                     <p class="text-muted">{!! nl2br($menuItem->menu_description) !!}</p>
                 @endif
 
+                <!-- Allergens -->
+                <div class="d-flex flex-wrap align-items-center allergens pb-2">
+                    @partial('@allergens')
+                </div>
+
                 <input type="hidden" name="menuId" value="{{ $menuItem->getBuyableIdentifier() }}"/>
                 <input type="hidden" name="rowId" value="{{ $cartItem ? $cartItem->rowId : null }}"/>
 
