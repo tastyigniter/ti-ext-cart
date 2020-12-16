@@ -382,7 +382,12 @@ class CartManager
             ));
         }
 
-        $countSelected = count($selectedValues);
+        if ('quantity' == $menuOption->display_type) {
+            $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) { return $qty + $selectedValue['qty']; });
+        } else {
+            $countSelected = count($selectedValues);
+        }
+
         if ($menuOption->min_selected > 0 OR $menuOption->max_selected > 0) {
             if (!($countSelected >= $menuOption->min_selected AND $countSelected <= $menuOption->max_selected)) {
                 throw new ApplicationException(sprintf(
