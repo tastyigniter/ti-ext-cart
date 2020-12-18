@@ -181,11 +181,11 @@ class Extension extends BaseExtension
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
         });
 
-        Event::listen('admin.statusHistory.added', function ($model) {
+        Event::listen('admin.statusHistory.added', function ($model, $statusHistory) {
             if (!$model instanceof Orders_model)
                 return;
 
-            Event::fire('igniter.cart.orderStatusAdded', [$model], TRUE);
+            Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], TRUE);
         });
 
         Event::listen('admin.assignable.assigned', function ($model) {
