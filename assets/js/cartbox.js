@@ -6,26 +6,10 @@
         this.options = options || {}
 
         this.init()
-        this.initAffix()
     }
 
     CartBox.prototype.init = function () {
         $(document).on('click', '[data-cart-control]', $.proxy(this.onControlClick, this))
-    }
-
-    CartBox.prototype.initAffix = function () {
-        var $affixEl = this.$el.closest('.affix-cart'),
-            offsetTop = $('.navbar-top').height(),
-            offsetBottom = $('footer.footer').outerHeight(true),
-            cartWidth = $affixEl.parent().width()
-
-        $affixEl.affix({
-            offset: {top: offsetTop, bottom: offsetBottom}
-        })
-
-        $affixEl.on('affixed.bs.affix', function () {
-            $affixEl.css('width', cartWidth)
-        })
     }
 
     CartBox.prototype.refreshCart = function ($el) {
