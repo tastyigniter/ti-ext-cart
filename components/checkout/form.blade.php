@@ -36,7 +36,7 @@
                 class="custom-control-input" {!! set_checkbox('terms_condition', '1') !!}
             >
             <label class="custom-control-label" for="terms-condition">
-                {{ sprintf(lang('igniter.cart::default.checkout.label_terms'), url($agreeTermsSlug)) }}
+                {!! sprintf(lang('igniter.cart::default.checkout.label_terms'), url($agreeTermsSlug)) !!}
             </label>
         </div>
         {!! form_error('terms_condition', '<span class="text-danger col-xs-12">', '</span>') !!}
