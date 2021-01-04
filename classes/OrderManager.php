@@ -236,10 +236,7 @@ class OrderManager
         $order->location_id = $this->location->current()->getKey();
         $order->order_type = $this->location->orderType();
 
-        if ($orderDateTime = $this->location->orderDateTime()) {
-            $order->order_date = $orderDateTime->format('Y-m-d');
-            $order->order_time = $orderDateTime->format('H:i');
-        }
+        $this->applyOrderDateTime($order);
 
         $order->total_items = $this->cart->count();
         $order->cart = $this->cart->content();
@@ -312,6 +309,19 @@ class OrderManager
         $order->markAsPaymentProcessed();
 
         return TRUE;
+    }
+
+    protected function applyOrderDateTime($order)
+    {
+        if (!$orderDateTime = $this->location->orderDateTime())
+            return;
+
+        if ($isAsapTime = $this->location->orderTimeIsAsap())
+            $orderDateTime->addMinutes($this->location->orderLeadTime());
+
+        $order->order_time_is_asap = $isAsapTime;
+        $order->order_date = $orderDateTime->format('Y-m-d');
+        $order->order_time = $orderDateTime->format('H:i');
     }
 
     //
