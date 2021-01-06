@@ -34,7 +34,7 @@ class Tip extends CartCondition
             return FALSE;
 
         $value = $this->getMetaData('amount');
-        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE) {
+        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE OR $value < 0) {
             $this->removeMetaData('amount');
             flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
         }
