@@ -383,8 +383,11 @@ class CartManager
         }
 
         if ('quantity' == $menuOption->display_type) {
-            $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) { return $qty + $selectedValue['qty']; });
-        } else {
+            $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) {
+                return $qty + $selectedValue['qty'];
+            });
+        }
+        else {
             $countSelected = count($selectedValues);
         }
 
@@ -419,5 +422,11 @@ class CartManager
     {
         return $this->location->orderTypeIsDelivery()
             AND !$this->location->checkMinimumOrder($this->cart->subtotal());
+    }
+
+    public function deliveryChargeIsUnavailable()
+    {
+        return $this->location->orderTypeIsDelivery()
+            AND $this->location->deliveryAmount($this->cart->subtotal()) < 0;
     }
 }

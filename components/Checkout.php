@@ -262,6 +262,9 @@ class Checkout extends BaseComponent
 
             if ($this->cartManager->cartTotalIsBelowMinimumOrder())
                 return TRUE;
+
+            if ($this->cartManager->deliveryChargeIsUnavailable())
+                return TRUE;
         }
         catch (Exception $ex) {
             flash()->warning($ex->getMessage())->now();

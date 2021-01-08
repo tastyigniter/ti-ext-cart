@@ -281,7 +281,8 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function hasMinimumOrder()
     {
-        return $this->cartManager->cartTotalIsBelowMinimumOrder();
+        return $this->cartManager->cartTotalIsBelowMinimumOrder()
+            OR $this->cartManager->deliveryChargeIsUnavailable();
     }
 
     public function buttonLabel()
