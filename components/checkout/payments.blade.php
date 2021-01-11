@@ -11,7 +11,7 @@
                     <div class="list-group">
                         @foreach ($paymentGateways as $paymentGateway)
                             @php
-                                $paymentIsSelected = ($order->payment == $paymentGateway->code) OR count($paymentGateways) == 1;
+                                $paymentIsSelected = ($order->payment == $paymentGateway->code);
                                 $paymentIsNotApplicable = !$paymentGateway->isApplicable($order->order_total, $paymentGateway);
                             @endphp
                             <div
