@@ -3,7 +3,6 @@
     data-control="cart-item"
     data-min-quantity="{{ $menuItem->minimum_qty }}"
     data-price-amount="{{ $cartItem ? $cartItem->price : $menuItem->getBuyablePrice() }}"
-    data-price-format="{{ currency_format(0, 0) }}"
 >
     <form method="POST" data-request="{{ $formHandler }}">
         <div class="modal-content">

@@ -84,12 +84,9 @@
             });            
 		
 		price *= inputEl.val();
-		
-		var decimalSeperator = $cartItem.data('priceFormat').indexOf('.') > -1 ? '.' : ',';
-		var decimals = $cartItem.data('priceFormat').split(decimalSeperator).pop();
-				
+
         $cartItem.find('[data-item-subtotal]')
-            .html($cartItem.data('priceFormat').replace('0' + decimalSeperator + decimals, price.toFixed(decimals.length)));
+            .html(app.currencyFormat(price));
     }
 
     CartBoxModal.prototype.onSubmitForm = function () {
