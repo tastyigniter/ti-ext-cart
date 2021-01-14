@@ -381,7 +381,7 @@ class OrderManager
 
     public function getCurrentPaymentCode()
     {
-        return $this->getSession('paymentCode') ?: optional($this->getDefaultPayment())->code;
+        return $this->getSession('paymentCode') ?: optional($this->getDefaultPayment() ?: $this->getPaymentGateways()->first())->code;
     }
 
     public function applyCurrentPaymentFee($code)
