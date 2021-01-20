@@ -3,6 +3,7 @@
 namespace Igniter\Cart\AutomationRules\Conditions;
 
 use ApplicationException;
+use Carbon\Carbon;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 
 class OrderAttribute extends BaseModelAttributesCondition
@@ -43,6 +44,9 @@ class OrderAttribute extends BaseModelAttributesCondition
             'payment' => [
                 'label' => 'Payment Code (eg. cod or stripe)',
             ],
+            'hours_since' => [
+                'label' => 'Hours since order',
+            ],
         ];
     }
 
@@ -56,6 +60,8 @@ class OrderAttribute extends BaseModelAttributesCondition
         if (!$order = array_get($params, 'order')) {
             throw new ApplicationException('Error evaluating the order attribute condition: the order object is not found in the condition parameters.');
         }
+
+        $order->hours_since = Carbon::parse($order->order_date.' '.$order->order_time)->diffInHours(Carbon::now());
 
         return $this->evalIsTrue($order);
     }
