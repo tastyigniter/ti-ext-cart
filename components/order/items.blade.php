@@ -2,9 +2,7 @@
 
 <div class="cart-items pt-2">
     <ul>
-        @php($orderItemOptions = $order->getOrderMenuOptions())
-
-        @foreach ($order->getOrderMenus() as $orderItem)
+        @foreach ($order->getOrderMenusWithOptions() as $orderItem)
             <li>
                 <span class="price pull-right">{{ currency_format($orderItem->subtotal) }}</span>
                 <span class="name">
@@ -15,7 +13,7 @@
                     @endif
                     {{ $orderItem->name }}
                 </span>
-                @if ($itemOptions = $orderItemOptions->get($orderItem->order_menu_id))
+                @if ($itemOptions = $orderItem->menu_options)
                     <ul class="list-unstyled small text-muted">
                         @foreach ($itemOptions as $itemOption)
                             <li>
