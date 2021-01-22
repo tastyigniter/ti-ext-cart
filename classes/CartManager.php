@@ -269,6 +269,12 @@ class CartManager
         $this->cart->content()->each(function (CartItem $cartItem) {
             $menuItem = $cartItem->model;
 
+            // be sure to load the right price at checkout phase
+            // handle the edge case of changing order type with a product added with special price for ANOTHER order type
+            $this->cart->update($cartItem->rowId, [
+    				      'price' => $menuItem->getBuyablePrice(),
+            ]);
+
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
             $menuOptions = $menuItem->menu_options->keyBy('menu_option_id');
@@ -309,11 +315,6 @@ class CartManager
 
     public function validateMenuItem(Menus_model $menuItem)
     {
-        // be sure to load the right price at checkout phase
-        // handle the edge case of changing order type with a product added with special price for ANOTHER order type 
-        $this->cart->update($cartItem->rowId, [
-				      'price' => $menuItem->getBuyablePrice(),
-        ]);
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuItem->isAvailable($this->location->orderDateTime())) {
             throw new ApplicationException(
