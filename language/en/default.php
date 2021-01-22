@@ -104,7 +104,6 @@ return [
     'alert_tip_not_applied' => 'Please enter a valid tip amount.',
     'alert_delivery_area_unavailable' => 'This restaurant cannot deliver to your location.',
 
-
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',
     'help_fixed_offset' => 'Pixels to offset from top and bottom screen when calculating position of scroll.',
