@@ -102,6 +102,7 @@ return [
     'alert_coupon_location_restricted' => 'Your coupon can not be applied on the selected order location.',
     'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
     'alert_tip_not_applied' => 'Please enter a valid tip amount.',
+    'alert_delivery_area_unavailable' => 'This restaurant cannot deliver to your location.',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',
