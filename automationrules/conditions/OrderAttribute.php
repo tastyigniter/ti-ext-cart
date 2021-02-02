@@ -45,9 +45,32 @@ class OrderAttribute extends BaseModelAttributesCondition
                 'label' => 'Payment Code (eg. cod or stripe)',
             ],
             'hours_since' => [
-                'label' => 'Hours since order',
+                'label' => 'Hours since order delivery/collection time',
+            ],
+            'hours_until' => [
+                'label' => 'Hours until order delivery/collection time',
             ],
         ];
+    }
+
+    public function getHoursSinceAttribute($value, $order)
+    {
+        $currentDateTime = Carbon::now();
+        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+
+        return $orderDateTime->isAfter($currentDateTime)
+            ? $orderDateTime->diffInRealHours($currentDateTime)
+            : 0;
+    }
+
+    public function getHoursUntilAttribute($value, $order)
+    {
+        $currentDateTime = Carbon::now();
+        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+
+        return $orderDateTime->isBefore($currentDateTime)
+            ? $currentDateTime->diffInRealHours($orderDateTime)
+            : 0;
     }
 
     /**
@@ -60,8 +83,6 @@ class OrderAttribute extends BaseModelAttributesCondition
         if (!$order = array_get($params, 'order')) {
             throw new ApplicationException('Error evaluating the order attribute condition: the order object is not found in the condition parameters.');
         }
-
-        $order->hours_since = Carbon::parse($order->order_date.' '.$order->order_time)->diffInHours(Carbon::now());
 
         return $this->evalIsTrue($order);
     }
