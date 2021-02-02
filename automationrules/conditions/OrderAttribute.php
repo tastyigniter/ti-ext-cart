@@ -3,6 +3,7 @@
 namespace Igniter\Cart\AutomationRules\Conditions;
 
 use ApplicationException;
+use Carbon\Carbon;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 
 class OrderAttribute extends BaseModelAttributesCondition
@@ -43,7 +44,33 @@ class OrderAttribute extends BaseModelAttributesCondition
             'payment' => [
                 'label' => 'Payment Code (eg. cod or stripe)',
             ],
+            'hours_since' => [
+                'label' => 'Hours since order delivery/collection time',
+            ],
+            'hours_until' => [
+                'label' => 'Hours until order delivery/collection time',
+            ],
         ];
+    }
+
+    public function getHoursSinceAttribute($value, $order)
+    {
+        $currentDateTime = Carbon::now();
+        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+
+        return $orderDateTime->isAfter($currentDateTime)
+            ? $orderDateTime->diffInRealHours($currentDateTime)
+            : 0;
+    }
+
+    public function getHoursUntilAttribute($value, $order)
+    {
+        $currentDateTime = Carbon::now();
+        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+
+        return $orderDateTime->isBefore($currentDateTime)
+            ? $currentDateTime->diffInRealHours($orderDateTime)
+            : 0;
     }
 
     /**
