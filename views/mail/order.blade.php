@@ -65,8 +65,7 @@ Your {order_type} order **{order_number}** has been received and will be with yo
     @if(!empty($order_menus))
         @foreach($order_menus as $order_menu)
             <tr>
-                <td>{{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}
-                    <br>{!! $order_menu['menu_options'] !!}<br>{!! $order_menu['menu_comment'] !!}</td>
+                <td>{{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}<br>{!! $order_menu['menu_options'] !!}<br>{!! $order_menu['menu_comment'] !!}</td>
                 <td align="right">{{ $order_menu['menu_price'] }}</td>
                 <td align="right">{{ $order_menu['menu_subtotal'] }}</td>
             </tr>
