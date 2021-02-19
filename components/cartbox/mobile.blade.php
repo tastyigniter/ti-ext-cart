@@ -1,6 +1,6 @@
 <div
     id="cart-mobile-buttons"
-    class="{{ !$pageIsCheckout ? 'fixed-bottom' : 'mt-3' }}{{ $pageIsCart ? 'hide' : ' d-block d-lg-none' }}"
+    class="{{ !$pageIsCheckout ? 'fixed-bottom' : 'mt-3' }}{{ $pageIsCart ? 'hide' : ' d-block d-md-none' }}"
 >
     @if ($pageIsCheckout)
     @elseif (!$pageIsCart)

@@ -1,4 +1,4 @@
-<div class="{{ $pageIsCheckout ? 'd-block' : 'affix-cart d-lg-block' }}">
+<div class="{{ $pageIsCart ?: 'affix-cart d-none d-md-block' }}">
     <div class="panel panel-cart">
         <div class="panel-body">
             @if (has_component($__SELF__->property('localBoxAlias')))
