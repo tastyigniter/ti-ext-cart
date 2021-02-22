@@ -107,9 +107,6 @@ class CartManager
 
         $this->validateLocation();
 
-        if ($this->deliveryChargeIsUnavailable())
-            throw new ApplicationException(lang('igniter.cart::default.alert_delivery_area_unavailable'));
-
         $this->validateOrderTime();
 
         $cartItem = null;
