@@ -183,6 +183,10 @@ class OrderManager
         $order->fill($data);
         $order->address_id = $addressId;
         $this->applyRequiredAttributes($order);
+
+        if ($order->order_total > 0 AND !$order->payment)
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+
         $order->save();
 
         $this->setCurrentOrderId($order->order_id);
@@ -243,9 +247,6 @@ class OrderManager
         $order->order_total = $this->cart->total();
 
         $paymentCode = $this->getCurrentPaymentCode();
-        if ($order->order_total > 0 AND !$paymentCode)
-            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
-
         $order->payment = $order->order_total > 0 ? $paymentCode : '';
 
         $this->applyCurrentPaymentFee($order->payment);
