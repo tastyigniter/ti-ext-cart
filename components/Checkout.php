@@ -305,6 +305,10 @@ class Checkout extends BaseComponent
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
             $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'sometimes|required|integer'];
         }
+        
+        $mergeRules = $this->fireSystemEvent('igniter.cart.createCheckoutRules');
+        if (count($mergeRules))
+            $namedRules = array_merge($mergeRules, $namedRules);
 
         return $namedRules;
     }
