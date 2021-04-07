@@ -13,13 +13,15 @@ class Tax extends CartCondition
 
     protected $taxRate;
 
+    protected $taxRateLabel;
+
     public $priority = 300;
 
     protected $taxDelivery;
 
     public function getLabel()
     {
-        $label = $this->taxInclusive ? "{$this->taxRate}% included" : "{$this->taxRate}%";
+        $label = $this->taxInclusive ? "{$this->taxRateLabel}% included" : "{$this->taxRateLabel}%";
 
         return sprintf(lang($this->label), $label);
     }
@@ -28,7 +30,9 @@ class Tax extends CartCondition
     {
         $this->taxMode = (bool)setting('tax_mode', 1);
         $this->taxInclusive = !((bool)setting('tax_menu_price', 1));
-        $this->taxRate = setting('tax_percentage', 0);
+        $this->taxRate = $this->taxRateLabel = setting('tax_percentage', 0);
+        if ($this->taxInclusive)
+            $this->taxRate /= (100 + $this->taxRate) / 100;
         $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
 
