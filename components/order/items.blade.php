@@ -5,25 +5,33 @@
         @foreach ($order->getOrderMenusWithOptions() as $orderItem)
             <li>
                 <span class="price pull-right">{{ currency_format($orderItem->subtotal) }}</span>
-                <span class="name">
+                <span class="name font-weight-bold">
                     @if ($orderItem->quantity > 1)
-                        <span class="quantity font-weight-bold">
+                        <span class="quantity">
                             {{ $orderItem->quantity }} @lang('igniter.cart::default.text_times')
                         </span>
                     @endif
                     {{ $orderItem->name }}
                 </span>
-                @if ($itemOptions = $orderItem->menu_options)
-                    <ul class="list-unstyled small text-muted">
-                        @foreach ($itemOptions as $itemOption)
+                @php $itemOptionGroup = $orderItem->menu_options->groupBy('order_option_category') @endphp
+                @if ($itemOptionGroup->isNotEmpty())
+                    <ul class="list-unstyled small">
+                        @foreach ($itemOptionGroup as $itemOptionGroupName => $itemOptions)
                             <li>
-                                @if ($itemOption->quantity > 1)
-                                    {{ $itemOption->quantity }} @lang('igniter.cart::default.text_times')
-                                @endif
-                                {{ $itemOption->order_option_name }}&nbsp;
-                                @if ($itemOption->order_option_price > 0)
-                                    ({{ currency_format($itemOption->quantity * $itemOption->order_option_price) }})
-                                @endif
+                                <u class="text-muted">{{ $itemOptionGroupName }}:</u>
+                                <ul class="list-unstyled">
+                                    @foreach ($itemOptions as $itemOption)
+                                        <li>
+                                            @if ($itemOption->quantity > 1)
+                                                {{ $itemOption->quantity }} @lang('igniter.cart::default.text_times')
+                                            @endif
+                                            {{ $itemOption->order_option_name }}&nbsp;
+                                            @if ($itemOption->order_option_price > 0)
+                                                ({{ currency_format($itemOption->quantity * $itemOption->order_option_price) }})
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </li>
                         @endforeach
                     </ul>
