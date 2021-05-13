@@ -18,11 +18,11 @@ class Menus_model extends BaseMenus_model implements Buyable
         'menu_options.option',
     ];
 
-    public static function findBy($menuId)
+    public static function findBy($menuId, $location)
     {
         $query = self::with(['menu_options' => function ($query) {
             $query->whereHas('option', function ($query) {
-                $query->whereHasOrDoesntHaveLocation($this->location->current());
+                $query->whereHasOrDoesntHaveLocation($location);
             });
         }]);
 

@@ -71,7 +71,7 @@ class CartManager
         if (!is_numeric($menuId))
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
 
-        if (!$menuItem = Menus_model::findBy($menuId))
+        if (!$menuItem = Menus_model::findBy($this->location->current()))
             throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
 
         return $menuItem;
