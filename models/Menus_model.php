@@ -18,15 +18,19 @@ class Menus_model extends BaseMenus_model implements Buyable
         'menu_options.option',
     ];
 
-    public static function findBy($menuId, $location)
+    public static function findBy($menuId, $location = null)
     {
-        $query = self::with(['menu_options' => function ($query) {
-            $query->whereHas('option', function ($query) {
-                $query->whereHasOrDoesntHaveLocation($location);
-            });
-        }]);
+        $query = self::query();
 
-        return $query->first();
+        if (!is_null($location)) {
+            $query->with(['menu_options' => function ($query) use ($location) {
+                $query->whereHas('option', function ($query) use ($location) {
+                    $query->whereHasOrDoesntHaveLocation($location);
+                });
+            }]);
+        }
+
+        return $query->isEnabled()->whereKey($menuId)->first();
     }
 
     public function getMorphClass()

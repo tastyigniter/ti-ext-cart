@@ -118,7 +118,7 @@ class Order extends \System\Classes\BaseComponent
         $orderMenus = $order->getOrderMenus();
 
         foreach ($orderMenus as $orderMenu) {
-            if (!$menuModel = Menus_model::find($orderMenu->menu_id))
+            if (!$menuModel = Menus_model::findBy($orderMenu->menu_id))
                 continue;
 
             if (is_string($orderMenu->option_values))
