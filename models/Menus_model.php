@@ -8,7 +8,26 @@ use Igniter\Flame\Location\Models\AbstractLocation;
 
 class Menus_model extends BaseMenus_model implements Buyable
 {
-    public $with = ['special', 'mealtimes', 'menu_options', 'menu_options.option'];
+    public $with = [
+        'special',
+        'media',
+        'allergens',
+        'allergens.media',
+        'mealtimes',
+        'menu_options',
+        'menu_options.option',
+    ];
+
+    public static function findBy($menuId)
+    {
+        $query = self::with(['menu_options' => function ($query) {
+            $query->whereHas('option', function ($query) {
+                $query->whereHasOrDoesntHaveLocation($this->location->current());
+            });
+        }]);
+
+        return $query->first();
+    }
 
     public function getMorphClass()
     {
