@@ -16,6 +16,7 @@
                 </tr>
 
                 @foreach ($cart->conditions() as $id => $condition)
+                    @if ($condition->isValid())
                     <tr>
                         <td>
                         <span class="text-muted">
@@ -35,6 +36,7 @@
                             {{ is_numeric($result = $condition->getValue()) ? currency_format($result) : $result }}
                         </td>
                     </tr>
+                    @endif
                 @endforeach
 
                 <tr>
