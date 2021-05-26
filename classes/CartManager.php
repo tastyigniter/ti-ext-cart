@@ -296,14 +296,15 @@ class CartManager
         if (!$this->location->current())
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
-        $orderType = $this->location->orderType();
-
-        if (!$this->location->checkOrderType())
-            throw new ApplicationException(lang('igniter.local::default.alert_'.$orderType.'_unavailable'));
+        $orderType = $this->location->getOrderType();
+        if ($orderType->isDisabled())
+            throw new ApplicationException(sprintf(lang('igniter.local::default.alert_order_is_unavailable'),
+                $orderType->getLabel()
+            ));
 
         if (!$this->location->checkOrderTime())
             throw new ApplicationException(sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'),
-                $this->location->orderType()
+                $orderType->getLabel()
             ));
     }
 
@@ -327,10 +328,11 @@ class CartManager
             );
         }
 
-        if ($menuItem->hasOrderTypeRestriction($orderType = $this->location->orderType())) {
+        $orderType = $this->location->getOrderType();
+        if ($menuItem->hasOrderTypeRestriction($orderType->getCode())) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_menu_order_restriction'),
-                lang('igniter.local::default.text_'.$orderType)
+                $orderType->getLabel()
             ));
         }
     }
