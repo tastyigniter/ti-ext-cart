@@ -297,14 +297,14 @@ class CartManager
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
         $orderType = $this->location->getOrderType();
-        if ($orderType->isDisabled())
+        if (!$orderType OR $orderType->isDisabled())
             throw new ApplicationException(sprintf(lang('igniter.local::default.alert_order_is_unavailable'),
-                $orderType->getLabel()
+                optional($orderType)->getLabel() ?? $this->location->orderType()
             ));
 
         if (!$this->location->checkOrderTime())
             throw new ApplicationException(sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'),
-                $orderType->getLabel()
+                optional($orderType)->getLabel() ?? $this->location->orderType()
             ));
     }
 
