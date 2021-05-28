@@ -290,7 +290,7 @@ class Checkout extends BaseComponent
             ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|between:1,48'],
             ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|between:1,48'],
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email:filter|max:96|unique:customers'],
-            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
+            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', 'integer'],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
             ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'],
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
@@ -299,7 +299,7 @@ class Checkout extends BaseComponent
         if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
             $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', 'sometimes|min:3|max:128'];
+            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', 'min:3|max:128'];
             $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', 'sometimes|min:2|max:128'];
             $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', 'sometimes|max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
