@@ -270,13 +270,12 @@ class OrderManager
     public function getCartTotals()
     {
         $totals = $this->cart->conditions()->map(function (CartCondition $condition) {
-            $priority = $condition->getPriority();
-
             return [
                 'code' => $condition->name,
                 'title' => $condition->getLabel(),
                 'value' => $condition->getValue(),
-                'priority' => $priority > 0 ? $priority : 1,
+                'priority' => $condition->getPriority() ?: 1,
+                'is_summable' => TRUE,
             ];
         })->all();
 
@@ -285,6 +284,7 @@ class OrderManager
             'title' => lang('igniter.cart::default.text_sub_total'),
             'value' => $this->cart->subtotal(),
             'priority' => 0,
+            'is_summable' => FALSE,
         ];
 
         $totals['total'] = [
@@ -292,6 +292,7 @@ class OrderManager
             'title' => lang('igniter.cart::default.text_order_total'),
             'value' => $this->cart->total(),
             'priority' => 999,
+            'is_summable' => FALSE,
         ];
 
         return $totals;
