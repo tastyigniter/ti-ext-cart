@@ -126,7 +126,7 @@ return [
             ['conditions.*.status', 'igniter.cart::default.label_cart_conditions', 'required|integer'],
             ['enable_tipping', 'igniter.cart::default.label_tipping', 'required|integer'],
             ['tip_value_type', 'igniter.cart::default.label_tipping', 'required|in:F,P'],
-            ['tip_amounts', 'igniter.cart::default.label_tipping', 'required|array'],
+            ['tip_amounts', 'igniter.cart::default.label_tipping', 'required_if:enable_tipping,1|array'],
             ['tip_amounts.*.priority', 'igniter.cart::default.label_tipping', 'required|integer'],
             ['tip_amounts.*.value', 'igniter.cart::default.label_tipping', 'required|numeric'],
         ],
