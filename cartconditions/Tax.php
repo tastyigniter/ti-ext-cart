@@ -62,4 +62,14 @@ class Tax extends CartCondition
 
         return parent::calculate($total);
     }
+    
+    protected function processActionValue($action, $total)
+    {
+        $action = parent::processActionValue($action, $total);
+
+        $precision = app('currency')->getDefault() ? app('currency')->getDefault()->decimal_position : 2;
+        $this->calculatedValue += round($this->calculatedValue, $precision);
+
+        return $action;        
+    }
 }
