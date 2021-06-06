@@ -299,11 +299,11 @@ class Checkout extends BaseComponent
         if (Location::orderTypeIsDelivery()) {
             $namedRules[] = ['address_id', 'lang:igniter.cart::default.checkout.label_address', 'required|integer'];
             $namedRules[] = ['address.address_1', 'lang:igniter.cart::default.checkout.label_address_1', 'required|min:3|max:128'];
-            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', ($this->property('showAddress2Field', 1) ? 'sometimes|' : 'nullable|').'min:3|max:128'];
-            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', ($this->property('showCityField', 1) ? 'sometimes|' : 'nullable|').'min:2|max:128'];
-            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', ($this->property('showStateField', 1) ? 'sometimes|' : 'nullable|').'max:128'];
+            $namedRules[] = ['address.address_2', 'lang:igniter.cart::default.checkout.label_address_2', ($this->property('showAddress2Field', 1) ? 'required|' : 'nullable|').'min:3|max:128'];
+            $namedRules[] = ['address.city', 'lang:igniter.cart::default.checkout.label_city', ($this->property('showCityField', 1) ? 'required|' : 'nullable|').'min:2|max:128'];
+            $namedRules[] = ['address.state', 'lang:igniter.cart::default.checkout.label_state', ($this->property('showStateField', 1) ? 'required|' : 'nullable|').'max:128'];
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
-            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', ($this->property('showCountryField', 1) ? 'sometimes|' : 'nullable|').'required|integer'];
+            $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', ($this->property('showCountryField', 1) ? 'required|' : 'nullable|').'required|integer'];
         }
 
         return $namedRules;
