@@ -290,7 +290,7 @@ class Checkout extends BaseComponent
             ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|between:1,48'],
             ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|between:1,48'],
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email:filter|max:96|unique:customers'],
-            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', ''],
+            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', 'regex:/^([0-9\s\-\+\(\)]*)$/i'],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
             ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'],
             ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
