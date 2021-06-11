@@ -4,6 +4,7 @@ namespace Igniter\Cart\CartConditions;
 
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Flame\Cart\CartCondition;
+use System\Models\Currencies_model;
 
 class Tip extends CartCondition
 {
@@ -47,8 +48,10 @@ class Tip extends CartCondition
         if ($amountType == 'amount' AND $this->tipValueType != 'F')
             $amount .= '%';
 
+        $precision = optional(Currencies_model::getDefault())->decimal_position ?? 2;
+
         return [
-            ['value' => "+{$amount}"],
+            ['value' => "+{$amount}", 'valuePrecision' => $precision],
         ];
     }
 }
