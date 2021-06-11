@@ -113,7 +113,7 @@ class Extension extends BaseExtension
             'settings' => [
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart settings.',
-                'icon' => 'fa fa-cart-plus',
+                'icon' => 'fa fa-gear',
                 'model' => 'Igniter\Cart\Models\CartSettings',
                 'permissions' => ['Module.CartModule'],
             ],
