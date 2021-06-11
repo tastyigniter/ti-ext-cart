@@ -4,6 +4,7 @@ namespace Igniter\Cart\CartConditions;
 
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Local\Facades\Location;
+use System\Models\Currencies_model;
 
 class Tax extends CartCondition
 {
@@ -45,10 +46,13 @@ class Tax extends CartCondition
 
     public function getActions()
     {
+        $precision = optional(Currencies_model::getDefault())->decimal_position ?? 2;
+
         return [
             [
                 'value' => "+{$this->taxRate}%",
                 'inclusive' => $this->taxInclusive,
+                'valuePrecision' => $precision,
             ],
         ];
     }
@@ -61,15 +65,5 @@ class Tax extends CartCondition
         }
 
         return parent::calculate($total);
-    }
-    
-    protected function processActionValue($action, $total)
-    {
-        $action = parent::processActionValue($action, $total);
-
-        $precision = app('currency')->getDefault() ? app('currency')->getDefault()->decimal_position : 2;
-        $this->calculatedValue += round($this->calculatedValue, $precision);
-
-        return $action;        
     }
 }
