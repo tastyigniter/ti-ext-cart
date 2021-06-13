@@ -103,6 +103,7 @@ return [
     'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
     'alert_tip_not_applied' => 'Please enter a valid tip amount.',
     'alert_delivery_area_unavailable' => 'This restaurant cannot deliver to your location.',
+    'alert_no_menu_item_found' => 'Item not found in the cart',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',
