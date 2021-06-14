@@ -86,9 +86,6 @@ return [
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',
     'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
-    'alert_order_unavailable' => 'This restaurant is unavailable to take orders at the moment.',
-    'alert_delivery_unavailable' => 'This restaurant is unavailable to take delivery orders at the moment.',
-    'alert_collection_unavailable' => 'This restaurant is unavailable to take pick-up orders at the moment.',
     'alert_min_delivery_order_total' => 'Order total is below the minimum delivery order total. <br />You need to spend %s or more to order for delivery',
     'alert_coupon_removed' => 'Your coupon has been removed successfully.',
     'alert_coupon_applied' => 'Your coupon has been applied successfully.',
@@ -102,7 +99,6 @@ return [
     'alert_coupon_location_restricted' => 'Your coupon can not be applied on the selected order location.',
     'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
     'alert_tip_not_applied' => 'Please enter a valid tip amount.',
-    'alert_delivery_area_unavailable' => 'This restaurant cannot deliver to your location.',
     'alert_no_menu_item_found' => 'Item not found in the cart',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
@@ -164,8 +160,6 @@ return [
 
         'button_agree_terms' => 'I Agree',
 
-        'error_delivery_unavailable' => 'Delivery is unavailable at the selected restaurant!',
-        'error_collection_unavailable' => 'Pick-up is unavailable at the selected restaurant!',
         'error_covered_area' => 'This restaurant currently does not deliver to your address',
         'error_delivery_less_current_time' => 'The %s Time can not be less than current time!',
         'error_invalid_payment' => 'The selected payment is invalid, please contact us',
@@ -175,7 +169,6 @@ return [
         'alert_no_selected_local' => 'Please select your local restaurant<',
         'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
         'alert_outside_hours' => 'The selected time is outside our %s hours',
-        'alert_order_unavailable' => 'Neither delivery or pick-up is available at the selected restaurant.',
         'alert_customer_not_logged' => 'Almost there, Please login or register to complete checkout.',
         'alert_delivery_area_changed' => 'Your delivery area has changed, please confirm the delivery cost.',
 
