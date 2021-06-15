@@ -275,7 +275,7 @@ class OrderManager
                 'title' => $condition->getLabel(),
                 'value' => $condition->getValue(),
                 'priority' => $condition->getPriority() ?: 1,
-                'is_summable' => TRUE,
+                'is_summable' => !$condition->isInclusive(),
             ];
         })->all();
 
