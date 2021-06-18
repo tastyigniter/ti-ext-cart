@@ -115,9 +115,7 @@ class Order extends \System\Classes\BaseComponent
         if (!$order = Orders_model::find($orderId))
             return;
 
-        $orderMenus = $order->getOrderMenus();
-
-        foreach ($orderMenus as $orderMenu) {
+        foreach ($order->getOrderMenus() as $orderMenu) {
             if (!$menuModel = Menus_model::findBy($orderMenu->menu_id))
                 continue;
 
@@ -127,7 +125,9 @@ class Order extends \System\Classes\BaseComponent
             if ($orderMenu->option_values instanceof Arrayable)
                 $orderMenu->option_values = $orderMenu->option_values->toArray();
 
-            Cart::add($menuModel, $orderMenu->quantity, $orderMenu->option_values, $orderMenu->comment);
+            $options = $this->prepareCartItemOptions($menuModel, $orderMenu->option_values);
+
+            Cart::add($menuModel, $orderMenu->quantity, $options, $orderMenu->comment);
         }
 
         flash()->success(sprintf(
@@ -153,5 +153,22 @@ class Order extends \System\Classes\BaseComponent
     protected function getHashParam()
     {
         return $this->param($this->property('hashParamName'));
+    }
+
+    protected function prepareCartItemOptions($menuModel, $optionValues)
+    {
+        $options = [];
+        foreach ($optionValues as $cartOption) {
+            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id']))
+                continue;
+
+            $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
+                return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
+            });
+
+            $options[] = $cartOption;
+        }
+
+        return $options;
     }
 }
