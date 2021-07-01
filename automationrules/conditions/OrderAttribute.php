@@ -56,7 +56,7 @@ class OrderAttribute extends BaseModelAttributesCondition
     public function getHoursSinceAttribute($value, $order)
     {
         $currentDateTime = Carbon::now();
-        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+        $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
 
         return $orderDateTime->isAfter($currentDateTime)
             ? $orderDateTime->diffInRealHours($currentDateTime)
@@ -66,7 +66,7 @@ class OrderAttribute extends BaseModelAttributesCondition
     public function getHoursUntilAttribute($value, $order)
     {
         $currentDateTime = Carbon::now();
-        $orderDateTime = Carbon::parse($order->order_date.' '.$order->order_time);
+        $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
 
         return $orderDateTime->isBefore($currentDateTime)
             ? $currentDateTime->diffInRealHours($orderDateTime)
