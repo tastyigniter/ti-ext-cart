@@ -48,7 +48,7 @@ class Checkout extends BaseComponent
                 'default' => FALSE,
                 'validationRule' => 'required|boolean',
             ],
-             'showPostcodeField' => [
+            'showPostcodeField' => [
                 'label' => 'Whether to display the postcode form field',
                 'type' => 'switch',
                 'default' => FALSE,
