@@ -91,6 +91,7 @@
               </div>
           </div>
         @endif
+        @if ($showPostcodeField)
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="">@lang('igniter.cart::default.checkout.label_postcode')</label>
@@ -102,6 +103,7 @@
                 {!! form_error('address.postcode', '<span class="text-danger">', '</span>') !!}
             </div>
         </div>
+        @endif
     </div>
     @if ($showCountryField)
         <div class="form-group">
