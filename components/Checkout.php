@@ -48,6 +48,12 @@ class Checkout extends BaseComponent
                 'default' => FALSE,
                 'validationRule' => 'required|boolean',
             ],
+            'showPostcodeField' => [
+                'label' => 'Whether to display the postcode form field',
+                'type' => 'switch',
+                'default' => FALSE,
+                'validationRule' => 'required|boolean',
+            ],
             'showAddress2Field' => [
                 'label' => 'Whether to display the address 2 form field',
                 'type' => 'switch',
@@ -126,6 +132,7 @@ class Checkout extends BaseComponent
     protected function prepareVars()
     {
         $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
+        $this->page['showPostcodeField'] = (bool)$this->property('showPostcodeField', 1);
         $this->page['showAddress2Field'] = (bool)$this->property('showAddress2Field', 1);
         $this->page['showCityField'] = (bool)$this->property('showCityField', 1);
         $this->page['showStateField'] = (bool)$this->property('showStateField', 1);
