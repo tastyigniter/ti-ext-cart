@@ -21,6 +21,7 @@ return [
     'text_tip' => 'Tip',
     'text_payment_fee' => 'Payment Fee',
     'text_vat' => 'VAT [%s]',
+    'text_vat_included' => 'included',
     'text_order_total' => 'Order Total',
     'text_menu_quantity' => 'Menu Quantity',
     'text_add_to_order' => 'Add to order',
