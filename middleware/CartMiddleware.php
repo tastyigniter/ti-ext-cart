@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\Middleware;
 
-use Auth;
-use Cart;
+use Igniter\Flame\Cart\Facades\Cart;
+use Main\Facades\Auth;
 
 class CartMiddleware
 {

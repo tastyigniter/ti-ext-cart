@@ -2,14 +2,14 @@
 
 namespace Igniter\Cart\Components;
 
-use ApplicationException;
-use Cart;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Models\CartSettings;
-use Location;
-use Redirect;
-use Request;
+use Igniter\Flame\Cart\Facades\Cart;
+use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Local\Facades\Location;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 
 class CartBox extends \System\Classes\BaseComponent
 {

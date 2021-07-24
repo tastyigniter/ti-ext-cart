@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
-use ApplicationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
+use Igniter\Flame\Exception\ApplicationException;
 
 class OrderStatusAttribute extends BaseModelAttributesCondition
 {

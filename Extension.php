@@ -3,14 +3,14 @@
 namespace Igniter\Cart;
 
 use Admin\Models\Orders_model;
-use Auth;
-use Cart;
-use Config;
-use Event;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
+use Igniter\Flame\Cart\Facades\Cart;
 use Igniter\Local\Facades\Location;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use Main\Facades\Auth;
 use System\Classes\BaseExtension;
 
 class Extension extends BaseExtension

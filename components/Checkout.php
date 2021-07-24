@@ -3,14 +3,14 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Traits\ValidatesForm;
-use Auth;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Local\Facades\Location;
 use Illuminate\Http\RedirectResponse;
-use Location;
-use Redirect;
+use Illuminate\Support\Facades\Redirect;
+use Main\Facades\Auth;
 use System\Classes\BaseComponent;
 
 class Checkout extends BaseComponent

@@ -3,7 +3,7 @@
 namespace Igniter\Cart\Models;
 
 use Igniter\Cart\Classes\CartConditionManager;
-use Model;
+use Igniter\Flame\Database\Model;
 
 /**
  * @method static instance()

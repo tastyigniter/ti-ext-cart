@@ -3,13 +3,13 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
-use Auth;
-use Cart;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Menus_model;
+use Igniter\Flame\Cart\Facades\Cart;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Redirect;
+use Main\Facades\Auth;
 use Main\Traits\UsesPage;
-use Redirect;
 
 class Order extends \System\Classes\BaseComponent
 {

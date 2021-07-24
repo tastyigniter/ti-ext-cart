@@ -3,15 +3,15 @@
 namespace Igniter\Cart\Classes;
 
 use Admin\Models\Addresses_model;
-use ApplicationException;
-use Auth;
-use Event;
 use Igniter\Cart\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
+use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Traits\Singleton;
 use Igniter\Local\Classes\CoveredArea;
 use Illuminate\Support\Facades\App;
-use Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Request;
+use Main\Facades\Auth;
 use System\Traits\SessionMaker;
 
 class OrderManager

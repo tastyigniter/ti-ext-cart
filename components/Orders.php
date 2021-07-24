@@ -3,7 +3,7 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
-use Auth;
+use Main\Facades\Auth;
 use Main\Traits\UsesPage;
 
 class Orders extends \System\Classes\BaseComponent
