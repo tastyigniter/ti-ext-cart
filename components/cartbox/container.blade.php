@@ -2,11 +2,11 @@
     <div class="panel panel-cart">
         <div class="panel-body">
             @if (has_component($__SELF__->property('localBoxAlias')))
-                <div class="local-timeslot">
-                    @partial($__SELF__->property('localBoxAlias').'::timeslot')
-                </div>
-                <div class="local-control mt-3">
+                <div class="local-control">
                     @partial($__SELF__->property('localBoxAlias').'::control')
+                </div>
+                <div class="local-timeslot mt-3">
+                    @partial($__SELF__->property('localBoxAlias').'::timeslot')
                 </div>
             @endif
 
