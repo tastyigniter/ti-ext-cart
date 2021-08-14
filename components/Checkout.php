@@ -280,7 +280,7 @@ class Checkout extends BaseComponent
             if ($order->isDeliveryType()) {
                 $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
             }
-            
+
             return [
                 'error' => false,
             ];
