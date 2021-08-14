@@ -211,19 +211,10 @@ class Checkout extends BaseComponent
 
         $data = $this->processDeliveryAddress($data);
 
-        $this->validateCheckoutSecurity();
-
         try {
-            $this->validate($data, $this->createRules(), [
-                'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
-            ]);
+            $this->validatePostData($data);
 
             $order = $this->getOrder();
-
-            if ($order->isDeliveryType()) {
-                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
-            }
-
             $this->orderManager->saveOrder($order, $data);
 
             if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
@@ -268,18 +259,8 @@ class Checkout extends BaseComponent
         $data = post();
         $data = $this->processDeliveryAddress($data);
 
-        $this->validateCheckoutSecurity();
-
         try {
-            $this->validate($data, $this->createRules(), [
-                'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
-            ]);
-
-            $order = $this->getOrder();
-
-            if ($order->isDeliveryType()) {
-                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
-            }
+            $this->validatePostData($data);
 
             return [
                 'error' => false,
@@ -320,6 +301,21 @@ class Checkout extends BaseComponent
         $this->cartManager->validateLocation();
 
         $this->cartManager->validateOrderTime();
+    }
+    
+    protected function validatePostData($data)
+    {
+        $this->validateCheckoutSecurity();
+
+        $this->validate($data, $this->createRules(), [
+            'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
+        ]);
+
+        $order = $this->getOrder();
+
+        if ($order->isDeliveryType()) {
+            $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
+        }        
     }
 
     protected function createRules()
