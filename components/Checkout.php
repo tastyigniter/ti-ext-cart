@@ -302,7 +302,7 @@ class Checkout extends BaseComponent
 
         $this->cartManager->validateOrderTime();
     }
-    
+
     protected function validatePostData($data)
     {
         $this->validateCheckoutSecurity();
@@ -315,7 +315,7 @@ class Checkout extends BaseComponent
 
         if ($order->isDeliveryType()) {
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
-        }        
+        }
     }
 
     protected function createRules()
