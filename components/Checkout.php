@@ -262,7 +262,7 @@ class Checkout extends BaseComponent
 
         return $result;
     }
-    
+
     public function onValidate()
     {
         $data = post();
@@ -282,7 +282,7 @@ class Checkout extends BaseComponent
             }
             
             return [
-                'error' => false,  
+                'error' => false,
             ];
         }
         catch (Exception $ex) {
