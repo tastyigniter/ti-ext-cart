@@ -3,6 +3,8 @@
     'role' => 'form',
     'method' => 'POST',
     'data-handler' => $confirmCheckoutEventHandler,
+    'data-validate-handler' => $validateCheckoutEventHandler,
+
 ]) !!}
 
 @partial('@customer_fields')
