@@ -7,7 +7,7 @@ use Main\Classes\MainController;
 
 class Orders_model extends BaseOrders_model
 {
-    protected $fillable = ['customer_id', 'first_name', 'last_name', 'email', 'telephone', 'comment', 'payment'];
+    protected $fillable = ['customer_id', 'address_id', 'first_name', 'last_name', 'email', 'telephone', 'comment', 'payment'];
 
     public function getUrl($page, $params = [])
     {
