@@ -150,6 +150,10 @@ class CartBox extends \System\Classes\BaseComponent
             $menuItem = $cartItem->model;
         }
 
+        $this->cartManager->validateLocation();
+
+        $this->cartManager->validateOrderTime();
+
         $this->cartManager->validateMenuItem($menuItem);
 
         $this->cartManager->validateMenuItemStockQty($menuItem, $cartItem ? $cartItem->qty : 0);
