@@ -214,6 +214,8 @@ class Checkout extends BaseComponent
         try {
             $this->validatePostData($data);
 
+            Event::fire('igniter.cart.onConfirm', [$data]);
+
             $order = $this->getOrder();
             $this->orderManager->saveOrder($order, $data);
 
@@ -261,6 +263,8 @@ class Checkout extends BaseComponent
 
         try {
             $this->validatePostData($data);
+
+            Event::fire('igniter.cart.onValidate', [$data]);
 
             return [
                 'error' => false,
