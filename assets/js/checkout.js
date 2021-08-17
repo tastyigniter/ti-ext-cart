@@ -27,9 +27,9 @@
             .on('submit', this.options.formSelector, $.proxy(this.onSubmitCheckoutForm, this))
             .on('ajaxFail ajaxDone', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
     }
-    
+
     Checkout.prototype.completeCheckout = function ($checkoutForm) {
-        $checkoutBtn = $('.checkout-btn');
+        var $checkoutBtn = $('.checkout-btn');
 
         var _event = jQuery.Event('submitCheckoutForm')
         $checkoutForm.trigger(_event)
@@ -110,12 +110,12 @@
     Checkout.prototype.onSubmitCheckoutForm = function (event) {
         var $checkoutForm = $(event.target),
             $checkoutBtn = $('.checkout-btn'),
-            $selectedPaymentMethod = this.$el.find(this.paymentInputSelector).is(':checked')
+            $selectedPaymentMethod = this.$el.find(this.paymentInputSelector + ':checked')
 
         $checkoutBtn.prop('disabled', true)
 
         event.preventDefault();
-        
+
         if ($selectedPaymentMethod && $selectedPaymentMethod.data('requirePrecheckoutValidation')) {
             this.onValidateCheckoutForm($checkoutForm);
             return;
@@ -127,14 +127,14 @@
     Checkout.prototype.onFailCheckoutForm = function (event) {
         $(this.options.formSelector).prop('disabled', false)
     }
-    
+
     Checkout.prototype.onValidateCheckoutForm = function ($checkoutForm) {
         var response = $checkoutForm.request($checkoutForm.data('validateHandler'));
         if (!response.error) {
             this.completeCheckout($checkoutForm);
             return;
         }
-        
+
         $.ti.flashMessage({ text: response.message, class: 'danger' });
     }
 
