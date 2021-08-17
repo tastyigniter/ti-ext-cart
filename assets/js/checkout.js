@@ -129,13 +129,15 @@
     }
 
     Checkout.prototype.onValidateCheckoutForm = function ($checkoutForm) {
-        var response = $checkoutForm.request($checkoutForm.data('validateHandler'));
-        if (!response.error) {
-            this.completeCheckout($checkoutForm);
-            return;
-        }
+        $checkoutForm.request($checkoutForm.data('validateHandler'))
+        .then((response) => {
+            if (!response.error) {
+                this.completeCheckout($checkoutForm);
+                return;
+            }
 
-        $.ti.flashMessage({ text: response.message, class: 'danger' });
+            $.ti.flashMessage({ text: response.message, class: 'danger' });
+        });
     }
 
     Checkout.DEFAULTS = {
