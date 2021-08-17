@@ -29,12 +29,10 @@
     }
 
     Checkout.prototype.completeCheckout = function ($checkoutForm) {
-        var $checkoutBtn = $('.checkout-btn');
-
         var _event = jQuery.Event('submitCheckoutForm')
         $checkoutForm.trigger(_event)
         if (_event.isDefaultPrevented()) {
-            $checkoutBtn.prop('disabled', false)
+            this.$checkoutBtn.prop('disabled', false)
             return false;
         }
 
@@ -109,10 +107,9 @@
 
     Checkout.prototype.onSubmitCheckoutForm = function (event) {
         var $checkoutForm = $(event.target),
-            $checkoutBtn = $('.checkout-btn'),
             $selectedPaymentMethod = this.$el.find(this.paymentInputSelector + ':checked')
 
-        $checkoutBtn.prop('disabled', true)
+        this.$checkoutBtn.prop('disabled', true)
 
         event.preventDefault();
 
@@ -137,6 +134,7 @@
             }
 
             $.ti.flashMessage({ text: response.message, class: 'danger' });
+            this.$checkoutBtn.prop('disabled', false)
         });
     }
 
