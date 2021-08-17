@@ -29,7 +29,7 @@
     }
     
     Checkout.prototype.completeCheckout = function ($checkoutForm) {
-        $checkoutBtn = $('.checkout-btn'),
+        $checkoutBtn = $('.checkout-btn');
 
         var _event = jQuery.Event('submitCheckoutForm')
         $checkoutForm.trigger(_event)
