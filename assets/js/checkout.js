@@ -125,11 +125,14 @@
         $(this.options.formSelector).prop('disabled', false)
     }
 
-    Checkout.prototype.onValidateCheckoutForm = function ($checkoutForm) {
+    Checkout.prototype.onValidateCheckoutForm = function ($checkoutForm, callbackFn) {
         $checkoutForm.request($checkoutForm.data('validateHandler'))
         .then((response) => {
             if (!response.error) {
-                this.completeCheckout($checkoutForm);
+                if (!callbackFn)
+                    this.completeCheckout($checkoutForm);
+                else
+                    callbackFn(response);
                 return;
             }
 
