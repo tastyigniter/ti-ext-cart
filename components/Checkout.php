@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Traits\ValidatesForm;
+use Event;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
