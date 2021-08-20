@@ -30,7 +30,7 @@
                                         value="{{ $paymentGateway->code }}"
                                         {!! $paymentIsSelected ? 'checked="checked"' : '' !!}
                                         {!! $paymentIsNotApplicable ? 'disabled="disabled"' : '' !!}
-                                        {!! $paymentGateway->requirePrecheckoutValidation() ? 'data-require-precheckout-validation="true"' : '' !!}
+                                        {!! $paymentGateway->requiresPreCheckoutValidation() ? 'data-requires-pre-checkout-validation="true"' : '' !!}
                                         autocomplete="off"
                                     />
                                     <label
