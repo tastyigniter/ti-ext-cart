@@ -318,7 +318,7 @@ class Checkout extends BaseComponent
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
-        Event::fire('igniter.cart.onValidateCheckout', [$data]);
+        Event::fire('igniter.checkout.onValidate', [$data]);
     }
 
     protected function createRules()
