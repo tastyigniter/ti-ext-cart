@@ -3,13 +3,13 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Traits\ValidatesForm;
-use Event;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redirect;
 use Main\Facades\Auth;
 use System\Classes\BaseComponent;
@@ -215,8 +215,6 @@ class Checkout extends BaseComponent
         try {
             $this->validatePostData($data);
 
-            Event::fire('igniter.cart.onConfirm', [$data]);
-
             $order = $this->getOrder();
             $this->orderManager->saveOrder($order, $data);
 
@@ -264,8 +262,6 @@ class Checkout extends BaseComponent
 
         try {
             $this->validatePostData($data);
-
-            Event::fire('igniter.cart.onValidate', [$data]);
 
             return [
                 'error' => false,
@@ -321,6 +317,8 @@ class Checkout extends BaseComponent
         if ($order->isDeliveryType()) {
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
+
+        Event::fire('igniter.cart.onValidateCheckout', [$data]);
     }
 
     protected function createRules()
