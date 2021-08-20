@@ -33,15 +33,26 @@
             .then((response) => {
                 if (!response.error) {
                     if (!callbackFn)
-                        $checkoutForm.request($checkoutForm.data('handler'))
+                        this.completeCheckout($checkoutForm);
                     else
                         callbackFn(response);
                     return;
                 }
 
-                $.ti.flashMessage({text: response.message, class: 'danger'});
+                $.ti.flashMessage({ text: response.message, class: 'danger' });
                 this.$checkoutBtn.prop('disabled', false)
             });
+    }
+
+    Checkout.prototype.completeCheckout = function ($checkoutForm) {
+        var _event = jQuery.Event('submitCheckoutForm')
+        $checkoutForm.trigger(_event)
+        if (_event.isDefaultPrevented()) {
+            this.$checkoutBtn.prop('disabled', false)
+            return false;
+        }
+
+        $checkoutForm.request($checkoutForm.data('handler'))
     }
 
     Checkout.prototype.confirmCheckout = function ($el) {
@@ -118,19 +129,12 @@
 
         event.preventDefault();
 
-        var _event = jQuery.Event('submitCheckoutForm')
-        $checkoutForm.trigger(_event)
-        if (_event.isDefaultPrevented()) {
-            this.$checkoutBtn.prop('disabled', false)
-            return false;
-        }
-
         if ($selectedPaymentMethod && $selectedPaymentMethod.data('requiresPreCheckoutValidation')) {
             this.validateCheckout($checkoutForm);
             return false;
         }
 
-        $checkoutForm.request($checkoutForm.data('handler'))
+        this.completeCheckout($checkoutForm);
     }
 
     Checkout.prototype.onFailCheckoutForm = function (event) {
