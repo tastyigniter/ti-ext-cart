@@ -28,15 +28,20 @@
             .on('ajaxFail ajaxDone', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
     }
 
-    Checkout.prototype.completeCheckout = function ($checkoutForm) {
-        var _event = jQuery.Event('submitCheckoutForm')
-        $checkoutForm.trigger(_event)
-        if (_event.isDefaultPrevented()) {
-            this.$checkoutBtn.prop('disabled', false)
-            return false;
-        }
+    Checkout.prototype.validateCheckout = function ($checkoutForm, callbackFn) {
+        $checkoutForm.request($checkoutForm.data('validateHandler'))
+            .then((response) => {
+                if (!response.error) {
+                    if (!callbackFn)
+                        $checkoutForm.request($checkoutForm.data('handler'))
+                    else
+                        callbackFn(response);
+                    return;
+                }
 
-        $checkoutForm.request($checkoutForm.data('handler'))
+                $.ti.flashMessage({text: response.message, class: 'danger'});
+                this.$checkoutBtn.prop('disabled', false)
+            });
     }
 
     Checkout.prototype.confirmCheckout = function ($el) {
@@ -113,32 +118,23 @@
 
         event.preventDefault();
 
-        if ($selectedPaymentMethod && $selectedPaymentMethod.data('requirePrecheckoutValidation')) {
-            this.onValidateCheckoutForm($checkoutForm);
-            return;
+        var _event = jQuery.Event('submitCheckoutForm')
+        $checkoutForm.trigger(_event)
+        if (_event.isDefaultPrevented()) {
+            this.$checkoutBtn.prop('disabled', false)
+            return false;
         }
 
-        this.completeCheckout($checkoutForm);
+        if ($selectedPaymentMethod && $selectedPaymentMethod.data('requiresPreCheckoutValidation')) {
+            this.validateCheckout($checkoutForm);
+            return false;
+        }
+
+        $checkoutForm.request($checkoutForm.data('handler'))
     }
 
     Checkout.prototype.onFailCheckoutForm = function (event) {
         $(this.options.formSelector).prop('disabled', false)
-    }
-
-    Checkout.prototype.onValidateCheckoutForm = function ($checkoutForm, callbackFn) {
-        $checkoutForm.request($checkoutForm.data('validateHandler'))
-        .then((response) => {
-            if (!response.error) {
-                if (!callbackFn)
-                    this.completeCheckout($checkoutForm);
-                else
-                    callbackFn(response);
-                return;
-            }
-
-            $.ti.flashMessage({ text: response.message, class: 'danger' });
-            this.$checkoutBtn.prop('disabled', false)
-        });
     }
 
     Checkout.DEFAULTS = {
