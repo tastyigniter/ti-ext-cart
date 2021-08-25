@@ -112,7 +112,7 @@ class Extension extends BaseExtension
         return [
             'settings' => [
                 'label' => 'Cart Settings',
-                'description' => 'Manage cart settings.',
+                'description' => 'Manage cart conditions and tipping settings.',
                 'icon' => 'fa fa-gear',
                 'model' => 'Igniter\Cart\Models\CartSettings',
                 'permissions' => ['Module.CartModule'],
