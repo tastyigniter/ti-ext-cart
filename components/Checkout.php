@@ -258,21 +258,10 @@ class Checkout extends BaseComponent
     public function onValidate()
     {
         $data = post();
+
         $data = $this->processDeliveryAddress($data);
 
-        try {
-            $this->validatePostData($data);
-
-            return [
-                'error' => false,
-            ];
-        }
-        catch (Exception $ex) {
-            return [
-                'error' => true,
-                'message' => $ex->getMessage(),
-            ];
-        }
+        $this->validatePostData($data);
     }
 
     protected function checkCheckoutSecurity()

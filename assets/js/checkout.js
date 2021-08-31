@@ -21,34 +21,29 @@
             .on('ajaxPromise', this.options.buttonSelector, function () {
                 $(this).prop('disabled', true)
             })
-            .on('ajaxFail ajaxDone', this.options.buttonSelector, function () {
+            .on('ajaxFail', this.options.buttonSelector, function () {
                 $(this).prop('disabled', false)
             })
             .on('submit', this.options.formSelector, $.proxy(this.onSubmitCheckoutForm, this))
-            .on('ajaxFail ajaxDone', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
+            .on('ajaxFail', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
     }
 
     Checkout.prototype.validateCheckout = function ($checkoutForm, callbackFn) {
-        $checkoutForm.request($checkoutForm.data('validateHandler'))
-            .then((response) => {
-                if (!response.error) {
-                    if (!callbackFn)
-                        this.completeCheckout($checkoutForm);
-                    else
-                        callbackFn(response);
-                    return;
-                }
-
-                $.ti.flashMessage({ text: response.message, class: 'danger' });
-                this.$checkoutBtn.prop('disabled', false)
-            });
+        $checkoutForm.request(this.options.validateHandler).done((response) => {
+            if (!callbackFn)
+                this.completeCheckout($checkoutForm);
+            else
+                callbackFn(response);
+        }).fail((response) => {
+            $(this.paymentInputSelector + ':checked', document).data('skipValidation', false)
+            this.$checkoutBtn.prop('disabled', false)
+        });
     }
 
     Checkout.prototype.completeCheckout = function ($checkoutForm) {
         var _event = jQuery.Event('submitCheckoutForm')
         $checkoutForm.trigger(_event)
         if (_event.isDefaultPrevented()) {
-            this.$checkoutBtn.prop('disabled', false)
             return false;
         }
 
@@ -57,6 +52,7 @@
 
     Checkout.prototype.confirmCheckout = function ($el) {
         this.$checkoutBtn.prop('disabled', true)
+        $(this.paymentInputSelector + ':checked', document).data('skipValidation', false)
         $($el.data('request-form')).submit()
     }
 
@@ -123,14 +119,15 @@
 
     Checkout.prototype.onSubmitCheckoutForm = function (event) {
         var $checkoutForm = $(event.target),
-            $selectedPaymentMethod = this.$el.find(this.paymentInputSelector + ':checked')
+            $selectedPaymentMethod = $(this.paymentInputSelector + ':checked', document)
 
         this.$checkoutBtn.prop('disabled', true)
 
         event.preventDefault();
 
-        if ($selectedPaymentMethod && $selectedPaymentMethod.data('requiresPreCheckoutValidation')) {
+        if ($selectedPaymentMethod && !$selectedPaymentMethod.data('skipValidation') && $selectedPaymentMethod.data('preValidateCheckout') === true) {
             this.validateCheckout($checkoutForm);
+            $selectedPaymentMethod.data('skipValidation', true)
             return false;
         }
 
@@ -138,7 +135,7 @@
     }
 
     Checkout.prototype.onFailCheckoutForm = function (event) {
-        $(this.options.formSelector).prop('disabled', false)
+        this.$checkoutBtn.prop('disabled', false)
     }
 
     Checkout.DEFAULTS = {
@@ -146,6 +143,7 @@
         formSelector: '#checkout-form',
         buttonSelector: '.checkout-btn',
         paymentInputName: 'payment',
+        validateHandler: undefined,
         choosePaymentHandler: undefined,
         deletePaymentHandler: undefined,
     }
@@ -179,12 +177,12 @@
     })
 
     $(document)
-        .on('ajaxPromise', '[data-payment-code]', function() {
+        .on('ajaxPromise', '[data-payment-code]', function () {
             var $indicatorContainer = $(this).closest('.progress-indicator-container')
             $indicatorContainer.prepend('<div class="progress-indicator"></div>')
             $indicatorContainer.addClass('is-loading')
         })
-        .on('ajaxFail ajaxDone', '[data-payment-code]', function() {
+        .on('ajaxFail ajaxDone', '[data-payment-code]', function () {
             var $indicatorContainer = $(this).closest('.progress-indicator-container')
             $('div.progress-indicator', $indicatorContainer).remove()
             $indicatorContainer.removeClass('is-loading')
