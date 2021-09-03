@@ -28,7 +28,7 @@ class Orders extends \System\Classes\BaseComponent
             'orderPage' => [
                 'label' => 'Account Order Page',
                 'type' => 'select',
-                'default' => 'account/order',
+                'default' => 'account'.DIRECTORY_SEPARATOR.'order',
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],

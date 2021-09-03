@@ -78,7 +78,7 @@ class CartBox extends \System\Classes\BaseComponent
                 'label' => 'Checkout Page',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
-                'default' => 'checkout/checkout',
+                'default' => 'checkout'.DIRECTORY_SEPARATOR.'checkout',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'localBoxAlias' => [

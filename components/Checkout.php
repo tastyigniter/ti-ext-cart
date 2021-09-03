@@ -82,7 +82,7 @@ class Checkout extends BaseComponent
             'menusPage' => [
                 'label' => 'Page to redirect to when checkout can not be performed',
                 'type' => 'select',
-                'default' => 'local/menus',
+                'default' => 'local'.DIRECTORY_SEPARATOR.'menus',
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
@@ -90,14 +90,14 @@ class Checkout extends BaseComponent
                 'label' => 'Page to redirect to when checkout fails',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
-                'default' => 'checkout/checkout',
+                'default' => 'checkout'.DIRECTORY_SEPARATOR.'checkout',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'successPage' => [
                 'label' => 'Page to redirect to when checkout is successful',
                 'type' => 'select',
                 'options' => [static::class, 'getThemePageOptions'],
-                'default' => 'checkout/success',
+                'default' => 'checkout'.DIRECTORY_SEPARATOR.'success',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'cartBoxAlias' => [
