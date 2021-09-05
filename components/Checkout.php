@@ -9,6 +9,7 @@ use Igniter\Cart\Classes\OrderManager;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redirect;
 use Main\Facades\Auth;
 use System\Classes\BaseComponent;
@@ -144,6 +145,7 @@ class Checkout extends BaseComponent
         $this->page['choosePaymentEventHandler'] = $this->getEventHandler('onChoosePayment');
         $this->page['deletePaymentEventHandler'] = $this->getEventHandler('onDeletePaymentProfile');
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
+        $this->page['validateCheckoutEventHandler'] = $this->getEventHandler('onValidate');
 
         $this->page['order'] = $this->getOrder();
         $this->page['paymentGateways'] = $this->getPaymentGateways();
@@ -210,19 +212,10 @@ class Checkout extends BaseComponent
 
         $data = $this->processDeliveryAddress($data);
 
-        $this->validateCheckoutSecurity();
-
         try {
-            $this->validate($data, $this->createRules(), [
-                'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
-            ]);
+            $this->validatePostData($data);
 
             $order = $this->getOrder();
-
-            if ($order->isDeliveryType()) {
-                $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
-            }
-
             $this->orderManager->saveOrder($order, $data);
 
             if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
@@ -262,6 +255,15 @@ class Checkout extends BaseComponent
         return $result;
     }
 
+    public function onValidate()
+    {
+        $data = post();
+
+        $data = $this->processDeliveryAddress($data);
+
+        $this->validatePostData($data);
+    }
+
     protected function checkCheckoutSecurity()
     {
         try {
@@ -289,6 +291,23 @@ class Checkout extends BaseComponent
         $this->cartManager->validateLocation();
 
         $this->cartManager->validateOrderTime();
+    }
+
+    protected function validatePostData($data)
+    {
+        $this->validateCheckoutSecurity();
+
+        $this->validate($data, $this->createRules(), [
+            'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
+        ]);
+
+        $order = $this->getOrder();
+
+        if ($order->isDeliveryType()) {
+            $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
+        }
+
+        Event::fire('igniter.checkout.onValidate', [$data]);
     }
 
     protected function createRules()
