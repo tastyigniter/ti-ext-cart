@@ -215,9 +215,10 @@ class Checkout extends BaseComponent
         $this->validateCheckoutSecurity();
 
         try {
-            $this->validateCheckout($data);
-
             $order = $this->getOrder();
+
+            $this->validateCheckout($data, $order);
+
             $this->orderManager->saveOrder($order, $data);
 
             if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
@@ -265,7 +266,11 @@ class Checkout extends BaseComponent
 
         $data = $this->processDeliveryAddress($data);
 
-        $this->validateCheckout($data);
+        $order = $this->getOrder();
+
+        $this->validateCheckout($data, $order);
+
+        $this->orderManager->saveOrder($order, $data);
     }
 
     protected function checkCheckoutSecurity()
@@ -297,13 +302,11 @@ class Checkout extends BaseComponent
         $this->cartManager->validateOrderTime();
     }
 
-    protected function validateCheckout($data)
+    protected function validateCheckout($data, $order)
     {
         $this->validate($data, $this->createRules(), [
             'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
         ]);
-
-        $order = $this->getOrder();
 
         if ($order->isDeliveryType()) {
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
