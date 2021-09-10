@@ -12,7 +12,7 @@
                     $currentAmount = $__SELF__->tippingSelectedAmount();
                 @endphp
                 @if ($tipAmounts = $__SELF__->tippingAmounts())
-                    <div class="btn-group btn-group-toggle w-100 text-center tip-amounts" data-toggle="buttons">
+                    <div class="btn-group btn-group-toggle w-100 text-center tip-amounts">
                         <button
                             type="button"
                             class="btn btn-light text-nowrap{{ $tipAmountType == 'none' ? ' active' : '' }}"
