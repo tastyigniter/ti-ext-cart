@@ -7,12 +7,14 @@ use Admin\Models\Menu_item_options_model;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menus_model;
 use Igniter\Coupons\Models\Coupons_model;
+use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Cart\CartItem;
 use Igniter\Flame\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Traits\Singleton;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 
 class CartManager
 {
@@ -166,6 +168,10 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
+        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], TRUE);
+        if ($condition instanceof CartCondition)
+            return $condition;
+
         if (strlen($code)) {
             if (!Coupons_model::isEnabled()->whereCode($code)->exists())
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
