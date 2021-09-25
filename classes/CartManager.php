@@ -168,7 +168,7 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
-        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], TRUE);
+        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code]);
         if ($condition instanceof CartCondition)
             return $condition;
 
