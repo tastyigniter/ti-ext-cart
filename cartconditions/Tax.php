@@ -34,6 +34,7 @@ class Tax extends CartCondition
         $this->taxRate = $this->taxRateLabel = setting('tax_percentage', 0);
         if ($this->taxInclusive)
             $this->taxRate /= (100 + $this->taxRate) / 100;
+
         $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
 
@@ -59,11 +60,18 @@ class Tax extends CartCondition
 
     public function calculate($total)
     {
-        if (Location::orderTypeIsDelivery() AND !$this->taxDelivery) {
+        $excludeDeliveryCharge = Location::orderTypeIsDelivery() AND !$this->taxDelivery;
+        if ($excludeDeliveryCharge) {
             $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
             $total -= (float)$deliveryCharge;
         }
 
-        return parent::calculate($total);
+        $result = parent::calculate($total);
+
+        if ($excludeDeliveryCharge) {
+            $result += (float)$deliveryCharge;
+        }
+
+        return $result;
     }
 }
