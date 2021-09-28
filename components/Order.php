@@ -3,6 +3,8 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
+use Exception;
+use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Menus_model;
 use Igniter\Flame\Cart\Facades\Cart;
@@ -119,15 +121,7 @@ class Order extends \System\Classes\BaseComponent
             if (!$menuModel = Menus_model::findBy($orderMenu->menu_id))
                 continue;
 
-            if (is_string($orderMenu->option_values))
-                $orderMenu->option_values = @unserialize($orderMenu->option_values);
-
-            if ($orderMenu->option_values instanceof Arrayable)
-                $orderMenu->option_values = $orderMenu->option_values->toArray();
-
-            $options = $this->prepareCartItemOptions($menuModel, $orderMenu->option_values);
-
-            Cart::add($menuModel, $orderMenu->quantity, $options, $orderMenu->comment);
+            $this->addCartItem($menuModel, $orderMenu);
         }
 
         flash()->success(sprintf(
@@ -155,6 +149,26 @@ class Order extends \System\Classes\BaseComponent
         return $this->param($this->property('hashParamName'));
     }
 
+    protected function addCartItem($menuModel, $orderMenu): void
+    {
+        try {
+            CartManager::instance()->validateCartMenuItem($menuModel, $orderMenu->quantity);
+
+            if (is_string($orderMenu->option_values))
+                $orderMenu->option_values = @unserialize($orderMenu->option_values);
+
+            if ($orderMenu->option_values instanceof Arrayable)
+                $orderMenu->option_values = $orderMenu->option_values->toArray();
+
+            $options = $this->prepareCartItemOptions($menuModel, $orderMenu->option_values);
+
+            Cart::add($menuModel, $orderMenu->quantity, $options, $orderMenu->comment);
+        }
+        catch (Exception $ex) {
+            flash()->warning($ex->getMessage());
+        }
+    }
+
     protected function prepareCartItemOptions($menuModel, $optionValues)
     {
         $options = [];
@@ -162,11 +176,18 @@ class Order extends \System\Classes\BaseComponent
             if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id']))
                 continue;
 
-            $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
-                return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
-            });
+            try {
+                CartManager::instance()->validateMenuItemOption($menuOption, $cartOption['values']->all());
 
-            $options[] = $cartOption;
+                $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
+                    return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
+                });
+
+                $options[] = $cartOption;
+            }
+            catch (Exception $ex) {
+                flash()->warning($ex->getMessage());
+            }
         }
 
         return $options;
