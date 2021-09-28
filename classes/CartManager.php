@@ -35,7 +35,7 @@ class CartManager
      */
     protected $settings;
 
-    protected $checkStock = FALSE;
+    protected $checkStock = TRUE;
 
     public function initialize()
     {
@@ -200,7 +200,7 @@ class CartManager
     //
     //
 
-    protected function validateCartMenuItem($menuItem, $quantity)
+    public function validateCartMenuItem($menuItem, $quantity)
     {
         $this->validateMenuItem($menuItem);
 
