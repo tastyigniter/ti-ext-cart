@@ -104,7 +104,7 @@ return [
                             ],
                             'value' => [
                                 'label' => 'lang:igniter.cart::default.column_tip_amount',
-                                'type' => 'money',
+                                'type' => 'currency',
                             ],
                         ],
                     ],
