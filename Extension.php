@@ -3,6 +3,7 @@
 namespace Igniter\Cart;
 
 use Admin\Models\Orders_model;
+use Igniter\Cart\Middleware\CartMiddleware;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Flame\Cart\Facades\Cart;
@@ -25,8 +26,7 @@ class Extension extends BaseExtension
     public function boot()
     {
         if (!$this->app->runningInAdmin()) {
-            $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
-                ->appendMiddlewareToGroup('web', \Igniter\Cart\Middleware\CartMiddleware::class);
+            $this->app['router']->pushMiddlewareToGroup('web', CartMiddleware::class);
         }
 
         $this->bindCartEvents();
