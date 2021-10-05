@@ -58,7 +58,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = Carbon::now();
         $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
 
-        return $orderDateTime->isAfter($currentDateTime)
+        return $currentDateTime->isAfter($orderDateTime)
             ? $orderDateTime->diffInRealHours($currentDateTime)
             : 0;
     }
@@ -68,7 +68,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = Carbon::now();
         $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
 
-        return $orderDateTime->isBefore($currentDateTime)
+        return $currentDateTime->isBefore($orderDateTime)
             ? $currentDateTime->diffInRealHours($orderDateTime)
             : 0;
     }
