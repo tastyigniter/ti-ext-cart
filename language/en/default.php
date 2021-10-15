@@ -206,9 +206,12 @@ return [
 
         'button_order' => 'Place New Order',
         'button_reorder' => 'Reorder',
+        'button_cancel' => 'Cancel',
         'button_view_order' => 'View/Reorder',
         'button_back' => 'Back',
 
         'alert_reorder_success' => 'You have successfully added the menus from order ID %s to your order.',
+        'alert_cancel_success' => 'Order successfully canceled.',
+        'alert_cancel_failed' => 'Unable to cancel order, please contact us.',
     ],
 ];

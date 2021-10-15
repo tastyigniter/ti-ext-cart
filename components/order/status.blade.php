@@ -42,4 +42,12 @@
             data-attach-loading
         >@lang('igniter.cart::default.orders.button_reorder')</button>
     @endif
+    @if ($__SELF__->showCancelButton())
+        <button
+            class="btn btn-light text-danger"
+            data-request="{{ $__SELF__.'::onCancel' }}"
+            data-request-data="orderId: {{ $order->order_id }}"
+            data-attach-loading
+        >@lang('igniter.cart::default.orders.button_cancel')</button>
+    @endif
 </div>

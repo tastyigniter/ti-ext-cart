@@ -3,11 +3,13 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
+use Admin\Models\Statuses_model;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Models\Menus_model;
 use Igniter\Flame\Cart\Facades\Cart;
+use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Redirect;
 use Main\Facades\Auth;
@@ -91,6 +93,23 @@ class Order extends \System\Classes\BaseComponent
         return $result;
     }
 
+    public function showCancelButton($order = null)
+    {
+        if (is_null($order) AND !$order = $this->getOrder())
+            return FALSE;
+
+        if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
+            return FALSE;
+
+        if (!$order->order_datetime->isFuture())
+            return FALSE;
+
+        if ($order->hasStatus(setting('canceled_order_status')))
+            return FALSE;
+
+        return $order->order_datetime->diffInRealMinutes() > $timeout;
+    }
+
     public function onRun()
     {
         $this->page['ordersPage'] = $this->property('ordersPage');
@@ -134,6 +153,25 @@ class Order extends \System\Classes\BaseComponent
             'orderId' => $orderId,
             'location' => $order->location->permalink_slug,
         ]));
+    }
+
+    public function onCancel()
+    {
+        if (!is_numeric($orderId = input('orderId')))
+            return;
+
+        if (!$order = Orders_model::find($orderId))
+            return;
+
+        if (!$this->showCancelButton($order))
+            throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
+
+        if (!$order->addStatusHistory(Statuses_model::find(setting('canceled_order_status'))))
+            throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
+
+        flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
+
+        return redirect()->back();
     }
 
     protected function getOrder()
