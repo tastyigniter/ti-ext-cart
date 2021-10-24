@@ -289,13 +289,16 @@ class CartBox extends \System\Classes\BaseComponent
             OR $this->cartManager->deliveryChargeIsUnavailable();
     }
 
-    public function buttonLabel()
+    public function buttonLabel($checkoutComponent = null)
     {
         if ($this->locationIsClosed())
             return lang('igniter.cart::default.text_is_closed');
 
         if (!$this->property('pageIsCheckout'))
             return lang('igniter.cart::default.button_order');
+
+        if ($checkoutComponent AND !$checkoutComponent->canConfirmCheckout())
+            return lang('igniter.cart::default.button_payment');
 
         return lang('igniter.cart::default.button_confirm');
     }

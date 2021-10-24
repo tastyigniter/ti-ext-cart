@@ -184,9 +184,6 @@ class OrderManager
         $order->address_id = $addressId;
         $this->applyRequiredAttributes($order);
 
-        if ($order->order_total > 0 AND !$order->payment)
-            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
-
         $order->save();
 
         $this->setCurrentOrderId($order->order_id);
