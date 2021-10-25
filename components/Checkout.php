@@ -41,7 +41,8 @@ class Checkout extends BaseComponent
         $this->orderManager = OrderManager::instance();
         $this->cartManager = CartManager::instance();
 
-        $this->checkoutStep = $this->param($this->property('stepParamName'), 'checkout');
+        if ($this->property('isMultiStepCheckout', FALSE))
+            $this->checkoutStep = $this->param($this->property('stepParamName'), 'details');
     }
 
     public function defineProperties()
