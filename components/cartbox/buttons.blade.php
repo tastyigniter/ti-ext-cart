@@ -9,4 +9,4 @@
     data-request="{{ $checkoutEventHandler }}"
     data-request-data="locationId: '{{ $__SELF__->getLocationId() }}'"
     @endif
->{{ $__SELF__->buttonLabel() }}</button>
+>{{ $__SELF__->buttonLabel($checkout ?? null) }}</button>

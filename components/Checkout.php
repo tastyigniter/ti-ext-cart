@@ -34,15 +34,26 @@ class Checkout extends BaseComponent
      */
     protected $order;
 
+    public $checkoutStep;
+
     public function initialize()
     {
         $this->orderManager = OrderManager::instance();
         $this->cartManager = CartManager::instance();
+
+        if ($this->property('isMultiStepCheckout', FALSE))
+            $this->checkoutStep = $this->param($this->property('stepParamName'), 'details');
     }
 
     public function defineProperties()
     {
         return [
+            'isMultiStepCheckout' => [
+                'label' => 'Whether to use a multi step checkout',
+                'type' => 'switch',
+                'default' => FALSE,
+                'validationRule' => 'required|boolean',
+            ],
             'showCountryField' => [
                 'label' => 'Whether to display the country form field',
                 'type' => 'switch',
@@ -107,6 +118,10 @@ class Checkout extends BaseComponent
                 'default' => 'cartBox',
                 'validationRule' => 'required|regex:/^[a-z0-9\-_]+$/i',
             ],
+            'stepParamName' => [
+                'type' => 'text',
+                'default' => 'step',
+            ],
         ];
     }
 
@@ -132,6 +147,7 @@ class Checkout extends BaseComponent
 
     protected function prepareVars()
     {
+        $this->page['isMultiStepCheckout'] = (bool)$this->property('isMultiStepCheckout', FALSE);
         $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
         $this->page['showPostcodeField'] = (bool)$this->property('showPostcodeField', 1);
         $this->page['showAddress2Field'] = (bool)$this->property('showAddress2Field', 1);
@@ -149,6 +165,7 @@ class Checkout extends BaseComponent
 
         $this->page['order'] = $this->getOrder();
         $this->page['paymentGateways'] = $this->getPaymentGateways();
+        $this->page['checkoutStep'] = $this->checkoutStep;
     }
 
     public function fetchPartials()
@@ -220,6 +237,9 @@ class Checkout extends BaseComponent
             $this->validateCheckout($data, $order);
 
             $this->orderManager->saveOrder($order, $data);
+
+            if (!$this->canConfirmCheckout())
+                return redirect()->to($this->currentPageUrl().'?step=pay');
 
             if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
                 return;
@@ -312,6 +332,9 @@ class Checkout extends BaseComponent
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
+        if ($this->canConfirmCheckout() AND $order->order_total > 0 AND !$order->payment)
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+
         Event::fire('igniter.checkout.afterValidate', [$data, $order]);
     }
 
@@ -323,8 +346,6 @@ class Checkout extends BaseComponent
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email:filter|max:96|unique:customers'],
             ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', 'regex:/^([0-9\s\-\+\(\)]*)$/i'],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
-            ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'],
-            ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'],
         ];
 
         if (Location::orderTypeIsDelivery()) {
@@ -336,6 +357,12 @@ class Checkout extends BaseComponent
             $namedRules[] = ['address.postcode', 'lang:igniter.cart::default.checkout.label_postcode', 'string'];
             $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'nullable|integer'];
         }
+
+        if ($this->checkoutStep === 'pay' AND $this->getOrder()->exists)
+            $namedRules = [];
+
+        $namedRules[] = ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'];
+        $namedRules[] = ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'];
 
         return $namedRules;
     }
@@ -375,5 +402,16 @@ class Checkout extends BaseComponent
     protected function getAgreeTermsPageSlug()
     {
         return $this->getStaticPagePermalink($this->property('agreeTermsPage'));
+    }
+
+    public function canConfirmCheckout()
+    {
+        if (!$this->property('isMultiStepCheckout', FALSE))
+            return TRUE;
+
+        if (optional($this->getOrder())->order_total < 1)
+            return TRUE;
+
+        return $this->checkoutStep === 'pay';
     }
 }

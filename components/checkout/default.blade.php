@@ -5,5 +5,5 @@
     data-validate-handler="{{ $validateCheckoutEventHandler }}"
     data-partial="checkoutForm"
 >
-    @partial('@form')
+    @partial($isMultiStepCheckout ? '@multi_step_form' : '@form')
 </div>
