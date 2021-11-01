@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    @if ($session AND !$session->customer())
+    @if ($session && !$session->customer())
         <div class="card mb-1">
             <div class="card-body text-center">
                 <a
@@ -20,7 +20,7 @@
             </div>
         </div>
     @else
-        @if ($showReviews AND !empty($reviewable))
+        @if ($showReviews && !empty($reviewable))
             <div class="card mb-1">
                 <div class="card-body">
                     @partial('localReview::form')

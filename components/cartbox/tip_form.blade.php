@@ -40,7 +40,7 @@
                 <div
                     class="input-group{{ $tipAmounts ? ' mt-2' : '' }}"
                     data-tip-custom
-                    {!! ($tipAmounts AND $tipAmountType != 'custom') ? 'style="display: none;"' : '' !!}
+                    {!! ($tipAmounts && $tipAmountType != 'custom') ? 'style="display: none;"' : '' !!}
                 >
                     <input
                         type="number"

@@ -7,7 +7,7 @@
             name="menu_options[{{ $index }}][option_values][]"
             value="{{ $optionValue->menu_option_value_id }}"
             data-option-price="{{ $optionValue->price }}"
-            @if (($cartItem AND $cartItem->hasOptionValue($menuOptionValueId)) OR $optionValue->isDefault())
+            @if (($cartItem && $cartItem->hasOptionValue($menuOptionValueId)) OR $optionValue->isDefault())
             checked="checked"
             @endif
         >

@@ -6,7 +6,7 @@
 >
     <form method="POST" data-request="{{ $formHandler }}">
         <div class="modal-content">
-            @if ($showCartItemThumb AND $menuItem->hasMedia('thumb'))
+            @if ($showCartItemThumb && $menuItem->hasMedia('thumb'))
                 <div class="modal-top">
                     <img
                         class="img-fluid" src="{!! $menuItem->thumb->getThumb([

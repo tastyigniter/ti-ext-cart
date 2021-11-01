@@ -2,7 +2,7 @@
 <button
     class="checkout-btn btn btn-primary {{ $locationIsClosed ? 'disabled' : '' }} btn-block btn-lg"
     data-attach-loading="disabled"
-    @if ($pageIsCheckout AND !$locationIsClosed)
+    @if ($pageIsCheckout && !$locationIsClosed)
     data-checkout-control="confirm-checkout"
     data-request-form="#checkout-form"
     @elseif (!$locationIsClosed)

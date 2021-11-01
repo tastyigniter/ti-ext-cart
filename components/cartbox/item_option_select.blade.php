@@ -5,10 +5,10 @@
 >
     <option>@lang('admin::lang.text_select')</option>
     @foreach ($optionValues as $optionValue)
-        @php $isSelected = ($cartItem AND $cartItem->hasOptionValue($optionValue->menu_option_value_id)); @endphp
+        @php $isSelected = ($cartItem && $cartItem->hasOptionValue($optionValue->menu_option_value_id)); @endphp
         <option
             value="{{ $optionValue->menu_option_value_id }}"
-            @if (($cartItem AND $cartItem->hasOptionValue($optionValue->menu_option_value_id)) OR $optionValue->isDefault())
+            @if (($cartItem && $cartItem->hasOptionValue($optionValue->menu_option_value_id)) OR $optionValue->isDefault())
             selected="selected"
             @endif
             data-option-price="{{ $optionValue->price }}"
