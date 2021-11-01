@@ -262,7 +262,7 @@ class Checkout extends BaseComponent
         $customer = Auth::customer();
         $payment = $this->orderManager->getPayment(post('code'));
 
-        if (!$payment OR !$payment->paymentProfileExists($customer))
+        if (!$payment || !$payment->paymentProfileExists($customer))
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
 
         $payment->deletePaymentProfile($customer);
@@ -332,7 +332,7 @@ class Checkout extends BaseComponent
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
-        if ($this->canConfirmCheckout() AND $order->order_total > 0 AND !$order->payment)
+        if ($this->canConfirmCheckout() && $order->order_total > 0 && !$order->payment)
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
 
         Event::fire('igniter.checkout.afterValidate', [$data, $order]);
@@ -358,7 +358,7 @@ class Checkout extends BaseComponent
             $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'nullable|integer'];
         }
 
-        if ($this->checkoutStep === 'pay' AND $this->getOrder()->exists)
+        if ($this->checkoutStep === 'pay' && $this->getOrder()->exists)
             $namedRules = [];
 
         $namedRules[] = ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'];
@@ -392,7 +392,7 @@ class Checkout extends BaseComponent
             $data['address'] = $address->toArray();
         }
 
-        if (isset($data['address']) AND !isset($data['address']['country_id'])) {
+        if (isset($data['address']) && !isset($data['address']['country_id'])) {
             $data['address']['country_id'] = setting('country_id');
         }
 

@@ -41,7 +41,7 @@ class Tax extends CartCondition
     public function beforeApply()
     {
         // only calculate taxes if enabled
-        if (!$this->taxMode OR !$this->taxRate)
+        if (!$this->taxMode || !$this->taxRate)
             return FALSE;
     }
 
@@ -60,7 +60,7 @@ class Tax extends CartCondition
 
     public function calculate($total)
     {
-        $excludeDeliveryCharge = Location::orderTypeIsDelivery() AND !$this->taxDelivery;
+        $excludeDeliveryCharge = Location::orderTypeIsDelivery() && !$this->taxDelivery;
         if ($excludeDeliveryCharge) {
             $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
             $total -= (float)$deliveryCharge;
