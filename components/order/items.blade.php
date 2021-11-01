@@ -54,6 +54,7 @@
                 <td class="border-top p-0" colspan="99999"></td>
             </tr>
             @foreach ($order->getOrderTotals() as $orderTotal)
+                @continue(!$orderTotal->is_summable)
                 @continue($order->isCollectionType() AND $orderTotal->code == 'delivery')
                 @php($thickLine = ($orderTotal->code == 'order_total' OR $orderTotal->code == 'total'))
                 <tr>
