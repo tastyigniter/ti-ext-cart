@@ -75,7 +75,7 @@ class Order extends \System\Classes\BaseComponent
             $result['default'] = 50;
         }
         elseif (in_array($order->status_id, setting('processing_order_status', []))
-            OR in_array($order->status_id, setting('completed_order_status', []))) {
+            || in_array($order->status_id, setting('completed_order_status', []))) {
             $result['default'] = 100;
         }
 
@@ -95,7 +95,7 @@ class Order extends \System\Classes\BaseComponent
 
     public function showCancelButton($order = null)
     {
-        if (is_null($order) AND !$order = $this->getOrder())
+        if (is_null($order) && !$order = $this->getOrder())
             return FALSE;
 
         if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
@@ -121,7 +121,7 @@ class Order extends \System\Classes\BaseComponent
 
         $this->addJs('js/order.js', 'checkout-js');
 
-        if (!$order OR !$order->isPaymentProcessed())
+        if (!$order || !$order->isPaymentProcessed())
             return Redirect::to($this->property('ordersPage'));
 
         if ($this->orderManager->isCurrentOrderId($order->order_id))

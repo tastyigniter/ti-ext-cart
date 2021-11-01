@@ -263,7 +263,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function onProceedToCheckout()
     {
         try {
-            if (!is_numeric($id = post('locationId')) OR !$location = Location::getById($id) OR !$location->location_status)
+            if (!is_numeric($id = post('locationId')) || !$location = Location::getById($id) || !$location->location_status)
                 throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
             Location::setCurrent($location);
@@ -286,7 +286,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function hasMinimumOrder()
     {
         return $this->cartManager->cartTotalIsBelowMinimumOrder()
-            OR $this->cartManager->deliveryChargeIsUnavailable();
+            || $this->cartManager->deliveryChargeIsUnavailable();
     }
 
     public function buttonLabel($checkoutComponent = null)
@@ -297,7 +297,7 @@ class CartBox extends \System\Classes\BaseComponent
         if (!$this->property('pageIsCheckout'))
             return lang('igniter.cart::default.button_order');
 
-        if ($checkoutComponent AND !$checkoutComponent->canConfirmCheckout())
+        if ($checkoutComponent && !$checkoutComponent->canConfirmCheckout())
             return lang('igniter.cart::default.button_payment');
 
         return lang('igniter.cart::default.button_confirm');
@@ -344,7 +344,7 @@ class CartBox extends \System\Classes\BaseComponent
     {
         $value = 0;
         $menuOptionValueId = $optionValue->menu_option_value_id;
-        if ($cartItem AND $cartItem->hasOptionValue($menuOptionValueId)) {
+        if ($cartItem && $cartItem->hasOptionValue($menuOptionValueId)) {
             $cartItem->options->search(function ($option) use ($menuOptionValueId, &$value) {
                 $option->values->each(function ($opt) use ($menuOptionValueId, &$value) {
                     if ($opt->id == $menuOptionValueId) {

@@ -149,7 +149,7 @@ class Extension extends BaseExtension
 
         Event::listen('igniter.user.login', function () {
             if (CartSettings::get('abandoned_cart')
-                AND Cart::content()->isEmpty()
+                && Cart::content()->isEmpty()
             ) {
                 Cart::restore(Auth::getId());
             }

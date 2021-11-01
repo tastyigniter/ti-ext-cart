@@ -70,7 +70,7 @@ class OrderManager
         $order = Orders_model::find($id);
 
         // Only users can view their own orders
-        if (!$order OR $order->customer_id != $customerId)
+        if (!$order || $order->customer_id != $customerId)
             $order = Orders_model::make($this->getCustomerAttributes());
 
         return $order;
@@ -124,13 +124,13 @@ class OrderManager
 
     public function validateCustomer($customer)
     {
-        if (!setting('guest_order') AND (!$customer OR !$customer->is_activated))
+        if (!setting('guest_order') && (!$customer || !$customer->is_activated))
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
     }
 
     public function validateDeliveryAddress(array $address)
     {
-        if (!array_get($address, 'country') AND isset($address['country_id']))
+        if (!array_get($address, 'country') && isset($address['country_id']))
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
 
         $addressString = implode(' ', array_only($address, [
@@ -141,7 +141,7 @@ class OrderManager
             return;
 
         $collection = app('geocoder')->geocode($addressString);
-        if (!$collection OR $collection->isEmpty())
+        if (!$collection || $collection->isEmpty())
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
 
         if (!$area = $this->location->current()->searchDeliveryArea($collection->first()->getCoordinates()))
@@ -200,11 +200,11 @@ class OrderManager
     {
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
-        if (!strlen($order->payment) AND $this->processPaymentLessForm($order))
+        if (!strlen($order->payment) && $this->processPaymentLessForm($order))
             return TRUE;
 
         $paymentMethod = $this->getPayment($order->payment);
-        if (!$paymentMethod OR !$paymentMethod->status)
+        if (!$paymentMethod || !$paymentMethod->status)
             throw new ApplicationException('Selected payment method is inactive, try a different one.');
 
         if (!$paymentMethod->isApplicable($order->order_total, $paymentMethod))
@@ -214,7 +214,7 @@ class OrderManager
                 $paymentMethod->name
             ));
 
-        if ($paymentMethod->hasApplicableFee() AND !optional($this->cart->getCondition('paymentFee'))->isApplied()) {
+        if ($paymentMethod->hasApplicableFee() && !optional($this->cart->getCondition('paymentFee'))->isApplied()) {
             throw new ApplicationException(sprintf(
                 lang('igniter.payregister::default.alert_missing_applicable_fee'),
                 $paymentMethod->name
