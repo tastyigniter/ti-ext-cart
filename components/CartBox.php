@@ -263,7 +263,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function onProceedToCheckout()
     {
         try {
-            if (!is_numeric($id = post('locationId')) || !$location = Location::getById($id) || !$location->location_status)
+            if (!is_numeric($id = post('locationId')) || !($location = Location::getById($id)) || !$location->location_status)
                 throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
             Location::setCurrent($location);
