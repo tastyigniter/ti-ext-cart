@@ -1,4 +1,4 @@
-@php $locationIsClosed = ($__SELF__->locationIsClosed() OR $__SELF__->hasMinimumOrder()); @endphp
+@php $locationIsClosed = ($__SELF__->locationIsClosed() || $__SELF__->hasMinimumOrder()); @endphp
 <button
     class="checkout-btn btn btn-primary {{ $locationIsClosed ? 'disabled' : '' }} btn-block btn-lg"
     data-attach-loading="disabled"

@@ -9,7 +9,7 @@
                             class="small pull-right text-muted">@lang('igniter.cart::default.text_required')</span>
                     @endif
                 </h5>
-                @if ($menuOption->min_selected > 0 OR $menuOption->max_selected > 0)
+                @if ($menuOption->min_selected > 0 || $menuOption->max_selected > 0)
                     <p class="mb-0">{!! sprintf(lang('igniter.cart::default.text_option_summary'), $menuOption->min_selected, $menuOption->max_selected) !!}</p>
                 @endif
             </div>

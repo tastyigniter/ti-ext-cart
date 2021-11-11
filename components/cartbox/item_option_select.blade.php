@@ -8,7 +8,7 @@
         @php $isSelected = ($cartItem && $cartItem->hasOptionValue($optionValue->menu_option_value_id)); @endphp
         <option
             value="{{ $optionValue->menu_option_value_id }}"
-            @if (($cartItem && $cartItem->hasOptionValue($optionValue->menu_option_value_id)) OR $optionValue->isDefault())
+            @if (($cartItem && $cartItem->hasOptionValue($optionValue->menu_option_value_id)) || $optionValue->isDefault())
             selected="selected"
             @endif
             data-option-price="{{ $optionValue->price }}"
