@@ -13,23 +13,12 @@ class Menus_model extends BaseMenus_model implements Buyable
         'allergens',
         'allergens.media',
         'mealtimes',
-        'menu_options',
-        'menu_options.option',
+        'menu_option_values.option_value',
     ];
 
     public static function findBy($menuId, $location = null)
     {
-        $query = self::query();
-
-        if (!is_null($location)) {
-            $query->with(['menu_options' => function ($query) use ($location) {
-                $query->whereHas('option', function ($query) use ($location) {
-                    $query->whereHasOrDoesntHaveLocation($location);
-                });
-            }]);
-        }
-
-        return $query->isEnabled()->whereKey($menuId)->first();
+        return self::query()->isEnabled()->whereKey($menuId)->first();
     }
 
     public function getMorphClass()
@@ -48,19 +37,6 @@ class Menus_model extends BaseMenus_model implements Buyable
     public function checkMinQuantity($quantity = 0)
     {
         return $quantity >= $this->minimum_qty;
-    }
-
-    public function outOfStock()
-    {
-        return $this->stock_qty < 0;
-    }
-
-    public function checkStockLevel($quantity = 0)
-    {
-        if ($this->stock_qty == 0)
-            return TRUE;
-
-        return $this->stock_qty >= $quantity;
     }
 
     public function hasOrderTypeRestriction($orderType)
