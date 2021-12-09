@@ -37,7 +37,7 @@ class Menus_model extends BaseMenus_model implements Buyable
         return 'menus';
     }
 
-    public function iSpecial()
+    public function isSpecial()
     {
         if (!$special = $this->special)
             return FALSE;
@@ -98,7 +98,7 @@ class Menus_model extends BaseMenus_model implements Buyable
      */
     public function getBuyablePrice()
     {
-        $price = $this->iSpecial()
+        $price = $this->isSpecial()
             ? $this->special->getMenuPrice($this->menu_price) : $this->menu_price;
 
         return $price;
