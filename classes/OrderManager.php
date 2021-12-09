@@ -287,7 +287,7 @@ class OrderManager
         $totals['total'] = [
             'code' => 'total',
             'title' => lang('igniter.cart::default.text_order_total'),
-            'value' => $this->cart->total(),
+            'value' => max(0, $this->cart->total()),
             'priority' => 999,
             'is_summable' => FALSE,
         ];
