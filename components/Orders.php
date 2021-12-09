@@ -47,11 +47,13 @@ class Orders extends \System\Classes\BaseComponent
         if (!$customer = Auth::customer())
             return [];
 
-        return Orders_model::with(['location', 'status'])->listFrontEnd([
-            'page' => $this->param('page'),
-            'pageLimit' => $this->property('itemsPerPage'),
-            'sort' => $this->property('sortOrder', 'created_at desc'),
-            'customer' => $customer,
-        ]);
+        return Orders_model::with(['location', 'status'])
+            ->whereProcessed(TRUE)
+            ->listFrontEnd([
+                'page' => $this->param('page'),
+                'pageLimit' => $this->property('itemsPerPage'),
+                'sort' => $this->property('sortOrder', 'created_at desc'),
+                'customer' => $customer,
+            ]);
     }
 }
