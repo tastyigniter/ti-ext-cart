@@ -98,13 +98,13 @@ class Order extends \System\Classes\BaseComponent
         if (is_null($order) && !$order = $this->getOrder())
             return FALSE;
 
+        if ($order->hasStatus(setting('canceled_order_status')))
+            return FALSE;
+
         if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
             return FALSE;
 
         if (!$order->order_datetime->isFuture())
-            return FALSE;
-
-        if ($order->hasStatus(setting('canceled_order_status')))
             return FALSE;
 
         return $order->order_datetime->diffInRealMinutes() > $timeout;
