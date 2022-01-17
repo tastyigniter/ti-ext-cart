@@ -328,7 +328,7 @@ class Checkout extends BaseComponent
             'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
         ]);
 
-        if ($order->isDeliveryType()) {
+        if ($this->checkoutStep === 'details' && $order->isDeliveryType()) {
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
