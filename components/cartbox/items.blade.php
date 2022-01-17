@@ -12,10 +12,10 @@
                     ><i class="fa fa-minus"></i></button>
 
                     <span class="price pull-right">
-                        <?php if ($cartItem->hasConditions()) { ?>
-                            <s class="text-muted"><?= currency_format($cartItem->subtotalWithoutConditions()); ?></s>/
-                        <?php } ?>
-                        <?= currency_format($cartItem->subtotal); ?>
+                        @if ($cartItem->hasConditions())
+                            <s class="text-muted">{{currency_format($cartItem->subtotalWithoutConditions())}}</s>/
+                        @endif
+                        {{ currency_format($cartItem->subtotal) }}
                     </span>
                     <a
                         class="name-image"

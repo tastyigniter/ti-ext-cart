@@ -74,19 +74,15 @@ class Order extends \System\Classes\BaseComponent
         if ($order->status_id == setting('default_order_status')) {
             $result['default'] = 50;
         }
-        elseif (in_array($order->status_id, setting('processing_order_status', []))
-            || in_array($order->status_id, setting('completed_order_status', []))) {
-            $result['default'] = 100;
-        }
 
         if (in_array($order->status_id, setting('processing_order_status', []))) {
+            $result['default'] = 100;
             $result['processing'] = 50;
-        }
-        elseif (in_array($order->status_id, setting('completed_order_status', []))) {
-            $result['processing'] = 100;
         }
 
         if (in_array($order->status_id, setting('completed_order_status', []))) {
+            $result['default'] = 100;
+            $result['processing'] = 100;
             $result['completed'] = 100;
         }
 
