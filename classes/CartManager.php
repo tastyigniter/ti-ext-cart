@@ -377,7 +377,7 @@ class CartManager
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_low_on_stock'),
                 $menuItem->menu_name,
-                $menuItem->stock_qty
+                $menuItem->stocks->where('location_id', $this->location->getId())->value('quantity')
             ));
         }
     }
