@@ -366,18 +366,18 @@ class CartManager
     public function validateMenuItemStockQty(Menus_model $menuItem, $quantity)
     {
         // checks if stock quantity is less than to zero
-        if ($menuItem->outOfStock()) {
+        if ($menuItem->outOfStock($this->location->getId())) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_out_of_stock'), $menuItem->menu_name
             ));
         }
 
         // checks if stock quantity is less than the cart quantity
-        if (!$menuItem->checkStockLevel($quantity)) {
+        if (!$menuItem->checkStockLevel($quantity, $this->location->getId())) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_low_on_stock'),
                 $menuItem->menu_name,
-                $menuItem->stock_qty
+                $menuItem->stocks->where('location_id', $this->location->getId())->value('quantity')
             ));
         }
     }

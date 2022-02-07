@@ -50,19 +50,6 @@ class Menus_model extends BaseMenus_model implements Buyable
         return $quantity >= $this->minimum_qty;
     }
 
-    public function outOfStock()
-    {
-        return $this->stock_qty < 0;
-    }
-
-    public function checkStockLevel($quantity = 0)
-    {
-        if ($this->stock_qty == 0)
-            return TRUE;
-
-        return $this->stock_qty >= $quantity;
-    }
-
     public function hasOrderTypeRestriction($orderType)
     {
         if (empty($this->order_restriction))
