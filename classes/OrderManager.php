@@ -329,6 +329,7 @@ class OrderManager
 
     public function clearOrder()
     {
+        $this->location->updateScheduleTimeSlot(null);
         $this->cart->destroy($this->getCustomerId());
         $this->resetSession();
     }
