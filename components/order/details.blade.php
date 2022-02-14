@@ -11,7 +11,7 @@
 <div class="card mb-1">
     <div class="card-body">
         <h2 class="h4 font-weight-normal">@lang('igniter.cart::default.checkout.text_comment')</h2>
-        <p class="mb-0">{!! !empty($order->comment) ? $order->comment : lang('igniter.cart::default.checkout.text_no_comment') !!}</p>
+        <p class="mb-0">{{ !empty($order->comment) ? $order->comment : lang('igniter.cart::default.checkout.text_no_comment') }}</p>
     </div>
 </div>
 
