@@ -48,6 +48,7 @@
                         class="form-control"
                         value="{{ $currentAmount }}"
                         placeholder="@lang('igniter.cart::default.text_apply_tip')"
+                        step="{{ 1 / (10 ** app('currency')->getDefault()->decimal_position) }}"
                     />
                     <div class="input-group-append">
                         <button
