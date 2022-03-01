@@ -84,6 +84,12 @@ class Checkout extends BaseComponent
                 'default' => TRUE,
                 'validationRule' => 'required|boolean',
             ],
+            'telephoneIsRequired' => [
+                'label' => 'Whether the telephone field should be required',
+                'type' => 'switch',
+                'default' => FALSE,
+                'validationRule' => 'required|boolean',
+            ],
             'agreeTermsPage' => [
                 'label' => 'lang:igniter.cart::default.checkout.label_checkout_terms',
                 'type' => 'select',
@@ -340,11 +346,15 @@ class Checkout extends BaseComponent
 
     protected function createRules()
     {
+        $telephoneRule = 'regex:/^([0-9\s\-\+\(\)]*)$/i';
+        if ($this->property('telephoneIsRequired', FALSE))
+            $telephoneRule = 'required|'.$telephoneRule;
+
         $namedRules = [
             ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|between:1,48'],
             ['last_name', 'lang:igniter.cart::default.checkout.label_last_name', 'required|between:1,48'],
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email:filter|max:96|unique:customers'],
-            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', 'regex:/^([0-9\s\-\+\(\)]*)$/i'],
+            ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', $telephoneRule],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
         ];
 
