@@ -131,6 +131,7 @@ class CartBox extends \System\Classes\BaseComponent
             '#cart-totals' => $this->renderPartial('@totals'),
             '#cart-buttons' => $this->renderPartial('@buttons'),
             '[data-cart-total]' => currency_format(Cart::total()),
+            '[data-cart-count]' => Cart::count(),
             '#notification' => $this->renderPartial('flash'),
         ];
     }
