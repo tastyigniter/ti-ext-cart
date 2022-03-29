@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Classes;
 
 use Admin\Models\Addresses_model;
+use Admin\Models\Customers_model;
 use Igniter\Cart\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Exception\ApplicationException;
@@ -41,6 +42,13 @@ class OrderManager
         $this->cart = CartManager::instance()->getCart();
         $this->location = App::make('location');
         $this->customer = Auth::customer();
+    }
+
+    public function setCustomer(Customers_model $customer)
+    {
+        $this->customer = $customer;
+
+        return $this;
     }
 
     public function getCustomerId()
