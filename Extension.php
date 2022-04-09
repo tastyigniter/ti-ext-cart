@@ -74,22 +74,22 @@ class Extension extends BaseExtension
     public function registerComponents()
     {
         return [
-            'Igniter\Cart\Components\CartBox' => [
+            \Igniter\Cart\Components\CartBox::class => [
                 'code' => 'cartBox',
                 'name' => 'lang:igniter.cart::default.text_component_title',
                 'description' => 'lang:igniter.cart::default.text_component_desc',
             ],
-            'Igniter\Cart\Components\Checkout' => [
+            \Igniter\Cart\Components\Checkout::class => [
                 'code' => 'checkout',
                 'name' => 'lang:igniter.cart::default.text_checkout_component_title',
                 'description' => 'lang:igniter.cart::default.text_checkout_component_desc',
             ],
-            'Igniter\Cart\Components\Orders' => [
+            \Igniter\Cart\Components\Orders::class => [
                 'code' => 'accountOrders',
                 'name' => 'lang:igniter.cart::default.orders.component_title',
                 'description' => 'lang:igniter.cart::default.orders.component_desc',
             ],
-            'Igniter\Cart\Components\Order' => [
+            \Igniter\Cart\Components\Order::class => [
                 'code' => 'orderPage',
                 'name' => 'lang:igniter.cart::default.orders.order_component_title',
                 'description' => 'lang:igniter.cart::default.orders.order_component_desc',
@@ -114,7 +114,7 @@ class Extension extends BaseExtension
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart conditions and tipping settings.',
                 'icon' => 'fa fa-gear',
-                'model' => 'Igniter\Cart\Models\CartSettings',
+                'model' => \Igniter\Cart\Models\CartSettings::class,
                 'permissions' => ['Module.CartModule'],
             ],
         ];
