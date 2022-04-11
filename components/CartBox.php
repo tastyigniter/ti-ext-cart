@@ -108,10 +108,11 @@ class CartBox extends \System\Classes\BaseComponent
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
+        $this->page['updateCartItemQtyEventHandler'] = $this->getEventHandler('onUpdateItemQuantity');
         $this->page['applyCouponEventHandler'] = $this->getEventHandler('onApplyCoupon');
         $this->page['applyTipEventHandler'] = $this->getEventHandler('onApplyTip');
         $this->page['loadCartItemEventHandler'] = $this->getEventHandler('onLoadItemPopup');
-        $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onRemoveItem');
+        $this->page['removeCartItemEventHandler'] = $this->getEventHandler('onUpdateItemQuantity');
         $this->page['removeConditionEventHandler'] = $this->getEventHandler('onRemoveCondition');
         $this->page['refreshCartEventHandler'] = $this->getEventHandler('onRefresh');
 
@@ -182,13 +183,14 @@ class CartBox extends \System\Classes\BaseComponent
         }
     }
 
-    public function onRemoveItem()
+    public function onUpdateItemQuantity()
     {
         try {
+            $action = (string)post('action');
             $rowId = (string)post('rowId');
             $quantity = (int)post('quantity');
 
-            $this->cartManager->updateCartItemQty($rowId, $quantity);
+            $this->cartManager->updateCartItemQty($rowId, $action ?: $quantity);
 
             $this->controller->pageCycle();
 
