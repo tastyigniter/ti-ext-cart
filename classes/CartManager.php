@@ -139,12 +139,20 @@ class CartManager
         $this->cart->remove($rowId);
     }
 
-    public function updateCartItemQty($rowId, $quantity = 0)
+    public function updateCartItemQty($rowId, $quantityOrAction = 0)
     {
         $cartItem = $this->getCartItem($rowId);
         $menuItem = $this->findMenuItem($cartItem->id);
 
-        $quantity = $quantity > 1 ? $quantity : $cartItem->qty - $menuItem->minimum_qty;
+        if ($quantityOrAction === 'plus') {
+            $quantity = $cartItem->qty + $menuItem->minimum_qty;
+        }
+        elseif ($quantityOrAction === 'minus') {
+            $quantity = max($cartItem->qty - $menuItem->minimum_qty, 0);
+        }
+        else {
+            $quantity = $quantityOrAction > 1 ? $quantityOrAction : $cartItem->qty - $menuItem->minimum_qty;
+        }
 
         return $this->cart->update($rowId, $quantity);
     }

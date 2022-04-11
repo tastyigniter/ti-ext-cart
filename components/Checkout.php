@@ -168,7 +168,8 @@ class Checkout extends BaseComponent
         $this->page['confirmCheckoutEventHandler'] = $this->getEventHandler('onConfirm');
         $this->page['validateCheckoutEventHandler'] = $this->getEventHandler('onValidate');
 
-        $this->page['order'] = $this->getOrder();
+        $this->page['order'] = $order = $this->getOrder();
+        $this->page['locationOrderType'] = resolve('location')->getOrderTypes()->get($order->order_type);
         $this->page['paymentGateways'] = $this->getPaymentGateways();
         $this->page['checkoutStep'] = $this->checkoutStep;
     }

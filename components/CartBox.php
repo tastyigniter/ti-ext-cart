@@ -40,15 +40,13 @@ class CartBox extends \System\Classes\BaseComponent
                 'label' => 'Cart item image width',
                 'type' => 'number',
                 'span' => 'left',
-                'default' => 720,
-                'validationRule' => 'integer',
+                'validationRule' => 'nullable|integer',
             ],
             'cartItemThumbHeight' => [
                 'label' => 'Cart item image height',
                 'type' => 'number',
                 'span' => 'right',
-                'default' => 300,
-                'validationRule' => 'integer',
+                'validationRule' => 'nullable|integer',
             ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
@@ -294,6 +292,9 @@ class CartBox extends \System\Classes\BaseComponent
         if ($this->locationIsClosed())
             return lang('igniter.cart::default.text_is_closed');
 
+        if (!$this->property('pageIsCheckout') && $this->cartManager->getCart()->count())
+            return lang('igniter.cart::default.button_order').' · '.currency_format($this->cartManager->getCart()->total());
+
         if (!$this->property('pageIsCheckout'))
             return lang('igniter.cart::default.button_order');
 
@@ -337,7 +338,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function tippingSelectedType()
     {
-        return optional($this->cartManager->getCart()->getCondition('tip'))->getMetaData('amountType', 'none') ?? 'none';
+        return optional($this->cartManager->getCart()->getCondition('tip'))->getMetaData('amountType');
     }
 
     public function getOptionQuantityTypeValue($cartItem, $optionValue)
