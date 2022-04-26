@@ -202,6 +202,11 @@ class CartBox extends \System\Classes\BaseComponent
         }
     }
 
+    public function onRemoveItem()
+    {
+        return $this->onUpdateItemQuantity();
+    }
+
     public function onApplyCoupon()
     {
         try {
