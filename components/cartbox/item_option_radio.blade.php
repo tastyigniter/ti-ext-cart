@@ -1,9 +1,9 @@
 @foreach ($optionValues as $optionValue)
-    <div class="custom-control custom-radio">
+    <div @class(['form-check', 'py-2' => !$loop->first || !$loop->last])>
         <input
             type="radio"
             id="menuOptionRadio{{ $menuOptionValueId = $optionValue->menu_option_value_id }}"
-            class="custom-control-input"
+            class="form-check-input"
             name="menu_options[{{ $index }}][option_values][]"
             value="{{ $optionValue->menu_option_value_id }}"
             data-option-price="{{ $optionValue->price }}"
@@ -11,13 +11,14 @@
             checked="checked"
             @endif
         >
+
         <label
-            class="custom-control-label w-100"
+            class="form-check-label ps-2 w-100"
             for="menuOptionRadio{{ $menuOptionValueId }}"
         >
             {{ $optionValue->name }}
             @if ($optionValue->price > 0 || !$hideZeroOptionPrices)
-                <span class="pull-right">@lang('main::lang.text_plus'){{ currency_format($optionValue->price) }}</span>
+                <span class="float-end fw-light">@lang('main::lang.text_plus'){{ currency_format($optionValue->price) }}</span>
             @endif
         </label>
     </div>

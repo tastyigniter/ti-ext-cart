@@ -27,9 +27,7 @@
     }
 
     CartBox.prototype.addItem = function ($el) {
-        $.request(this.options.updateItemHandler, {
-            data: $el.data(),
-        })
+        $el.request(this.options.updateItemHandler)
     }
 
     CartBox.prototype.removeItem = function ($el) {

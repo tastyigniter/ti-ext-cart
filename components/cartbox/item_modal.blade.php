@@ -9,10 +9,12 @@
             @if ($showCartItemThumb && $menuItem->hasMedia('thumb'))
                 <div class="modal-top">
                     <img
-                        class="img-fluid" src="{!! $menuItem->thumb->getThumb([
-                          'width' => $cartItemThumbWidth,
-                          'height' => $cartItemThumbHeight,
-                        ]) !!}"
+                        class="img-fluid"
+                        src="{!! $menuItem->thumb->getThumb([
+                              'width' => $cartItemThumbWidth,
+                              'height' => $cartItemThumbHeight,
+                            ]) !!}"
+                        alt="{{ $menuItem->getBuyableName() }}"
                     />
                 </div>
             @endif
@@ -21,7 +23,7 @@
                 <button
                     type="button"
                     class="close px-2"
-                    data-dismiss="modal"
+                    data-bs-dismiss="modal"
                 ><span aria-hidden="true">&times;</span></button>
                 <h4>{{ $menuItem->getBuyableName() }}</h4>
                 @if (strlen($menuItem->menu_description))
@@ -50,16 +52,14 @@
             </div>
 
             <div class="modal-footer">
-                <div class="row no-gutters w-100">
+                <div class="row g-0 w-100">
                     <div class="col-sm-5 pb-3 pb-sm-0">
-                        <div class="input-group" data-cart-toggle="quantity">
-                            <div class="input-group-prepend">
-                                <button
-                                    class="btn btn-light"
-                                    data-operator="minus"
-                                    type="button"
-                                ><i class="fa fa-minus"></i></button>
-                            </div>
+                        <div class="input-group" data-toggle="quantity">
+                            <button
+                                class="btn btn-light"
+                                data-operator="minus"
+                                type="button"
+                            ><i class="fa fa-minus"></i></button>
                             <input
                                 type="number"
                                 name="quantity"
@@ -68,25 +68,27 @@
                                 min="0"
                                 autocomplete="off"
                             >
-                            <div class="input-group-append">
-                                <button
-                                    class="btn btn-light"
-                                    data-operator="plus"
-                                    type="button"
-                                ><i class="fa fa-plus"></i></button>
-                            </div>
+                            <button
+                                class="btn btn-light"
+                                data-operator="plus"
+                                type="button"
+                            ><i class="fa fa-plus fa-fw"></i></button>
                         </div>
                     </div>
-                    <div class="col-sm-7 pl-sm-2">
-                        <button type="submit" class="btn btn-primary btn-block" data-attach-loading>
-                            {!! $cartItem
-                              ? lang('igniter.cart::default.button_update')
-                              : lang('igniter.cart::default.button_add_to_order') !!}
-                            <span class="pull-right" data-item-subtotal>
-                                {!! currency_format($cartItem
-                                    ? $cartItem->subtotal
-                                    : $menuItem->getBuyablePrice()) !!}
-                            </span>
+                    <div class="col-sm-7 pe-sm-2">
+                        <button type="submit" class="btn btn-primary btn-lg text-white w-100" data-attach-loading>
+                            <div class="d-flex align-items-center">
+                                <div class="col"></div>
+                                <div class="col text-nowrap">{!! $cartItem
+                                    ? lang('igniter.cart::default.button_update')
+                                    : lang('igniter.cart::default.button_add_to_order')
+                                !!}</div>
+                                <div class="col text-end fw-normal fs-6" data-item-subtotal>
+                                    {!! currency_format($cartItem
+                                        ? $cartItem->subtotal
+                                        : $menuItem->getBuyablePrice()) !!}
+                                </div>
+                            </div>
                         </button>
                     </div>
                 </div>

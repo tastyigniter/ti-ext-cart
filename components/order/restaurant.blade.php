@@ -1,8 +1,8 @@
 <div class="d-sm-flex">
     @if ($location->hasMedia('thumb'))
-        <div class="w-sm-25 d-none d-sm-block mr-sm-4">
+        <div class="w-sm-25 d-none d-sm-block me-sm-4">
             <img
-                class="img-responsive"
+                class="img-fluid"
                 src="{{ $location->getThumb() }}"
             >
         </div>
@@ -10,7 +10,7 @@
 
     <div class="">
         <dl class="no-spacing mb-0">
-            <dd><h2 class="h4 mb-0 font-weight-normal">{{ $location->location_name }}</h2></dd>
+            <dd><h2 class="h4 mb-0 fw-normal">{{ $location->location_name }}</h2></dd>
             <dd>
                 <span class="text-muted text-truncate">{!! format_address($location->getAddress(), FALSE) !!}</span>
             </dd>

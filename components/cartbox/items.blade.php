@@ -18,14 +18,14 @@
                         {{ currency_format($cartItem->subtotal) }}
                     </span>
                     <a
-                        class="name-image"
+                        class="text-reset name-image"
                         data-cart-control="load-item"
                         data-row-id="{{ $cartItem->rowId }}"
                         data-menu-id="{{ $cartItem->id }}"
                     >
                         <span class="name">
                             @if ($cartItem->qty > 1)
-                                <span class="quantity font-weight-bold">
+                                <span class="quantity fw-bold">
                                     {{ $cartItem->qty }} @lang('igniter.cart::default.text_times')
                                 </span>
                             @endif

@@ -1,11 +1,11 @@
-<h2 class="h4 mb-0 font-weight-normal">@lang('igniter.cart::default.checkout.text_order_details')</h2>
+<h2 class="h4 mb-0 fw-normal">@lang('igniter.cart::default.checkout.text_order_details')</h2>
 
 <div class="cart-items pt-2">
     <ul>
         @foreach ($order->getOrderMenusWithOptions() as $orderItem)
             <li>
                 <span class="price pull-right">{{ currency_format($orderItem->subtotal) }}</span>
-                <span class="name font-weight-bold">
+                <span class="name fw-bold">
                     @if ($orderItem->quantity > 1)
                         <span class="quantity">
                             {{ $orderItem->quantity }} @lang('igniter.cart::default.text_times')
@@ -58,10 +58,10 @@
                 @php($thickLine = ($orderTotal->code == 'order_total' || $orderTotal->code == 'total'))
                 @continue(!$thickLine && !$orderTotal->is_summable)
                 <tr>
-                    <td class="px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'text-muted border-0' }}">
+                    <td class="px-0 {{ $thickLine ? 'border-top lead fw-bold' : 'text-muted border-0' }}">
                         {{ $orderTotal->title }}
                     </td>
-                    <td class="text-right px-0 {{ $thickLine ? 'border-top lead font-weight-bold' : 'border-0' }}">
+                    <td class="text-right px-0 {{ $thickLine ? 'border-top lead fw-bold' : 'border-0' }}">
                         {{ currency_format($orderTotal->value) }}
                     </td>
                 </tr>

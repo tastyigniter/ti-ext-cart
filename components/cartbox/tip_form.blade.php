@@ -50,14 +50,12 @@
                         placeholder="@lang('igniter.cart::default.text_apply_tip')"
                         step="{{ 1 / (10 ** app('currency')->getDefault()->decimal_position) }}"
                     />
-                    <div class="input-group-append">
-                        <button
-                            type="submit"
-                            class="btn btn-light"
-                            data-replace-loading="fa fa-spinner fa-spin"
-                            title="@lang('igniter.cart::default.button_apply_tip')"
-                        ><i class="fa fa-check"></i></button>
-                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-light"
+                        data-replace-loading="fa fa-spinner fa-spin"
+                        title="@lang('igniter.cart::default.button_apply_tip')"
+                    ><i class="fa fa-check"></i></button>
                 </div>
             </div>
         </div>

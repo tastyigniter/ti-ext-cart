@@ -5,6 +5,7 @@
         $.fn.cartBox = {}
 
     var CartBoxModal = function (options) {
+        this.modal = null
         this.$modalRootElement = null
 
         this.options = $.extend({}, CartBoxModal.DEFAULTS, options)
@@ -14,8 +15,9 @@
     }
 
     CartBoxModal.prototype.dispose = function () {
-        this.$modalElement.modal('hide')
+        this.modal.dispose()
         this.$modalRootElement.remove()
+        this.modal = null
         this.$modalElement = null
         this.$modalRootElement = null
     }
@@ -26,64 +28,67 @@
 
         this.$modalRootElement = $('<div/>', {
             id: 'cart-box-modal',
-            class: 'modal',
+            class: 'modal fade',
             role: 'dialog',
             tabindex: -1,
-            ariaLabelled: '#cart-box-modal',
-            ariaHidden: true,
+            'aria-labelled': '#cart-box-modal',
+            'aria-hidden': true,
         })
 
-        this.$modalRootElement.one('hide.bs.modal', $.proxy(this.onModalHidden, this))
+        this.$modalRootElement.one('hidden.bs.modal', $.proxy(this.onModalHidden, this))
         this.$modalRootElement.one('shown.bs.modal', $.proxy(this.onModalShown, this))
     }
 
     CartBoxModal.prototype.show = function () {
         this.$modalRootElement.html(
             '<div class="modal-dialog"><div class="modal-content"><div class="modal-body"><div class="text-center">'
-            + '<span class="spinner"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><div class="mt-2">Loading...</div></span>'
-            + '</div></div></div></div>'
+            +'<span class="spinner"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><div class="mt-2">Loading...</div></span>'
+            +'</div></div></div></div>'
         );
 
-        this.$modalRootElement.modal()
+        $('body').append(this.$modalRootElement)
+
+        this.modal = new bootstrap.Modal('#cart-box-modal')
+        this.modal.show()
     }
 
     CartBoxModal.prototype.hide = function () {
         if (this.$modalElement)
-            this.$modalElement.trigger('hide.bs.modal')
+            this.modal.hide()
     }
 
     CartBoxModal.prototype.getCartBoxElement = function () {
         return this.$modalElement.find('[data-control="cart-options"]')
     }
-    
+
     CartBoxModal.prototype.onQuantityOrOptionChanged = function (event) {
         var inputEl = this.$modalElement.find('[name="quantity"]'),
             $cartItem = this.$modalElement.find('[data-control="cart-item"]');
 
         var price = $cartItem.data('priceAmount');
-                
-		this.$modalElement.find('input[data-option-price]:checked')
-            .each(function(idx, option){
-                var optionPrice = $(option).data('optionPrice')
-			    price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
-            });
-		
-		this.$modalElement.find('select[data-option-price] option:selected')
-            .each(function(idx, option){
+
+        this.$modalElement.find('input[data-option-price]:checked')
+            .each(function (idx, option) {
                 var optionPrice = $(option).data('optionPrice')
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
-            
-		this.$modalElement.find('input[data-option-price][type="number"]')
-            .each(function(idx, option){
-	            var val = parseInt($(option).val()),
+
+        this.$modalElement.find('select[data-option-price] option:selected')
+            .each(function (idx, option) {
+                var optionPrice = $(option).data('optionPrice')
+                price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
+            });
+
+        this.$modalElement.find('input[data-option-price][type="number"]')
+            .each(function (idx, option) {
+                var val = parseInt($(option).val()),
                     optionPrice = $(option).data('optionPrice');
-	            if (val > 0){
-			    	price += val * parseFloat(optionPrice === undefined ? 0 : optionPrice);
-			    }
-            });            
-		
-		price *= inputEl.val();
+                if (val > 0) {
+                    price += val * parseFloat(optionPrice === undefined ? 0 : optionPrice);
+                }
+            });
+
+        price *= inputEl.val();
 
         $cartItem.find('[data-item-subtotal]')
             .html(app.currencyFormat(price));
@@ -107,10 +112,10 @@
     CartBoxModal.prototype.onModalHidden = function (event) {
         var $cartItem = this.$modalElement.find('[data-control="cart-item"]')
 
+        this.dispose()
+
         $cartItem.cartItem('dispose')
         $cartItem.remove()
-
-        this.dispose()
 
         if (this.options.onClose !== undefined)
             this.options.onClose.call(this)
@@ -143,7 +148,7 @@
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
         $cartItem.on('ajaxFail', 'form', $.proxy(this.onFailedForm, this))
-        
+
         this.onQuantityOrOptionChanged()
 
         $cartItem.cartItem()

@@ -10,7 +10,7 @@
             href="{{ site_url('cart') }}"
         >
             @lang('igniter.cart::default.text_heading'):
-            <span data-cart-total class="font-weight-bold">{{ currency_format($cart->total()) }}</span>
+            <span data-cart-total class="fw-bold">{{ currency_format($cart->total()) }}</span>
         </a>
     @endif
 </div>

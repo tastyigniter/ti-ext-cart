@@ -28,7 +28,7 @@
     }
 
     CartItem.prototype.init = function () {
-        this.$qtyControlElement = this.$el.find('[data-cart-toggle="quantity"]')
+        this.$qtyControlElement = this.$el.find('[data-toggle="quantity"]')
 
         this.registerHandlers()
     }
@@ -48,7 +48,8 @@
 
     CartItem.prototype.onControlQuantity = function (event) {
         var $button = $(event.currentTarget),
-            $input = this.$qtyControlElement.find('input[name="quantity"]'),
+            $container = $button.closest('[data-toggle="quantity"]'),
+            $input = $container.find('input'),
             oldValue = parseFloat($input.val())
 
         if ($button.data('operator') === 'plus') {

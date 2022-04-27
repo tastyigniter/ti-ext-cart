@@ -28,8 +28,8 @@
             </div>
         @endif
 
-        <div class="row no-gutters">
-            <div class="col-sm-7 pr-sm-1">
+        <div class="row g-0">
+            <div class="col-sm-7 pe-sm-1">
                 <div class="card mb-1">
                     <div class="card-body">
                         @partial($__SELF__.'::restaurant', ['location' => $order->location])

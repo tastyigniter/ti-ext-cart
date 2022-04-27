@@ -1,20 +1,18 @@
 @php $customerAddresses = $order->listCustomerAddresses() @endphp
 <div class="form-group @if(!count($customerAddresses)) d-none @endif">
     <label for="">@lang('igniter.cart::default.checkout.text_delivery_address')</label>
-    <div class="input-group">
-        <select
-            class="form-control"
-            name="address_id"
-        >
-            <option value="0">@lang('igniter.cart::default.checkout.text_address')</option>
-            @foreach ($customerAddresses as $address)
-                <option
-                    value="{{ $address->address_id }}"
-                    {!! $order->address_id == $address->address_id ? 'selected="selected"' : '' !!}
-                >{!! $address->formatted_address !!}</option>
-            @endforeach
-        </select>
-    </div>
+    <select
+        class="form-select"
+        name="address_id"
+    >
+        <option value="0">@lang('igniter.cart::default.checkout.text_address')</option>
+        @foreach ($customerAddresses as $address)
+            <option
+                value="{{ $address->address_id }}"
+                {!! $order->address_id == $address->address_id ? 'selected="selected"' : '' !!}
+            >{!! $address->formatted_address !!}</option>
+        @endforeach
+    </select>
     {!! form_error('address_id', '<span class="text-danger">', '</span>') !!}
 </div>
 
@@ -104,7 +102,7 @@
             <label for="">@lang('igniter.cart::default.checkout.label_country')</label>
             <select
                 name="address[country_id]"
-                class="form-control"
+                class="form-select"
             >
                 @foreach (countries('country_name') as $key => $value)
                     <option

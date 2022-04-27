@@ -18,14 +18,14 @@
                                 class="list-group-item{{ $paymentIsSelected ? ' bg-light' : '' }}{{ $paymentIsNotApplicable ? ' disabled' : '' }}"
                             >
                                 <div
-                                    class="custom-control custom-radio"
+                                    class="form-check"
                                     data-checkout-control="choose-payment"
                                     data-payment-code="{{ $paymentGateway->code }}"
                                 >
                                     <input
                                         type="radio"
                                         id="payment-{{ $paymentGateway->code }}"
-                                        class="custom-control-input"
+                                        class="form-check-input"
                                         name="payment"
                                         value="{{ $paymentGateway->code }}"
                                         {!! $paymentIsSelected ? 'checked="checked"' : '' !!}
@@ -34,16 +34,16 @@
                                         autocomplete="off"
                                     />
                                     <label
-                                        class="custom-control-label d-block"
+                                        class="form-check-label d-block"
                                         for="payment-{{ $paymentGateway->code }}"
                                     >{{ $paymentGateway->name }}</label>
                                     @if (strlen($paymentGateway->description))
-                                        <p class="hide small font-weight-normal mb-0">
+                                        <p class="hide small fw-normal mb-0">
                                             {!! $paymentGateway->description !!}
                                         </p>
                                     @endif
                                     @if ($paymentIsNotApplicable)
-                                        <p class="small font-weight-normal mb-0">
+                                        <p class="small fw-normal mb-0">
                                             <em>
                                                 {!! sprintf(
                                                     lang('igniter.payregister::default.alert_min_order_total'),
@@ -54,7 +54,7 @@
                                         </p>
                                     @endif
                                     @if ($paymentGateway->hasApplicableFee())
-                                        <p class="small font-weight-normal mb-0">
+                                        <p class="small fw-normal mb-0">
                                             <em>
                                                 {!! sprintf(
                                                     lang('igniter.payregister::default.alert_order_fee'),

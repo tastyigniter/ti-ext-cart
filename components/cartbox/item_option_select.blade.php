@@ -1,6 +1,6 @@
 <select
     name="menu_options[{{ $index }}][option_values][]"
-    class="form-control my-2"
+    class="form-select"
     data-option-price
 >
     <option>@lang('admin::lang.text_select')</option>
