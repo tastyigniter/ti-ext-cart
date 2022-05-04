@@ -35,7 +35,7 @@ class CartManager
      */
     protected $settings;
 
-    protected $checkStock = TRUE;
+    protected $checkStock = true;
 
     public function initialize()
     {
@@ -165,7 +165,7 @@ class CartManager
     public function applyCondition($name, array $metaData = [])
     {
         if (!$condition = $this->cart->getCondition($name))
-            return FALSE;
+            return false;
 
         $condition->setMetaData($metaData);
 
@@ -176,7 +176,7 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
-        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], TRUE);
+        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], true);
         if ($condition instanceof CartCondition)
             return $condition;
 
@@ -194,7 +194,7 @@ class CartManager
 
         $conditions = $this->settings->get('conditions') ?: [];
         foreach ($conditions as $name => $definition) {
-            if (!(bool)array_get($definition, 'status', TRUE))
+            if (!(bool)array_get($definition, 'status', true))
                 continue;
 
             $className = array_get($definition, 'className');
@@ -243,7 +243,7 @@ class CartManager
                 'id' => $menuOption->menu_option_id,
                 'name' => $menuOption->option_name,
                 'values' => $menuOptionValues->all(),
-            ] : FALSE;
+            ] : false;
         })->filter()->all();
     }
 

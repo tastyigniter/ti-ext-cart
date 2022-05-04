@@ -42,7 +42,7 @@ class Tax extends CartCondition
     {
         // only calculate taxes if enabled
         if (!$this->taxMode || !$this->taxRate)
-            return FALSE;
+            return false;
     }
 
     public function getActions()

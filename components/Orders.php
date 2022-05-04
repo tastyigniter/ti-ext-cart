@@ -48,7 +48,7 @@ class Orders extends \System\Classes\BaseComponent
             return [];
 
         return Orders_model::with(['location', 'status'])
-            ->whereProcessed(TRUE)
+            ->whereProcessed(true)
             ->listFrontEnd([
                 'page' => $this->param('page'),
                 'pageLimit' => $this->property('itemsPerPage'),

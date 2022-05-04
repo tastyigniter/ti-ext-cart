@@ -49,7 +49,7 @@ class Order extends \System\Classes\BaseComponent
             'hideReorderBtn' => [
                 'label' => 'Whether to hide the reorder button, should be hidden on the checkout success page',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'hashParamName' => [
@@ -92,16 +92,16 @@ class Order extends \System\Classes\BaseComponent
     public function showCancelButton($order = null)
     {
         if (is_null($order) && !$order = $this->getOrder())
-            return FALSE;
+            return false;
 
         if ($order->hasStatus(setting('canceled_order_status')))
-            return FALSE;
+            return false;
 
         if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
-            return FALSE;
+            return false;
 
         if (!$order->order_datetime->isFuture())
-            return FALSE;
+            return false;
 
         return $order->order_datetime->diffInRealMinutes() > $timeout;
     }

@@ -22,13 +22,13 @@ return [
                 'label' => 'lang:igniter.cart::default.label_abandoned_cart',
                 'type' => 'switch',
                 'span' => 'left',
-                'default' => FALSE,
+                'default' => false,
             ],
             'destroy_on_logout' => [
                 'label' => 'lang:igniter.cart::default.label_destroy_on_logout',
                 'type' => 'switch',
                 'span' => 'right',
-                'default' => FALSE,
+                'default' => false,
             ],
         ],
         'tabs' => [
@@ -36,9 +36,9 @@ return [
                 'conditions' => [
                     'tab' => 'lang:igniter.cart::default.label_cart_conditions',
                     'type' => 'repeater',
-                    'sortable' => TRUE,
-                    'showAddButton' => FALSE,
-                    'showRemoveButton' => FALSE,
+                    'sortable' => true,
+                    'showAddButton' => false,
+                    'showRemoveButton' => false,
                     'commentAbove' => 'lang:igniter.cart::default.help_cart_conditions',
                     'form' => [
                         'fields' => [
@@ -50,7 +50,7 @@ return [
                                 'label' => 'lang:igniter.cart::default.column_condition_name',
                                 'type' => 'text',
                                 'attributes' => [
-                                    'readonly' => TRUE,
+                                    'readonly' => true,
                                 ],
                             ],
                             'label' => [
@@ -60,7 +60,7 @@ return [
                             'status' => [
                                 'label' => 'lang:admin::lang.label_status',
                                 'type' => 'switch',
-                                'default' => TRUE,
+                                'default' => true,
                             ],
                         ],
                     ],
@@ -69,7 +69,7 @@ return [
                     'tab' => 'lang:igniter.cart::default.label_tipping',
                     'label' => 'lang:igniter.cart::default.label_enable_tipping',
                     'type' => 'switch',
-                    'default' => FALSE,
+                    'default' => false,
                     'on' => 'lang:admin::lang.text_yes',
                     'off' => 'lang:admin::lang.text_no',
                 ],
@@ -93,9 +93,9 @@ return [
                     'label' => 'lang:igniter.cart::default.label_tip_amounts',
                     'type' => 'repeater',
                     'span' => 'left',
-                    'sortable' => TRUE,
-                    'showAddButton' => TRUE,
-                    'showRemoveButton' => TRUE,
+                    'sortable' => true,
+                    'showAddButton' => true,
+                    'showRemoveButton' => true,
                     'form' => [
                         'fields' => [
                             'priority' => [
