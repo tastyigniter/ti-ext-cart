@@ -40,7 +40,7 @@ class Menus_model extends BaseMenus_model implements Buyable
     public function isSpecial()
     {
         if (!$special = $this->special)
-            return FALSE;
+            return false;
 
         return $special->active();
     }
@@ -53,7 +53,7 @@ class Menus_model extends BaseMenus_model implements Buyable
     public function hasOrderTypeRestriction($orderType)
     {
         if (empty($this->order_restriction))
-            return FALSE;
+            return false;
 
         return !in_array($orderType, $this->order_restriction);
     }

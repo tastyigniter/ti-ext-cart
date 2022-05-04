@@ -101,7 +101,7 @@ class OrderManager
 
     public function getDefaultPayment()
     {
-        return $this->getPaymentGateways()->where('is_default', TRUE)->first();
+        return $this->getPaymentGateways()->where('is_default', true)->first();
     }
 
     /**
@@ -209,7 +209,7 @@ class OrderManager
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
         if (!strlen($order->payment) && $this->processPaymentLessForm($order))
-            return TRUE;
+            return true;
 
         $paymentMethod = $this->getPayment($order->payment);
         if (!$paymentMethod || !$paymentMethod->status)
@@ -289,7 +289,7 @@ class OrderManager
             'title' => lang('igniter.cart::default.text_sub_total'),
             'value' => $this->cart->subtotal(),
             'priority' => 0,
-            'is_summable' => FALSE,
+            'is_summable' => false,
         ];
 
         $totals['total'] = [
@@ -297,7 +297,7 @@ class OrderManager
             'title' => lang('igniter.cart::default.text_order_total'),
             'value' => max(0, $this->cart->total()),
             'priority' => 999,
-            'is_summable' => FALSE,
+            'is_summable' => false,
         ];
 
         return $totals;
@@ -310,12 +310,12 @@ class OrderManager
     protected function processPaymentLessForm($order)
     {
         if ($order->order_total > 0)
-            return FALSE;
+            return false;
 
-        $order->updateOrderStatus(setting('default_order_status'), ['notify' => FALSE]);
+        $order->updateOrderStatus(setting('default_order_status'), ['notify' => false]);
         $order->markAsPaymentProcessed();
 
-        return TRUE;
+        return true;
     }
 
     protected function applyOrderDateTime($order)

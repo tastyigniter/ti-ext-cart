@@ -23,7 +23,7 @@ class CartBox extends \System\Classes\BaseComponent
     public function initialize()
     {
         $this->cartManager = CartManager::instance()->checkStock(
-            (bool)$this->property('checkStockCheckout', TRUE)
+            (bool)$this->property('checkStockCheckout', true)
         );
     }
 
@@ -33,7 +33,7 @@ class CartBox extends \System\Classes\BaseComponent
             'showCartItemThumb' => [
                 'label' => 'Show cart menu item image in the popup',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'cartItemThumbWidth' => [
@@ -51,25 +51,25 @@ class CartBox extends \System\Classes\BaseComponent
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
-                'default' => TRUE,
+                'default' => true,
                 'validationRule' => 'required|boolean',
             ],
             'pageIsCheckout' => [
                 'label' => 'Whether this component is loaded on the checkout page',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'pageIsCart' => [
                 'label' => 'Whether this component is loaded on the cart page',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'hideZeroOptionPrices' => [
                 'label' => 'Whether to hide zero prices on options',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'checkoutPage' => [
@@ -99,7 +99,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     protected function prepareVars()
     {
-        $this->page['showCartItemThumb'] = $this->property('showCartItemThumb', FALSE);
+        $this->page['showCartItemThumb'] = $this->property('showCartItemThumb', false);
         $this->page['cartItemThumbWidth'] = $this->property('cartItemThumbWidth');
         $this->page['cartItemThumbHeight'] = $this->property('cartItemThumbHeight');
         $this->page['pageIsCart'] = $this->property('pageIsCart');
@@ -230,7 +230,7 @@ class CartBox extends \System\Classes\BaseComponent
                 throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
 
             $amount = post('amount');
-            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === FALSE)
+            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === false)
                 throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
 
             $this->cartManager->applyCondition('tip', [

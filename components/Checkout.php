@@ -50,43 +50,43 @@ class Checkout extends BaseComponent
             'isMultiStepCheckout' => [
                 'label' => 'Whether to use a multi step checkout',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'showCountryField' => [
                 'label' => 'Whether to display the country form field',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'showPostcodeField' => [
                 'label' => 'Whether to display the postcode form field',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'showAddress2Field' => [
                 'label' => 'Whether to display the address 2 form field',
                 'type' => 'switch',
-                'default' => TRUE,
+                'default' => true,
                 'validationRule' => 'required|boolean',
             ],
             'showCityField' => [
                 'label' => 'Whether to display the city form field',
                 'type' => 'switch',
-                'default' => TRUE,
+                'default' => true,
                 'validationRule' => 'required|boolean',
             ],
             'showStateField' => [
                 'label' => 'Whether to display the state form field',
                 'type' => 'switch',
-                'default' => TRUE,
+                'default' => true,
                 'validationRule' => 'required|boolean',
             ],
             'telephoneIsRequired' => [
                 'label' => 'Whether the telephone field should be required',
                 'type' => 'switch',
-                'default' => FALSE,
+                'default' => false,
                 'validationRule' => 'required|boolean',
             ],
             'agreeTermsPage' => [
@@ -152,7 +152,7 @@ class Checkout extends BaseComponent
 
     protected function prepareVars()
     {
-        $this->page['isMultiStepCheckout'] = (bool)$this->property('isMultiStepCheckout', FALSE);
+        $this->page['isMultiStepCheckout'] = (bool)$this->property('isMultiStepCheckout', false);
         $this->page['showCountryField'] = (bool)$this->property('showCountryField', 1);
         $this->page['showPostcodeField'] = (bool)$this->property('showPostcodeField', 1);
         $this->page['showAddress2Field'] = (bool)$this->property('showAddress2Field', 1);
@@ -247,7 +247,7 @@ class Checkout extends BaseComponent
             if (!$this->canConfirmCheckout())
                 return redirect()->to($this->currentPageUrl().'?step=pay');
 
-            if (($redirect = $this->orderManager->processPayment($order, $data)) === FALSE)
+            if (($redirect = $this->orderManager->processPayment($order, $data)) === false)
                 return;
 
             if ($redirect instanceof RedirectResponse)
@@ -305,15 +305,15 @@ class Checkout extends BaseComponent
             $this->validateCheckoutSecurity();
 
             if ($this->cartManager->cartTotalIsBelowMinimumOrder())
-                return TRUE;
+                return true;
 
             if ($this->cartManager->deliveryChargeIsUnavailable())
-                return TRUE;
+                return true;
         }
         catch (Exception $ex) {
             flash()->warning($ex->getMessage())->now();
 
-            return TRUE;
+            return true;
         }
     }
 
@@ -347,7 +347,7 @@ class Checkout extends BaseComponent
     protected function createRules()
     {
         $telephoneRule = 'regex:/^([0-9\s\-\+\(\)]*)$/i';
-        if ($this->property('telephoneIsRequired', FALSE))
+        if ($this->property('telephoneIsRequired', false))
             $telephoneRule = 'required|'.$telephoneRule;
 
         $namedRules = [
@@ -386,7 +386,7 @@ class Checkout extends BaseComponent
     {
         $order = $this->getOrder();
         if (!$order->isPaymentProcessed())
-            return FALSE;
+            return false;
 
         $redirectUrl = $order->getUrl($this->property('successPage'));
         if ($this->isCheckoutSuccessPage())
@@ -416,11 +416,11 @@ class Checkout extends BaseComponent
 
     public function canConfirmCheckout()
     {
-        if (!$this->property('isMultiStepCheckout', FALSE))
-            return TRUE;
+        if (!$this->property('isMultiStepCheckout', false))
+            return true;
 
         if (optional($this->getOrder())->order_total < 1)
-            return TRUE;
+            return true;
 
         return $this->checkoutStep === 'pay';
     }

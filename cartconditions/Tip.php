@@ -8,7 +8,7 @@ use System\Models\Currencies_model;
 
 class Tip extends CartCondition
 {
-    protected $tippingEnabled = FALSE;
+    protected $tippingEnabled = false;
 
     protected $tipValueType;
 
@@ -28,14 +28,14 @@ class Tip extends CartCondition
     public function beforeApply()
     {
         if (!$this->tippingEnabled)
-            return FALSE;
+            return false;
 
         // if amount is not set, empty or 0
         if (!$tipAmount = $this->getMetaData('amount'))
-            return FALSE;
+            return false;
 
         $value = $this->getMetaData('amount');
-        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === FALSE || $value < 0) {
+        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === false || $value < 0) {
             $this->removeMetaData('amount');
             flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
         }

@@ -178,21 +178,21 @@ class Extension extends BaseExtension
             if (!$object instanceof Orders_model)
                 return;
 
-            Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], TRUE);
+            Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], true);
         });
 
         Event::listen('admin.statusHistory.added', function ($model, $statusHistory) {
             if (!$model instanceof Orders_model)
                 return;
 
-            Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], TRUE);
+            Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], true);
         });
 
         Event::listen('admin.assignable.assigned', function ($model) {
             if (!$model instanceof Orders_model)
                 return;
 
-            Event::fire('igniter.cart.orderAssigned', [$model], TRUE);
+            Event::fire('igniter.cart.orderAssigned', [$model], true);
         });
     }
 }
