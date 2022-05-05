@@ -6,6 +6,14 @@
 >
     <form method="POST" data-request="{{ $formHandler }}">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ $menuItem->getBuyableName() }}</h4>
+                <button
+                    type="button"
+                    class="btn-close px-2"
+                    data-bs-dismiss="modal"
+                ></button>
+            </div>
             @if ($showCartItemThumb && $menuItem->hasMedia('thumb'))
                 <div class="modal-top">
                     <img
@@ -20,12 +28,6 @@
             @endif
 
             <div class="modal-body">
-                <button
-                    type="button"
-                    class="close px-2"
-                    data-bs-dismiss="modal"
-                ><span aria-hidden="true">&times;</span></button>
-                <h4>{{ $menuItem->getBuyableName() }}</h4>
                 @if (strlen($menuItem->menu_description))
                     <p class="text-muted">{!! nl2br($menuItem->menu_description) !!}</p>
                 @endif
@@ -54,7 +56,7 @@
             <div class="modal-footer">
                 <div class="row g-0 w-100">
                     <div class="col-sm-5 pb-3 pb-sm-0">
-                        <div class="input-group" data-toggle="quantity">
+                        <div class="input-group input-group-lg" data-toggle="quantity">
                             <button
                                 class="btn btn-light"
                                 data-operator="minus"
@@ -75,7 +77,7 @@
                             ><i class="fa fa-plus fa-fw"></i></button>
                         </div>
                     </div>
-                    <div class="col-sm-7 pe-sm-2">
+                    <div class="col-sm-7 ps-sm-3">
                         <button type="submit" class="btn btn-primary btn-lg text-white w-100" data-attach-loading>
                             <div class="d-flex align-items-center">
                                 <div class="col"></div>

@@ -1,4 +1,4 @@
-<div class="label label-light mb-3">
+<div class="label label-secondary mb-3">
     <span class="h6">
         <i class="fa fa-clock"></i>&nbsp;
         {{ $order->order_datetime->isoFormat($orderDateTimeFormat) }}
