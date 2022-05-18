@@ -15,6 +15,11 @@
       "email": "sam@sampoyigi.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Igniter\\Cart\\": "src/"
+    }
+  },
   "extra": {
     "tastyigniter-extension": {
       "code": "igniter.cart",
