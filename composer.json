@@ -22,7 +22,6 @@
   },
   "extra": {
     "tastyigniter-extension": {
-      "code": "igniter.cart",
       "name": "Cart",
       "icon": {
         "class": "fa fa-shopping-cart",
