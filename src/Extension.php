@@ -7,6 +7,7 @@ use Igniter\Cart\Middleware\CartMiddleware;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Flame\Cart\Facades\Cart;
+use Igniter\Igniter;
 use Igniter\Local\Facades\Location;
 use Igniter\Main\Facades\Auth;
 use Igniter\System\Classes\BaseExtension;
@@ -25,7 +26,7 @@ class Extension extends BaseExtension
 
     public function boot()
     {
-        if (!$this->app->runningInAdmin()) {
+        if (!Igniter::runningInAdmin()) {
             $this->app['router']->pushMiddlewareToGroup('web', CartMiddleware::class);
         }
 
