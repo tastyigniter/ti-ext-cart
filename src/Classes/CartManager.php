@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\Classes;
 
-use Igniter\Admin\Models\MenuItemOption;
 use Igniter\Admin\Models\MenuItemOptionValue;
+use Igniter\Admin\Models\MenuOption;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
 use Igniter\Coupons\Models\Coupon;
@@ -222,14 +222,14 @@ class CartManager
 
     protected function prepareCartMenuItemOptions(Collection $menuOptions, array $selected)
     {
-        $selected = collect($selected)->keyBy('menu_option_id');
-        $menuOptions = $menuOptions->keyBy('menu_option_id')->sortBy('priority');
+        $selected = collect($selected)->keyBy('option_id');
+        $menuOptions = $menuOptions->keyBy('option_id')->sortBy('priority');
 
-        return $menuOptions->map(function (MenuItemOption $menuOption) use ($selected) {
+        return $menuOptions->map(function (MenuOption $menuOption) use ($selected) {
             $selectedOption = $selected->get($menuOption->getKey());
             $selectedValues = array_filter(array_get($selectedOption, 'option_values', []));
 
-            if ($menuOption->option->display_type != 'quantity') {
+            if ($menuOption->display_type != 'quantity') {
                 $selectedValues = array_filter($selectedValues, 'ctype_digit');
             }
 
@@ -240,7 +240,7 @@ class CartManager
             );
 
             return $menuOptionValues->isNotEmpty() ? [
-                'id' => $menuOption->menu_option_id,
+                'id' => $menuOption->option_id,
                 'name' => $menuOption->option_name,
                 'values' => $menuOptionValues->all(),
             ] : false;
@@ -285,7 +285,7 @@ class CartManager
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
-            $menuOptions = $menuItem->menu_options->keyBy('menu_option_id');
+            $menuOptions = $menuItem->menu_options->keyBy('option_id');
 
             $cartItem->options->each(function ($cartItemOption) use ($menuOptions) {
                 $this->validateMenuItemOption(
@@ -390,7 +390,7 @@ class CartManager
         }
     }
 
-    public function validateMenuItemOption(MenuItemOption $menuOption, $selectedValues)
+    public function validateMenuItemOption(MenuOption $menuOption, $selectedValues)
     {
         if ($menuOption->isRequired() && !$selectedValues) {
             throw new ApplicationException(sprintf(

@@ -1,16 +1,10 @@
 @foreach ($menuItem->menu_options->sortBy('priority') as $index => $menuOption)
-    <div
-        class="menu-option"
-        data-control="item-option"
-        data-option-type="{{ $menuOption->display_type }}"
-        data-option-minimum="{{ $menuOption->min_selected }}"
-        data-option-maximum="{{ $menuOption->max_selected }}"
-    >
+    <div class="menu-option">
         <div class="option option-{{ $menuOption->display_type }}">
             <div class="option-details">
                 <h5 class="mb-0">
                     {{ $menuOption->option_name }}
-                    @if ($menuOption->required == 1)
+                    @if ($menuOption->isRequired())
                         <span
                             class="small pull-right text-muted">@lang('igniter.cart::default.text_required')</span>
                     @endif
@@ -23,36 +17,15 @@
             @if (count($optionValues = $menuOption->menu_option_values))
                 <input
                     type="hidden"
-                    name="menu_options[{{ $index }}][menu_option_id]"
-                    value="{{ $menuOption->menu_option_id }}"
+                    name="menu_options[{{ $index }}][option_id]"
+                    value="{{ $menuOption->option_id }}"
                 />
                 <div class="option-group">
-                    @if($menuOption->display_type !== 'select' && $limitCartItemOptionsValues && $optionValues->count() >= $limitCartItemOptionsValues)
-                        @partial('@item_option_'.$menuOption->display_type, [
-                            'index' => $index,
-                            'cartItem' => $cartItem,
-                            'optionValues' => $optionValues->sortBy('priority')->slice(0, $limitCartItemOptionsValues),
-                        ])
-
-                        <div class="hidden-item-options" style="display: none;">
-                            @partial('@item_option_'.$menuOption->display_type, [
-                                'index' => $index,
-                                'cartItem' => $cartItem,
-                                'optionValues' => $optionValues->sortBy('priority')->slice($limitCartItemOptionsValues-1),
-                            ])
-                        </div>
-                        <button
-                            type="button"
-                            data-toggle="more-options"
-                            class="btn btn-link"
-                        >@lang('igniter.cart::default.button_show_more_options')</button>
-                    @else
-                        @partial('@item_option_'.$menuOption->display_type, [
-                            'index' => $index,
-                            'cartItem' => $cartItem,
-                            'optionValues' => $optionValues->sortBy('priority'),
-                        ])
-                    @endif
+                    @themePartial('@item_option_'.$menuOption->display_type, [
+                        'index' => $index,
+                        'cartItem' => $cartItem,
+                        'optionValues' => $optionValues->sortBy('priority'),
+                    ])
                 </div>
             @endif
         </div>

@@ -32,10 +32,10 @@ In the admin user interface you can manage the cart conditions.
 
 | Name     | Page variable                  | Description                                      |
 | -------- | ------------------------------ | ------------------------------------------------ |
-| CartBox  | `@component('cartBox')`  | Show the contents of and manages the user's cart |
-| Checkout | `@component('checkout')` | Displays Checkout form on the page               |
-| OrderPage | `@component('orderPage')` | Displays a single order on the page               |
-| Orders | `@component('orders')` | Displays a list of orders on the page               |
+| CartBox  | `@componentPartial('cartBox')`  | Show the contents of and manages the user's cart |
+| Checkout | `@componentPartial('checkout')` | Displays Checkout form on the page               |
+| OrderPage | `@componentPartial('orderPage')` | Displays a single order on the page               |
+| Orders | `@componentPartial('orders')` | Displays a list of orders on the page               |
 
 ### CartBox Component
 
@@ -74,7 +74,7 @@ permalink: /checkout
     checkoutPage: checkout/checkout
 ---
 ...
-@component('cartBox')
+@componentPartial('cartBox')
 ...
 ```
 
@@ -120,7 +120,7 @@ permalink: /checkout
     successParamCode: 'hash'
 ---
 ...
-@component('checkout')
+@componentPartial('checkout')
 ...
 ```
 

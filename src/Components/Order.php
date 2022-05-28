@@ -3,7 +3,7 @@
 namespace Igniter\Cart\Components;
 
 use Exception;
-use Igniter\Admin\Models\Order;
+use Igniter\Admin\Models\Order as OrderModel;
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
@@ -129,7 +129,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
         if (!is_numeric($orderId = input('orderId')))
             return;
 
-        if (!$order = Order::find($orderId))
+        if (!$order = OrderModel::find($orderId))
             return;
 
         foreach ($order->getOrderMenus() as $orderMenu) {
@@ -156,7 +156,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
         if (!is_numeric($orderId = input('orderId')))
             return;
 
-        if (!$order = Order::find($orderId))
+        if (!$order = OrderModel::find($orderId))
             return;
 
         if (!$this->showCancelButton($order))

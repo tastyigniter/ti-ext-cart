@@ -54,7 +54,7 @@ Your {{$order_type}} order **{{$order_number}}** has been received and will be w
 
 {{$order_comment}}
 
-@partial('table')
+@themePartial('table')
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <thead>
     <tr>

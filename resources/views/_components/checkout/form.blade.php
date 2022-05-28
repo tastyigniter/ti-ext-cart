@@ -5,14 +5,14 @@
     'data-handler' => $confirmCheckoutEventHandler,
 ]) !!}
 
-@partial('@customer_fields')
+@themePartial('@customer_fields')
 
 @if ($order->isDeliveryType())
-    @partial('@address_fields')
+    @themePartial('@address_fields')
 @endif
 
 <div data-partial="checkoutPayments">
-    @partial('@payments')
+    @themePartial('@payments')
 </div>
 
 @if ($showCommentField)

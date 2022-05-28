@@ -3,13 +3,13 @@
 namespace Igniter\Cart\Classes;
 
 use Igniter\Admin\Models\Address;
-use Igniter\Admin\Models\Customer;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Traits\Singleton;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Main\Facades\Auth;
+use Igniter\Main\Models\Customer;
 use Igniter\System\Traits\SessionMaker;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
@@ -33,7 +33,7 @@ class OrderManager
     protected $location;
 
     /**
-     * @var \Igniter\Admin\Models\Customer
+     * @var \Igniter\Main\Models\Customer
      */
     protected $customer;
 
@@ -86,7 +86,7 @@ class OrderManager
 
     /**
      * @param $hash
-     * @param \Igniter\Admin\Models\Customer|null $customer
+     * @param \Igniter\Main\Models\Customer|null $customer
      * @return \Igniter\Admin\Models\Order|\Illuminate\Database\Eloquent\Model|object|null
      */
     public function getOrderByHash($hash, $customer = null)
