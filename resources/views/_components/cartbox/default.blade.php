@@ -10,25 +10,25 @@
 >
     <div id="cart-box" class="module-box">
         <div id="cart-items">
-            @partial('@items')
+            @themePartial('@items')
         </div>
 
         <div id="cart-coupon">
-            @partial('@coupon_form')
+            @themePartial('@coupon_form')
         </div>
 
         <?php if ($__SELF__->tippingEnabled()) { ?>
         <div id="cart-tip">
-            @partial('@tip_form')
+            @themePartial('@tip_form')
         </div>
         <?php } ?>
 
         <div id="cart-totals">
-            @partial('@totals')
+            @themePartial('@totals')
         </div>
 
         <div id="cart-buttons" class="mt-3">
-            @partial('@buttons')
+            @themePartial('@buttons')
         </div>
     </div>
 </div>

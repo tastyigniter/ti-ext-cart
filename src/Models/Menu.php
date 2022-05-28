@@ -13,23 +13,12 @@ class Menu extends BaseMenu implements Buyable
         'allergens',
         'allergens.media',
         'mealtimes',
-        'menu_options',
-        'menu_options.option',
+        'menu_option_values.option_value',
     ];
 
     public static function findBy($menuId, $location = null)
     {
-        $query = self::query();
-
-        if (!is_null($location)) {
-            $query->with(['menu_options' => function ($query) use ($location) {
-                $query->whereHas('option', function ($query) use ($location) {
-                    $query->whereHasOrDoesntHaveLocation($location);
-                });
-            }]);
-        }
-
-        return $query->isEnabled()->whereKey($menuId)->first();
+        return self::query()->isEnabled()->whereKey($menuId)->first();
     }
 
     public function getMorphClass()

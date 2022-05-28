@@ -3,15 +3,15 @@
         <div class="panel-body">
             @if (has_component($__SELF__->property('localBoxAlias')))
                 <div class="local-timeslot">
-                    @partial($__SELF__->property('localBoxAlias').'::timeslot')
+                    @themePartial($__SELF__->property('localBoxAlias').'::timeslot')
                 </div>
                 <div class="local-control mt-3">
-                    @partial($__SELF__->property('localBoxAlias').'::control')
+                    @themePartial($__SELF__->property('localBoxAlias').'::control')
                 </div>
             @endif
 
-            @partial($__SELF__.'::default')
+            @themePartial($__SELF__.'::default')
         </div>
     </div>
 </div>
-@partial($__SELF__.'::mobile')
+@themePartial($__SELF__.'::mobile')

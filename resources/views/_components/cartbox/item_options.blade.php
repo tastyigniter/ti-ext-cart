@@ -4,7 +4,7 @@
             <div class="option-details">
                 <h5 class="mb-0">
                     {{ $menuOption->option_name }}
-                    @if ($menuOption->required == 1)
+                    @if ($menuOption->isRequired())
                         <span
                             class="small pull-right text-muted">@lang('igniter.cart::default.text_required')</span>
                     @endif
@@ -17,11 +17,11 @@
             @if (count($optionValues = $menuOption->menu_option_values))
                 <input
                     type="hidden"
-                    name="menu_options[{{ $index }}][menu_option_id]"
-                    value="{{ $menuOption->menu_option_id }}"
+                    name="menu_options[{{ $index }}][option_id]"
+                    value="{{ $menuOption->option_id }}"
                 />
                 <div class="option-group">
-                    @partial('@item_option_'.$menuOption->display_type, [
+                    @themePartial('@item_option_'.$menuOption->display_type, [
                         'index' => $index,
                         'cartItem' => $cartItem,
                         'optionValues' => $optionValues->sortBy('priority'),

@@ -6,10 +6,10 @@
 ]) !!}
 
 @if ($__SELF__->checkoutStep !== 'pay')
-    @partial('@customer_fields')
+    @themePartial('@customer_fields')
 
     @if ($order->isDeliveryType())
-        @partial('@address_fields')
+        @themePartial('@address_fields')
     @endif
 
     <div class="form-group">
@@ -23,7 +23,7 @@
     </div>
 @else
     <div data-partial="checkoutPayments">
-        @partial('@payments')
+        @themePartial('@payments')
     </div>
 
     @if ($agreeTermsSlug)

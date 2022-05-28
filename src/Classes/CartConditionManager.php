@@ -50,7 +50,7 @@ class CartConditionManager
         }
 
         // Load extensions cart conditions
-        $registeredConditions = ExtensionManager::instance()->getRegistrationMethodValues('registerCartConditions');
+        $registeredConditions = resolve(ExtensionManager::class)->getRegistrationMethodValues('registerCartConditions');
         foreach ($registeredConditions as $extensionCode => $cartConditions) {
             $this->registerConditions($cartConditions);
         }
