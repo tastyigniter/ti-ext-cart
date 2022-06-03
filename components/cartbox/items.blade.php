@@ -1,4 +1,9 @@
 @if ($cart->count())
+    @if ($minOrderTotal = $location->minimumOrderTotal())
+        <p class="text-muted text-center my-2">
+            {{ sprintf(lang('igniter.cart::default.text_min_order_total'), currency_format($minOrderTotal), $location->getOrderType()->getLabel()) }}
+        </p>
+    @endif
     <div class="cart-items">
         <ul>
             @foreach ($cart->content()->reverse() as $cartItem)
@@ -45,5 +50,5 @@
         </ul>
     </div>
 @else
-    <div class="panel-body">@lang('igniter.cart::default.text_no_cart_items')</div>
+    <div class="panel-body text-center">@lang('igniter.cart::default.text_no_cart_items')</div>
 @endif

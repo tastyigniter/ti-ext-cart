@@ -436,8 +436,7 @@ class CartManager
 
     public function cartTotalIsBelowMinimumOrder()
     {
-        return $this->location->orderTypeIsDelivery()
-            && !$this->location->checkMinimumOrder($this->cart->subtotal());
+        return !$this->location->checkMinimumOrderTotal($this->cart->subtotal());
     }
 
     public function deliveryChargeIsUnavailable()
