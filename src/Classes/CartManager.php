@@ -11,15 +11,12 @@ use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Cart\CartItem;
 use Igniter\Flame\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\Flame\Traits\Singleton;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 
 class CartManager
 {
-    use Singleton;
-
     /**
      * @var \Igniter\Flame\Cart\Cart
      */
@@ -37,7 +34,7 @@ class CartManager
 
     protected $checkStock = true;
 
-    public function initialize()
+    public function __construct()
     {
         $this->cart = App::make('cart');
         $this->location = App::make('location');
@@ -190,7 +187,7 @@ class CartManager
 
     protected function loadCartConditions()
     {
-        $conditionManager = CartConditionManager::instance();
+        $conditionManager = resolve(CartConditionManager::class);
 
         $conditions = $this->settings->get('conditions') ?: [];
         foreach ($conditions as $name => $definition) {

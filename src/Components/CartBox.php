@@ -22,7 +22,7 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function initialize()
     {
-        $this->cartManager = CartManager::instance()->checkStock(
+        $this->cartManager = resolve(CartManager::class)->checkStock(
             (bool)$this->property('checkStockCheckout', true)
         );
     }

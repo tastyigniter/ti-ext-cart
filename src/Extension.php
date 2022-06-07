@@ -3,6 +3,9 @@
 namespace Igniter\Cart;
 
 use Igniter\Admin\Models\Order;
+use Igniter\Cart\Classes\CartConditionManager;
+use Igniter\Cart\Classes\CartManager;
+use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Middleware\CartMiddleware;
 use Igniter\Cart\Models\Cart as CartStore;
 use Igniter\Cart\Models\CartSettings;
@@ -19,6 +22,10 @@ class Extension extends BaseExtension
 {
     public function register()
     {
+        $this->app->singleton(CartConditionManager::class);
+        $this->app->singleton(CartManager::class);
+        $this->app->singleton(OrderManager::class);
+
         $this->app->register(\Igniter\Flame\Cart\CartServiceProvider::class);
 
         AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);

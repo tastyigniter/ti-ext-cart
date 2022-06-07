@@ -21,7 +21,7 @@ class CartSettings extends Model
     public function getConditionsAttribute($value)
     {
         $result = [];
-        $registeredConditions = CartConditionManager::instance()->listRegisteredConditions();
+        $registeredConditions = resolve(CartConditionManager::class)->listRegisteredConditions();
         foreach ($registeredConditions as $registeredCondition) {
             $name = array_get($registeredCondition, 'name');
             $dbCondition = $value[$name] ?? [];

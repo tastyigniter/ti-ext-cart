@@ -3,13 +3,10 @@
 namespace Igniter\Cart\Classes;
 
 use Exception;
-use Igniter\Flame\Traits\Singleton;
 use Igniter\System\Classes\ExtensionManager;
 
 class CartConditionManager
 {
-    use Singleton;
-
     /**
      * @var array An array of registered conditions.
      */
