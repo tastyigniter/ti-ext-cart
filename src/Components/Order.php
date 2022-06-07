@@ -26,7 +26,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
 
     public function initialize()
     {
-        $this->orderManager = OrderManager::instance();
+        $this->orderManager = resolve(OrderManager::class);
     }
 
     public function defineProperties()
@@ -186,7 +186,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
     protected function addCartItem($menuModel, $orderMenu): void
     {
         try {
-            CartManager::instance()->validateCartMenuItem($menuModel, $orderMenu->quantity);
+            resolve(CartManager::class)->validateCartMenuItem($menuModel, $orderMenu->quantity);
 
             if (is_string($orderMenu->option_values))
                 $orderMenu->option_values = @unserialize($orderMenu->option_values);
@@ -211,7 +211,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
                 continue;
 
             try {
-                CartManager::instance()->validateMenuItemOption($menuOption, $cartOption['values']->all());
+                resolve(CartManager::class)->validateMenuItemOption($menuOption, $cartOption['values']->all());
 
                 $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
                     return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);

@@ -6,7 +6,6 @@ use Igniter\Admin\Models\Address;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\Flame\Traits\Singleton;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Main\Facades\Auth;
 use Igniter\Main\Models\Customer;
@@ -17,7 +16,6 @@ use Illuminate\Support\Facades\Request;
 
 class OrderManager
 {
-    use Singleton;
     use SessionMaker;
 
     protected $sessionKey = 'igniter.checkout.order';
@@ -37,9 +35,9 @@ class OrderManager
      */
     protected $customer;
 
-    public function initialize()
+    public function __construct()
     {
-        $this->cart = CartManager::instance()->getCart();
+        $this->cart = resolve(CartManager::class)->getCart();
         $this->location = App::make('location');
         $this->customer = Auth::customer();
     }

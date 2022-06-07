@@ -38,8 +38,8 @@ class Checkout extends BaseComponent
 
     public function initialize()
     {
-        $this->orderManager = OrderManager::instance();
-        $this->cartManager = CartManager::instance();
+        $this->orderManager = resolve(OrderManager::class);
+        $this->cartManager = resolve(CartManager::class);
 
         $this->checkoutStep = $this->param($this->property('stepParamName'), 'details');
     }
