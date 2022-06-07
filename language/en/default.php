@@ -88,7 +88,7 @@ return [
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',
     'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
-    'alert_min_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
+    'alert_min_delivery_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
     'alert_coupon_removed' => 'Your coupon has been removed successfully.',
     'alert_coupon_applied' => 'Your coupon has been applied successfully.',
     'alert_coupon_invalid' => 'Please enter a valid coupon.',
