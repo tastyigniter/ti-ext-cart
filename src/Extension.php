@@ -14,7 +14,6 @@ use Igniter\Flame\Igniter;
 use Igniter\Local\Facades\Location;
 use Igniter\Main\Facades\Auth;
 use Igniter\System\Classes\BaseExtension;
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 
@@ -25,10 +24,6 @@ class Extension extends BaseExtension
         $this->app->singleton(CartConditionManager::class);
         $this->app->singleton(CartManager::class);
         $this->app->singleton(OrderManager::class);
-
-        $this->app->register(\Igniter\Flame\Cart\CartServiceProvider::class);
-
-        AliasLoader::getInstance()->alias('Cart', \Igniter\Flame\Cart\Facades\Cart::class);
     }
 
     public function boot()
