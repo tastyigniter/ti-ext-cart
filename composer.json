@@ -15,6 +15,12 @@
       "email": "sam@sampoyigi.com"
     }
   ],
+  "require": {
+    "tastyigniter/flame": "v4.x-dev",
+    "tastyigniter/ti-ext-local": "v4.x-dev",
+    "tastyigniter/ti-ext-payregister": "v4.x-dev",
+    "tastyigniter/ti-ext-user": "v4.x-dev"
+  },
   "autoload": {
     "psr-4": {
       "Igniter\\Cart\\": "src/"
@@ -28,12 +34,7 @@
         "color": "#FFF",
         "backgroundColor": "#ED561A"
       },
-      "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart",
-      "require": {
-        "igniter.local": "*",
-        "igniter.user": "*",
-        "igniter.payregister": "*"
-      }
+      "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart"
     }
   }
 }
