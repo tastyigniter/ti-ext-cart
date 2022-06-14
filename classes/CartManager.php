@@ -193,9 +193,11 @@ class CartManager
         $conditionManager = CartConditionManager::instance();
 
         $conditions = $this->settings->get('conditions') ?: [];
-        foreach ($conditions as $name => $definition) {
+        foreach ($conditions as $definition) {
             if (!(bool)array_get($definition, 'status', true))
                 continue;
+
+            $definition['cartInstance'] = $this->cart->currentInstance();
 
             $className = array_get($definition, 'className');
             $condition = $conditionManager->makeCondition($className, $definition);
