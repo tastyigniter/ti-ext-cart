@@ -181,7 +181,7 @@ class CartManager
             return $condition;
 
         if (strlen($code)) {
-            if (!Coupons_model::isEnabled()->whereCode($code)->exists())
+            if (!Coupons_model::isEnabled()->whereCodeAndLocation($code, $this->location->getId())->exists())
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
