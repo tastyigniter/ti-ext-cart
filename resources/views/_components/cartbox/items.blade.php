@@ -45,5 +45,5 @@
         </ul>
     </div>
 @else
-    <div class="panel-body">@lang('igniter.cart::default.text_no_cart_items')</div>
+    <div class="panel-body text-center">@lang('igniter.cart::default.text_no_cart_items')</div>
 @endif
