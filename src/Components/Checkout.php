@@ -305,7 +305,8 @@ class Checkout extends BaseComponent
             $this->validateCheckoutSecurity();
 
             if ($this->cartManager->cartTotalIsBelowMinimumOrder())
-                return true;
+                throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_min_order_total'),
+                    currency_format(resolve('location')->minimumOrderTotal())));
 
             if ($this->cartManager->deliveryChargeIsUnavailable())
                 return true;

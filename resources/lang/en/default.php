@@ -37,8 +37,6 @@ return [
     'text_option_summary' => 'Choose between %s and %s',
     'text_add_more_items' => 'Add more items',
     'text_min_order_total' => 'Your order is below the %s minimum for %s orders, add more items to checkout.',
-    'text_mail_order' => 'Order email to customer',
-    'text_mail_order_alert' => 'Order alert email to admin',
 
     'button_add_to_order' => 'Add to order',
     'button_update' => 'Update',
@@ -48,7 +46,6 @@ return [
     'button_apply_coupon' => 'Apply Coupon',
     'button_apply_tip' => 'Apply Tip',
     'button_view_cart' => 'Back to My Order',
-    'button_show_more_options' => 'Show more',
 
     'column_condition_name' => 'Name',
     'column_condition_priority' => 'Priority',
@@ -92,7 +89,6 @@ return [
     'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
     'alert_min_delivery_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
-    'alert_min_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
     'alert_coupon_removed' => 'Your coupon has been removed successfully.',
     'alert_coupon_applied' => 'Your coupon has been applied successfully.',
     'alert_coupon_invalid' => 'Please enter a valid coupon.',
@@ -159,7 +155,6 @@ return [
         'label_payment_method' => 'Payment Method',
         'label_terms' => 'By clicking Register, you agree to the <a target="_blank" href="%s">Terms and Conditions</a> set out by this site, including our Cookie Use.',
         'label_comment' => 'Leave a note',
-        'label_delivery_comment' => 'Leave a note for the driver',
         'label_ip' => 'IP Address',
         'label_checkout_terms' => 'Checkout Terms',
 
@@ -195,7 +190,6 @@ return [
         'text_leave_review' => 'Leave review',
         'text_no_payment' => 'No Payment',
         'text_login_to_view_more' => 'For more information about your order, please create an account or login.',
-        'text_title_cancel' => 'Cancel Order',
 
         'column_id' => 'Order no.',
         'column_status' => 'Status',
@@ -213,10 +207,9 @@ return [
 
         'button_order' => 'Place New Order',
         'button_reorder' => 'Reorder',
-        'button_cancel' => 'Cancel order',
+        'button_cancel' => 'Cancel',
         'button_view_order' => 'View/Reorder',
         'button_back' => 'Back',
-        'label_cancel_reason' => 'Reason for cancellation',
 
         'alert_reorder_success' => 'You have successfully added the menus from order ID %s to your order.',
         'alert_cancel_success' => 'Order successfully canceled.',
