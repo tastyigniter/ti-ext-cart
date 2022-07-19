@@ -79,7 +79,7 @@
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 
-        this.$modalElement.find('input[data-option-price][type="number"]')
+        this.$modalElement.find('[data-toggle="quantity"] input[data-option-price]')
             .each(function (idx, option) {
                 var val = parseInt($(option).val()),
                     optionPrice = $(option).data('optionPrice');
@@ -144,6 +144,7 @@
 
         $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityOrOptionChanged, this))
         $cartItem.on('change', '[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
+        $cartItem.on('input', '[data-toggle="quantity"] input[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
 
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
