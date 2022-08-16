@@ -24,4 +24,5 @@ security vulnerabilities.
 
 ### License
 
-TastyIgniter Cart extension is open-sourced software licensed under the [MIT license](LICENSE).
+TastyIgniter Cart extension is open-sourced software licensed under
+the [MIT license](https://github.com/tastyigniter/ti-ext-cart/LICENSE.md).
