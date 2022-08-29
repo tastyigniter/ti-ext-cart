@@ -211,11 +211,11 @@ class Order extends \System\Classes\BaseComponent
                 continue;
 
             try {
-                CartManager::instance()->validateMenuItemOption($menuOption, $cartOption['values']->all());
+                CartManager::instance()->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
 
                 $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
                     return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
-                });
+                })->toArray();
 
                 $options[] = $cartOption;
             }
