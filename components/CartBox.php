@@ -286,7 +286,7 @@ class CartBox extends \System\Classes\BaseComponent
 
     public function locationIsClosed()
     {
-        return !Location::instance()->checkOrderTime();
+        return !Location::instance()->checkOrderTime() || Location::instance()->checkNoOrderTypeAvailable();
     }
 
     public function hasMinimumOrder()
