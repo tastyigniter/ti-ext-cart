@@ -152,7 +152,11 @@ class OrderManager
         if (!$collection || $collection->isEmpty())
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
 
-        if (!$area = $this->location->current()->searchDeliveryArea($collection->first()->getCoordinates()))
+        $userLocation = $collection->first();
+
+        $this->location->updateUserPosition($userLocation);
+
+        if (!$area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates()))
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
 
         if (!$this->location->isCurrentAreaId($area->area_id)) {
