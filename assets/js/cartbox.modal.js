@@ -67,19 +67,19 @@
 
         var price = $cartItem.data('priceAmount');
 
-        this.$modalElement.find('input[data-option-price]:checked')
+        this.$modalElement.find('input[data-option-price]:checked:not([disabled])')
             .each(function (idx, option) {
                 var optionPrice = $(option).data('optionPrice')
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 
-        this.$modalElement.find('select[data-option-price] option:selected')
+        this.$modalElement.find('select[data-option-price] option:selected:not([disabled])')
             .each(function (idx, option) {
                 var optionPrice = $(option).data('optionPrice')
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 
-        this.$modalElement.find('[data-toggle="quantity"] input[data-option-price]')
+        this.$modalElement.find('[data-toggle="quantity"] input[data-option-price]:not([disabled])')
             .each(function (idx, option) {
                 var val = parseInt($(option).val()),
                     optionPrice = $(option).data('optionPrice');
