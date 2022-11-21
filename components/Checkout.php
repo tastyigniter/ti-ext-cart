@@ -53,18 +53,6 @@ class Checkout extends BaseComponent
                 'default' => false,
                 'validationRule' => 'required|boolean',
             ],
-            'showCountryField' => [
-                'label' => 'Whether to display the country form field',
-                'type' => 'switch',
-                'default' => false,
-                'validationRule' => 'required|boolean',
-            ],
-            'showPostcodeField' => [
-                'label' => 'Whether to display the postcode form field',
-                'type' => 'switch',
-                'default' => false,
-                'validationRule' => 'required|boolean',
-            ],
             'showAddress2Field' => [
                 'label' => 'Whether to display the address 2 form field',
                 'type' => 'switch',
@@ -79,6 +67,24 @@ class Checkout extends BaseComponent
             ],
             'showStateField' => [
                 'label' => 'Whether to display the state form field',
+                'type' => 'switch',
+                'default' => true,
+                'validationRule' => 'required|boolean',
+            ],
+            'showPostcodeField' => [
+                'label' => 'Whether to display the postcode form field',
+                'type' => 'switch',
+                'default' => false,
+                'validationRule' => 'required|boolean',
+            ],
+            'showCountryField' => [
+                'label' => 'Whether to display the country form field',
+                'type' => 'switch',
+                'default' => false,
+                'validationRule' => 'required|boolean',
+            ],
+            'showCommentField' => [
+                'label' => 'Whether to display the comment form field',
                 'type' => 'switch',
                 'default' => true,
                 'validationRule' => 'required|boolean',
@@ -158,6 +164,7 @@ class Checkout extends BaseComponent
         $this->page['showAddress2Field'] = (bool)$this->property('showAddress2Field', 1);
         $this->page['showCityField'] = (bool)$this->property('showCityField', 1);
         $this->page['showStateField'] = (bool)$this->property('showStateField', 1);
+        $this->page['showCommentField'] = (bool)$this->property('showCommentField', 1);
         $this->page['agreeTermsSlug'] = $this->getAgreeTermsPageSlug();
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');

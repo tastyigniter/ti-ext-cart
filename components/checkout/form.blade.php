@@ -15,6 +15,7 @@
     @partial('@payments')
 </div>
 
+@if ($showCommentField)
 <div class="form-group">
     <label for="comment">@lang('igniter.cart::default.checkout.label_comment')</label>
     <textarea
@@ -24,6 +25,7 @@
         class="form-control"
     >{!! set_value('comment', $order->comment) !!}</textarea>
 </div>
+@endif
 
 @if ($agreeTermsSlug)
     <div class="form-group">
