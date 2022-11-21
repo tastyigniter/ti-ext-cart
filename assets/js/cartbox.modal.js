@@ -61,6 +61,16 @@
         return this.$modalElement.find('[data-control="cart-options"]')
     }
 
+    CartBoxModal.prototype.toggleSelection = function (event) {
+        this.$modalElement.find('[data-control="item-option"]').each(function (id, option) {
+            var $parent = $(option),
+                maxSelection = $parent.data('option-maximum'),
+                selectedCount = $parent.find('input[type="checkbox"][data-option-price]:checked:not([disabled])').length
+
+            $parent.find('input[type="checkbox"][data-option-price]:not(:checked)').prop('disabled', selectedCount === maxSelection)
+        })
+    }
+
     CartBoxModal.prototype.onQuantityOrOptionChanged = function (event) {
         var inputEl = this.$modalElement.find('[name="quantity"]'),
             $cartItem = this.$modalElement.find('[data-control="cart-item"]');
@@ -92,6 +102,8 @@
 
         $cartItem.find('[data-item-subtotal]')
             .html(app.currencyFormat(price));
+
+        this.toggleSelection()
     }
 
     CartBoxModal.prototype.onSubmitForm = function () {

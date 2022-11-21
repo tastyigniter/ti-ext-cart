@@ -1,5 +1,11 @@
 @foreach ($menuItem->menu_options->sortBy('priority') as $index => $menuOption)
-    <div class="menu-option">
+    <div
+        class="menu-option"
+        data-control="item-option"
+        data-option-type="{{ $menuOption->display_type }}"
+        data-option-minimum="{{ $menuOption->min_selected }}"
+        data-option-maximum="{{ $menuOption->max_selected }}"
+    >
         <div class="option option-{{ $menuOption->display_type }}">
             <div class="option-details">
                 <h5 class="mb-0">
