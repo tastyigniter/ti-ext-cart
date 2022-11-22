@@ -3,7 +3,7 @@
 namespace Igniter\Cart\Models;
 
 use Igniter\Admin\Models\Menu as BaseMenu;
-use Igniter\Flame\Cart\Contracts\Buyable;
+use Igniter\Cart\Contracts\Buyable;
 
 class Menu extends BaseMenu implements Buyable
 {

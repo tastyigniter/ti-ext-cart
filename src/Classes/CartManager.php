@@ -4,12 +4,12 @@ namespace Igniter\Cart\Classes;
 
 use Igniter\Admin\Models\MenuItemOptionValue;
 use Igniter\Admin\Models\MenuOption;
+use Igniter\Cart\CartCondition;
+use Igniter\Cart\CartItem;
+use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
 use Igniter\Coupons\Models\Coupon;
-use Igniter\Flame\Cart\CartCondition;
-use Igniter\Flame\Cart\CartItem;
-use Igniter\Flame\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Event;
 class CartManager
 {
     /**
-     * @var \Igniter\Flame\Cart\Cart
+     * @var \Igniter\Cart\Cart
      */
     protected $cart;
 

@@ -4,8 +4,8 @@ namespace Igniter\Cart\Components;
 
 use Exception;
 use Igniter\Cart\Classes\CartManager;
+use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Flame\Cart\Facades\Cart;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
 use Illuminate\Support\Facades\Redirect;
