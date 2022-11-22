@@ -3,8 +3,8 @@
 namespace Igniter\Cart\Classes;
 
 use Igniter\Admin\Models\Address;
+use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
-use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Main\Facades\Auth;
@@ -21,7 +21,7 @@ class OrderManager
     protected $sessionKey = 'igniter.checkout.order';
 
     /**
-     * @var \Igniter\Flame\Cart\Cart
+     * @var \Igniter\Cart\Cart
      */
     protected $cart;
 

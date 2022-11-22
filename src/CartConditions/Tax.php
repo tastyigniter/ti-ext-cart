@@ -2,7 +2,7 @@
 
 namespace Igniter\Cart\CartConditions;
 
-use Igniter\Flame\Cart\CartCondition;
+use Igniter\Cart\CartCondition;
 use Igniter\Local\Facades\Location;
 use Igniter\System\Models\Currency;
 

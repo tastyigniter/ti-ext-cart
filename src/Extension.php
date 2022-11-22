@@ -3,17 +3,11 @@
 namespace Igniter\Cart;
 
 use Igniter\Admin\Models\Order;
-use Igniter\Cart\Classes\CartConditionManager;
-use Igniter\Cart\Classes\CartManager;
-use Igniter\Cart\Classes\OrderManager;
-use Igniter\Cart\Middleware\CartMiddleware;
-use Igniter\Cart\Models\Cart as CartStore;
-use Igniter\Cart\Models\CartSettings;
-use Igniter\Flame\Cart\Facades\Cart;
 use Igniter\Flame\Igniter;
 use Igniter\Local\Facades\Location;
 use Igniter\Main\Facades\Auth;
 use Igniter\System\Classes\BaseExtension;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 
@@ -21,15 +15,21 @@ class Extension extends BaseExtension
 {
     public function register()
     {
-        $this->app->singleton(CartConditionManager::class);
-        $this->app->singleton(CartManager::class);
-        $this->app->singleton(OrderManager::class);
+        $this->mergeConfigFrom(__DIR__.'/../config/cart.php', 'cart');
+
+        $this->app->singleton(Classes\CartConditionManager::class);
+        $this->app->singleton(Classes\CartManager::class);
+        $this->app->singleton(Classes\OrderManager::class);
+
+        $this->registerCart();
+
+        AliasLoader::getInstance()->alias('Cart', Facades\Cart::class);
     }
 
     public function boot()
     {
         if (!Igniter::runningInAdmin()) {
-            $this->app['router']->pushMiddlewareToGroup('web', CartMiddleware::class);
+            $this->app['router']->pushMiddlewareToGroup('web', Http\Middleware\CartMiddleware::class);
         }
 
         $this->bindCartEvents();
@@ -145,8 +145,8 @@ class Extension extends BaseExtension
     protected function bindCartEvents()
     {
         Event::listen('cart.beforeRegister', function () {
-            Config::set('cart.model', CartStore::class);
-            Config::set('cart.abandonedCart', CartSettings::get('abandoned_cart'));
+            Config::set('cart.model', Models\Cart::class);
+            Config::set('cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
         });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
@@ -155,16 +155,16 @@ class Extension extends BaseExtension
         });
 
         Event::listen('igniter.user.login', function () {
-            if (CartSettings::get('abandoned_cart')
-                && Cart::content()->isEmpty()
+            if (Models\CartSettings::get('abandoned_cart')
+                && Facades\Cart::content()->isEmpty()
             ) {
-                Cart::restore(Auth::getId());
+                Facades\Cart::restore(Auth::getId());
             }
         });
 
         Event::listen('igniter.user.logout', function () {
-            if (CartSettings::get('destroy_on_logout'))
-                Cart::destroy();
+            if (Models\CartSettings::get('destroy_on_logout'))
+                Facades\Cart::destroy();
         });
     }
 
@@ -204,6 +204,19 @@ class Extension extends BaseExtension
                 return;
 
             Event::fire('igniter.cart.orderAssigned', [$model], true);
+        });
+    }
+
+    protected function registerCart(): void
+    {
+        $this->app->singleton('cart', function ($app) {
+            $this->app['events']->fire('cart.beforeRegister', [$this]);
+
+            $instance = new Cart($app['session'], $app['events']);
+
+            $this->app['events']->fire('cart.afterRegister', [$instance, $this]);
+
+            return $instance;
         });
     }
 }

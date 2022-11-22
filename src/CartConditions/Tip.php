@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\CartConditions;
 
+use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Flame\Cart\CartCondition;
 use Igniter\System\Models\Currency;
 
 class Tip extends CartCondition
