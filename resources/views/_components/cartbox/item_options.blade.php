@@ -17,8 +17,8 @@
             @if (count($optionValues = $menuOption->menu_option_values))
                 <input
                     type="hidden"
-                    name="menu_options[{{ $index }}][option_id]"
-                    value="{{ $menuOption->option_id }}"
+                    name="menu_options[{{ $index }}][menu_option_id]"
+                    value="{{ $menuOption->menu_option_id }}"
                 />
                 <div class="option-group">
                     @themePartial('@item_option_'.$menuOption->display_type, [

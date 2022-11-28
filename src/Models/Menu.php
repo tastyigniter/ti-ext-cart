@@ -13,7 +13,8 @@ class Menu extends BaseMenu implements Buyable
         'allergens',
         'allergens.media',
         'mealtimes',
-        'menu_option_values.option_value',
+        'menu_options',
+        'menu_options.option',
     ];
 
     public static function findBy($menuId, $location = null)
