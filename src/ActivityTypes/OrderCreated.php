@@ -3,7 +3,7 @@
 namespace Igniter\Cart\ActivityTypes;
 
 use Igniter\Admin\Models\Order;
-use Igniter\Admin\Models\Staff;
+use Igniter\Admin\Models\User;
 use Igniter\Flame\ActivityLog\Contracts\ActivityInterface;
 use Igniter\Flame\ActivityLog\Models\Activity;
 
@@ -21,12 +21,9 @@ class OrderCreated implements ActivityInterface
 
     public static function log($order)
     {
-        $recipients = Staff::isEnabled()
+        $recipients = User::isEnabled()
             ->whereHasLocation($order->location->getKey())
-            ->get()
-            ->map(function ($staff) {
-                return $staff->user;
-            })->all();
+            ->get();
 
         activity()->pushLog(new static('orderCreated', $order), $recipients);
     }
