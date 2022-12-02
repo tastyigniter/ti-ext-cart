@@ -67,6 +67,9 @@
                 maxSelection = $parent.data('option-maximum'),
                 selectedCount = $parent.find('input[type="checkbox"][data-option-price]:checked:not([disabled])').length
 
+            if (maxSelection <= 0)
+                return;
+
             $parent.find('input[type="checkbox"][data-option-price]:not(:checked)').prop('disabled', selectedCount === maxSelection)
         })
     }
