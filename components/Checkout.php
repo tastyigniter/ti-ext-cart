@@ -309,6 +309,8 @@ class Checkout extends BaseComponent
     protected function checkCheckoutSecurity()
     {
         try {
+            $this->fireSystemEvent('igniter.cart.beforeCheckCheckoutSecurity', [$this]);
+
             $this->validateCheckoutSecurity();
 
             if ($this->cartManager->cartTotalIsBelowMinimumOrder())
