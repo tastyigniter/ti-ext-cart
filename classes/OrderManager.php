@@ -4,7 +4,7 @@ namespace Igniter\Cart\Classes;
 
 use Admin\Models\Addresses_model;
 use Admin\Models\Customers_model;
-use Igniter\Cart\Models\Orders_model;
+use Admin\Models\Orders_model;
 use Igniter\Flame\Cart\CartCondition;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Traits\Singleton;

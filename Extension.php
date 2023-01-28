@@ -32,6 +32,10 @@ class Extension extends BaseExtension
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
+
+        Orders_model::extend(function ($model) {
+            $model->implement[] = 'Igniter\Cart\Actions\OrderAction';
+        });
     }
 
     public function registerCartConditions()

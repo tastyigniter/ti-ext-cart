@@ -30,7 +30,7 @@ class Checkout extends BaseComponent
     protected $orderManager;
 
     /**
-     * @var  \Igniter\Cart\Models\Orders_model
+     * @var  \Admin\Models\Orders_model
      */
     protected $order;
 
