@@ -170,6 +170,10 @@ class Extension extends BaseExtension
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
         });
+
+        Event::listen('admin.order.beforePaymentProcessed', function (Orders_model $model) {
+            $model->subtractStock();
+        });
     }
 
     protected function bindOrderStatusEvent()
