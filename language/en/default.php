@@ -37,6 +37,8 @@ return [
     'text_option_summary' => 'Choose between %s and %s',
     'text_add_more_items' => 'Add more items',
     'text_min_order_total' => 'Your order is below the %s minimum for %s orders, add more items to checkout.',
+    'text_mail_order' => 'Order email to customer',
+    'text_mail_order_alert' => 'Order alert email to admin',
 
     'button_add_to_order' => 'Add to order',
     'button_update' => 'Update',

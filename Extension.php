@@ -127,8 +127,8 @@ class Extension extends BaseExtension
     public function registerMailTemplates()
     {
         return [
-            'igniter.cart::mail.order' => 'Order confirmation email to customer',
-            'igniter.cart::mail.order_alert' => 'New order alert email to admin',
+            'igniter.cart::mail.order' => 'lang:igniter.cart::default.text_mail_order',
+            'igniter.cart::mail.order_alert' => 'lang:igniter.cart::default.text_mail_order_alert',
         ];
     }
 
