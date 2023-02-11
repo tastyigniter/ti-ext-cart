@@ -27,6 +27,18 @@
 </div>
 @endif
 
+@if ($showDeliveryCommentField)
+<div class="form-group">
+    <label for="delivery_comment">@lang('igniter.cart::default.checkout.label_delivery_comment')</label>
+    <textarea
+        name="delivery_comment"
+        id="delivery_comment"
+        rows="3"
+        class="form-control"
+    >{!! set_value('delivery_comment', $order->delivery_comment) !!}</textarea>
+</div>
+@endif
+
 @if ($agreeTermsSlug)
     <div class="form-group">
         <div class="form-check">

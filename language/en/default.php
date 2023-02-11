@@ -157,6 +157,7 @@ return [
         'label_payment_method' => 'Payment Method',
         'label_terms' => 'By clicking Register, you agree to the <a target="_blank" href="%s">Terms and Conditions</a> set out by this site, including our Cookie Use.',
         'label_comment' => 'Leave a note',
+        'label_delivery_comment' => 'Leave a note for the driver',
         'label_ip' => 'IP Address',
         'label_checkout_terms' => 'Checkout Terms',
 

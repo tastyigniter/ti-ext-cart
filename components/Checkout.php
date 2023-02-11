@@ -89,6 +89,12 @@ class Checkout extends BaseComponent
                 'default' => true,
                 'validationRule' => 'required|boolean',
             ],
+            'showDeliveryCommentField' => [
+                'label' => 'Whether to display the delivery comment form field',
+                'type' => 'switch',
+                'default' => true,
+                'validationRule' => 'required|boolean',
+            ],
             'telephoneIsRequired' => [
                 'label' => 'Whether the telephone field should be required',
                 'type' => 'switch',
@@ -165,6 +171,7 @@ class Checkout extends BaseComponent
         $this->page['showCityField'] = (bool)$this->property('showCityField', 1);
         $this->page['showStateField'] = (bool)$this->property('showStateField', 1);
         $this->page['showCommentField'] = (bool)$this->property('showCommentField', 1);
+        $this->page['showDeliveryCommentField'] = (bool)$this->property('showDeliveryCommentField', 1);
         $this->page['agreeTermsSlug'] = $this->getAgreeTermsPageSlug();
         $this->page['redirectPage'] = $this->property('redirectPage');
         $this->page['menusPage'] = $this->property('menusPage');
@@ -366,6 +373,7 @@ class Checkout extends BaseComponent
             ['email', 'lang:igniter.cart::default.checkout.label_email', 'sometimes|required|email:filter|max:96|unique:customers'],
             ['telephone', 'lang:igniter.cart::default.checkout.label_telephone', $telephoneRule],
             ['comment', 'lang:igniter.cart::default.checkout.label_comment', 'max:500'],
+            ['delivery_comment', 'lang:igniter.cart::default.checkout.label_delivery_comment', 'max:500'],
         ];
 
         if (Location::orderTypeIsDelivery()) {
