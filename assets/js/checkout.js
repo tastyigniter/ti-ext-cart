@@ -9,8 +9,6 @@
         this.options = options || {}
         this.$checkoutBtn = $(document).find(this.options.buttonSelector)
         this.paymentInputSelector = 'input[name='+this.options.paymentInputName+']'
-        this.telephonePicker = null
-        this.$telephoneInput = null
 
         this.init()
     }
@@ -28,22 +26,6 @@
             })
             .on('submit', this.options.formSelector, $.proxy(this.onSubmitCheckoutForm, this))
             .on('ajaxFail', this.options.formSelector, $.proxy(this.onFailCheckoutForm, this))
-
-        this.initCountryCodePicker(this.$el.find(this.options.telephoneSelector))
-    }
-
-    Checkout.prototype.initCountryCodePicker = function ($el) {
-        this.$telephoneInput = $('<input>').attr({
-            type: 'hidden',
-            id: 'hidden-input-' + $el.attr('id'),
-            name: $el.attr('name'),
-            value: $el.val(),
-        });
-
-        $el.removeAttr('name')
-        $el.after(this.$telephoneInput)
-
-        this.telephonePicker = $el.intlTelInput($.extend({}, Checkout.TELEPHONE_PICKER_DEFAULTS, $el.data()));
     }
 
     Checkout.prototype.validateCheckout = function ($checkoutForm, callbackFn) {
@@ -137,14 +119,11 @@
 
     Checkout.prototype.onSubmitCheckoutForm = function (event) {
         var $checkoutForm = $(event.target),
-            $selectedPaymentMethod = $(this.paymentInputSelector + ':checked', document),
-            telephoneNumber = this.telephonePicker.intlTelInput('getNumber')
+            $selectedPaymentMethod = $(this.paymentInputSelector + ':checked', document)
 
         this.$checkoutBtn.prop('disabled', true)
 
         event.preventDefault();
-
-        this.$telephoneInput.val(telephoneNumber)
 
         if ($selectedPaymentMethod && !$selectedPaymentMethod.data('skipValidation') && $selectedPaymentMethod.data('preValidateCheckout') === true) {
             this.validateCheckout($checkoutForm);
@@ -163,17 +142,10 @@
         alias: 'checkout',
         formSelector: '#checkout-form',
         buttonSelector: '.checkout-btn',
-        telephoneSelector: '[data-control="country-code-picker"]',
         paymentInputName: 'payment',
         validateHandler: undefined,
         choosePaymentHandler: undefined,
         deletePaymentHandler: undefined,
-    }
-
-    Checkout.TELEPHONE_PICKER_DEFAULTS = {
-        initialCountry: 'gb',
-        separateDialCode: true,
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
     }
 
     // PLUGIN DEFINITION
