@@ -16,7 +16,6 @@
     }
   ],
   "require": {
-    "tastyigniter/flame": "v4.x-dev",
     "tastyigniter/ti-ext-local": "v4.x-dev",
     "tastyigniter/ti-ext-payregister": "v4.x-dev",
     "tastyigniter/ti-ext-user": "v4.x-dev"
