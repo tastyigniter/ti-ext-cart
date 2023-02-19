@@ -1,56 +1,58 @@
-subject = "{site_name} order confirmation - {order_number}"
+subject = "{{$site_name}} order confirmation - {{$order_number}}"
 ==
 Thank you for your order!
 
-Hi, {first_name} {last_name}
+Hi, {{$first_name}} {{$last_name}}
 
 Your order has been received and will be with you shortly.
 
 To view your order progress, use the URL below:
-{order_view_url}
+{{$order_view_url}}
 
-Your order number is {order_number}
-This is a {order_type} order.
+Your order number is {{$order_number}}
+This is a {{$order_type}} order.
 
-Order date: {order_date}
-Requested {order_type} time: {order_time}
-Payment Method: {order_payment}
+Order date: {{$order_date}}
+Requested {{$order_type}} time: {{$order_time}}
+Payment Method: {{$order_payment}}
 
-{order_address}
-Restaurant: {location_name}
+{{$order_address}}
+Restaurant: {{$location_name}}
 
-{order_comment}
+{{$order_comment}}
 
-{order_menus}
-{menu_quantity} x {menu_name}
-{menu_options}
-- {menu_price}
-- {menu_subtotal}
-{menu_comment}
+@if(!empty($order_menus))
+@foreach($order_menus as $order_menu)
+{{ $order_menu['menu_quantity'] }} x {{ $order_menu['menu_name'] }}
+{!! $order_menu['menu_options'] !!}
+- {{ $order_menu['menu_price'] }}
+- {{ $order_menu['menu_subtotal'] }}
+{!! $order_menu['menu_comment'] !!}
+@endforeach
+@endif
 
-{/order_menus}
-
-{order_totals}
-{order_total_title}
-{order_total_value}
-
-{/order_totals}
+@if(!empty($order_totals))
+@foreach($order_totals as $order_total)
+{{ $order_total['order_total_title'] }}
+{{ $order_total['order_total_value'] }}
+@endforeach
+@endif
 
 ==
-Hi {first_name} {last_name},
+Hi {{$first_name}} {{$last_name}},
 
 ## Thank you for your order!
 
-Your {order_type} order **{order_number}** has been received and will be with you shortly.
+Your {{$order_type}} order **{{$order_number}}** has been received and will be with you shortly.
 
-[Click here]({order_view_url}) to view your order progress.
+[Click here]({{$order_view_url}}) to view your order progress.
 
-**Requested {order_type} time:** {order_time}<br>
-**Payment Method:** {order_payment}<br>
-**Restaurant:** {location_name}<br>
-**Delivery Address:** {order_address}
+**Requested {{$order_type}} time:** {{$order_time}}<br>
+**Payment Method:** {{$order_payment}}<br>
+**Restaurant:** {{$location_name}}<br>
+**Delivery Address:** {{$order_address}}
 
-{order_comment}
+{{$order_comment}}
 
 @partial('table')
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
