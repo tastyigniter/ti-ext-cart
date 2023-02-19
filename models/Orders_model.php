@@ -8,7 +8,6 @@ use Main\Classes\MainController;
 /**
  * Orders Model Class
  * @deprecated remove before v4. Added for backward compatibility, use Admin\Models\Orders_model
- *
  */
 class Orders_model extends BaseOrders_model
 {
