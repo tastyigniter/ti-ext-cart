@@ -23,7 +23,7 @@ class OrderCreated implements ActivityInterface
     {
         $recipients = User::isEnabled()
             ->whereHasLocation($order->location->getKey())
-            ->get();
+            ->get()->all();
 
         activity()->pushLog(new static('orderCreated', $order), $recipients);
     }
