@@ -135,13 +135,6 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerActivityTypes()
-    {
-        return [
-            ActivityTypes\OrderCreated::class => 'orderCreated',
-        ];
-    }
-
     protected function bindCartEvents()
     {
         Event::listen('cart.beforeRegister', function () {
@@ -171,7 +164,7 @@ class Extension extends BaseExtension
     protected function bindCheckoutEvents()
     {
         Event::listen('admin.order.paymentProcessed', function (Order $model) {
-            ActivityTypes\OrderCreated::log($model);
+            Notifications\OrderCreatedNotification::make()->subject($model)->sendToDatabase();
 
             $model->mailSend('igniter.cart::mail.order', 'customer');
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
