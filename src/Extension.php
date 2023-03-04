@@ -160,7 +160,7 @@ class Extension extends BaseExtension
     protected function bindCheckoutEvents()
     {
         Event::listen('admin.order.paymentProcessed', function (Order $model) {
-            Notifications\OrderCreatedNotification::make()->subject($model)->sendToDatabase();
+            Notifications\OrderCreatedNotification::make()->subject($model)->broadcast();
 
             $model->mailSend('igniter.cart::mail.order', 'customer');
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
