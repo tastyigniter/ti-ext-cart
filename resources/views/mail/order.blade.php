@@ -52,7 +52,7 @@ Your {order_type} order **{order_number}** has been received and will be with yo
 
 {order_comment}
 
-@themePartial('table')
+@partial('table')
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <thead>
     <tr>
