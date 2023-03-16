@@ -3,7 +3,6 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
-use Admin\Models\Statuses_model;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
@@ -94,16 +93,10 @@ class Order extends \System\Classes\BaseComponent
         if (is_null($order) && !$order = $this->getOrder())
             return false;
 
-        if ($order->hasStatus(setting('canceled_order_status')))
+        if ($order->isCanceled())
             return false;
 
-        if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
-            return false;
-
-        if (!$order->order_datetime->isFuture())
-            return false;
-
-        return $order->order_datetime->diffInRealMinutes() > $timeout;
+        return $order->isCancelable();
     }
 
     public function onRun()
@@ -162,7 +155,7 @@ class Order extends \System\Classes\BaseComponent
         if (!$this->showCancelButton($order))
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
-        if (!$order->addStatusHistory(Statuses_model::find(setting('canceled_order_status'))))
+        if (!$order->markAsCanceled())
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
         flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
