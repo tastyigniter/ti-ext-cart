@@ -2,7 +2,6 @@
 
 namespace Igniter\Cart;
 
-use Admin\Models\Orders_model;
 use Igniter\Admin\Models\Order;
 use Igniter\Flame\Igniter;
 use Igniter\Local\Facades\Location;
@@ -37,7 +36,7 @@ class Extension extends BaseExtension
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
 
-        Orders_model::extend(function ($model) {
+        Order::extend(function ($model) {
             $model->implement[] = \Igniter\Cart\Actions\OrderAction::class;
         });
     }
@@ -174,7 +173,7 @@ class Extension extends BaseExtension
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
         });
 
-        Event::listen('admin.order.beforePaymentProcessed', function (Orders_model $model) {
+        Event::listen('admin.order.beforePaymentProcessed', function (Order $model) {
             $model->subtractStock();
         });
     }
