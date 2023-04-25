@@ -29,7 +29,6 @@ trait CartConditionHelper
     /**
      * Added for backward compatibility
      *
-     * @param $subTotal
      * @return float|string
      */
     protected function processValue($subTotal)
@@ -46,8 +45,7 @@ trait CartConditionHelper
         if ($this->valueIsPercentage($actionValue)) {
             $cleanValue = $this->cleanValue($actionValue);
             $value = ($total * ($cleanValue / 100));
-        }
-        else {
+        } else {
             $value = (float)$this->cleanValue($actionValue);
         }
 
@@ -70,25 +68,23 @@ trait CartConditionHelper
         $result = $total;
         if ($this->actionIsInclusive($action)) {
             $result = $total;
-        }
-        elseif ($this->valueIsToBeSubtracted($actionValue)) {
+        } elseif ($this->valueIsToBeSubtracted($actionValue)) {
             $result = ($total - $calculatedValue);
-        }
-        elseif ($this->valueIsToBeAdded($actionValue)) {
+        } elseif ($this->valueIsToBeAdded($actionValue)) {
             $result = ($total + $calculatedValue);
-        }
-        elseif ($this->valueIsToBeMultiplied($actionValue)) {
+        } elseif ($this->valueIsToBeMultiplied($actionValue)) {
             $result = ($total * $calculatedValue);
-        }
-        elseif ($this->valueIsToBeDivided($actionValue)) {
+        } elseif ($this->valueIsToBeDivided($actionValue)) {
             $result = (float)($total / $calculatedValue);
         }
 
-        if ($actionMultiplier)
+        if ($actionMultiplier) {
             $result = (float)($total * $this->operandValue($actionMultiplier));
+        }
 
-        if ($this->actionHasReachedMax($actionMax, $result))
+        if ($this->actionHasReachedMax($actionMax, $result)) {
             $result = $actionMax;
+        }
 
         return max($result, 0);
     }
@@ -101,7 +97,6 @@ trait CartConditionHelper
     /**
      * Removes some arithmetic signs (%,+,-, /, *) only
      *
-     * @param $value
      * @param string $include
      *
      * @return mixed
@@ -113,11 +108,13 @@ trait CartConditionHelper
 
     protected function operandValue($key)
     {
-        if (property_exists($this, $key))
+        if (property_exists($this, $key)) {
             return $this->{$key};
+        }
 
-        if ($key !== 'total' && $this->target && method_exists($this->target, $key))
+        if ($key !== 'total' && $this->target && method_exists($this->target, $key)) {
             return call_user_func([$this->target, $key]);
+        }
 
         return $key;
     }
@@ -152,8 +149,9 @@ trait CartConditionHelper
     {
         preg_match('/([a-zA-Z0-9\-?]+)(?:\s*)([\=\!\<\>]{1,2})(?:\s*)([\-?a-zA-Z0-9]+)/', $rule, $matches);
 
-        if (!count($matches))
+        if (!count($matches)) {
             throw new Exception(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
+        }
 
         array_shift($matches);
 
@@ -162,11 +160,13 @@ trait CartConditionHelper
 
     protected function parseAction($action)
     {
-        if ($action == [])
+        if ($action == []) {
             return $action;
+        }
 
-        if (!array_key_exists('value', $action))
+        if (!array_key_exists('value', $action)) {
             throw new Exception(sprintf('Cart condition action [%s] format is invalid on %s.', $action, get_class($this)));
+        }
 
         return $action;
     }
@@ -179,8 +179,6 @@ trait CartConditionHelper
     /**
      * Check if value is a percentage
      *
-     * @param $value
-     *
      * @return bool
      */
     protected function valueIsPercentage($value)
@@ -190,8 +188,6 @@ trait CartConditionHelper
 
     /**
      * Check if value is a subtract
-     *
-     * @param $value
      *
      * @return bool
      */
@@ -203,8 +199,6 @@ trait CartConditionHelper
     /**
      * Check if value is to be added
      *
-     * @param $value
-     *
      * @return bool
      */
     protected function valueIsToBeAdded($value)
@@ -215,8 +209,6 @@ trait CartConditionHelper
     /**
      * Check if value is to be added
      *
-     * @param $value
-     *
      * @return bool
      */
     protected function valueIsToBeMultiplied($value)
@@ -226,8 +218,6 @@ trait CartConditionHelper
 
     /**
      * Check if value is to be added
-     *
-     * @param $value
      *
      * @return bool
      */

@@ -29,8 +29,9 @@ class Menu extends BaseMenu implements Buyable
 
     public function isSpecial()
     {
-        if (!$special = $this->special)
+        if (!$special = $this->special) {
             return false;
+        }
 
         return $special->active();
     }
@@ -42,8 +43,9 @@ class Menu extends BaseMenu implements Buyable
 
     public function hasOrderTypeRestriction($orderType)
     {
-        if (empty($this->order_restriction))
+        if (empty($this->order_restriction)) {
             return false;
+        }
 
         return !in_array($orderType, $this->order_restriction);
     }

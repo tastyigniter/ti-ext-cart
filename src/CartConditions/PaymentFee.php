@@ -23,16 +23,19 @@ class PaymentFee extends CartCondition
 
     public function beforeApply()
     {
-        if (!strlen($paymentCode = $this->getMetaData('code')))
+        if (!strlen($paymentCode = $this->getMetaData('code'))) {
             return false;
+        }
 
-        if (is_null($this->paymentModel))
+        if (is_null($this->paymentModel)) {
             $this->paymentModel = Payment::whereCode($paymentCode)->first();
+        }
 
         // only apply if payment has applicable fee
         $paymentFee = optional($this->paymentModel)->order_fee;
-        if (!($paymentFee > 0))
+        if (!($paymentFee > 0)) {
             return false;
+        }
     }
 
     public function getActions()

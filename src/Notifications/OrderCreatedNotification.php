@@ -22,8 +22,9 @@ class OrderCreatedNotification extends Notification
     public function getUrl(): string
     {
         $url = 'orders';
-        if ($this->subject)
+        if ($this->subject) {
             $url .= '/edit/'.$this->subject->getKey();
+        }
 
         return admin_url($url);
     }

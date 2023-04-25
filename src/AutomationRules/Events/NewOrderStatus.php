@@ -21,8 +21,9 @@ class NewOrderStatus extends BaseEvent
         $params = [];
         $order = array_get($args, 0);
         $status = array_get($args, 1);
-        if ($order instanceof Order)
+        if ($order instanceof Order) {
             $params = $order->mailGetData();
+        }
 
         $params['status'] = $status;
 

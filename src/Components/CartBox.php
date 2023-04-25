@@ -184,10 +184,12 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
@@ -203,10 +205,12 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
@@ -223,10 +227,12 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
@@ -234,12 +240,14 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
     {
         try {
             $amountType = post('amount_type');
-            if (!in_array($amountType, ['none', 'amount', 'custom']))
+            if (!in_array($amountType, ['none', 'amount', 'custom'])) {
                 throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+            }
 
             $amount = post('amount');
-            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === false)
+            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === false) {
                 throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+            }
 
             $this->cartManager->applyCondition('tip', [
                 'amountType' => $amountType,
@@ -249,45 +257,53 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
     public function onRemoveCondition()
     {
         try {
-            if (!strlen($conditionId = post('conditionId')))
+            if (!strlen($conditionId = post('conditionId'))) {
                 return;
+            }
 
             $this->cartManager->removeCondition($conditionId);
             $this->controller->pageCycle();
 
             return $this->fetchPartials();
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
     public function onProceedToCheckout()
     {
         try {
-            if (!is_numeric($id = post('locationId')) || !($location = Location::getById($id)) || !$location->location_status)
+            if (!is_numeric($id = post('locationId')) || !($location = Location::getById($id)) || !$location->location_status) {
                 throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
+            }
 
             Location::setCurrent($location);
 
             $redirectUrl = $this->controller->pageUrl($this->property('checkoutPage'));
 
             return Redirect::to($redirectUrl);
-        }
-        catch (Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else flash()->alert($ex->getMessage());
+        } catch (Exception $ex) {
+            if (Request::ajax()) {
+                throw $ex;
+            } else {
+                flash()->alert($ex->getMessage());
+            }
         }
     }
 
@@ -304,17 +320,21 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function buttonLabel($checkoutComponent = null)
     {
-        if ($this->locationIsClosed())
+        if ($this->locationIsClosed()) {
             return lang('igniter.cart::default.text_is_closed');
+        }
 
-        if (!$this->property('pageIsCheckout') && $this->cartManager->getCart()->count())
+        if (!$this->property('pageIsCheckout') && $this->cartManager->getCart()->count()) {
             return lang('igniter.cart::default.button_order').' · '.currency_format($this->cartManager->getCart()->total());
+        }
 
-        if (!$this->property('pageIsCheckout'))
+        if (!$this->property('pageIsCheckout')) {
             return lang('igniter.cart::default.button_order');
+        }
 
-        if ($checkoutComponent && !$checkoutComponent->canConfirmCheckout())
+        if ($checkoutComponent && !$checkoutComponent->canConfirmCheckout()) {
             return lang('igniter.cart::default.button_payment');
+        }
 
         return lang('igniter.cart::default.button_confirm');
     }

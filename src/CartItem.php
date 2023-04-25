@@ -77,9 +77,7 @@ class CartItem implements Arrayable, Jsonable
      * @param int|string $id
      * @param string $name
      * @param float $price
-     * @param array $options
      * @param null $comment
-     * @param array $conditions
      */
     public function __construct($id, $name, $price, array $options = [], $comment = null, array $conditions = [])
     {
@@ -177,8 +175,9 @@ class CartItem implements Arrayable, Jsonable
      */
     public function setQuantity($qty)
     {
-        if (!is_numeric($qty))
+        if (!is_numeric($qty)) {
             throw new \InvalidArgumentException('Please supply a valid quantity.');
+        }
 
         $this->qty = $qty;
     }
@@ -191,8 +190,6 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Update the cart item from a Buyable.
      *
-     * @param \Igniter\Cart\Contracts\Buyable $item
-     *
      * @return void
      */
     public function updateFromBuyable(Buyable $item)
@@ -204,8 +201,6 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Update the cart item from an array.
-     *
-     * @param array $attributes
      *
      * @return void
      */
@@ -259,10 +254,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      *
-     * @param \Igniter\Cart\Contracts\Buyable $item
-     * @param array $options
      * @param null $comment
-     * @param array $conditions
      *
      * @return \Igniter\Cart\CartItem
      */
@@ -280,8 +272,6 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @param array $attributes
      *
      * @return \Igniter\Cart\CartItem
      */
@@ -301,7 +291,6 @@ class CartItem implements Arrayable, Jsonable
      * Generate a unique id for the cart item.
      *
      * @param string $id
-     * @param array $options
      *
      * @return string
      */
@@ -314,8 +303,9 @@ class CartItem implements Arrayable, Jsonable
 
     protected function makeCartItemOptions($options)
     {
-        if ($options instanceof CartItemOptions)
+        if ($options instanceof CartItemOptions) {
             return $options;
+        }
 
         return new CartItemOptions(array_map(function ($option) {
             return CartItemOption::fromArray($option);
@@ -324,8 +314,9 @@ class CartItem implements Arrayable, Jsonable
 
     protected function makeCartItemConditions($conditions)
     {
-        if ($conditions instanceof CartItemConditions)
+        if ($conditions instanceof CartItemConditions) {
             return $conditions;
+        }
 
         return new CartItemConditions($conditions);
     }

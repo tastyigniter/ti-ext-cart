@@ -51,8 +51,9 @@ class OrderManager
 
     public function getCustomerId()
     {
-        if (!$this->customer)
+        if (!$this->customer) {
             return null;
+        }
 
         return $this->customer->getKey();
     }
@@ -76,14 +77,14 @@ class OrderManager
         $order = Order::find($id);
 
         // Only users can view their own orders
-        if (!$order || $order->customer_id != $customerId)
+        if (!$order || $order->customer_id != $customerId) {
             $order = Order::make($this->getCustomerAttributes());
+        }
 
         return $order;
     }
 
     /**
-     * @param $hash
      * @param \Igniter\Main\Models\Customer|null $customer
      * @return \Igniter\Admin\Models\Order|\Illuminate\Database\Eloquent\Model|object|null
      */
@@ -91,8 +92,9 @@ class OrderManager
     {
         $query = Order::whereHash($hash);
 
-        if (!is_null($customer))
+        if (!is_null($customer)) {
             $query->where('customer_id', $customer->getKey());
+        }
 
         return $query->first();
     }
@@ -103,7 +105,6 @@ class OrderManager
     }
 
     /**
-     * @param $code
      * @return \Igniter\Admin\Models\Payment|\Admin\Classes\BasePaymentGateway
      */
     public function getPayment($code)
@@ -118,8 +119,9 @@ class OrderManager
 
     public function findDeliveryAddress($addressId)
     {
-        if (empty($addressId))
+        if (empty($addressId)) {
             return null;
+        }
 
         return Address::find($addressId);
     }
@@ -130,41 +132,46 @@ class OrderManager
 
     public function validateCustomer($customer)
     {
-        if (!$this->location->current()->allowGuestOrder() && (!$customer || !$customer->is_activated))
+        if (!$this->location->current()->allowGuestOrder() && (!$customer || !$customer->is_activated)) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
+        }
     }
 
     public function validateDeliveryAddress(array $address)
     {
-        if (!array_get($address, 'country') && isset($address['country_id']))
+        if (!array_get($address, 'country') && isset($address['country_id'])) {
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
+        }
 
         $addressString = implode(' ', array_only($address, [
             'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
         ]));
 
-        if (!$this->location->requiresUserPosition())
+        if (!$this->location->requiresUserPosition()) {
             return;
+        }
 
         $collection = app('geocoder')->geocode($addressString);
-        if (!$collection || $collection->isEmpty())
+        if (!$collection || $collection->isEmpty()) {
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
+        }
 
         $userLocation = $collection->first();
         $this->location->updateUserPosition($userLocation);
 
-        if (!$area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates()))
+        if (!$area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates())) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
+        }
 
         if (!$this->location->isCurrentAreaId($area->area_id)) {
             $this->location->setCoveredArea(new CoveredArea($area));
+
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
         }
     }
 
     /**
      * @param $order \Igniter\Admin\Models\Order
-     * @param $data
      *
      * @return \Igniter\Admin\Models\Order
      */
@@ -172,8 +179,9 @@ class OrderManager
     {
         Event::fire('igniter.checkout.beforeSaveOrder', [$order, $data]);
 
-        if ($this->customer)
+        if ($this->customer) {
             $data['email'] = $this->customer->email;
+        }
 
         $addressId = null;
         if ($address = array_get($data, 'address', [])) {
@@ -209,19 +217,22 @@ class OrderManager
     {
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
-        if (!strlen($order->payment) && $this->processPaymentLessForm($order))
+        if (!strlen($order->payment) && $this->processPaymentLessForm($order)) {
             return true;
+        }
 
         $paymentMethod = $this->getPayment($order->payment);
-        if (!$paymentMethod || !$paymentMethod->status)
+        if (!$paymentMethod || !$paymentMethod->status) {
             throw new ApplicationException('Selected payment method is inactive, try a different one.');
+        }
 
-        if (!$paymentMethod->isApplicable($order->order_total, $paymentMethod))
+        if (!$paymentMethod->isApplicable($order->order_total, $paymentMethod)) {
             throw new ApplicationException(sprintf(
                 lang('igniter.payregister::default.alert_min_order_total'),
                 currency_format($paymentMethod->order_total),
                 $paymentMethod->name
             ));
+        }
 
         if ($paymentMethod->hasApplicableFee() && !optional($this->cart->getCondition('paymentFee'))->isApplied()) {
             throw new ApplicationException(sprintf(
@@ -232,8 +243,7 @@ class OrderManager
 
         if (array_get($data, 'pay_from_profile') == 1) {
             $result = $paymentMethod->payFromPaymentProfile($order, $data);
-        }
-        else {
+        } else {
             $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
         }
 
@@ -310,8 +320,9 @@ class OrderManager
      */
     protected function processPaymentLessForm($order)
     {
-        if ($order->order_total > 0)
+        if ($order->order_total > 0) {
             return false;
+        }
 
         $order->updateOrderStatus(setting('default_order_status'), ['notify' => false]);
         $order->markAsPaymentProcessed();
@@ -321,11 +332,13 @@ class OrderManager
 
     protected function applyOrderDateTime($order)
     {
-        if (!$orderDateTime = $this->location->orderDateTime())
+        if (!$orderDateTime = $this->location->orderDateTime()) {
             return;
+        }
 
-        if ($isAsapTime = $this->location->orderTimeIsAsap())
+        if ($isAsapTime = $this->location->orderTimeIsAsap()) {
             $orderDateTime->addMinutes($this->location->orderLeadTime());
+        }
 
         $order->order_time_is_asap = $isAsapTime;
         $order->order_date = $orderDateTime->format('Y-m-d');
@@ -345,8 +358,6 @@ class OrderManager
 
     /**
      * Set the current order id.
-     *
-     * @param $orderId
      */
     public function setCurrentOrderId($orderId)
     {
@@ -374,8 +385,6 @@ class OrderManager
     /**
      * Check if the given order id is the current order id.
      *
-     * @param $orderId
-     *
      * @return bool
      */
     public function isCurrentOrderId($orderId)
@@ -397,8 +406,9 @@ class OrderManager
     {
         $this->setCurrentPaymentCode($code);
 
-        if (!$condition = $this->cart->getCondition('paymentFee'))
+        if (!$condition = $this->cart->getCondition('paymentFee')) {
             return;
+        }
 
         $condition->setMetaData(['code' => $code]);
 

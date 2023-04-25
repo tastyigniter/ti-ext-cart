@@ -45,9 +45,6 @@ class Cart
 
     /**
      * Cart constructor.
-     *
-     * @param \Illuminate\Session\SessionManager $session
-     * @param \Illuminate\Events\Dispatcher $events
      */
     public function __construct(SessionManager $session, Dispatcher $events)
     {
@@ -88,9 +85,7 @@ class Cart
     /**
      * Add an item to the cart.
      *
-     * @param $buyable
      * @param int $qty
-     * @param array $options
      * @param null $comment
      *
      * @return array|\Igniter\Cart\CartItem
@@ -140,11 +135,9 @@ class Cart
 
         if ($qty instanceof Buyable) {
             $cartItem->updateFromBuyable($qty);
-        }
-        elseif (is_array($qty)) {
+        } elseif (is_array($qty)) {
             $cartItem->updateFromArray($qty);
-        }
-        else {
+        } else {
             $cartItem->qty = $qty;
         }
 
@@ -209,8 +202,9 @@ class Cart
     {
         $content = $this->getContent();
 
-        if (!$content->has($rowId))
+        if (!$content->has($rowId)) {
             throw new InvalidRowIDException("The cart does not contain rowId {$rowId}.");
+        }
 
         return $content->get($rowId);
     }
@@ -244,8 +238,6 @@ class Cart
 
     /**
      * Get the number of items in the cart.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -274,8 +266,6 @@ class Cart
 
     /**
      * Search the cart content for a cart item matching the given search closure.
-     *
-     * @param \Closure $search
      *
      * @return \Igniter\Cart\CartContent
      */
@@ -330,8 +320,6 @@ class Cart
     /**
      * Get condition applied on the cart by its name
      *
-     * @param $name
-     *
      * @return CartCondition
      */
     public function getCondition($name)
@@ -342,8 +330,6 @@ class Cart
     /**
      * Clear a condition on a cart by its name,
      *
-     * @param $name
-     *
      * @return bool
      */
     public function removeCondition($name)
@@ -352,8 +338,9 @@ class Cart
 
         $this->fireEvent('condition.removing', $cartCondition);
 
-        if (!$cartCondition || !$cartCondition->removeable)
+        if (!$cartCondition || !$cartCondition->removeable) {
             return false;
+        }
 
         $cartCondition->clearMetaData();
 
@@ -430,24 +417,23 @@ class Cart
             if (!$cartItem->conditions->has($itemCondition->name)) {
                 $cartItem->conditions->put($itemCondition->name, $itemCondition);
             }
-        }
-        elseif ($cartItem->conditions) {
+        } elseif ($cartItem->conditions) {
             $cartItem->conditions->forget($condition->name);
         }
     }
 
     /**
-     * @param $condition
-     * @param $cartItem
      * @return null|\Igniter\Cart\CartCondition
      */
     protected function getApplicableItemCondition($condition, $cartItem)
     {
-        if (!in_array(ActsAsItemable::class, class_uses($condition)))
+        if (!in_array(ActsAsItemable::class, class_uses($condition))) {
             return null;
+        }
 
-        if (!$condition::isApplicableTo($cartItem))
+        if (!$condition::isApplicableTo($cartItem)) {
             return null;
+        }
 
         return $condition->toItem();
     }
@@ -518,8 +504,9 @@ class Cart
      */
     protected function getContent()
     {
-        if (!$content = $this->getSession('content'))
+        if (!$content = $this->getSession('content')) {
             $content = new CartContent;
+        }
 
         return $content;
     }
@@ -531,8 +518,9 @@ class Cart
      */
     protected function getConditions()
     {
-        if (!$this->conditions)
+        if (!$this->conditions) {
             $this->conditions = new CartConditions;
+        }
 
         return $this->conditions;
     }
@@ -540,9 +528,7 @@ class Cart
     /**
      * Create a new CartItem from the supplied attributes.
      *
-     * @param $buyable
      * @param int $qty
-     * @param array $options
      * @param null $comment
      *
      * @return \Igniter\Cart\CartItem
@@ -553,8 +539,7 @@ class Cart
             $cartItem = CartItem::fromBuyable($buyable, $options, $comment);
             $cartItem->setQuantity($qty);
             $cartItem->associate($buyable);
-        }
-        else {
+        } else {
             $cartItem = CartItem::fromArray($buyable);
             $cartItem->setQuantity(array_get($buyable, 'qty'));
         }
@@ -571,7 +556,9 @@ class Cart
      */
     protected function isMulti($item)
     {
-        if (!is_array($item)) return false;
+        if (!is_array($item)) {
+            return false;
+        }
 
         return is_array(head($item)) || head($item) instanceof Buyable;
     }
@@ -641,8 +628,6 @@ class Cart
     }
 
     /**
-     * @param $identifier
-     *
      * @return bool
      */
     protected function storedCartWithIdentifierExists($identifier)
@@ -666,8 +651,9 @@ class Cart
     protected function createModel()
     {
         $modelClass = config('cart.model');
-        if (!$modelClass || !class_exists($modelClass))
+        if (!$modelClass || !class_exists($modelClass)) {
             throw new Exception(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
+        }
 
         return new $modelClass();
     }
@@ -691,15 +677,13 @@ class Cart
     //
 
     /**
-     * @param $name
-     * @param $payload
-     *
      * @return mixed
      */
     protected function fireEvent($name, $payload = null)
     {
-        if (is_null($payload))
+        if (is_null($payload)) {
             return $this->events->fire('cart.'.$name, [$this]);
+        }
 
         return $this->events->fire('cart.'.$name, [$this, $payload]);
     }

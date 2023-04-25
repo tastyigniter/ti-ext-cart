@@ -90,8 +90,9 @@ class Order extends \Igniter\System\Classes\BaseComponent
 
     public function showCancelButton($order = null)
     {
-        if (is_null($order) && !$order = $this->getOrder())
+        if (is_null($order) && !$order = $this->getOrder()) {
             return false;
+        }
 
         return !$order->isCanceled() && $order->isCancelable();
     }
@@ -107,24 +108,29 @@ class Order extends \Igniter\System\Classes\BaseComponent
 
         $this->addJs('js/order.js', 'checkout-js');
 
-        if (!$order || !$order->isPaymentProcessed())
+        if (!$order || !$order->isPaymentProcessed()) {
             return Redirect::to($this->property('ordersPage'));
+        }
 
-        if ($this->orderManager->isCurrentOrderId($order->order_id))
+        if ($this->orderManager->isCurrentOrderId($order->order_id)) {
             $this->orderManager->clearOrder();
+        }
     }
 
     public function onReOrder()
     {
-        if (!is_numeric($orderId = input('orderId')))
+        if (!is_numeric($orderId = input('orderId'))) {
             return;
+        }
 
-        if (!$order = OrderModel::find($orderId))
+        if (!$order = OrderModel::find($orderId)) {
             return;
+        }
 
         foreach ($order->getOrderMenus() as $orderMenu) {
-            if (!$menuModel = Menu::findBy($orderMenu->menu_id))
+            if (!$menuModel = Menu::findBy($orderMenu->menu_id)) {
                 continue;
+            }
 
             $this->addCartItem($menuModel, $orderMenu);
         }
@@ -143,17 +149,21 @@ class Order extends \Igniter\System\Classes\BaseComponent
 
     public function onCancel()
     {
-        if (!is_numeric($orderId = input('orderId')))
+        if (!is_numeric($orderId = input('orderId'))) {
             return;
+        }
 
-        if (!$order = OrderModel::find($orderId))
+        if (!$order = OrderModel::find($orderId)) {
             return;
+        }
 
-        if (!$this->showCancelButton($order))
+        if (!$this->showCancelButton($order)) {
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
+        }
 
-        if (!$order->markAsCanceled())
+        if (!$order->markAsCanceled()) {
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
+        }
 
         flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
 
@@ -162,8 +172,9 @@ class Order extends \Igniter\System\Classes\BaseComponent
 
     protected function getOrder()
     {
-        if (!is_string($hashParam = $this->getHashParam()))
+        if (!is_string($hashParam = $this->getHashParam())) {
             return null;
+        }
 
         return $this->orderManager->getOrderByHash($hashParam, Auth::customer());
     }
@@ -178,17 +189,18 @@ class Order extends \Igniter\System\Classes\BaseComponent
         try {
             resolve(CartManager::class)->validateCartMenuItem($menuModel, $orderMenu->quantity);
 
-            if (is_string($orderMenu->option_values))
+            if (is_string($orderMenu->option_values)) {
                 $orderMenu->option_values = @unserialize($orderMenu->option_values);
+            }
 
-            if ($orderMenu->option_values instanceof Arrayable)
+            if ($orderMenu->option_values instanceof Arrayable) {
                 $orderMenu->option_values = $orderMenu->option_values->toArray();
+            }
 
             $options = $this->prepareCartItemOptions($menuModel, $orderMenu->option_values);
 
             Cart::add($menuModel, $orderMenu->quantity, $options, $orderMenu->comment);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             flash()->warning($ex->getMessage());
         }
     }
@@ -197,8 +209,9 @@ class Order extends \Igniter\System\Classes\BaseComponent
     {
         $options = [];
         foreach ($optionValues as $cartOption) {
-            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id']))
+            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id'])) {
                 continue;
+            }
 
             try {
                 resolve(CartManager::class)->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
@@ -208,8 +221,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
                 })->toArray();
 
                 $options[] = $cartOption;
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 flash()->warning($ex->getMessage());
             }
         }

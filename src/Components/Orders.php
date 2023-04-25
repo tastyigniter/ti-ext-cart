@@ -44,8 +44,9 @@ class Orders extends \Igniter\System\Classes\BaseComponent
 
     protected function loadOrders()
     {
-        if (!$customer = Auth::customer())
+        if (!$customer = Auth::customer()) {
             return [];
+        }
 
         return Order::with(['location', 'status'])
             ->whereProcessed(true)
