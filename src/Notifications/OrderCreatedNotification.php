@@ -32,4 +32,9 @@ class OrderCreatedNotification extends Notification
     {
         return sprintf(lang('igniter.cart::default.checkout.notify_order_created'), $this->subject->customer_name);
     }
+
+    public function getIcon(): ?string
+    {
+        return 'fa-clipboard-list';
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart;
 
+use Admin\Models\Orders_model;
 use Igniter\Admin\Models\Order;
 use Igniter\Flame\Igniter;
 use Igniter\Local\Facades\Location;
@@ -37,7 +38,7 @@ class Extension extends BaseExtension
         $this->bindOrderStatusEvent();
 
         Orders_model::extend(function ($model) {
-            $model->implement[] = 'Igniter\Cart\Actions\OrderAction';
+            $model->implement[] = \Igniter\Cart\Actions\OrderAction::class;
         });
     }
 
@@ -130,8 +131,8 @@ class Extension extends BaseExtension
     public function registerMailTemplates()
     {
         return [
-            'igniter.cart::mail.order' => 'lang:igniter.cart::default.text_mail_order',
-            'igniter.cart::mail.order_alert' => 'lang:igniter.cart::default.text_mail_order_alert',
+            'igniter.cart::mail.order' => 'Order confirmation email to customer',
+            'igniter.cart::mail.order_alert' => 'New order alert email to admin',
         ];
     }
 

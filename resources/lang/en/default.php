@@ -37,6 +37,8 @@ return [
     'text_option_summary' => 'Choose between %s and %s',
     'text_add_more_items' => 'Add more items',
     'text_min_order_total' => 'Your order is below the %s minimum for %s orders, add more items to checkout.',
+    'text_mail_order' => 'Order email to customer',
+    'text_mail_order_alert' => 'Order alert email to admin',
 
     'button_add_to_order' => 'Add to order',
     'button_update' => 'Update',
@@ -155,6 +157,7 @@ return [
         'label_payment_method' => 'Payment Method',
         'label_terms' => 'By clicking Register, you agree to the <a target="_blank" href="%s">Terms and Conditions</a> set out by this site, including our Cookie Use.',
         'label_comment' => 'Leave a note',
+        'label_delivery_comment' => 'Leave a note for the driver',
         'label_ip' => 'IP Address',
         'label_checkout_terms' => 'Checkout Terms',
 

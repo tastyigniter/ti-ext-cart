@@ -160,7 +160,6 @@
         $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityOrOptionChanged, this))
         $cartItem.on('change', '[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
         $cartItem.on('input', '[data-toggle="quantity"] input[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
-        $cartItem.on('click', '[data-toggle="more-options"]', $.proxy(this.onToggleMoreOptions, this))
 
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))
@@ -170,14 +169,6 @@
 
         $cartItem.cartItem()
     }
-
-    CartBoxModal.prototype.onToggleMoreOptions = function (event) {
-        var $el = $(event.currentTarget),
-            $container = $el.closest('[data-control="item-option"]')
-
-        $el.fadeOut()
-        $container.find('.hidden-item-options').fadeIn()
-    };
 
     CartBoxModal.DEFAULTS = {
         alias: undefined,

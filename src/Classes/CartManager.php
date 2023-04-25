@@ -309,6 +309,9 @@ class CartManager
         if (!$this->location->current())
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
 
+        if ($this->location->checkNoOrderTypeAvailable())
+            throw new ApplicationException(lang('igniter.local::default.alert_order_type_required'));
+
         $orderType = $this->location->getOrderType();
         if (!$orderType || $orderType->isDisabled())
             throw new ApplicationException(sprintf(lang('igniter.local::default.alert_order_is_unavailable'),
