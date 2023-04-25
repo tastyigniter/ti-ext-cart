@@ -14,17 +14,20 @@ class CartMiddleware
 
     public function terminate($request, $response)
     {
-        if (config('cart.abandonedCart'))
+        if (config('cart.abandonedCart')) {
             $this->storeUserCart();
+        }
     }
 
     protected function storeUserCart()
     {
-        if (!Auth::check())
+        if (!Auth::check()) {
             return;
+        }
 
-        if (Cart::content()->isEmpty())
+        if (Cart::content()->isEmpty()) {
             return;
+        }
 
         Cart::store(Auth::getUser()->getKey());
     }

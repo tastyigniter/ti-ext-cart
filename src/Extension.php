@@ -144,8 +144,9 @@ class Extension extends BaseExtension
         });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
-            if (Location::current())
+            if (Location::current()) {
                 $cart->instance('location-'.Location::getId());
+            }
         });
 
         Event::listen('igniter.user.login', function () {
@@ -157,8 +158,9 @@ class Extension extends BaseExtension
         });
 
         Event::listen('igniter.user.logout', function () {
-            if (Models\CartSettings::get('destroy_on_logout'))
+            if (Models\CartSettings::get('destroy_on_logout')) {
                 Facades\Cart::destroy();
+            }
         });
     }
 
@@ -180,22 +182,25 @@ class Extension extends BaseExtension
     protected function bindOrderStatusEvent()
     {
         Event::listen('admin.statusHistory.beforeAddStatus', function ($model, $object, $statusId, $previousStatus) {
-            if (!$object instanceof Order)
+            if (!$object instanceof Order) {
                 return;
+            }
 
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], true);
         });
 
         Event::listen('admin.statusHistory.added', function ($model, $statusHistory) {
-            if (!$model instanceof Order)
+            if (!$model instanceof Order) {
                 return;
+            }
 
             Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], true);
         });
 
         Event::listen('admin.assignable.assigned', function ($model) {
-            if (!$model instanceof Order)
+            if (!$model instanceof Order) {
                 return;
+            }
 
             Event::fire('igniter.cart.orderAssigned', [$model], true);
         });

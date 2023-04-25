@@ -21,8 +21,9 @@ class CartConditionManager
 
     public function makeCondition($className, array $config = [])
     {
-        if (!class_exists($className))
+        if (!class_exists($className)) {
             throw new Exception(sprintf("The Cart Condition class '%s' has not been registered", $className));
+        }
 
         return new $className($config);
     }
@@ -55,8 +56,9 @@ class CartConditionManager
 
     public function registerConditions(array $conditions)
     {
-        if ($this->registeredConditions === null)
+        if ($this->registeredConditions === null) {
             $this->registeredConditions = [];
+        }
 
         foreach ($conditions as $className => $condition) {
             $this->registerCondition($className, $condition);
@@ -65,8 +67,9 @@ class CartConditionManager
 
     public function registerCondition($className, $conditionInfo = null)
     {
-        if ($this->registeredConditions === null)
+        if ($this->registeredConditions === null) {
             $this->registeredConditions = [];
+        }
 
         $defaults = [
             'name' => 'default',

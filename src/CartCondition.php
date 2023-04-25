@@ -83,8 +83,9 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
         $this->priority = array_get($config, 'priority', $this->priority);
         $this->removeable = array_get($config, 'removeable', $this->removeable);
 
-        if ($metaData = array_get($config, 'metaData'))
+        if ($metaData = array_get($config, 'metaData')) {
             Session::put($this->getSessionKey(), $metaData);
+        }
     }
 
     public function isValid()
@@ -109,17 +110,17 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
     /**
      * Apply condition to cart content
      *
-     * @param $subTotal
-     *
      * @return float|string
      */
     public function apply($subTotal)
     {
-        if ($this->beforeApply() === false)
+        if ($this->beforeApply() === false) {
             return $subTotal;
+        }
 
-        if ($this->validate($this->getRules()))
+        if ($this->validate($this->getRules())) {
             $subTotal = $this->calculate($subTotal);
+        }
 
         $this->afterApply();
 
@@ -129,8 +130,6 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
     /**
      * Get the calculated the value of this condition
      * Used internally when applying to cart item
-     *
-     * @param $subTotal
      *
      * @return float|string
      */
@@ -269,8 +268,9 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
     public function getMetaData($key = null, $default = null)
     {
         $metaData = Session::get($this->getSessionKey(), []);
-        if (is_null($key))
+        if (is_null($key)) {
             return $metaData;
+        }
 
         return Arr::get($metaData, $key, $default);
     }
@@ -283,8 +283,7 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
             foreach ($key as $k => $v) {
                 Arr::set($metaData, $k, $v);
             }
-        }
-        else {
+        } else {
             Arr::set($metaData, $key, $value);
         }
 
@@ -297,8 +296,7 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
 
         if (is_null($key)) {
             $metaData = [];
-        }
-        else {
+        } else {
             Arr::pull($metaData, $key);
         }
 

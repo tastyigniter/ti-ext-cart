@@ -20,8 +20,9 @@ class OrderPlaced extends BaseEvent
     {
         $params = [];
         $order = array_get($args, 0);
-        if ($order instanceof Order)
+        if ($order instanceof Order) {
             $params = $order->mailGetData();
+        }
 
         $params['status'] = $order->status;
 

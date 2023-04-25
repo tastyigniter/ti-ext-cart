@@ -144,11 +144,13 @@ class Checkout extends BaseComponent
 
     public function onRun()
     {
-        if ($redirect = $this->isOrderMarkedAsProcessed())
+        if ($redirect = $this->isOrderMarkedAsProcessed()) {
             return $redirect;
+        }
 
-        if ($this->checkCheckoutSecurity())
+        if ($this->checkCheckoutSecurity()) {
             return Redirect::to(restaurant_url($this->property('menusPage')));
+        }
 
         $this->prepareVars();
     }
@@ -199,13 +201,15 @@ class Checkout extends BaseComponent
 
     public function getOrder()
     {
-        if (!is_null($this->order))
+        if (!is_null($this->order)) {
             return $this->order;
+        }
 
         $order = $this->orderManager->loadOrder();
 
-        if (!$order->isPaymentProcessed())
+        if (!$order->isPaymentProcessed()) {
             $this->orderManager->applyRequiredAttributes($order);
+        }
 
         return $this->order = $order;
     }
@@ -222,8 +226,9 @@ class Checkout extends BaseComponent
     {
         $paymentCode = post('code');
 
-        if (!$payment = $this->orderManager->getPayment($paymentCode))
+        if (!$payment = $this->orderManager->getPayment($paymentCode)) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+        }
 
         $this->orderManager->applyCurrentPaymentFee($payment->code);
 
@@ -240,8 +245,9 @@ class Checkout extends BaseComponent
 
     public function onConfirm()
     {
-        if ($redirect = $this->isOrderMarkedAsProcessed())
+        if ($redirect = $this->isOrderMarkedAsProcessed()) {
             return $redirect;
+        }
 
         $data = post();
         $data['cancelPage'] = $this->property('redirectPage');
@@ -258,19 +264,22 @@ class Checkout extends BaseComponent
 
             $this->orderManager->saveOrder($order, $data);
 
-            if (!$this->canConfirmCheckout())
+            if (!$this->canConfirmCheckout()) {
                 return redirect()->to($this->currentPageUrl().'?step=pay');
+            }
 
-            if (($redirect = $this->orderManager->processPayment($order, $data)) === false)
+            if (($redirect = $this->orderManager->processPayment($order, $data)) === false) {
                 return;
+            }
 
-            if ($redirect instanceof RedirectResponse)
+            if ($redirect instanceof RedirectResponse) {
                 return $redirect;
+            }
 
-            if ($redirect = $this->isOrderMarkedAsProcessed())
+            if ($redirect = $this->isOrderMarkedAsProcessed()) {
                 return $redirect;
-        }
-        catch (Exception $ex) {
+            }
+        } catch (Exception $ex) {
             flash()->warning($ex->getMessage())->important();
 
             return Redirect::back()->withInput();
@@ -282,8 +291,9 @@ class Checkout extends BaseComponent
         $customer = Auth::customer();
         $payment = $this->orderManager->getPayment(post('code'));
 
-        if (!$payment || !$payment->paymentProfileExists($customer))
+        if (!$payment || !$payment->paymentProfileExists($customer)) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+        }
 
         $payment->deletePaymentProfile($customer);
 
@@ -320,14 +330,15 @@ class Checkout extends BaseComponent
 
             $this->validateCheckoutSecurity();
 
-            if ($this->cartManager->cartTotalIsBelowMinimumOrder())
+            if ($this->cartManager->cartTotalIsBelowMinimumOrder()) {
                 throw new ApplicationException(sprintf(lang('igniter.cart::default.alert_min_order_total'),
                     currency_format(resolve('location')->minimumOrderTotal())));
+            }
 
-            if ($this->cartManager->deliveryChargeIsUnavailable())
+            if ($this->cartManager->deliveryChargeIsUnavailable()) {
                 return true;
-        }
-        catch (Exception $ex) {
+            }
+        } catch (Exception $ex) {
             flash()->warning($ex->getMessage())->now();
 
             return true;
@@ -355,8 +366,9 @@ class Checkout extends BaseComponent
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
-        if ($this->canConfirmCheckout() && $order->order_total > 0 && !$order->payment)
+        if ($this->canConfirmCheckout() && $order->order_total > 0 && !$order->payment) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
+        }
 
         Event::fire('igniter.checkout.afterValidate', [$data, $order]);
     }
@@ -364,8 +376,9 @@ class Checkout extends BaseComponent
     protected function createRules()
     {
         $telephoneRule = 'regex:/^([0-9\s\-\+\(\)]*)$/i';
-        if ($this->property('telephoneIsRequired', false))
+        if ($this->property('telephoneIsRequired', false)) {
             $telephoneRule = 'required|'.$telephoneRule;
+        }
 
         $namedRules = [
             ['first_name', 'lang:igniter.cart::default.checkout.label_first_name', 'required|between:1,48'],
@@ -386,8 +399,9 @@ class Checkout extends BaseComponent
             $namedRules[] = ['address.country_id', 'lang:igniter.cart::default.checkout.label_country', 'nullable|integer'];
         }
 
-        if ($this->checkoutStep === 'pay' && $this->getOrder()->exists)
+        if ($this->checkoutStep === 'pay' && $this->getOrder()->exists) {
             $namedRules = [];
+        }
 
         $namedRules[] = ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'];
         $namedRules[] = ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'];
@@ -403,12 +417,14 @@ class Checkout extends BaseComponent
     protected function isOrderMarkedAsProcessed()
     {
         $order = $this->getOrder();
-        if (!$order->isPaymentProcessed())
+        if (!$order->isPaymentProcessed()) {
             return false;
+        }
 
         $redirectUrl = $order->getUrl($this->property('successPage'));
-        if ($this->isCheckoutSuccessPage())
+        if ($this->isCheckoutSuccessPage()) {
             $redirectUrl = $this->controller->pageUrl($this->property('redirectPage'));
+        }
 
         return Redirect::to($redirectUrl);
     }
@@ -434,11 +450,13 @@ class Checkout extends BaseComponent
 
     public function canConfirmCheckout()
     {
-        if (!$this->property('isMultiStepCheckout', false))
+        if (!$this->property('isMultiStepCheckout', false)) {
             return true;
+        }
 
-        if (optional($this->getOrder())->order_total < 1)
+        if (optional($this->getOrder())->order_total < 1) {
             return true;
+        }
 
         return $this->checkoutStep === 'pay';
     }

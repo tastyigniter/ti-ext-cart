@@ -59,19 +59,20 @@ class CartManager
     {
         try {
             return $this->cart->get($rowId);
-        }
-        catch (InvalidRowIDException $ex) {
+        } catch (InvalidRowIDException $ex) {
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_item_found'));
         }
     }
 
     public function findMenuItem($menuId)
     {
-        if (!is_numeric($menuId))
+        if (!is_numeric($menuId)) {
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
+        }
 
-        if (!$menuItem = Menu::findBy($menuId, $this->location->current()))
+        if (!$menuItem = Menu::findBy($menuId, $this->location->current())) {
             throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
+        }
 
         return $menuItem;
     }
@@ -110,15 +111,17 @@ class CartManager
 
         $cartItem = null;
         $menuItem = $this->findMenuItem($menuId);
-        if ($rowId && $cartItem = $this->getCartItem($rowId))
+        if ($rowId && $cartItem = $this->getCartItem($rowId)) {
             $menuItem = $cartItem->model;
+        }
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
         $options = $this->prepareCartMenuItemOptions($menuItem->menu_options, $menuOptions);
 
-        if (is_null($cartItem))
+        if (is_null($cartItem)) {
             return $this->cart->add($menuItem, $quantity, $options, $comment);
+        }
 
         return $this->cart->update($cartItem->rowId, [
             'name' => $menuItem->getBuyableName(),
@@ -143,11 +146,9 @@ class CartManager
 
         if ($quantityOrAction === 'plus') {
             $quantity = $cartItem->qty + $menuItem->minimum_qty;
-        }
-        elseif ($quantityOrAction === 'minus') {
+        } elseif ($quantityOrAction === 'minus') {
             $quantity = max($cartItem->qty - $menuItem->minimum_qty, 0);
-        }
-        else {
+        } else {
             $quantity = $quantityOrAction > 1 ? $quantityOrAction : $cartItem->qty - $menuItem->minimum_qty;
         }
 
@@ -161,8 +162,9 @@ class CartManager
 
     public function applyCondition($name, array $metaData = [])
     {
-        if (!$condition = $this->cart->getCondition($name))
+        if (!$condition = $this->cart->getCondition($name)) {
             return false;
+        }
 
         $condition->setMetaData($metaData);
 
@@ -174,12 +176,14 @@ class CartManager
     public function applyCouponCondition($code)
     {
         $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], true);
-        if ($condition instanceof CartCondition)
+        if ($condition instanceof CartCondition) {
             return $condition;
+        }
 
         if (strlen($code)) {
-            if (!Coupon::isEnabled()->whereCodeAndLocation($code, $this->location->getId())->exists())
+            if (!Coupon::isEnabled()->whereCodeAndLocation($code, $this->location->getId())->exists()) {
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
+            }
         }
 
         return $this->applyCondition('coupon', ['code' => $code]);
@@ -191,8 +195,9 @@ class CartManager
 
         $conditions = $this->settings->get('conditions') ?: [];
         foreach ($conditions as $definition) {
-            if (!(bool)array_get($definition, 'status', true))
+            if (!(bool)array_get($definition, 'status', true)) {
                 continue;
+            }
 
             $definition['cartInstance'] = $this->cart->currentInstance();
 
@@ -213,8 +218,9 @@ class CartManager
 
         $this->validateMenuItemMinQty($menuItem, $quantity);
 
-        if ($this->checkStock)
+        if ($this->checkStock) {
             $this->validateMenuItemStockQty($menuItem, $quantity);
+        }
 
         $this->validateMenuItemLocation($menuItem);
     }
@@ -253,13 +259,16 @@ class CartManager
         return $menuOptionValues
             ->map(function (MenuItemOptionValue $optionValue) use ($selectedValues) {
                 $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
-                if (!in_array($optionValue->menu_option_value_id, $selectedIds))
+                if (!in_array($optionValue->menu_option_value_id, $selectedIds)) {
                     return;
+                }
 
                 $selectedValue = collect($selectedValues)->firstWhere('id', $optionValue->menu_option_value_id);
 
                 $qty = (int)array_get($selectedValue, 'qty', 1);
-                if ($qty < 1) return;
+                if ($qty < 1) {
+                    return;
+                }
 
                 return [
                     'id' => $optionValue->menu_option_value_id,
@@ -276,8 +285,9 @@ class CartManager
 
     public function validateContents()
     {
-        if (!$this->cart->count())
+        if (!$this->cart->count()) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
+        }
 
         $this->cart->content()->each(function (CartItem $cartItem) {
             $menuItem = $cartItem->model;
@@ -297,31 +307,37 @@ class CartManager
 
     public function validateLocation()
     {
-        if (!$this->location->current())
+        if (!$this->location->current()) {
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
+        }
 
-        if ($this->location->orderTypeIsDelivery() && $this->location->requiresUserPosition() && !$this->location->userPosition()->isValid())
+        if ($this->location->orderTypeIsDelivery() && $this->location->requiresUserPosition() && !$this->location->userPosition()->isValid()) {
             throw new ApplicationException(lang('igniter.cart::default.alert_no_search_query'));
+        }
     }
 
     public function validateOrderTime()
     {
-        if (!$this->location->current())
+        if (!$this->location->current()) {
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
+        }
 
-        if ($this->location->checkNoOrderTypeAvailable())
+        if ($this->location->checkNoOrderTypeAvailable()) {
             throw new ApplicationException(lang('igniter.local::default.alert_order_type_required'));
+        }
 
         $orderType = $this->location->getOrderType();
-        if (!$orderType || $orderType->isDisabled())
+        if (!$orderType || $orderType->isDisabled()) {
             throw new ApplicationException(sprintf(lang('igniter.local::default.alert_order_is_unavailable'),
                 optional($orderType)->getLabel() ?? $this->location->orderType()
             ));
+        }
 
-        if (!$this->location->checkOrderTime())
+        if (!$this->location->checkOrderTime()) {
             throw new ApplicationException(sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'),
                 optional($orderType)->getLabel() ?? $this->location->orderType()
             ));
+        }
     }
 
     public function validateMenuItem(Menu $menuItem)
@@ -355,8 +371,9 @@ class CartManager
 
     public function validateMenuItemMinQty(Menu $menuItem, $quantity)
     {
-        if ($quantity == 0 || $menuItem->minimum_qty == 0)
+        if ($quantity == 0 || $menuItem->minimum_qty == 0) {
             return;
+        }
 
         // Quantity is valid if its divisive by the minimum quantity
         if (($quantity % $menuItem->minimum_qty) > 0) {
@@ -404,8 +421,7 @@ class CartManager
             $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) {
                 return $qty + $selectedValue['qty'];
             });
-        }
-        else {
+        } else {
             $countSelected = count($selectedValues);
         }
 

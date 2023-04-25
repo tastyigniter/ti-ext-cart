@@ -65,8 +65,6 @@ class CartItemOption implements Arrayable, Jsonable
     /**
      * Update the cart item from an array.
      *
-     * @param array $attributes
-     *
      * @return void
      */
     public function updateFromArray(array $attributes)
@@ -78,8 +76,6 @@ class CartItemOption implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @param array $attributes
      *
      * @return \Igniter\Cart\CartItemOption
      */
@@ -94,8 +90,9 @@ class CartItemOption implements Arrayable, Jsonable
 
     protected function makeCartOptionValues($values)
     {
-        if ($values instanceof CartItemOptionValues)
+        if ($values instanceof CartItemOptionValues) {
             return $values;
+        }
 
         return new CartItemOptionValues(array_map(function ($item) {
             return CartItemOptionValue::fromArray($item);

@@ -89,16 +89,15 @@ class CartItemOptionValue implements Arrayable, Jsonable
      */
     public function setQuantity($qty)
     {
-        if (!is_numeric($qty))
+        if (!is_numeric($qty)) {
             throw new \InvalidArgumentException('Please supply a valid item option quantity.');
+        }
 
         $this->qty = $qty;
     }
 
     /**
      * Update the cart item option value from an array.
-     *
-     * @param array $attributes
      *
      * @return void
      */
@@ -112,8 +111,6 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @param array $attributes
      *
      * @return \Igniter\Cart\CartItemOptionValue
      */

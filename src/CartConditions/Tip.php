@@ -27,12 +27,14 @@ class Tip extends CartCondition
 
     public function beforeApply()
     {
-        if (!$this->tippingEnabled)
+        if (!$this->tippingEnabled) {
             return false;
+        }
 
         // if amount is not set, empty or 0
-        if (!$tipAmount = $this->getMetaData('amount'))
+        if (!$tipAmount = $this->getMetaData('amount')) {
             return false;
+        }
 
         $value = $this->getMetaData('amount');
         if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === false || $value < 0) {
@@ -45,8 +47,9 @@ class Tip extends CartCondition
     {
         $amountType = $this->getMetaData('amountType');
         $amount = $this->getMetaData('amount');
-        if ($amountType == 'amount' && $this->tipValueType != 'F')
+        if ($amountType == 'amount' && $this->tipValueType != 'F') {
             $amount .= '%';
+        }
 
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
 

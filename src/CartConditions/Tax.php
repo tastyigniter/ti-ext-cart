@@ -32,8 +32,9 @@ class Tax extends CartCondition
         $this->taxMode = (bool)setting('tax_mode', 1);
         $this->taxInclusive = !((bool)setting('tax_menu_price', 1));
         $this->taxRate = $this->taxRateLabel = setting('tax_percentage', 0);
-        if ($this->taxInclusive)
+        if ($this->taxInclusive) {
             $this->taxRate /= (100 + $this->taxRate) / 100;
+        }
 
         $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
@@ -41,8 +42,9 @@ class Tax extends CartCondition
     public function beforeApply()
     {
         // only calculate taxes if enabled
-        if (!$this->taxMode || !$this->taxRate)
+        if (!$this->taxMode || !$this->taxRate) {
             return false;
+        }
     }
 
     public function getActions()

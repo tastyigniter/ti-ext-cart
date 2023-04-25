@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Add new cart total extension records as type 'total' in extensions table
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up()
     {
         $conditions = [];
@@ -15,15 +16,17 @@ return new class extends Migration {
 
         foreach ($seedConditions as $condition) {
             $data = array_get((array)$condition, 'data');
-            if (!is_array($data))
+            if (!is_array($data)) {
                 $data = unserialize($data);
+            }
 
             $conditions[$data['priority']] = array_get($data, 'name');
         }
 
         $table = DB::table('extension_settings')->where('item', 'igniter_cart_settings');
-        if (!$table->exists())
+        if (!$table->exists()) {
             $table->update(['data' => serialize(['conditions' => $conditions])]);
+        }
     }
 
     public function down()
@@ -37,7 +40,7 @@ return new class extends Migration {
             $existingConditions = DB::table('extensions')->select('data')->where('type', 'cart_total')->get();
         }
 
-        if (!count($existingConditions))
+        if (!count($existingConditions)) {
             return [
                 [
                     'data' => [
@@ -64,6 +67,7 @@ return new class extends Migration {
                     ],
                 ],
             ];
+        }
 
         return $existingConditions;
     }
