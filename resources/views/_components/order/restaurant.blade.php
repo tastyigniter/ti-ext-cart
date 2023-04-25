@@ -12,7 +12,7 @@
         <dl class="no-spacing mb-0">
             <dd><h2 class="h4 mb-0 fw-normal">{{ $location->location_name }}</h2></dd>
             <dd>
-                <span class="text-muted text-truncate">{!! format_address($location->getAddress(), FALSE) !!}</span>
+                <span class="text-muted text-truncate">{{ format_address($location->getAddress(), false) }}</span>
             </dd>
             <dd>{{ $location->location_telephone }}</dd>
             <dd>

@@ -23,6 +23,7 @@ class OrderAssigned extends BaseEvent
         if ($order instanceof Order)
             $params = $order->mailGetData();
 
+        $params['status'] = $order->status;
         $params['assignee'] = $order->assignee;
 
         return $params;

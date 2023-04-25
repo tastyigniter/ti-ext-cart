@@ -47,6 +47,8 @@
                 name="telephone"
                 id="telephone"
                 class="form-control"
+                data-control="country-code-picker"
+                data-initial-country="gb"
                 value="{{ set_value('telephone', $order->telephone) }}"/>
             {!! form_error('telephone', '<span class="text-danger">', '</span>') !!}
         </div>

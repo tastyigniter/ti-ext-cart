@@ -61,25 +61,38 @@
         return this.$modalElement.find('[data-control="cart-options"]')
     }
 
+    CartBoxModal.prototype.toggleSelection = function (event) {
+        this.$modalElement.find('[data-control="item-option"]').each(function (id, option) {
+            var $parent = $(option),
+                maxSelection = $parent.data('option-maximum'),
+                selectedCount = $parent.find('input[type="checkbox"][data-option-price]:checked:not([disabled])').length
+
+            if (maxSelection <= 0)
+                return;
+
+            $parent.find('input[type="checkbox"][data-option-price]:not(:checked)').prop('disabled', selectedCount === maxSelection)
+        })
+    }
+
     CartBoxModal.prototype.onQuantityOrOptionChanged = function (event) {
         var inputEl = this.$modalElement.find('[name="quantity"]'),
             $cartItem = this.$modalElement.find('[data-control="cart-item"]');
 
         var price = $cartItem.data('priceAmount');
 
-        this.$modalElement.find('input[data-option-price]:checked')
+        this.$modalElement.find('input[data-option-price]:checked:not([disabled])')
             .each(function (idx, option) {
                 var optionPrice = $(option).data('optionPrice')
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 
-        this.$modalElement.find('select[data-option-price] option:selected')
+        this.$modalElement.find('select[data-option-price] option:selected:not([disabled])')
             .each(function (idx, option) {
                 var optionPrice = $(option).data('optionPrice')
                 price += parseFloat(optionPrice === undefined ? 0 : optionPrice);
             });
 
-        this.$modalElement.find('input[data-option-price][type="number"]')
+        this.$modalElement.find('[data-toggle="quantity"] input[data-option-price]:not([disabled])')
             .each(function (idx, option) {
                 var val = parseInt($(option).val()),
                     optionPrice = $(option).data('optionPrice');
@@ -92,6 +105,8 @@
 
         $cartItem.find('[data-item-subtotal]')
             .html(app.currencyFormat(price));
+
+        this.toggleSelection()
     }
 
     CartBoxModal.prototype.onSubmitForm = function () {
@@ -144,6 +159,7 @@
 
         $cartItem.on('input', '[name="quantity"]', $.proxy(this.onQuantityOrOptionChanged, this))
         $cartItem.on('change', '[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
+        $cartItem.on('input', '[data-toggle="quantity"] input[data-option-price]', $.proxy(this.onQuantityOrOptionChanged, this))
 
         $cartItem.on('submit', 'form', $.proxy(this.onSubmitForm, this))
         $cartItem.on('ajaxDone', 'form', $.proxy(this.onSuccessForm, this))

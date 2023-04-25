@@ -23,6 +23,8 @@ class OrderPlaced extends BaseEvent
         if ($order instanceof Order)
             $params = $order->mailGetData();
 
+        $params['status'] = $order->status;
+
         return $params;
     }
 }

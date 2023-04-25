@@ -3,7 +3,7 @@
         <div class="card-body">
             <h2 class="h4 fw-normal">@lang('igniter.cart::default.checkout.text_delivery_address')</h2>
             <b>{{ $order->customer_name }}</b><br>
-            {!! format_address($order->address) !!}
+            {{ format_address($order->address) }}
         </div>
     </div>
 @endif

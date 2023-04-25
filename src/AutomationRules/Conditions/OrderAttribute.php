@@ -2,7 +2,6 @@
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
-use Carbon\Carbon;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 use Igniter\Flame\Exception\ApplicationException;
 
@@ -50,27 +49,33 @@ class OrderAttribute extends BaseModelAttributesCondition
             'hours_until' => [
                 'label' => 'Hours until order delivery/collection time',
             ],
+            'history_status_id' => [
+                'label' => 'Recent order status IDs (eg. 1,2,3)',
+            ],
         ];
     }
 
     public function getHoursSinceAttribute($value, $order)
     {
-        $currentDateTime = Carbon::now();
-        $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
+        $currentDateTime = now();
 
-        return $currentDateTime->isAfter($orderDateTime)
-            ? $orderDateTime->diffInRealHours($currentDateTime)
+        return $currentDateTime->isAfter($order->order_datetime)
+            ? $order->order_datetime->diffInRealHours($currentDateTime)
             : 0;
     }
 
     public function getHoursUntilAttribute($value, $order)
     {
-        $currentDateTime = Carbon::now();
-        $orderDateTime = Carbon::parse($order->order_date->format('Y-m-d').' '.$order->order_time);
+        $currentDateTime = now();
 
-        return $currentDateTime->isBefore($orderDateTime)
-            ? $currentDateTime->diffInRealHours($orderDateTime)
+        return $currentDateTime->isBefore($order->order_datetime)
+            ? $currentDateTime->diffInRealHours($order->order_datetime)
             : 0;
+    }
+
+    public function getHistoryStatusIdAttribute($value, $order)
+    {
+        return $order->status_history()->pluck('status_id')->implode(',');
     }
 
     /**

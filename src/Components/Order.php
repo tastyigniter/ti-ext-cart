@@ -4,7 +4,6 @@ namespace Igniter\Cart\Components;
 
 use Exception;
 use Igniter\Admin\Models\Order as OrderModel;
-use Igniter\Admin\Models\Status;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Facades\Cart;
@@ -94,16 +93,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
         if (is_null($order) && !$order = $this->getOrder())
             return false;
 
-        if ($order->hasStatus(setting('canceled_order_status')))
-            return false;
-
-        if (!$timeout = $order->location->getOrderCancellationTimeout($order->order_type))
-            return false;
-
-        if (!$order->order_datetime->isFuture())
-            return false;
-
-        return $order->order_datetime->diffInRealMinutes() > $timeout;
+        return !$order->isCanceled() && $order->isCancelable();
     }
 
     public function onRun()
@@ -162,7 +152,7 @@ class Order extends \Igniter\System\Classes\BaseComponent
         if (!$this->showCancelButton($order))
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
-        if (!$order->addStatusHistory(Status::find(setting('canceled_order_status'))))
+        if (!$order->markAsCanceled())
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
         flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
@@ -211,11 +201,11 @@ class Order extends \Igniter\System\Classes\BaseComponent
                 continue;
 
             try {
-                resolve(CartManager::class)->validateMenuItemOption($menuOption, $cartOption['values']->all());
+                resolve(CartManager::class)->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
 
                 $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
                     return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
-                });
+                })->toArray();
 
                 $options[] = $cartOption;
             }
