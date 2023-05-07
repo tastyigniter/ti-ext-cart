@@ -1,63 +1,66 @@
 {
-    "name": "tastyigniter/ti-ext-cart",
-    "type": "tastyigniter-package",
-    "description": "Easily add a shopping cart to your site. The most powerful way to sell your menu items.",
-    "keywords": [
-        "tastyigniter",
-        "cart",
-        "online-food-ordering",
-        "ordering"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Sam Poyigi",
-            "email": "sam@sampoyigi.com"
-        }
-    ],
-    "require": {
-        "tastyigniter/ti-ext-local": "v4.x-dev as 4.0",
-        "tastyigniter/ti-ext-payregister": "v4.x-dev as 4.0",
-        "tastyigniter/ti-ext-user": "v4.x-dev as 4.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^8.5",
-        "pestphp/pest": "^2.5",
-        "pestphp/pest-plugin-laravel": "^2.0",
-        "laravel/pint": "^1.2",
-        "nunomaduro/larastan": "^2.4.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Igniter\\Cart\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "tastyigniter-extension": {
-            "name": "Cart",
-            "icon": {
-                "class": "fa fa-shopping-cart",
-                "color": "#FFF",
-                "backgroundColor": "#ED561A"
-            },
-            "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        },
-        "sort-packages": true
-    },
-    "scripts": {
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint",
-        "static": "vendor/bin/phpstan analyse --ansi --memory-limit 1056M"
-    }
+	"name": "tastyigniter/ti-ext-cart",
+	"type": "tastyigniter-package",
+	"description": "Easily add a shopping cart to your site. The most powerful way to sell your menu items.",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Sam Poyigi",
+			"email": "sam@sampoyigi.com"
+		}
+	],
+	"keywords": [
+		"tastyigniter",
+		"cart",
+		"online-food-ordering",
+		"ordering"
+	],
+	"require-dev": {
+		"laravel/pint": "^1.2",
+		"nunomaduro/larastan": "^2.4.0",
+		"orchestra/testbench": "^8.5",
+		"pestphp/pest-plugin-laravel": "^2.0",
+		"tastyigniter/core": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"Igniter\\Cart\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Igniter\\Cart\\Tests\\": "tests/"
+		}
+	},
+	"extra": {
+		"tastyigniter-extension": {
+			"name": "Cart",
+			"icon": {
+				"class": "fa fa-shopping-cart",
+				"color": "#FFF",
+				"backgroundColor": "#ED561A"
+			},
+			"homepage": "https://tastyigniter.com/marketplace/item/igniter-cart"
+		}
+	},
+	"scripts": {
+		"test": "vendor/bin/pest",
+		"test-coverage": "vendor/bin/pest --coverage",
+		"format": "vendor/bin/pint",
+		"static": "vendor/bin/phpstan analyse --ansi --memory-limit 1056M"
+	},
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true,
+			"php-http/discovery": true,
+			"composer/installers": true
+		},
+		"sort-packages": true
+	},
+	"require": {
+		"tastyigniter/ti-ext-automation": "v4.x-dev as 4.0",
+		"tastyigniter/ti-ext-local": "v4.x-dev as 4.0",
+		"tastyigniter/ti-ext-payregister": "v4.x-dev as 4.0",
+		"tastyigniter/ti-ext-user": "v4.x-dev as 4.0"
+	}
 }
