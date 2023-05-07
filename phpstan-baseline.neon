@@ -1,0 +1,506 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Variable \\$__SELF__ might not be defined\\.$#"
+			count: 1
+			path: resources/views/_components/cartbox/default.blade.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$hash\\.$#"
+			count: 1
+			path: src/Actions/OrderAction.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Events\\\\Dispatcher\\:\\:fire\\(\\)\\.$#"
+			count: 2
+			path: src/Cart.php
+
+		-
+			message: "#^Cannot call method forget\\(\\) on array\\.$#"
+			count: 2
+			path: src/Cart.php
+
+		-
+			message: "#^Cannot call method has\\(\\) on array\\.$#"
+			count: 1
+			path: src/Cart.php
+
+		-
+			message: "#^Cannot call method put\\(\\) on array\\.$#"
+			count: 1
+			path: src/Cart.php
+
+		-
+			message: "#^Function traceLog invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: src/Cart.php
+
+		-
+			message: "#^Method Igniter\\\\Cart\\\\Cart\\:\\:removeCondition\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: src/Cart.php
+
+		-
+			message: "#^Function traceLog invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: src/CartCondition.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$include$#"
+			count: 1
+			path: src/CartCondition.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Payment\\:\\:whereCode\\(\\)\\.$#"
+			count: 1
+			path: src/CartConditions/PaymentFee.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:coveredArea\\(\\)\\.$#"
+			count: 1
+			path: src/CartConditions/Tax.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderTypeIsDelivery\\(\\)\\.$#"
+			count: 1
+			path: src/CartConditions/Tax.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
+			count: 2
+			path: src/CartConditions/Tip.php
+
+		-
+			message: "#^Cannot call method search\\(\\) on array\\.$#"
+			count: 1
+			path: src/CartItem.php
+
+		-
+			message: "#^Cannot call method subtotal\\(\\) on array\\.$#"
+			count: 1
+			path: src/CartItem.php
+
+		-
+			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
+			count: 2
+			path: src/CartItem.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$comment$#"
+			count: 1
+			path: src/CartItemOptionValue.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
+			count: 1
+			path: src/CartItemOptionValue.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$display_type\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$max_selected\\.$#"
+			count: 3
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_id\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_values\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$min_selected\\.$#"
+			count: 3
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$option\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOption\\:\\:\\$option_name\\.$#"
+			count: 3
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOptionValue\\:\\:\\$menu_option_value_id\\.$#"
+			count: 3
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOptionValue\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\MenuItemOptionValue\\:\\:\\$price\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\CartItem\\:\\:\\$model\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$locations\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$mealtimes\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_name\\.$#"
+			count: 4
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$minimum_qty\\.$#"
+			count: 4
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$stocks\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Call to static method isEnabled\\(\\) on an unknown class Igniter\\\\Coupons\\\\Models\\\\Coupon\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Cannot call method each\\(\\) on array\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Static call to instance method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:instance\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\Order\\:\\:\\$order_total\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$address_id\\.$#"
+			count: 2
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$customer_id\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$email\\.$#"
+			count: 2
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Main\\\\Models\\\\Customer\\:\\:\\$telephone\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to property \\$name on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 2
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to property \\$order_total on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Access to property \\$status on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Address\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:whereHash\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
+			count: 3
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to method hasApplicableFee\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to method isApplicable\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to method payFromPaymentProfile\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to method processPaymentForm\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Method Igniter\\\\Cart\\\\Classes\\\\OrderManager\\:\\:getPayment\\(\\) has invalid return type Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:count\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:total\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
+			count: 3
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getById\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:instance\\(\\)\\.$#"
+			count: 3
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:setCurrent\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Access to property \\$code on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Components\\\\Checkout\\:\\:currentPageUrl\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\System\\\\Classes\\\\BaseComponent\\:\\:fetchPartials\\(\\)\\.$#"
+			count: 2
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderTypeIsDelivery\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to method deletePaymentProfile\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to method paymentProfileExists\\(\\) on an unknown class Admin\\\\Classes\\\\BasePaymentGateway\\.$#"
+			count: 1
+			path: src/Components/Checkout.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
+			count: 2
+			path: src/Components/Order.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:add\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Order.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Order.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:whereProcessed\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Orders.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
+			count: 1
+			path: src/Components/Orders.php
+
+		-
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
+			count: 3
+			path: src/Contracts/Buyable.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:content\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:destroy\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:restore\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
+			count: 3
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:current\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:getId\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
+			count: 3
+			path: src/Extension.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:content\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:store\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:check\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Main\\\\Facades\\\\Auth\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_name\\.$#"
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_price\\.$#"
+			count: 2
+			path: src/Models/Menu.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$minimum_qty\\.$#"
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$special\\.$#"
+			count: 2
+			path: src/Models/Menu.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:isEnabled\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Menu.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$hash\\.$#"
+			count: 1
+			path: src/Models/Order.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$customer_name\\.$#"
+			count: 1
+			path: src/Notifications/OrderCreatedNotification.php
+
+		-
+			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$location\\.$#"
+			count: 1
+			path: src/Notifications/OrderCreatedNotification.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\User\\:\\:isEnabled\\(\\)\\.$#"
+			count: 1
+			path: src/Notifications/OrderCreatedNotification.php
