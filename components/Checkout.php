@@ -251,7 +251,7 @@ class Checkout extends BaseComponent
 
         $this->validateCheckoutSecurity();
 
-        try {
+        return rescue(function () use ($data) {
             $order = $this->getOrder();
 
             $this->validateCheckout($data, $order);
@@ -269,12 +269,11 @@ class Checkout extends BaseComponent
 
             if ($redirect = $this->isOrderMarkedAsProcessed())
                 return $redirect;
-        }
-        catch (Exception $ex) {
+        }, function (Exception $ex) {
             flash()->warning($ex->getMessage())->important();
 
             return Redirect::back()->withInput();
-        }
+        });
     }
 
     public function onDeletePaymentProfile()
@@ -326,8 +325,7 @@ class Checkout extends BaseComponent
 
             if ($this->cartManager->deliveryChargeIsUnavailable())
                 return true;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             flash()->warning($ex->getMessage())->now();
 
             return true;
