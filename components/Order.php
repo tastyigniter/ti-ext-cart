@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Components;
 
 use Admin\Models\Orders_model;
+use Admin\Traits\ValidatesForm;
 use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
@@ -16,6 +17,7 @@ use Main\Traits\UsesPage;
 
 class Order extends \System\Classes\BaseComponent
 {
+    use ValidatesForm;
     use UsesPage;
 
     /**
@@ -93,7 +95,7 @@ class Order extends \System\Classes\BaseComponent
         if (is_null($order) && !$order = $this->getOrder())
             return false;
 
-        if ($order->isCanceled())
+        if (!setting('canceled_order_status') || $order->isCanceled())
             return false;
 
         return $order->isCancelable();
@@ -146,17 +148,21 @@ class Order extends \System\Classes\BaseComponent
 
     public function onCancel()
     {
-        if (!is_numeric($orderId = input('orderId')))
-            return;
+        $validated = $this->validate(request()->input(), [
+            'orderId' => ['required', 'numeric'],
+            'cancel_reason' => ['required', 'max:255'],
+        ]);
 
-        if (!$order = Orders_model::find($orderId))
+        if (!$order = Orders_model::find($validated['orderId']))
             return;
 
         if (!$this->showCancelButton($order))
             throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
-        if (!$order->markAsCanceled())
-            throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
+        if (!$order->markAsCanceled([
+            'comment' => $validated['cancel_reason'],
+            'notify' => false,
+        ])) throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
         flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
 
@@ -190,8 +196,7 @@ class Order extends \System\Classes\BaseComponent
             $options = $this->prepareCartItemOptions($menuModel, $orderMenu->option_values);
 
             Cart::add($menuModel, $orderMenu->quantity, $options, $orderMenu->comment);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             flash()->warning($ex->getMessage());
         }
     }
@@ -211,8 +216,7 @@ class Order extends \System\Classes\BaseComponent
                 })->toArray();
 
                 $options[] = $cartOption;
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 flash()->warning($ex->getMessage());
             }
         }

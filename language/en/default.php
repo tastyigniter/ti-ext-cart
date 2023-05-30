@@ -194,6 +194,7 @@ return [
         'text_leave_review' => 'Leave review',
         'text_no_payment' => 'No Payment',
         'text_login_to_view_more' => 'For more information about your order, please create an account or login.',
+        'text_title_cancel' => 'Cancel Order',
 
         'column_id' => 'Order no.',
         'column_status' => 'Status',
@@ -211,9 +212,10 @@ return [
 
         'button_order' => 'Place New Order',
         'button_reorder' => 'Reorder',
-        'button_cancel' => 'Cancel',
+        'button_cancel' => 'Cancel order',
         'button_view_order' => 'View/Reorder',
         'button_back' => 'Back',
+        'label_cancel_reason' => 'Reason for cancellation',
 
         'alert_reorder_success' => 'You have successfully added the menus from order ID %s to your order.',
         'alert_cancel_success' => 'Order successfully canceled.',
