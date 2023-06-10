@@ -10,6 +10,7 @@ use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
 use Igniter\Main\Facades\Auth;
 use Igniter\System\Classes\BaseComponent;
+use Igniter\System\Models\Country;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redirect;
@@ -437,7 +438,7 @@ class Checkout extends BaseComponent
         }
 
         if (isset($data['address']) && !isset($data['address']['country_id'])) {
-            $data['address']['country_id'] = setting('country_id');
+            $data['address']['country_id'] = Country::getDefaultKey();
         }
 
         return $data;
