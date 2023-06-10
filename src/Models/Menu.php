@@ -19,7 +19,7 @@ class Menu extends BaseMenu implements Buyable
 
     public static function findBy($menuId, $location = null)
     {
-        return self::query()->isEnabled()->whereKey($menuId)->first();
+        return self::query()->whereIsEnabled()->whereKey($menuId)->first();
     }
 
     public function getMorphClass()
