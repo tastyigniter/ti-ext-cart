@@ -7,7 +7,7 @@ use Igniter\Flame\Exception\ApplicationException;
 
 class OrderAttribute extends BaseModelAttributesCondition
 {
-    protected $modelClass = \Igniter\Admin\Models\Order::class;
+    protected $modelClass = \Igniter\Cart\Models\Order::class;
 
     protected $modelAttributes;
 

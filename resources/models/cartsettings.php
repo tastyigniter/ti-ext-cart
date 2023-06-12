@@ -79,8 +79,8 @@ return [
                     'type' => 'radiotoggle',
                     'default' => 'F',
                     'options' => [
-                        'F' => 'lang:admin::lang.menus.text_fixed_amount',
-                        'P' => 'lang:admin::lang.menus.text_percentage',
+                        'F' => 'lang:igniter.cart::default.menus.text_fixed_amount',
+                        'P' => 'lang:igniter.cart::default.menus.text_percentage',
                     ],
                     'trigger' => [
                         'action' => 'show',

@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\AutomationRules\Events;
 
-use Igniter\Admin\Models\Order;
 use Igniter\Automation\Classes\BaseEvent;
+use Igniter\Cart\Models\Order;
 
 class OrderPlaced extends BaseEvent
 {

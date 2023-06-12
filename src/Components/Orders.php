@@ -2,9 +2,9 @@
 
 namespace Igniter\Cart\Components;
 
-use Igniter\Admin\Models\Order;
-use Igniter\Main\Facades\Auth;
+use Igniter\Cart\Models\Order;
 use Igniter\Main\Traits\UsesPage;
+use Igniter\User\Facades\Auth;
 
 class Orders extends \Igniter\System\Classes\BaseComponent
 {
