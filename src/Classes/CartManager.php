@@ -2,13 +2,13 @@
 
 namespace Igniter\Cart\Classes;
 
-use Igniter\Admin\Models\MenuItemOption;
-use Igniter\Admin\Models\MenuItemOptionValue;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartItem;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Support\Collection;

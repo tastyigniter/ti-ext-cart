@@ -3,7 +3,7 @@
 namespace Igniter\Cart\Http\Middleware;
 
 use Igniter\Cart\Facades\Cart;
-use Igniter\Main\Facades\Auth;
+use Igniter\User\Facades\Auth;
 
 class CartMiddleware
 {

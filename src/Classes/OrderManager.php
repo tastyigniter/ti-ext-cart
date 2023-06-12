@@ -2,14 +2,14 @@
 
 namespace Igniter\Cart\Classes;
 
-use Igniter\Admin\Models\Address;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Classes\CoveredArea;
-use Igniter\Main\Facades\Auth;
-use Igniter\Main\Models\Customer;
 use Igniter\System\Traits\SessionMaker;
+use Igniter\User\Facades\Auth;
+use Igniter\User\Models\Address;
+use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
@@ -31,7 +31,7 @@ class OrderManager
     protected $location;
 
     /**
-     * @var \Igniter\Main\Models\Customer
+     * @var \Igniter\User\Models\Customer
      */
     protected $customer;
 
@@ -64,7 +64,7 @@ class OrderManager
     }
 
     /**
-     * @return \Igniter\Admin\Models\Order
+     * @return \Igniter\Cart\Models\Order
      */
     public function loadOrder()
     {
@@ -85,8 +85,8 @@ class OrderManager
     }
 
     /**
-     * @param \Igniter\Main\Models\Customer|null $customer
-     * @return \Igniter\Admin\Models\Order|\Illuminate\Database\Eloquent\Model|object|null
+     * @param \Igniter\User\Models\Customer|null $customer
+     * @return \Igniter\Cart\Models\Order|\Illuminate\Database\Eloquent\Model|object|null
      */
     public function getOrderByHash($hash, $customer = null)
     {
@@ -105,7 +105,7 @@ class OrderManager
     }
 
     /**
-     * @return \Igniter\Admin\Models\Payment|\Admin\Classes\BasePaymentGateway
+     * @return \Igniter\PayRegister\Models\Payment|\Igniter\PayRegister\Classes\BasePaymentGateway
      */
     public function getPayment($code)
     {
@@ -171,9 +171,9 @@ class OrderManager
     }
 
     /**
-     * @param $order \Igniter\Admin\Models\Order
+     * @param $order \Igniter\Cart\Models\Order
      *
-     * @return \Igniter\Admin\Models\Order
+     * @return \Igniter\Cart\Models\Order
      */
     public function saveOrder($order, array $data)
     {
@@ -315,7 +315,7 @@ class OrderManager
     }
 
     /**
-     * @param \Igniter\Admin\Models\Order $order
+     * @param \Igniter\Cart\Models\Order $order
      * @return bool
      */
     protected function processPaymentLessForm($order)

@@ -2,14 +2,14 @@
 
 namespace Igniter\Cart\Notifications;
 
-use Igniter\Admin\Models\User;
-use Igniter\System\Classes\Notification;
+use Igniter\User\Classes\Notification;
+use Igniter\User\Models\User;
 
 class OrderCreatedNotification extends Notification
 {
     public function getRecipients(): array
     {
-        return User::isEnabled()
+        return User::query()->isEnabled()
             ->whereHasLocation($this->subject->location->getKey())
             ->get()->all();
     }

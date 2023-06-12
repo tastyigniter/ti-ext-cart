@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\CartConditions;
 
-use Igniter\Admin\Models\Payment;
 use Igniter\Cart\CartCondition;
+use Igniter\PayRegister\Models\Payment;
 
 class PaymentFee extends CartCondition
 {

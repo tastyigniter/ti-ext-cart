@@ -3,14 +3,14 @@
 namespace Igniter\Cart\Components;
 
 use Exception;
-use Igniter\Admin\Models\Order as OrderModel;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\Order as OrderModel;
 use Igniter\Flame\Exception\ApplicationException;
-use Igniter\Main\Facades\Auth;
 use Igniter\Main\Traits\UsesPage;
+use Igniter\User\Facades\Auth;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Redirect;
 
