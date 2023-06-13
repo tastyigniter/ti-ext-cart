@@ -27,9 +27,9 @@ class MenuOptionRequest extends FormRequest
             'is_required' => ['boolean'],
             'min_selected' => ['integer', 'lte:max_selected'],
             'max_selected' => ['integer', 'gte:min_selected'],
-            'locations' => ['array'],
+            'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
-            'option_values' => ['required', 'array'],
+            'values' => ['required', 'array'],
         ];
     }
 }
