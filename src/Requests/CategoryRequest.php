@@ -28,7 +28,7 @@ class CategoryRequest extends FormRequest
             'parent_id' => ['nullable', 'integer'],
             'priority' => ['nullable', 'integer'],
             'status' => ['boolean'],
-            'locations' => ['array'],
+            'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
         ];
     }
