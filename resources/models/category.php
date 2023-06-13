@@ -24,6 +24,11 @@ $config['list']['filter'] = [
 
 $config['list']['toolbar'] = [
     'buttons' => [
+        'back' => [
+            'label' => 'lang:igniter::admin.button_icon_back',
+            'class' => 'btn btn-default',
+            'href' => 'menus',
+        ],
         'create' => [
             'label' => 'lang:igniter::admin.button_new',
             'class' => 'btn btn-primary',

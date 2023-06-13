@@ -292,13 +292,6 @@ class Extension extends BaseExtension
                         'title' => lang('igniter.cart::default.text_side_menu_menu'),
                         'permission' => 'Admin.Menus',
                     ],
-                    'categories' => [
-                        'priority' => 30,
-                        'class' => 'categories',
-                        'href' => admin_url('categories'),
-                        'title' => lang('igniter.cart::default.text_side_menu_category'),
-                        'permission' => 'Admin.Categories',
-                    ],
                     'mealtimes' => [
                         'priority' => 40,
                         'class' => 'mealtimes',
