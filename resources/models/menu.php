@@ -36,6 +36,12 @@ $config['list']['toolbar'] = [
             'class' => 'btn btn-primary',
             'href' => 'menus/create',
         ],
+        'categories' => [
+            'label' => 'lang:igniter.cart::default.text_side_menu_category',
+            'class' => 'btn btn-default',
+            'href' => 'categories',
+            'permission' => 'Admin.Categories',
+        ],
         'menu_options' => [
             'label' => 'lang:igniter.cart::default.menu_options.text_options',
             'class' => 'btn btn-default',
