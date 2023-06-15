@@ -355,6 +355,15 @@ class Extension extends BaseExtension
 
     protected function bindCheckoutEvents()
     {
+        Event::listen('payregister.paypalexpress.extendFields', function ($payment, &$fields, $order, $data) {
+            if ($tax = $order->getOrderTotals()->firstWhere('code', 'tax')) {
+                $fields['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
+                    'currency_code' => $fields['purchase_units'][0]['amount']['currency_code'],
+                    'value' => number_format($tax->value, 2, '.', ''),
+                ];
+            }
+        });
+
         Event::listen('admin.order.paymentProcessed', function (Order $model) {
             Notifications\OrderCreatedNotification::make()->subject($model)->broadcast();
 
