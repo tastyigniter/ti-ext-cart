@@ -6,14 +6,6 @@ $config['list']['filter'] = [
         'mode' => 'all',
     ],
     'scopes' => [
-        'location' => [
-            'label' => 'lang:igniter::admin.text_filter_location',
-            'type' => 'selectlist',
-            'scope' => 'whereHasLocation',
-            'modelClass' => \Igniter\Local\Models\Location::class,
-            'nameFrom' => 'location_name',
-            'locationAware' => true,
-        ],
         'category' => [
             'label' => 'lang:igniter.cart::default.menus.text_filter_category',
             'type' => 'selectlist',

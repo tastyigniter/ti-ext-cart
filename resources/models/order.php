@@ -16,14 +16,6 @@ $config['list']['filter'] = [
                 3 => 'lang:igniter::admin.statuses.text_assigned_to_others',
             ],
         ],
-        'location' => [
-            'label' => 'lang:igniter::admin.text_filter_location',
-            'type' => 'selectlist',
-            'scope' => 'whereHasLocation',
-            'modelClass' => \Igniter\Local\Models\Location::class,
-            'nameFrom' => 'location_name',
-            'locationAware' => true,
-        ],
         'status' => [
             'label' => 'lang:igniter::admin.text_filter_status',
             'type' => 'selectlist',
