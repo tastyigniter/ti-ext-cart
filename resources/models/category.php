@@ -6,14 +6,6 @@ $config['list']['filter'] = [
         'mode' => 'all',
     ],
     'scopes' => [
-        'location' => [
-            'label' => 'lang:igniter::admin.text_filter_location',
-            'type' => 'selectlist',
-            'scope' => 'whereHasLocation',
-            'modelClass' => \Igniter\Local\Models\Location::class,
-            'nameFrom' => 'location_name',
-            'locationAware' => true,
-        ],
         'status' => [
             'label' => 'lang:igniter::admin.text_filter_status',
             'type' => 'switch', // checkbox, switch, date, daterange
