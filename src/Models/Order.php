@@ -152,6 +152,20 @@ class Order extends Model
     // Helpers
     //
 
+    public function getUrl($page, $params = [])
+    {
+        $defaults = [
+            'id' => $this->getKey(),
+            'hash' => $this->hash,
+        ];
+
+        $params = !is_null($params)
+            ? array_merge($defaults, $params)
+            : [];
+
+        return page_url($page, $params);
+    }
+
     public function isCompleted()
     {
         if (!$this->isPaymentProcessed()) {
@@ -248,22 +262,6 @@ class Order extends Model
         return $this->addStatusHistory(
             Status::find($id), $options
         );
-    }
-
-    public function getUrl($page, $params = [])
-    {
-        $defaults = [
-            'id' => $this->getKey(),
-            'hash' => $this->hash,
-        ];
-
-        $params = !is_null($params)
-            ? array_merge($defaults, $params)
-            : [];
-
-        $controller = MainController::getController() ?: new MainController;
-
-        return $controller->pageUrl($page, $params);
     }
 
     public function getMorphClass()

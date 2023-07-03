@@ -528,4 +528,13 @@ return [
         'help_is_tracked' => 'When enabled, ordered menu and/or options quantities are automatically subtracted.',
         'help_low_stock_alert' => 'Enable automated low stock alerts so that you receive emails when the stock quantity falls below or equals the specified threshold.',
     ],
+
+    'settings' => [
+        'text_tab_checkout' => 'Checkout settings',
+        'text_tab_desc_checkout' => 'Configure your checkout settings',
+        'text_tab_delivery' => 'Delivery settings',
+        'text_tab_desc_delivery' => 'Configure your settings for delivery orders',
+        'text_tab_collection' => 'Pick-up settings',
+        'text_tab_desc_collection' => 'Configure your settings for pick-up orders',
+    ]
 ];

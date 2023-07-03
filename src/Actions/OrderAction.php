@@ -14,18 +14,4 @@ class OrderAction extends ModelAction
 
         $this->model->fillable(['customer_id', 'address_id', 'first_name', 'last_name', 'email', 'telephone', 'comment', 'delivery_comment', 'payment']);
     }
-
-    public function getUrl($page, $params = [])
-    {
-        $defaults = [
-            'id' => $this->model->getKey(),
-            'hash' => $this->model->hash,
-        ];
-
-        $params = !is_null($params)
-            ? array_merge($defaults, $params)
-            : [];
-
-        return page_url($page, $params);
-    }
 }
