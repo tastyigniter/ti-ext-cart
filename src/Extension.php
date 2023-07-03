@@ -4,6 +4,7 @@ namespace Igniter\Cart;
 
 use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\Models\Category;
+use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\Observers\MenuItemOptionObserver;
@@ -16,6 +17,7 @@ use Igniter\Cart\Models\Scopes\OrderScope;
 use Igniter\Cart\Requests\OrderSettingsRequest;
 use Igniter\Flame\Igniter;
 use Igniter\Local\Facades\Location;
+use Igniter\Local\Models\Location as LocationModel;
 use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
@@ -82,9 +84,7 @@ class Extension extends BaseExtension
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
 
-        Order::extend(function ($model) {
-            $model->implement[] = \Igniter\Cart\Actions\OrderAction::class;
-        });
+        LocationModel::implement(LocationAction::class);
 
         Customers::extendFormFields(function (Form $form) {
             if (!$form->model instanceof Customer) {
@@ -322,6 +322,36 @@ class Extension extends BaseExtension
                 'label' => 'Stock Editor',
                 'code' => 'stockeditor',
             ],
+        ];
+    }
+
+    public function registerLocationSettings()
+    {
+        return [
+            'checkout' => [
+                'label' => 'igniter.cart::default.settings.text_tab_checkout',
+                'description' => 'igniter.cart::default.settings.text_tab_desc_checkout',
+                'icon' => 'fa fa-sliders',
+                'priority' => 0,
+                'form' => 'igniter.cart::/models/checkoutsettings',
+                'request' => \Igniter\Cart\Requests\CheckoutSettingsRequest::class,
+            ],
+            'delivery' => [
+                'label' => 'igniter.cart::default.settings.text_tab_delivery',
+                'description' => 'igniter.cart::default.settings.text_tab_desc_delivery',
+                'icon' => 'fa fa-sliders',
+                'priority' => 0,
+                'form' => 'igniter.cart::/models/deliverysettings',
+                'request' => \Igniter\Cart\Requests\DeliverySettingsRequest::class,
+            ],
+            'collection' => [
+                'label' => 'igniter.cart::default.settings.text_tab_collection',
+                'description' => 'igniter.cart::default.settings.text_tab_desc_collection',
+                'icon' => 'fa fa-sliders',
+                'priority' => 0,
+                'form' => 'igniter.cart::/models/collectionsettings',
+                'request' => \Igniter\Cart\Requests\CollectionSettingsRequest::class,
+            ]
         ];
     }
 
