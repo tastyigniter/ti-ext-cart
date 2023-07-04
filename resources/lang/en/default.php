@@ -62,6 +62,10 @@ return [
     'text_side_menu_menu' => 'Menu Items',
     'text_side_menu_category' => 'Categories',
     'text_side_menu_mealtimes' => 'Mealtimes',
+    'text_delivery_time_info' => 'Delivery %s',
+    'text_collection_time_info' => 'Pick-up %s',
+    'text_delivery_is_disabled' => 'Delivery is not available.',
+    'text_collection_is_disabled' => 'Pick-up is not available.',
 
     'menu_component_title' => 'Local Menu items Component',
     'menu_component_desc' => 'Displays a list of menu items',

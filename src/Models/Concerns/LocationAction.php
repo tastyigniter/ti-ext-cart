@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Models\Concerns;
 
+use Igniter\Cart\Classes\OrderTypes;
 use Igniter\Local\Models\Location;
 use Igniter\PayRegister\Models\Payment;
 use Igniter\System\Actions\ModelAction;
@@ -34,6 +35,16 @@ class LocationAction extends ModelAction
         return collect($result);
     }
 
+    public function availableOrderTypes()
+    {
+        return resolve(OrderTypes::class)->makeOrderTypes($this->model);
+    }
+
+    public static function getOrderTypeOptions()
+    {
+        return collect(resolve(OrderTypes::class)->listOrderTypes())->pluck('name', 'code');
+    }
+
     public function getOrderTimeInterval(string $orderType): int
     {
         return (int)$this->model->getSettings($orderType.'.time_interval', 15);
@@ -61,7 +72,7 @@ class LocationAction extends ModelAction
 
     public function getMinimumOrderTotal(string $orderType): float
     {
-        return $this->model->getSettings($orderType.'.min_order_amount', 0);
+        return (float)$this->model->getSettings($orderType.'.min_order_amount', 0);
     }
 
     public function deliveryMinutes(): int
