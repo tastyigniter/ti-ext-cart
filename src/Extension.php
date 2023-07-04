@@ -325,6 +325,20 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerOrderTypes()
+    {
+        return [
+            \Igniter\Cart\OrderTypes\Delivery::class => [
+                'code' => LocationModel::DELIVERY,
+                'name' => 'lang:igniter.local::default.text_delivery',
+            ],
+            \Igniter\Cart\OrderTypes\Collection::class => [
+                'code' => LocationModel::COLLECTION,
+                'name' => 'lang:igniter.local::default.text_collection',
+            ],
+        ];
+    }
+
     public function registerLocationSettings()
     {
         return [
