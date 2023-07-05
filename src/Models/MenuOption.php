@@ -4,7 +4,7 @@ namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
-use Igniter\Local\Facades\AdminLocation;
+use Igniter\Local\Facades\Location;
 use Igniter\Local\Models\Concerns\Locationable;
 
 /**
@@ -60,7 +60,7 @@ class MenuOption extends Model
     {
         $query = self::selectRaw('option_id, concat(option_name, " (", display_type, ")") AS display_name');
 
-        if (!is_null($ids = AdminLocation::getIdOrAll())) {
+        if (!empty($ids = Location::currentOrAssigned())) {
             $query->whereHasLocation($ids);
         }
 

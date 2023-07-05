@@ -302,7 +302,7 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function locationIsClosed()
     {
-        return !Location::instance()->checkOrderTime() || Location::instance()->checkNoOrderTypeAvailable();
+        return !Location::checkOrderTime() || Location::checkNoOrderTypeAvailable();
     }
 
     public function hasMinimumOrder()
@@ -334,7 +334,7 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function getLocationId()
     {
-        return Location::instance()->getId();
+        return Location::getId();
     }
 
     public function tippingEnabled()
