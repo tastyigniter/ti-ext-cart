@@ -6,7 +6,7 @@ use Igniter\Admin\Classes\BaseFormWidget;
 use Igniter\Admin\Classes\FormField;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\Models\StockHistory;
-use Igniter\Local\Facades\AdminLocation;
+use Igniter\User\Facades\AdminAuth;
 
 /**
  * Stock Editor
@@ -106,7 +106,7 @@ class StockEditor extends BaseFormWidget
     {
         $locations = $this->model->getStockableLocations();
 
-        return $locations && $locations->isNotEmpty() ? $locations : AdminLocation::listLocations();
+        return $locations && $locations->isNotEmpty() ? $locations : AdminAuth::user()->getAvailableLocations();
     }
 
     protected function makeStockFormWidget($location)
