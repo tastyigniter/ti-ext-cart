@@ -81,7 +81,6 @@ $config['list']['columns'] = [
         'relation' => 'locations',
         'select' => 'location_name',
         'locationAware' => true,
-        'invisible' => true,
     ],
     'created_at' => [
         'label' => 'lang:igniter::admin.column_date_added',

@@ -65,7 +65,6 @@ $config['list']['columns'] = [
         'type' => 'text',
         'relation' => 'locations',
         'select' => 'location_name',
-        'invisible' => true,
         'locationAware' => true,
     ],
     'option_id' => [
