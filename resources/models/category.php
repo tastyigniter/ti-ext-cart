@@ -80,7 +80,6 @@ $config['list']['columns'] = [
         'relation' => 'locations',
         'select' => 'location_name',
         'locationAware' => true,
-        'invisible' => true,
     ],
     'priority' => [
         'label' => 'lang:igniter.cart::default.categories.column_priority',
