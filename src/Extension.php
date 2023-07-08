@@ -365,7 +365,7 @@ class Extension extends BaseExtension
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/collectionsettings',
                 'request' => \Igniter\Cart\Requests\CollectionSettingsRequest::class,
-            ]
+            ],
         ];
     }
 
