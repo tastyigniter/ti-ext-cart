@@ -46,6 +46,6 @@ return [
                 'commentAbove' => 'lang:igniter.payregister::default.help_payments',
                 'placeholder' => 'lang:igniter.payregister::default.help_no_payments',
             ],
-        ]
-    ]
+        ],
+    ],
 ];

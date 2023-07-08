@@ -130,6 +130,6 @@ return [
                     'condition' => 'checked',
                 ],
             ],
-        ]
-    ]
+        ],
+    ],
 ];

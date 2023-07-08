@@ -540,5 +540,5 @@ return [
         'text_tab_desc_delivery' => 'Configure your settings for delivery orders',
         'text_tab_collection' => 'Pick-up settings',
         'text_tab_desc_collection' => 'Configure your settings for pick-up orders',
-    ]
+    ],
 ];
