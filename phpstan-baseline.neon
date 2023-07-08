@@ -91,7 +91,37 @@ parameters:
 			path: src/CartItemOptionValue.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getSettings\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:futureOrderDays\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getMinimumOrderTotal\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getOrderLeadTime\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getOrderTimeInterval\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getOrderTimeRestriction\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:hasFutureOrder\\(\\)\\.$#"
+			count: 3
+			path: src/Classes/AbstractOrderType.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:minimumFutureOrderDays\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/AbstractOrderType.php
 
@@ -242,6 +272,31 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$telephone\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:allowGuestOrder\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:getKey\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:listAvailablePayments\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:searchDeliveryArea\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/OrderManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:payFromPaymentProfile\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
@@ -457,11 +512,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Models\\\\Location\\:\\:implement\\(\\)\\.$#"
 			count: 1
 			path: src/Extension.php
 
@@ -1256,9 +1306,24 @@ parameters:
 			path: src/Notifications/OrderCreatedNotification.php
 
 		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:hasCollection\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Collection.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
 			count: 1
 			path: src/OrderTypes/Collection.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getMinimumOrderTotal\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Delivery.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:hasDelivery\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Delivery.php
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:subtotal\\(\\)\\.$#"
