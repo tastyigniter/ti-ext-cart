@@ -6,11 +6,6 @@ parameters:
 			path: resources/views/_components/cartbox/default.blade.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$hash\\.$#"
-			count: 1
-			path: src/Actions/OrderAction.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Events\\\\Dispatcher\\:\\:fire\\(\\)\\.$#"
 			count: 2
 			path: src/Cart.php
@@ -94,6 +89,11 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
 			count: 1
 			path: src/CartItemOptionValue.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getSettings\\(\\)\\.$#"
+			count: 1
+			path: src/Classes/AbstractOrderType.php
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\CartItem\\:\\:\\$model\\.$#"
@@ -286,13 +286,23 @@ parameters:
 			path: src/Components/CartBox.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:checkNoOrderTypeAvailable\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:checkOrderTime\\(\\)\\.$#"
+			count: 1
+			path: src/Components/CartBox.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getById\\(\\)\\.$#"
 			count: 1
 			path: src/Components/CartBox.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:instance\\(\\)\\.$#"
-			count: 3
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
+			count: 1
 			path: src/Components/CartBox.php
 
 		-
@@ -451,6 +461,11 @@ parameters:
 			path: src/Extension.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Models\\\\Location\\:\\:implement\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getId\\(\\)\\.$#"
 			count: 1
 			path: src/Extension.php
@@ -506,7 +521,7 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\AdminLocation\\:\\:listLocations\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:user\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
@@ -594,6 +609,11 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:pluck\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Category.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getSettings\\(\\)\\.$#"
+			count: 15
+			path: src/Models/Concerns/LocationAction.php
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Ingredient\\:\\:menus\\(\\)\\.$#"
@@ -846,7 +866,7 @@ parameters:
 			path: src/Models/MenuOption.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\AdminLocation\\:\\:getIdOrAll\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:currentOrAssigned\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOption.php
 
@@ -1131,11 +1151,6 @@ parameters:
 			path: src/Models/OrderMenuOptionValue.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Ordere\\:\\:\\$hash\\.$#"
-			count: 1
-			path: src/Models/Ordere.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:whereHasOrDoesntHaveLocation\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Scopes/MenuScope.php
@@ -1239,3 +1254,23 @@ parameters:
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:isEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Notifications/OrderCreatedNotification.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Collection.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:subtotal\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Delivery.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:coveredArea\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Delivery.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
+			count: 1
+			path: src/OrderTypes/Delivery.php
