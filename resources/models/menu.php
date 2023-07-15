@@ -38,6 +38,7 @@ $config['list']['toolbar'] = [
             'label' => 'lang:igniter.cart::default.menu_options.text_options',
             'class' => 'btn btn-default',
             'href' => 'menu_options',
+            'permission' => 'Admin.Menus',
         ],
         'ingredients' => [
             'label' => 'lang:igniter.cart::default.ingredients.text_ingredients',
