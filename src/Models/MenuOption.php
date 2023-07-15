@@ -61,7 +61,7 @@ class MenuOption extends Model
         $query = self::selectRaw('option_id, concat(option_name, " (", display_type, ")") AS display_name');
 
         if (!empty($ids = Location::currentOrAssigned())) {
-            $query->whereHasLocation($ids);
+            $query->whereHasOrDoesntHaveLocation($ids);
         }
 
         return $query->orderBy('option_name')->dropdown('display_name');
