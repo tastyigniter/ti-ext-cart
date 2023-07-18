@@ -18,7 +18,7 @@ $config['list']['toolbar'] = [
     'buttons' => [
         'back' => [
             'label' => 'lang:igniter::admin.button_icon_back',
-            'class' => 'btn btn-default',
+            'class' => 'btn btn-outline-secondary',
             'href' => 'menus',
         ],
         'create' => [
