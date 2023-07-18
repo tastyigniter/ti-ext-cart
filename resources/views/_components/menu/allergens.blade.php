@@ -1,7 +1,7 @@
 @foreach ($menuItem->allergens->where('status', 1) ?? [] as $allergen)
     <span
         @class([
-            'badge bg-light text-dark fw-normal rounded-pill shadow-sm px-2',
+            'badge text-dark fw-normal rounded-pill shadow-sm px-2',
             'py-2' => !$allergen->hasMedia('thumb'),
             'me-2' => !$loop->last
         ])
