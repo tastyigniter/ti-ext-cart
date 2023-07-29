@@ -20,7 +20,7 @@
         <div
             class="tab-pane p-3 {{ (('#'.$tabs->section.'tab-'.$loop->iteration) == $activeTab) ? 'active' : '' }}"
             id="{{ $tabs->section.'tab-'.$loop->iteration }}">
-            <div class="form-fields">
+            <div class="form-fields row g-3">
                 @if($loop->iteration == 1)
                     <div class="col-md-9">
                         @isset($fields['order_menus'])
@@ -34,7 +34,7 @@
                             </div>
                         @endisset
                     </div>
-                    <div class="col-md-3 px-md-0">
+                    <div class="col-md-3">
                         @if($formModel->comment)
                             <div class="card shadow-sm mb-3">
                                 <div class="card-body">
