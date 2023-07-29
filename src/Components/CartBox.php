@@ -2,14 +2,12 @@
 
 namespace Igniter\Cart\Components;
 
-use Exception;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
 
 class CartBox extends \Igniter\System\Classes\BaseComponent
 {
@@ -176,42 +174,26 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function onUpdateCart()
     {
-        try {
-            $postData = post();
+        $postData = post();
 
-            $this->cartManager->addOrUpdateCartItem($postData);
+        $this->cartManager->addOrUpdateCartItem($postData);
 
-            $this->controller->pageCycle();
+        $this->controller->pageCycle();
 
-            return $this->fetchPartials();
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
-        }
+        return $this->fetchPartials();
     }
 
     public function onUpdateItemQuantity()
     {
-        try {
-            $action = (string)post('action');
-            $rowId = (string)post('rowId');
-            $quantity = (int)post('quantity');
+        $action = (string)post('action');
+        $rowId = (string)post('rowId');
+        $quantity = (int)post('quantity');
 
-            $this->cartManager->updateCartItemQty($rowId, $action ?: $quantity);
+        $this->cartManager->updateCartItemQty($rowId, $action ?: $quantity);
 
-            $this->controller->pageCycle();
+        $this->controller->pageCycle();
 
-            return $this->fetchPartials();
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
-        }
+        return $this->fetchPartials();
     }
 
     public function onRemoveItem()
@@ -221,90 +203,58 @@ class CartBox extends \Igniter\System\Classes\BaseComponent
 
     public function onApplyCoupon()
     {
-        try {
-            $this->cartManager->applyCouponCondition(post('code'));
+        $this->cartManager->applyCouponCondition(post('code'));
 
-            $this->controller->pageCycle();
+        $this->controller->pageCycle();
 
-            return $this->fetchPartials();
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
-        }
+        return $this->fetchPartials();
     }
 
     public function onApplyTip()
     {
-        try {
-            $amountType = post('amount_type');
-            if (!in_array($amountType, ['none', 'amount', 'custom'])) {
-                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
-            }
-
-            $amount = post('amount');
-            if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === false) {
-                throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
-            }
-
-            $this->cartManager->applyCondition('tip', [
-                'amountType' => $amountType,
-                'amount' => $amount,
-            ]);
-
-            $this->controller->pageCycle();
-
-            return $this->fetchPartials();
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
+        $amountType = post('amount_type');
+        if (!in_array($amountType, ['none', 'amount', 'custom'])) {
+            throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
         }
+
+        $amount = post('amount');
+        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $amount) === false) {
+            throw new ApplicationException(lang('igniter.cart::default.alert_tip_not_applied'));
+        }
+
+        $this->cartManager->applyCondition('tip', [
+            'amountType' => $amountType,
+            'amount' => $amount,
+        ]);
+
+        $this->controller->pageCycle();
+
+        return $this->fetchPartials();
     }
 
     public function onRemoveCondition()
     {
-        try {
-            if (!strlen($conditionId = post('conditionId'))) {
-                return;
-            }
-
-            $this->cartManager->removeCondition($conditionId);
-            $this->controller->pageCycle();
-
-            return $this->fetchPartials();
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
+        if (!strlen($conditionId = post('conditionId'))) {
+            return;
         }
+
+        $this->cartManager->removeCondition($conditionId);
+        $this->controller->pageCycle();
+
+        return $this->fetchPartials();
     }
 
     public function onProceedToCheckout()
     {
-        try {
-            if (!is_numeric($id = post('locationId')) || !($location = Location::getById($id)) || !$location->location_status) {
-                throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
-            }
-
-            Location::setCurrent($location);
-
-            $redirectUrl = $this->controller->pageUrl($this->property('checkoutPage'));
-
-            return Redirect::to($redirectUrl);
-        } catch (Exception $ex) {
-            if (Request::ajax()) {
-                throw $ex;
-            } else {
-                flash()->alert($ex->getMessage());
-            }
+        if (!is_numeric($id = post('locationId')) || !($location = Location::getById($id)) || !$location->location_status) {
+            throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
         }
+
+        Location::setCurrent($location);
+
+        $redirectUrl = $this->controller->pageUrl($this->property('checkoutPage'));
+
+        return Redirect::to($redirectUrl);
     }
 
     public function locationIsClosed()
