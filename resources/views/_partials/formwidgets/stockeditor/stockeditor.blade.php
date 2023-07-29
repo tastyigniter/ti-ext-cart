@@ -16,12 +16,12 @@
     />
 
     <a
-        class="btn btn-outline-default {{ $previewMode ? 'disabled' : '' }}"
+        class="btn btn-light {{ $previewMode ? 'disabled' : '' }}"
         data-toggle="record-editor"
         data-handler="{{ $this->getEventHandler('onLoadRecord') }}"
     >@lang('igniter.cart::default.stocks.button_manage_stock')</a>
     <a
-        class="btn btn-outline-default {{ $previewMode ? 'disabled' : '' }}"
+        class="btn btn-light {{ $previewMode ? 'disabled' : '' }}"
         data-toggle="record-editor"
         data-handler="{{ $this->getEventHandler('onLoadHistory') }}"
     >@lang('igniter.cart::default.stocks.button_stock_history')</a>
