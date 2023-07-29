@@ -95,17 +95,17 @@ class LocationAction extends ModelAction
         return (bool)$this->model->getSettings('collection.is_enabled', 1);
     }
 
-    public function hasFutureOrder(string $orderType = null): bool
+    public function hasFutureOrder(?string $orderType = null): bool
     {
         return (bool)$this->model->getSettings(($orderType ?: Location::DELIVERY).'.future_orders.is_enabled', 0);
     }
 
-    public function futureOrderDays(string $orderType = null): int
+    public function futureOrderDays(?string $orderType = null): int
     {
         return (int)$this->model->getSettings(($orderType ?: Location::DELIVERY).'.future_orders.days', 0);
     }
 
-    public function minimumFutureOrderDays(string $orderType = null): int
+    public function minimumFutureOrderDays(?string $orderType = null): int
     {
         return (int)$this->model->getSettings(($orderType ?: Location::DELIVERY).'.future_orders.min_days', 0);
     }
