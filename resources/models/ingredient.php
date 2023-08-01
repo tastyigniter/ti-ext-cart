@@ -16,11 +16,6 @@ $config['list']['filter'] = [
 
 $config['list']['toolbar'] = [
     'buttons' => [
-        'back' => [
-            'label' => 'lang:igniter::admin.button_icon_back',
-            'class' => 'btn btn-outline-secondary',
-            'href' => 'menus',
-        ],
         'create' => [
             'label' => 'lang:igniter::admin.button_new',
             'class' => 'btn btn-primary',
@@ -94,11 +89,6 @@ $config['list']['columns'] = [
 
 $config['form']['toolbar'] = [
     'buttons' => [
-        'back' => [
-            'label' => 'lang:igniter::admin.button_icon_back',
-            'class' => 'btn btn-outline-secondary',
-            'href' => 'ingredients',
-        ],
         'save' => [
             'label' => 'lang:igniter::admin.button_save',
             'context' => ['create', 'edit'],

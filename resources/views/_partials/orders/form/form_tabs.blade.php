@@ -20,7 +20,7 @@
         <div
             class="tab-pane p-3 {{ (('#'.$tabs->section.'tab-'.$loop->iteration) == $activeTab) ? 'active' : '' }}"
             id="{{ $tabs->section.'tab-'.$loop->iteration }}">
-            <div class="form-fields row g-3">
+            <div class="form-fields">
                 @if($loop->iteration == 1)
                     <div class="col-md-9">
                         @isset($fields['order_menus'])

@@ -20,6 +20,7 @@ class Ingredients extends AdminController
             'emptyMessage' => 'lang:igniter.cart::default.ingredients.text_empty',
             'defaultSort' => ['ingredient_id', 'DESC'],
             'configFile' => 'ingredient',
+            'back' => 'menus',
         ],
     ];
 
@@ -41,7 +42,7 @@ class Ingredients extends AdminController
         ],
         'preview' => [
             'title' => 'lang:igniter::admin.form.preview_title',
-            'redirect' => 'ingredients',
+            'back' => 'ingredients',
         ],
         'delete' => [
             'redirect' => 'ingredients',
