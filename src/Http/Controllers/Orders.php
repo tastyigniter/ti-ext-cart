@@ -37,7 +37,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         ],
         'preview' => [
             'title' => 'lang:igniter::admin.form.preview_title',
-            'redirect' => 'orders',
+            'back' => 'orders',
         ],
         'delete' => [
             'redirect' => 'orders',

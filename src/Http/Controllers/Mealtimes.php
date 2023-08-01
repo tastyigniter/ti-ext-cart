@@ -40,7 +40,7 @@ class Mealtimes extends \Igniter\Admin\Classes\AdminController
         ],
         'preview' => [
             'title' => 'lang:igniter::admin.form.preview_title',
-            'redirect' => 'mealtimes',
+            'back' => 'mealtimes',
         ],
         'delete' => [
             'redirect' => 'mealtimes',

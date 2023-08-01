@@ -19,6 +19,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
             'emptyMessage' => 'lang:igniter.cart::default.menu_options.text_empty',
             'defaultSort' => ['option_id', 'DESC'],
             'configFile' => 'menuoption',
+            'back' => 'menus',
         ],
     ];
 
@@ -40,7 +41,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
         ],
         'preview' => [
             'title' => 'lang:admin::default.form.preview_title',
-            'redirect' => 'menu_options',
+            'back' => 'menu_options',
         ],
         'delete' => [
             'redirect' => 'menu_options',

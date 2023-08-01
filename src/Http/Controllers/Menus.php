@@ -41,7 +41,7 @@ class Menus extends AdminController
         ],
         'preview' => [
             'title' => 'lang:igniter::admin.form.preview_title',
-            'redirect' => 'menus',
+            'back' => 'menus',
         ],
         'delete' => [
             'redirect' => 'menus',

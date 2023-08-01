@@ -21,6 +21,7 @@ class Categories extends AdminController
             'emptyMessage' => 'lang:igniter.cart::default.categories.text_empty',
             'defaultSort' => ['category_id', 'DESC'],
             'configFile' => 'category',
+            'back' => 'menus',
         ],
     ];
 
@@ -42,7 +43,7 @@ class Categories extends AdminController
         ],
         'preview' => [
             'title' => 'lang:igniter::admin.form.preview_title',
-            'redirect' => 'categories',
+            'back' => 'categories',
         ],
         'delete' => [
             'redirect' => 'categories',
