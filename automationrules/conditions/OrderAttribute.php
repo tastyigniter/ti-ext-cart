@@ -34,6 +34,9 @@ class OrderAttribute extends BaseModelAttributesCondition
             'location_id' => [
                 'label' => 'Location ID',
             ],
+            'status_id' => [
+                'label' => 'Last order status ID',
+            ],
             'total_items' => [
                 'label' => 'Cart total items',
             ],
@@ -48,6 +51,12 @@ class OrderAttribute extends BaseModelAttributesCondition
             ],
             'hours_until' => [
                 'label' => 'Hours until order delivery/collection time',
+            ],
+            'days_since' => [
+                'label' => 'Days since order delivery/collection time',
+            ],
+            'days_until' => [
+                'label' => 'Days until order delivery/collection time',
             ],
             'history_status_id' => [
                 'label' => 'Recent order status IDs (eg. 1,2,3)',
@@ -70,6 +79,24 @@ class OrderAttribute extends BaseModelAttributesCondition
 
         return $currentDateTime->isBefore($order->order_datetime)
             ? $currentDateTime->diffInRealHours($order->order_datetime)
+            : 0;
+    }
+
+    public function getDaysSinceAttribute($value, $order)
+    {
+        $currentDateTime = now();
+
+        return $currentDateTime->isAfter($order->order_datetime)
+            ? $order->order_datetime->diffInDays($currentDateTime)
+            : 0;
+    }
+
+    public function getDaysUntilAttribute($value, $order)
+    {
+        $currentDateTime = now();
+
+        return $currentDateTime->isBefore($order->order_datetime)
+            ? $currentDateTime->diffInDays($order->order_datetime)
             : 0;
     }
 
