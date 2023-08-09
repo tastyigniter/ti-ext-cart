@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>{!! $model->invoice_number.' - '.lang('igniter.cart::default.orders.text_invoice').' - '.setting('site_name') !!}</title>
+    <title>{!! $model->invoice_number.' - '.lang('igniter.cart::default.orders.text_invoice').' - '.$site_name !!}</title>
     {!! get_style_tags() !!}
     <style>
         body {
@@ -36,7 +36,7 @@
             <address>{{ format_address($model->location->getAddress(), true) }}</address>
         </div>
         <div class="col-6 text-right">
-            <img class="img-responsive" src="{{ uploads_url(setting('invoice_logo') ?: setting('site_logo')) }}" alt=""
+            <img class="img-responsive" src="{{ media_url(setting('invoice_logo') ?: $site_logo) }}" alt=""
                  style="max-height:120px;"/>
         </div>
     </div>
