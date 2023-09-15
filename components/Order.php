@@ -36,14 +36,14 @@ class Order extends \System\Classes\BaseComponent
             'ordersPage' => [
                 'label' => 'Account Orders Page',
                 'type' => 'select',
-                'default' => 'account' . DIRECTORY_SEPARATOR . 'orders',
+                'default' => 'account'.DIRECTORY_SEPARATOR.'orders',
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
             'menusPage' => [
                 'label' => 'Menus Page, page to redirect to when a user clicks the re-order button',
                 'type' => 'select',
-                'default' => 'local' . DIRECTORY_SEPARATOR . 'menus',
+                'default' => 'local'.DIRECTORY_SEPARATOR.'menus',
                 'options' => [static::class, 'getThemePageOptions'],
                 'validationRule' => 'required|regex:/^[a-z0-9\-_\/]+$/i',
             ],
@@ -161,7 +161,7 @@ class Order extends \System\Classes\BaseComponent
 
         if (!$order->markAsCanceled([
             'comment' => array_get($validated, 'cancel_reason'),
-            'notify' => false,
+            'notify' => true,
         ])) throw new ApplicationException(lang('igniter.cart::default.orders.alert_cancel_failed'));
 
         flash()->success(lang('igniter.cart::default.orders.alert_cancel_success'));
