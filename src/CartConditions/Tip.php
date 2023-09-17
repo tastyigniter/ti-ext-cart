@@ -45,9 +45,8 @@ class Tip extends CartCondition
 
     public function getActions()
     {
-        $amountType = $this->getMetaData('amountType');
         $amount = $this->getMetaData('amount');
-        if ($amountType == 'amount' && $this->tipValueType != 'F') {
+        if (!$this->getMetaData('isCustom') && $this->tipValueType != 'F') {
             $amount .= '%';
         }
 

@@ -7,8 +7,10 @@ use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuOption;
 use Igniter\Cart\Models\Observers\MenuItemOptionObserver;
 use Igniter\Cart\Models\Observers\MenuObserver;
+use Igniter\Cart\Models\Observers\MenuOptionObserver;
 use Igniter\Cart\Models\Observers\OrderObserver;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\CategoryScope;
@@ -31,6 +33,7 @@ class Extension extends BaseExtension
 {
     protected $observers = [
         MenuItemOption::class => MenuItemOptionObserver::class,
+        MenuOption::class => MenuOptionObserver::class,
         Menu::class => MenuObserver::class,
         Order::class => OrderObserver::class,
     ];

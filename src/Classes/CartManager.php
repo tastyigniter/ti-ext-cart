@@ -70,11 +70,7 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
         }
 
-        if (!$menuItem = Menu::findBy($menuId, $this->location->current())) {
-            throw new ApplicationException(lang('igniter.cart::default.alert_menu_not_found'));
-        }
-
-        return $menuItem;
+        return Menu::findBy($menuId, $this->location->current());
     }
 
     public function addCartItem($menuId, array $properties = [])
@@ -95,7 +91,7 @@ class CartManager
     {
         $rowId = array_get($postData, 'rowId');
         $menuId = array_get($postData, 'menuId');
-        $quantity = array_get($postData, 'quantity');
+        $quantity = array_get($postData, 'quantity', 1);
         $comment = array_get($postData, 'comment');
         $menuOptions = array_get($postData, 'menu_options', []);
 
@@ -110,10 +106,12 @@ class CartManager
         $this->validateOrderTime();
 
         $cartItem = null;
-        $menuItem = $this->findMenuItem($menuId);
+        $menuItem = $menuId ? $this->findMenuItem($menuId) : null;
         if ($rowId && $cartItem = $this->getCartItem($rowId)) {
             $menuItem = $cartItem->model;
         }
+
+        throw_unless($menuItem, new ApplicationException(lang('igniter.cart::default.alert_menu_not_found')));
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
@@ -181,7 +179,7 @@ class CartManager
         }
 
         if (strlen($code)) {
-            if (!Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->exists()) {
+            if (!Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
                 throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
             }
         }
@@ -227,14 +225,14 @@ class CartManager
 
     protected function prepareCartMenuItemOptions(Collection $menuOptions, array $selected)
     {
-        $selected = collect($selected)->keyBy('menu_option_id');
+        $selected = collect($selected);
         $menuOptions = $menuOptions->keyBy('menu_option_id')->sortBy('priority');
 
         return $menuOptions->map(function (MenuItemOption $menuOption) use ($selected) {
             $selectedOption = $selected->get($menuOption->getKey());
-            $selectedValues = array_filter(array_get($selectedOption, 'option_values', []));
+            $selectedValues = array_filter((array)array_get($selectedOption, 'option_values', []));
 
-            if ($menuOption->option->display_type != 'quantity') {
+            if (!in_array($menuOption->option->display_type, ['quantity', 'checkbox'])) {
                 $selectedValues = array_filter($selectedValues, 'ctype_digit');
             }
 
@@ -247,6 +245,7 @@ class CartManager
             return $menuOptionValues->isNotEmpty() ? [
                 'id' => $menuOption->menu_option_id,
                 'name' => $menuOption->option_name,
+                'type' => $menuOption->display_type,
                 'values' => $menuOptionValues->all(),
             ] : false;
         })->filter()->all();
@@ -259,13 +258,13 @@ class CartManager
         return $menuOptionValues
             ->map(function (MenuItemOptionValue $optionValue) use ($selectedValues) {
                 $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
-                if (!in_array($optionValue->menu_option_value_id, $selectedIds)) {
+                if (!in_array($optionValue->menu_option_value_id, $selectedIds)
+                    && !(array_get($selectedIds, $optionValue->menu_option_value_id) === true
+                        || is_array(array_get($selectedIds, $optionValue->menu_option_value_id)))) {
                     return;
                 }
 
-                $selectedValue = collect($selectedValues)->firstWhere('id', $optionValue->menu_option_value_id);
-
-                $qty = (int)array_get($selectedValue, 'qty', 1);
+                $qty = (int)array_get($selectedValues, $optionValue->menu_option_value_id.'.qty', 1);
                 if ($qty < 1) {
                     return;
                 }

@@ -80,7 +80,8 @@ class MenuItemOption extends Model
             $menuOptionValue = $this->menu_option_values->firstWhere('option_value_id', $optionValue->getKey());
 
             $optionValue->menu_option_value_id = $menuOptionValue?->menu_option_value_id;
-            $optionValue->menu_option_id = $menuOptionValue?->menu_option_id;
+            $optionValue->menu_option_id = $menuOptionValue?->menu_option_id ?? $optionValue->option_id;
+            $optionValue->option_value_id = $menuOptionValue->option_value_id ?? $optionValue->getKey();
             $optionValue->price = $menuOptionValue->price ?? $optionValue->price;
             $optionValue->override_price = $menuOptionValue?->override_price;
             $optionValue->is_default = $menuOptionValue?->is_default;

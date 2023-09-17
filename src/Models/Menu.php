@@ -248,30 +248,19 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        $isAvailable = true;
-
-        if (count($this->mealtimes) > 0) {
-            $isAvailable = false;
-            foreach ($this->mealtimes as $mealtime) {
-                if ($mealtime->isEnabled()) {
-                    $isAvailable = $isAvailable || $mealtime->isAvailable($datetime);
-                }
-            }
+        if ($this->active_mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+            return false;
         }
 
-        if (count($this->ingredients) > 0) {
-            foreach ($this->ingredients as $ingredient) {
-                if (!$ingredient->isEnabled()) {
-                    $isAvailable = false;
-                }
-            }
+        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
+            return false;
         }
 
-        if (is_bool($eventResults = $this->fireSystemEvent('admin.menu.isAvailable', [$datetime, $isAvailable], true))) {
-            $isAvailable = $eventResults;
+        if (($this->fireSystemEvent('admin.menu.isAvailable', [$datetime, true])) === FALSE) {
+            return false;
         }
 
-        return $isAvailable;
+        return true;
     }
 
     public static function findBy($menuId, $location = null)
