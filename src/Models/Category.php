@@ -16,12 +16,12 @@ use Igniter\System\Models\Concerns\Switchable;
  */
 class Category extends Model
 {
-    use Sortable;
-    use HasPermalink;
     use HasFactory;
-    use NestedTree;
-    use Locationable;
     use HasMedia;
+    use HasPermalink;
+    use Locationable;
+    use NestedTree;
+    use Sortable;
     use Switchable;
 
     const SORT_ORDER = 'priority';

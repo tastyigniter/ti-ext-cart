@@ -17,11 +17,11 @@ use Igniter\System\Models\Concerns\Switchable;
  */
 class Menu extends Model implements Buyable
 {
-    use Purgeable;
-    use Locationable;
-    use HasMedia;
-    use Stockable;
     use HasFactory;
+    use HasMedia;
+    use Locationable;
+    use Purgeable;
+    use Stockable;
     use Switchable;
 
     public const LOCATIONABLE_RELATION = 'locations';
@@ -248,15 +248,15 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        if ($this->active_mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+        if ($this->active_mealtimes->contains(fn ($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
             return false;
         }
 
-        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
+        if ($this->ingredients->contains(fn ($ingredient) => !$ingredient->isEnabled())) {
             return false;
         }
 
-        if (($this->fireSystemEvent('admin.menu.isAvailable', [$datetime, true])) === FALSE) {
+        if (($this->fireSystemEvent('admin.menu.isAvailable', [$datetime, true])) === false) {
             return false;
         }
 

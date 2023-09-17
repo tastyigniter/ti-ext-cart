@@ -86,7 +86,6 @@ class Cart
      * Add an item to the cart.
      *
      * @param int $qty
-     * @param null $comment
      *
      * @return array|\Igniter\Cart\CartItem
      */
@@ -401,8 +400,6 @@ class Cart
 
     /**
      * Applies all conditions to a cart item.
-     *
-     * @param \Igniter\Cart\CartItem $cartItem
      */
     protected function applyAllConditionsToItem(CartItem $cartItem)
     {
@@ -529,7 +526,6 @@ class Cart
      * Create a new CartItem from the supplied attributes.
      *
      * @param int $qty
-     * @param null $comment
      *
      * @return \Igniter\Cart\CartItem
      */

@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Ingredient extends Model
 {
-    use HasMedia;
     use HasFactory;
+    use HasMedia;
     use Switchable;
 
     /**

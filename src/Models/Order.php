@@ -26,14 +26,14 @@ use Igniter\User\Models\Concerns\HasCustomer;
  */
 class Order extends Model
 {
-    use HasCustomer;
-    use HasInvoice;
-    use ManagesOrderItems;
-    use LogsStatusHistory;
-    use SendsMailTemplate;
-    use Locationable;
     use Assignable;
     use GeneratesHash;
+    use HasCustomer;
+    use HasInvoice;
+    use Locationable;
+    use LogsStatusHistory;
+    use ManagesOrderItems;
+    use SendsMailTemplate;
 
     const DELIVERY = 'delivery';
 
