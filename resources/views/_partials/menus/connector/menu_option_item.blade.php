@@ -26,7 +26,7 @@
         @elseif($item->display_type == 'quantity')
             <i
                 title="{{ sprintf(lang('igniter.cart::default.menu_options.text_option_summary'), $item->display_type) }}"
-                class="fa fa-plus-square text-muted"
+                class="fa fa-hashtag text-muted"
             ></i>
         @else
             {{ sprintf(lang('igniter.cart::default.menu_options.text_option_summary'), $item->display_type) }}

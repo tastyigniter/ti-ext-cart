@@ -4,6 +4,12 @@ $config['form']['fields'] = [
     'menu_option_value_id' => [
         'type' => 'hidden',
     ],
+    'menu_option_id' => [
+        'type' => 'hidden',
+    ],
+    'option_value_id' => [
+        'type' => 'hidden',
+    ],
     'priority' => [
         'type' => 'hidden',
     ],
