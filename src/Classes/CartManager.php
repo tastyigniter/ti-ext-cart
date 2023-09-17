@@ -416,7 +416,7 @@ class CartManager
             ));
         }
 
-        if ('quantity' == $menuOption->display_type) {
+        if ($menuOption->display_type == 'quantity') {
             $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) {
                 return $qty + $selectedValue['qty'];
             });

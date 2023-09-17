@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Redirect;
 
 class Checkout extends BaseComponent
 {
-    use ValidatesForm;
     use \Igniter\Main\Traits\UsesPage;
+    use ValidatesForm;
 
     /**
      * @var \Igniter\Cart\Classes\CartManager

@@ -77,7 +77,6 @@ class CartItem implements Arrayable, Jsonable
      * @param int|string $id
      * @param string $name
      * @param float $price
-     * @param null $comment
      */
     public function __construct($id, $name, $price, array $options = [], $comment = null, array $conditions = [])
     {
@@ -253,8 +252,6 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Create a new instance from a Buyable.
-     *
-     * @param null $comment
      *
      * @return \Igniter\Cart\CartItem
      */
