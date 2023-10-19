@@ -248,11 +248,11 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        if ($this->mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+        if ($this->mealtimes->contains(fn ($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
             return false;
         }
 
-        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
+        if ($this->ingredients->contains(fn ($ingredient) => !$ingredient->isEnabled())) {
             return false;
         }
 
