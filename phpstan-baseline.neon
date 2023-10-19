@@ -157,7 +157,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$display_type\\.$#"
-			count: 1
+			count: 2
 			path: src/Classes/CartManager.php
 
 		-
@@ -192,7 +192,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$menu_option_value_id\\.$#"
-			count: 3
+			count: 5
 			path: src/Classes/CartManager.php
 
 		-
@@ -687,7 +687,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$ingredients\\.$#"
-			count: 2
+			count: 1
 			path: src/Models/Menu.php
 
 		-
@@ -697,7 +697,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$mealtimes\\.$#"
-			count: 2
+			count: 1
 			path: src/Models/Menu.php
 
 		-
