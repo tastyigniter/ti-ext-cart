@@ -1,3 +1,5 @@
+@php $i = 0 @endphp
+
 @foreach ($optionValues as $optionIndex => $optionValue)
     @php $menuOptionValueId = $optionValue->menu_option_value_id @endphp
     <div @class(['form-quantity d-flex align-items-center', 'py-2' => !$loop->first || !$loop->last])>
@@ -42,4 +44,23 @@
             @endif
         </label>
     </div>
+    @if ($i == 2 && count($optionValues) > 3)
+        <div class="show-more-options-quantity" style="display: none;">
+    @endif
+
+    @php $i++ @endphp
 @endforeach
+
+@if (count($optionValues) > 3)
+    </div>
+    <a href="#" class="show-more-link-quantity">Show more</a>
+    <script>
+        $(document).ready(function() {
+            $('.show-more-link-quantity').click(function(e) {
+                e.preventDefault();
+                $('.show-more-options-quantity').show();
+                $('.show-more-link-quantity').hide();
+            });
+        });
+    </script>
+@endif

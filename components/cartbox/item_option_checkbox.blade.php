@@ -1,3 +1,5 @@
+@php $i = 0 @endphp
+
 @foreach ($optionValues as $optionValue)
     <div @class(['form-check', 'py-2' => !$loop->first || !$loop->last])>
         <input
@@ -22,4 +24,23 @@
             @endif
         </label>
     </div>
+    @if ($i == 2 && count($optionValues) > 3)
+        <div class="show-more-options-checkbox py-2" style="display: none;">
+    @endif
+
+    @php $i++ @endphp
 @endforeach
+
+@if (count($optionValues) > 3)
+    </div>
+    <a href="#" class="show-more-link-checkbox">Show more</a>
+    <script>
+        $(document).ready(function() {
+            $('.show-more-link-checkbox').click(function(e) {
+                e.preventDefault();
+                $('.show-more-options-checkbox').show();
+                $('.show-more-link-checkbox').hide();
+            });
+        });
+    </script>
+@endif
