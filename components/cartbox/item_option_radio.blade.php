@@ -33,7 +33,7 @@
 
 @if (count($optionValues) > 3)
     </div>
-    <a href="#" class="show-more-link-radio">Show more</a>
+    <a href="#" class="show-more-link-radio">@lang('igniter.cart::default.button_show_more')</a>
     <script>
         $(document).ready(function() {
             $('.show-more-link-radio').click(function(e) {

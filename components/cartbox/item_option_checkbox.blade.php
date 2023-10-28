@@ -33,7 +33,7 @@
 
 @if (count($optionValues) > 3)
     </div>
-    <a href="#" class="show-more-link-checkbox">Show more</a>
+    <a href="#" class="show-more-link-checkbox">@lang('igniter.cart::default.button_show_more')</a>
     <script>
         $(document).ready(function() {
             $('.show-more-link-checkbox').click(function(e) {
