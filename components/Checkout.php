@@ -8,10 +8,10 @@ use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Facades\Location;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redirect;
 use Main\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 use System\Classes\BaseComponent;
 
 class Checkout extends BaseComponent
@@ -264,12 +264,12 @@ class Checkout extends BaseComponent
             if (($redirect = $this->orderManager->processPayment($order, $data)) === false)
                 return;
 
-            if ($redirect instanceof RedirectResponse)
+            if ($redirect instanceof Response)
                 return $redirect;
 
             if ($redirect = $this->isOrderMarkedAsProcessed())
                 return $redirect;
-        }, function (Exception $ex) {
+        }, function (\Throwable $ex) {
             flash()->warning($ex->getMessage())->important();
 
             return Redirect::back()->withInput();
