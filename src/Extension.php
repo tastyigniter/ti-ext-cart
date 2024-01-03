@@ -166,42 +166,6 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerComponents()
-    {
-        return [
-            \Igniter\Cart\Components\Menu::class => [
-                'code' => 'localMenu',
-                'name' => 'lang:igniter.cart::default.menu_component_title',
-                'description' => 'lang:igniter.cart::default.menu_component_desc',
-            ],
-            \Igniter\Cart\Components\Categories::class => [
-                'code' => 'categories',
-                'name' => 'lang:igniter.cart::default.categories_component_title',
-                'description' => 'lang:igniter.cart::default.categories_component_desc',
-            ],
-            \Igniter\Cart\Components\CartBox::class => [
-                'code' => 'cartBox',
-                'name' => 'lang:igniter.cart::default.text_component_title',
-                'description' => 'lang:igniter.cart::default.text_component_desc',
-            ],
-            \Igniter\Cart\Components\Checkout::class => [
-                'code' => 'checkout',
-                'name' => 'lang:igniter.cart::default.text_checkout_component_title',
-                'description' => 'lang:igniter.cart::default.text_checkout_component_desc',
-            ],
-            \Igniter\Cart\Components\Orders::class => [
-                'code' => 'accountOrders',
-                'name' => 'lang:igniter.cart::default.orders.component_title',
-                'description' => 'lang:igniter.cart::default.orders.component_desc',
-            ],
-            \Igniter\Cart\Components\Order::class => [
-                'code' => 'orderPage',
-                'name' => 'lang:igniter.cart::default.orders.order_component_title',
-                'description' => 'lang:igniter.cart::default.orders.order_component_desc',
-            ],
-        ];
-    }
-
     public function registerPermissions()
     {
         return [
