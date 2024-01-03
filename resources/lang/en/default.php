@@ -3,10 +3,6 @@
 return [
     'text_tab_general' => 'General',
     'text_tab_orders' => 'Orders',
-    'text_component_title' => 'Cart Component',
-    'text_component_desc' => 'Displays cart for menu to be added',
-    'text_checkout_component_title' => 'Checkout Component',
-    'text_checkout_component_desc' => 'Displays checkout form and accept orders',
     'text_tab_totals' => 'Cart Totals',
     'text_tab_tax' => 'Tax',
     'text_tab_order' => 'Order',
@@ -66,11 +62,6 @@ return [
     'text_collection_time_info' => 'Pick-up %s',
     'text_delivery_is_disabled' => 'Delivery is not available.',
     'text_collection_is_disabled' => 'Pick-up is not available.',
-
-    'menu_component_title' => 'Local Menu items Component',
-    'menu_component_desc' => 'Displays a list of menu items',
-    'categories_component_title' => 'Local Categories Component',
-    'categories_component_desc' => 'Displays a list of menu categories',
 
     'button_add_to_order' => 'Add to order',
     'button_update' => 'Update',
@@ -242,10 +233,6 @@ return [
     ],
 
     'orders' => [
-        'component_title' => 'Account Orders Component',
-        'component_desc' => 'List account orders',
-        'order_component_title' => 'Order Page Component',
-        'order_component_desc' => 'Displays a single order',
         'text_heading' => 'Recent Orders',
         'text_my_account' => 'My Account',
         'text_view_heading' => 'My Order View',
