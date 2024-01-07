@@ -2,7 +2,6 @@
 
 namespace Igniter\Cart\Classes;
 
-use Exception;
 use Igniter\System\Classes\ExtensionManager;
 
 class CartConditionManager
@@ -22,7 +21,7 @@ class CartConditionManager
     public function makeCondition($className, array $config = [])
     {
         if (!class_exists($className)) {
-            throw new Exception(sprintf("The Cart Condition class '%s' has not been registered", $className));
+            throw new \LogicException(sprintf("The Cart Condition class '%s' has not been registered", $className));
         }
 
         return new $className($config);
