@@ -648,7 +648,7 @@ class Cart
     {
         $modelClass = config('cart.model');
         if (!$modelClass || !class_exists($modelClass)) {
-            throw new Exception(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
+            throw new \LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
         }
 
         return new $modelClass();

@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
+use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
-use Igniter\Flame\Exception\ApplicationException;
 
 class OrderStatusAttribute extends BaseModelAttributesCondition
 {
@@ -42,7 +42,7 @@ class OrderStatusAttribute extends BaseModelAttributesCondition
     public function isTrue(&$params)
     {
         if (!$status = array_get($params, 'status')) {
-            throw new ApplicationException('Error evaluating the status attribute condition: the status object is not found in the condition parameters.');
+            throw new AutomationException('Error evaluating the status attribute condition: the status object is not found in the condition parameters.');
         }
 
         return $this->evalIsTrue($status);

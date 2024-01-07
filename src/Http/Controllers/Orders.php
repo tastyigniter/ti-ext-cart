@@ -5,7 +5,7 @@ namespace Igniter\Cart\Http\Controllers;
 use Igniter\Admin\Facades\AdminMenu;
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
-use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Exception\FlashException;
 
 class Orders extends \Igniter\Admin\Classes\AdminController
 {
@@ -72,9 +72,9 @@ class Orders extends \Igniter\Admin\Classes\AdminController
 
     public function index_onDelete()
     {
-        if (!$this->getUser()->hasPermission('Admin.DeleteOrders')) {
-            throw new ApplicationException(lang('igniter::admin.alert_user_restricted'));
-        }
+        throw_unless($this->authorize('Admin.DeleteOrders'),
+            FlashException::error(lang('igniter::admin.alert_user_restricted'))
+        );
 
         return $this->asExtension(\Igniter\Admin\Http\Actions\ListController::class)->index_onDelete();
     }
@@ -96,9 +96,9 @@ class Orders extends \Igniter\Admin\Classes\AdminController
 
     public function edit_onDelete($context, $recordId)
     {
-        if (!$this->getUser()->hasPermission('Admin.DeleteOrders')) {
-            throw new ApplicationException(lang('igniter::admin.alert_user_restricted'));
-        }
+        throw_unless($this->authorize('Admin.DeleteOrders'),
+            FlashException::error(lang('igniter::admin.alert_user_restricted'))
+        );
 
         return $this->asExtension(\Igniter\Admin\Http\Actions\FormController::class)->edit_onDelete($context, $recordId);
     }
@@ -107,9 +107,9 @@ class Orders extends \Igniter\Admin\Classes\AdminController
     {
         $model = $this->formFindModelObject($recordId);
 
-        if (!$model->hasInvoice()) {
-            throw new ApplicationException(lang('igniter.cart::default.orders.alert_invoice_not_generated'));
-        }
+        throw_unless($model->hasInvoice(),
+            FlashException::error(lang('igniter.cart::default.orders.alert_invoice_not_generated'))
+        );
 
         $this->vars['model'] = $model;
 

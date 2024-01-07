@@ -2,8 +2,8 @@
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
+use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
-use Igniter\Flame\Exception\ApplicationException;
 
 class OrderAttribute extends BaseModelAttributesCondition
 {
@@ -86,7 +86,7 @@ class OrderAttribute extends BaseModelAttributesCondition
     public function isTrue(&$params)
     {
         if (!$order = array_get($params, 'order')) {
-            throw new ApplicationException('Error evaluating the order attribute condition: the order object is not found in the condition parameters.');
+            throw new AutomationException('Error evaluating the order attribute condition: the order object is not found in the condition parameters.');
         }
 
         return $this->evalIsTrue($order);

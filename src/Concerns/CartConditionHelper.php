@@ -2,8 +2,6 @@
 
 namespace Igniter\Cart\Concerns;
 
-use Exception;
-
 trait CartConditionHelper
 {
     /**
@@ -150,7 +148,7 @@ trait CartConditionHelper
         preg_match('/([a-zA-Z0-9\-?]+)(?:\s*)([\=\!\<\>]{1,2})(?:\s*)([\-?a-zA-Z0-9]+)/', $rule, $matches);
 
         if (!count($matches)) {
-            throw new Exception(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
+            throw new \InvalidArgumentException(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
         }
 
         array_shift($matches);
@@ -165,7 +163,7 @@ trait CartConditionHelper
         }
 
         if (!array_key_exists('value', $action)) {
-            throw new Exception(sprintf('Cart condition action [%s] format is invalid on %s.', $action, get_class($this)));
+            throw new \InvalidArgumentException(sprintf('Cart condition action [%s] format is invalid on %s.', $action, get_class($this)));
         }
 
         return $action;
