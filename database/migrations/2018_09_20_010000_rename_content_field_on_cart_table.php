@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Rename content column
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up()
     {
         if (!Schema::hasColumn('igniter_cart_cart', 'content')) {
