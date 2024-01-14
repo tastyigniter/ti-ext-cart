@@ -60,7 +60,7 @@ class MenuItemOptionValue extends Model
 
     public function getPriceAttribute()
     {
-        if (!is_null($this->override_price) || strlen($this->override_price)) {
+        if ($this->override_price) {
             return $this->override_price;
         }
 

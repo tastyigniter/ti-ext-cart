@@ -6,13 +6,13 @@ use Igniter\Admin\Facades\AdminMenu;
 
 class Mealtimes extends \Igniter\Admin\Classes\AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\Mealtime::class,
             'title' => 'lang:igniter.cart::default.mealtimes.text_title',
@@ -22,7 +22,7 @@ class Mealtimes extends \Igniter\Admin\Classes\AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.mealtimes.text_form_name',
         'model' => \Igniter\Cart\Models\Mealtime::class,
         'request' => \Igniter\Cart\Requests\MealtimeRequest::class,
@@ -48,7 +48,7 @@ class Mealtimes extends \Igniter\Admin\Classes\AdminController
         'configFile' => 'mealtime',
     ];
 
-    protected $requiredPermissions = 'Admin.Mealtimes';
+    protected null|string|array $requiredPermissions = 'Admin.Mealtimes';
 
     public static function getSlug()
     {
