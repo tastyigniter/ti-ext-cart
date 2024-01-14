@@ -7,13 +7,13 @@ use Igniter\Admin\Facades\AdminMenu;
 
 class Menus extends AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\Menu::class,
             'title' => 'lang:igniter.cart::default.menus.text_title',
@@ -23,7 +23,7 @@ class Menus extends AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menus.text_form_name',
         'model' => \Igniter\Cart\Models\Menu::class,
         'request' => \Igniter\Cart\Requests\MenuRequest::class,
@@ -49,7 +49,7 @@ class Menus extends AdminController
         'configFile' => 'menu',
     ];
 
-    protected $requiredPermissions = 'Admin.Menus';
+    protected null|string|array $requiredPermissions = 'Admin.Menus';
 
     public static function getSlug()
     {

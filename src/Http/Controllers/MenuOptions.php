@@ -6,13 +6,13 @@ use Igniter\Admin\Facades\AdminMenu;
 
 class MenuOptions extends \Igniter\Admin\Classes\AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\MenuOption::class,
             'title' => 'lang:igniter.cart::default.menu_options.text_title',
@@ -23,7 +23,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menu_options.text_form_name',
         'model' => \Igniter\Cart\Models\MenuOption::class,
         'request' => \Igniter\Cart\Requests\MenuOptionRequest::class,
@@ -49,7 +49,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
         'configFile' => 'menuoption',
     ];
 
-    protected $requiredPermissions = 'Admin.Menus';
+    protected null|string|array $requiredPermissions = 'Admin.Menus';
 
     public static function getSlug()
     {

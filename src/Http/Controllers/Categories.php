@@ -8,13 +8,13 @@ use Igniter\Cart\Models\Category;
 
 class Categories extends AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\Category::class,
             'title' => 'lang:igniter.cart::default.categories.text_title',
@@ -25,7 +25,7 @@ class Categories extends AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.categories.text_form_name',
         'model' => \Igniter\Cart\Models\Category::class,
         'request' => \Igniter\Cart\Requests\CategoryRequest::class,
@@ -51,7 +51,7 @@ class Categories extends AdminController
         'configFile' => 'category',
     ];
 
-    protected $requiredPermissions = ['Admin.Categories'];
+    protected null|string|array $requiredPermissions = ['Admin.Categories'];
 
     public static function getSlug()
     {

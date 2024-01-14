@@ -9,14 +9,14 @@ use Igniter\Flame\Exception\FlashException;
 
 class Orders extends \Igniter\Admin\Classes\AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
         \Igniter\User\Http\Actions\AssigneeController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\Order::class,
             'title' => 'lang:igniter.cart::default.orders.text_title',
@@ -26,7 +26,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.orders.text_form_name',
         'model' => \Igniter\Cart\Models\Order::class,
         'request' => \Igniter\Cart\Requests\OrderRequest::class,
@@ -45,7 +45,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         'configFile' => 'order',
     ];
 
-    protected $requiredPermissions = [
+    protected null|string|array $requiredPermissions = [
         'Admin.Orders',
         'Admin.AssignOrders',
         'Admin.DeleteOrders',

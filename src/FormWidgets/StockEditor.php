@@ -45,7 +45,7 @@ class StockEditor extends BaseFormWidget
         $this->vars['previewMode'] = $this->controller->getAction() == 'create';
     }
 
-    public function getSaveValue($value)
+    public function getSaveValue(mixed $value): int
     {
         return FormField::NO_SAVE_DATA;
     }

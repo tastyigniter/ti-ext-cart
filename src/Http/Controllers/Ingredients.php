@@ -7,13 +7,13 @@ use Igniter\Admin\Facades\AdminMenu;
 
 class Ingredients extends AdminController
 {
-    public $implement = [
+    public array $implement = [
         \Igniter\Admin\Http\Actions\ListController::class,
         \Igniter\Admin\Http\Actions\FormController::class,
         \Igniter\Local\Http\Actions\LocationAwareController::class,
     ];
 
-    public $listConfig = [
+    public array $listConfig = [
         'list' => [
             'model' => \Igniter\Cart\Models\Ingredient::class,
             'title' => 'lang:igniter.cart::default.ingredients.text_title',
@@ -24,7 +24,7 @@ class Ingredients extends AdminController
         ],
     ];
 
-    public $formConfig = [
+    public array $formConfig = [
         'name' => 'lang:igniter.cart::default.ingredients.text_form_name',
         'model' => \Igniter\Cart\Models\Ingredient::class,
         'request' => \Igniter\Cart\Requests\IngredientRequest::class,
@@ -50,7 +50,7 @@ class Ingredients extends AdminController
         'configFile' => 'ingredient',
     ];
 
-    protected $requiredPermissions = 'Admin.Ingredients';
+    protected null|string|array $requiredPermissions = 'Admin.Ingredients';
 
     public static function getSlug()
     {

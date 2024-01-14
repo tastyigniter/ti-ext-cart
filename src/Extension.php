@@ -166,7 +166,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerPermissions()
+    public function registerPermissions(): array
     {
         return [
             'Admin.Allergens' => [
@@ -204,7 +204,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerSettings()
+    public function registerSettings(): array
     {
         return [
             'settings' => [
@@ -217,7 +217,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerMailTemplates()
+    public function registerMailTemplates(): array
     {
         return [
             'igniter.cart::mail.order' => 'lang:igniter.cart::default.text_mail_order',
@@ -247,7 +247,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerNavigation()
+    public function registerNavigation(): array
     {
         return [
             'restaurant' => [
@@ -282,7 +282,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerFormWidgets()
+    public function registerFormWidgets(): array
     {
         return [
             \Igniter\Cart\FormWidgets\StockEditor::class => [

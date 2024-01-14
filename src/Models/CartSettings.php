@@ -10,13 +10,13 @@ use Igniter\Flame\Database\Model;
  */
 class CartSettings extends Model
 {
-    public $implement = [\Igniter\System\Actions\SettingsModel::class];
+    public array $implement = [\Igniter\System\Actions\SettingsModel::class];
 
     // A unique code
-    public $settingsCode = 'igniter_cart_settings';
+    public string $settingsCode = 'igniter_cart_settings';
 
     // Reference to field configuration
-    public $settingsFieldsConfig = 'cartsettings';
+    public string $settingsFieldsConfig = 'cartsettings';
 
     public function getConditionsAttribute($value)
     {
