@@ -73,7 +73,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
     public function index_onDelete()
     {
         throw_unless($this->authorize('Admin.DeleteOrders'),
-            FlashException::error(lang('igniter::admin.alert_user_restricted'))
+            new FlashException(lang('igniter::admin.alert_user_restricted'))
         );
 
         return $this->asExtension(\Igniter\Admin\Http\Actions\ListController::class)->index_onDelete();
@@ -97,7 +97,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
     public function edit_onDelete($context, $recordId)
     {
         throw_unless($this->authorize('Admin.DeleteOrders'),
-            FlashException::error(lang('igniter::admin.alert_user_restricted'))
+            new FlashException(lang('igniter::admin.alert_user_restricted'))
         );
 
         return $this->asExtension(\Igniter\Admin\Http\Actions\FormController::class)->edit_onDelete($context, $recordId);
@@ -108,7 +108,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         $model = $this->formFindModelObject($recordId);
 
         throw_unless($model->hasInvoice(),
-            FlashException::error(lang('igniter.cart::default.orders.alert_invoice_not_generated'))
+            new FlashException(lang('igniter.cart::default.orders.alert_invoice_not_generated'))
         );
 
         $this->vars['model'] = $model;
