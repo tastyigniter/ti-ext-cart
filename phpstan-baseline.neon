@@ -396,7 +396,7 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$stocks\\.$#"
+			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$stocks\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
@@ -406,17 +406,17 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockByLocation\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockByLocation\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockableLocations\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockableLocations\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockableName\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockableName\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
