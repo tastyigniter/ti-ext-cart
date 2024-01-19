@@ -2,11 +2,12 @@
 
 namespace Igniter\Cart\Actions;
 
+use Igniter\Flame\Database\Model;
 use Igniter\System\Actions\ModelAction;
 
 class OrderAction extends ModelAction
 {
-    protected $model;
+    protected Model $model;
 
     public function __construct($model)
     {

@@ -396,7 +396,7 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$stocks\\.$#"
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$stocks\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
@@ -406,17 +406,17 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockByLocation\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockByLocation\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockableLocations\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockableLocations\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Model\\:\\:getStockableName\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:getStockableName\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
@@ -727,7 +727,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$override_price\\.$#"
-			count: 2
+			count: 1
 			path: src/Models/MenuItemOptionValue.php
 
 		-
