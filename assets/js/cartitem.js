@@ -53,7 +53,7 @@
             oldValue = parseFloat($input.val())
 
         if ($button.data('operator') === 'plus') {
-            $input.val(oldValue + this.options.minQuantity)
+            $input.val(oldValue + parseFloat(this.options.minQuantity))
         } else {
             $input.val((oldValue > 0) ? oldValue - this.options.minQuantity : 0)
         }
