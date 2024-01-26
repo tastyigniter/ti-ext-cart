@@ -60,7 +60,7 @@
         var self = this,
             $paymentToggle = $el.closest('[data-toggle="payments"]')
 
-        if ($paymentToggle.hasClass('in-progress') || $el.find(this.paymentInputSelector).is(':checked'))
+        if ($paymentToggle.hasClass('in-progress') || $el.find(this.paymentInputSelector).attr('checked'))
             return
 
         this.$checkoutBtn.prop('disabled', true)
