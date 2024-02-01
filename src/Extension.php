@@ -80,7 +80,7 @@ class Extension extends BaseExtension
     public function boot()
     {
         if (!Igniter::runningInAdmin()) {
-            $this->app['router']->pushMiddlewareToGroup('web', Http\Middleware\CartMiddleware::class);
+            $this->app['router']->pushMiddlewareToGroup('igniter', Http\Middleware\CartMiddleware::class);
         }
 
         $this->bindCartEvents();
@@ -341,6 +341,7 @@ class Extension extends BaseExtension
         Event::listen('cart.beforeRegister', function () {
             Config::set('cart.model', Models\Cart::class);
             Config::set('cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
+            Config::set('cart.destroyOnLogout', Models\CartSettings::get('destroy_on_logout'));
         });
 
         Event::listen('cart.afterRegister', function ($cart, $instance) {
