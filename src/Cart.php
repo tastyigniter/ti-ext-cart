@@ -620,7 +620,8 @@ class Cart
     {
         $this->createModel()
             ->where('identifier', $identifier)
-            ->where('instance', $this->currentInstance())->delete();
+            ->where('instance', $this->currentInstance())
+            ->delete();
     }
 
     /**
