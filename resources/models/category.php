@@ -62,6 +62,7 @@ $config['list']['columns'] = [
     'name' => [
         'label' => 'lang:igniter::admin.label_name',
         'type' => 'text',
+        'searchable' => true,
     ],
     'parent_cat' => [
         'label' => 'lang:igniter.cart::default.categories.column_parent',
