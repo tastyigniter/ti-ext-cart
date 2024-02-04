@@ -54,10 +54,11 @@ it('has numeric rule for menu_price input', function () {
     expect('numeric')->toBeIn(array_get($rules, 'menu_price'));
 });
 
-it('has min:0 rule for menu_price input', function () {
+it('has min:0 rule for menu_price, menu_priority input', function () {
     $rules = (new MenuRequest)->rules();
 
-    expect('min:0')->toBeIn(array_get($rules, 'menu_price'));
+    expect('min:0')->toBeIn(array_get($rules, 'menu_price'))
+        ->and('min:0')->toBeIn(array_get($rules, 'menu_priority'));
 });
 
 it('has min:1 rule for minimum_qty input', function () {
@@ -108,7 +109,7 @@ it('has nullable rule for inputs:
     order_restriction.*, mealtime_id, menu_priority',
     function () {
         $rules = (new MenuRequest)->rules();
-        $inputNames = ['order_restriction.*', 'mealtime_id', 'menu_priority'];
+        $inputNames = ['order_restriction.*', 'mealtime_id'];
         $testExpectation = null;
 
         foreach ($inputNames as $key => $inputName) {

@@ -50,12 +50,13 @@
         var $button = $(event.currentTarget),
             $container = $button.closest('[data-toggle="quantity"]'),
             $input = $container.find('input'),
-            oldValue = parseFloat($input.val())
+            oldValue = parseFloat($input.val()),
+            minQuantity = parseFloat(this.options.minQuantity)
 
         if ($button.data('operator') === 'plus') {
-            $input.val(oldValue+this.options.minQuantity)
+            $input.val(oldValue+minQuantity)
         } else {
-            $input.val((oldValue > 0) ? oldValue-this.options.minQuantity : 0)
+            $input.val((oldValue > 0) ? oldValue-minQuantity : 0)
         }
 
         $input.trigger('input');

@@ -225,10 +225,10 @@ class Order extends Model
         return $this->pluckDates('created_at');
     }
 
-    public function markAsCanceled()
+    public function markAsCanceled(array $statusData = [])
     {
         $canceled = false;
-        if ($this->addStatusHistory(setting('canceled_order_status'))) {
+        if ($this->addStatusHistory(setting('canceled_order_status'), $statusData)) {
             $canceled = true;
             OrderCanceledEvent::dispatch($this);
         }

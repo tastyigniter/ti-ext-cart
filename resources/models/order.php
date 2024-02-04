@@ -140,6 +140,16 @@ $config['list']['columns'] = [
         'label' => 'lang:igniter.cart::default.orders.column_total',
         'type' => 'currency',
     ],
+    'telephone' => [
+        'label' => 'lang:igniter.cart::default.orders.label_telephone',
+        'invisible' => true,
+        'searchable' => true,
+    ],
+    'email' => [
+        'label' => 'lang:igniter::admin.label_email',
+        'invisible' => true,
+        'searchable' => true,
+    ],
     'updated_at' => [
         'label' => 'lang:igniter::admin.column_date_updated',
         'type' => 'datesince',
