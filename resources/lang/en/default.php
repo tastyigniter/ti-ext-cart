@@ -129,6 +129,7 @@ return [
     'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
     'alert_min_delivery_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
+    'alert_min_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
     'alert_coupon_removed' => 'Your coupon has been removed successfully.',
     'alert_coupon_applied' => 'Your coupon has been applied successfully.',
     'alert_coupon_invalid' => 'Please enter a valid coupon.',
@@ -240,6 +241,7 @@ return [
         'text_leave_review' => 'Leave review',
         'text_no_payment' => 'No Payment',
         'text_login_to_view_more' => 'For more information about your order, please create an account or login.',
+        'text_title_cancel' => 'Cancel Order',
 
         'column_id' => 'Order no.',
         'column_status' => 'Status',
@@ -257,7 +259,7 @@ return [
 
         'button_order' => 'Place New Order',
         'button_reorder' => 'Reorder',
-        'button_cancel' => 'Cancel',
+        'button_cancel' => 'Cancel order',
         'button_view_order' => 'View/Reorder',
         'button_back' => 'Back',
 
@@ -328,6 +330,7 @@ return [
         'label_restaurant_address' => 'Address',
         'label_payment_method' => 'Payment Method',
         'label_total_items' => 'Total Items',
+        'label_cancel_reason' => 'Reason for cancellation',
 
         'notify_status_updated_title' => 'Order status updated',
         'notify_assigned_title' => 'Order assigned',

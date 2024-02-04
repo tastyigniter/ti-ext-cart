@@ -357,7 +357,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
-			count: 3
+			count: 4
 			path: src/Extension.php
 
 		-
