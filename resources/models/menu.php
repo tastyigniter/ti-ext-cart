@@ -248,6 +248,7 @@ $config['form']['tabs'] = [
             'type' => 'mediafinder',
             'comment' => 'lang:igniter.cart::default.menus.help_image',
             'span' => 'right',
+            'context' => ['edit', 'preview'],
             'useAttachment' => true,
         ],
 

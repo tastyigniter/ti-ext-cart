@@ -40,6 +40,17 @@ class MenuRequest extends FormRequest
             'menu_status' => ['boolean'],
             'mealtime_id' => ['nullable', 'integer'],
             'menu_priority' => ['min:0', 'integer'],
+            'special.special_id' => ['nullable', 'integer'],
+            'special.type' => ['string', 'in:F,P'],
+            'special.special_price' => ['numeric', 'min:0'],
+            'special.validity' => ['string', 'in:forever,period,recurring'],
+            'special.start_date' => ['required_if:special.validity,period', 'nullable', 'date'],
+            'special.end_date' => ['required_if:special.validity,period', 'nullable', 'date'],
+            'special.recurring_every' => ['required_if:special.validity,recurring', 'array'],
+            'special.recurring_every.*' => ['required_if:special.validity,recurring', 'integer'],
+            'special.recurring_from' => ['required_if:special.validity,recurring', 'nullable', 'date_format:H:i'],
+            'special.recurring_to' => ['required_if:special.validity,recurring', 'nullable', 'date_format:H:i'],
+            'special.special_status' => ['boolean'],
         ];
     }
 }
