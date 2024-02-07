@@ -248,11 +248,11 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        if ($this->mealtimes->contains(fn ($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+        if ($this->mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
             return false;
         }
 
-        if ($this->ingredients->contains(fn ($ingredient) => !$ingredient->isEnabled())) {
+        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
             return false;
         }
 
@@ -275,11 +275,7 @@ class Menu extends Model implements Buyable
 
     public function isSpecial()
     {
-        if (!$special = $this->special) {
-            return false;
-        }
-
-        return $special->active();
+        return $this->special?->active();
     }
 
     public function checkMinQuantity($quantity = 0)
@@ -323,9 +319,8 @@ class Menu extends Model implements Buyable
      */
     public function getBuyablePrice()
     {
-        $price = $this->isSpecial()
-            ? $this->special->getMenuPrice($this->menu_price) : $this->menu_price;
-
-        return $price;
+        return $this->isSpecial()
+            ? $this->special->getMenuPrice($this->menu_price)
+            : $this->menu_price;
     }
 }
