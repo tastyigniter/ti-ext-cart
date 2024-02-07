@@ -24,6 +24,7 @@ class MealtimeRequest extends FormRequest
             'start_time' => ['required', 'valid_time'],
             'end_time' => ['required', 'valid_time'],
             'mealtime_status' => ['required', 'boolean'],
+            'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
         ];
     }

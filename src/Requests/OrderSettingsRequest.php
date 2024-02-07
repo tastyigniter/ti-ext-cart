@@ -39,7 +39,7 @@ class OrderSettingsRequest extends FormRequest
             'guest_order' => ['required', 'integer'],
             'location_order' => ['required', 'integer'],
 
-            'invoice_prefix' => ['nullable', 'alpha_dash'],
+            'invoice_prefix' => ['nullable', 'regex:/^[a-zA-Z0-9-_\{\}]+$/'],
             'invoice_logo' => ['nullable', 'string'],
 
             'tax_mode' => ['required', 'integer'],
