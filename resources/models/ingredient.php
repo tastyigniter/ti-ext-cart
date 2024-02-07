@@ -62,6 +62,7 @@ $config['list']['columns'] = [
     'name' => [
         'label' => 'lang:igniter::admin.label_name',
         'type' => 'text',
+        'searchable' => true
     ],
     'is_allergen' => [
         'label' => 'lang:igniter.cart::default.ingredients.column_is_allergen',
