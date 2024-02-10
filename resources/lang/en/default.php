@@ -126,7 +126,6 @@ return [
     'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',
     'alert_qty_is_invalid' => 'Selected quantity is not divisive by the minimum quantity of %s.',
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',
-    'alert_no_search_query' => 'Please type in a postcode/address to check if we can deliver to you.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
     'alert_min_delivery_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
     'alert_min_order_total' => 'Order total is below the %s minimum order total. <br />You need to spend more to order.',
