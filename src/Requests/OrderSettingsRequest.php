@@ -45,7 +45,7 @@ class OrderSettingsRequest extends FormRequest
             'tax_mode' => ['required', 'integer'],
             'tax_title' => ['string', 'max:32'],
             'tax_percentage' => ['required_if:tax_mode,1', 'numeric'],
-            'tax_menu_price' => ['numeric'],
+            'tax_menu_price' => ['required', 'numeric'],
             'tax_delivery_charge' => ['numeric'],
         ];
     }

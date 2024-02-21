@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Models\Concerns;
 
 use Carbon\Carbon;
+use Igniter\System\Models\Settings;
 
 trait HasInvoice
 {
@@ -74,6 +75,6 @@ trait HasInvoice
             'hour' => $invoiceDate->hour,
             'minute' => $invoiceDate->minute,
             'second' => $invoiceDate->second,
-        ], setting('invoice_prefix') ?: 'INV-{year}-00');
+        ], Settings::get('invoice_prefix', 'INV-{year}-00'));
     }
 }

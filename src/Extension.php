@@ -18,7 +18,6 @@ use Igniter\Cart\Models\Scopes\MenuScope;
 use Igniter\Cart\Models\Scopes\OrderScope;
 use Igniter\Cart\Requests\OrderSettingsRequest;
 use Igniter\Flame\Igniter;
-use Igniter\Local\Facades\Location;
 use Igniter\Local\Models\Location as LocationModel;
 use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
@@ -26,7 +25,6 @@ use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
 use Igniter\User\Models\Customer;
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 
 class Extension extends BaseExtension
@@ -69,7 +67,7 @@ class Extension extends BaseExtension
     {
         parent::register();
 
-        $this->mergeConfigFrom(__DIR__.'/../config/cart.php', 'cart');
+        $this->mergeConfigFrom(__DIR__.'/../config/cart.php', 'igniter-cart');
 
         $this->registerCart();
         $this->registerSystemSettings();
@@ -338,18 +336,6 @@ class Extension extends BaseExtension
 
     protected function bindCartEvents()
     {
-        Event::listen('cart.beforeRegister', function () {
-            Config::set('cart.model', Models\Cart::class);
-            Config::set('cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
-            Config::set('cart.destroyOnLogout', Models\CartSettings::get('destroy_on_logout'));
-        });
-
-        Event::listen('cart.afterRegister', function ($cart, $instance) {
-            if (Location::current()) {
-                $cart->instance('location-'.Location::getId());
-            }
-        });
-
         Event::listen('igniter.user.login', function () {
             if (Models\CartSettings::get('abandoned_cart')
                 && Facades\Cart::content()->isEmpty()
@@ -419,6 +405,10 @@ class Extension extends BaseExtension
     protected function registerCart(): void
     {
         $this->app->singleton('cart', function ($app) {
+            $this->app['config']->set('igniter-cart.model', Models\Cart::class);
+            $this->app['config']->set('igniter-cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
+            $this->app['config']->set('igniter-cart.destroyOnLogout', Models\CartSettings::get('destroy_on_logout'));
+
             $this->app['events']->fire('cart.beforeRegister', [$this]);
 
             $instance = new Cart($app['session'], $app['events']);

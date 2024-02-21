@@ -221,11 +221,6 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_total\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:\\$name\\.$#"
 			count: 2
 			path: src/Classes/OrderManager.php
@@ -242,7 +237,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$address_id\\.$#"
-			count: 2
+			count: 3
 			path: src/Classes/OrderManager.php
 
 		-
@@ -358,16 +353,6 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
 			count: 4
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:current\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 1
 			path: src/Extension.php
 
 		-
@@ -491,7 +476,22 @@ parameters:
 			path: src/Http/Middleware/CartMiddleware.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:instance\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:store\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:current\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Middleware/CartMiddleware.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Middleware/CartMiddleware.php
 

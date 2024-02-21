@@ -14,7 +14,7 @@ return [
     'text_menu_price_include_tax' => 'Menu prices already include tax',
     'text_apply_tax_on_menu_price' => 'Apply tax on top of my menu price',
 
-    'text_heading' => 'My Order',
+    'text_basket' => 'Basket',
     'text_update_heading' => 'Updating menu choices',
     'text_add_heading' => 'Adding menu choices',
     'text_no_cart_items' => 'Add menu items to your cart.',
@@ -122,6 +122,7 @@ return [
     'alert_menu_not_found' => '%s not found, please add from the local menus page.',
     'alert_no_menu_selected' => 'Please select a menu to add to your order.',
     'alert_menu_order_restriction' => 'The selected menu item is not available for <b>%s</b>',
+    'alert_option_not_found' => 'The selected option is not available',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
     'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',
     'alert_qty_is_invalid' => 'Selected quantity is not divisive by the minimum quantity of %s.',
@@ -142,6 +143,7 @@ return [
     'alert_menu_location_restricted' => 'Menu [%s] does not be belong to the selected order location.',
     'alert_tip_not_applied' => 'Please enter a valid tip amount.',
     'alert_no_menu_item_found' => 'Item not found in the cart',
+    'alert_condition_not_found' => 'Condition not found',
 
     'help_show_cart_images' => 'Show or hide cart menu images',
     'help_cart_image_size' => '(Height x Width)',
@@ -219,6 +221,7 @@ return [
         'error_covered_area' => 'This restaurant currently does not deliver to your address',
         'error_delivery_less_current_time' => 'The %s Time can not be less than current time!',
         'error_invalid_payment' => 'The selected payment is invalid, please contact us',
+        'error_payment_partial' => 'View [%s] not found for payment: %s.',
         'error_email_exists' => 'An account exists with this email address. Please login to continue or use a different email address',
 
         'alert_no_menu_to_order' => 'Please, add some menus before you checkout!',
