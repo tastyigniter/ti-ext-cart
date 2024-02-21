@@ -32,8 +32,6 @@ class CartManager
      */
     protected $settings;
 
-    protected $checkStock = true;
-
     public function __construct()
     {
         $this->cart = App::make('cart');
@@ -41,13 +39,6 @@ class CartManager
         $this->settings = CartSettings::instance();
 
         $this->loadCartConditions();
-    }
-
-    public function checkStock(bool $checkStock)
-    {
-        $this->checkStock = $checkStock;
-
-        return $this;
     }
 
     public function getCart()
@@ -216,9 +207,7 @@ class CartManager
 
         $this->validateMenuItemMinQty($menuItem, $quantity);
 
-        if ($this->checkStock) {
-            $this->validateMenuItemStockQty($menuItem, $quantity);
-        }
+        $this->validateMenuItemStockQty($menuItem, $quantity);
 
         $this->validateMenuItemLocation($menuItem);
     }
@@ -296,8 +285,12 @@ class CartManager
             $menuOptions = $menuItem->menu_options->keyBy('menu_option_id');
 
             $cartItem->options->each(function ($cartItemOption) use ($menuOptions) {
+                throw_unless($menuItemOption = $menuOptions->get($cartItemOption->id), new ApplicationException(
+                    lang('igniter.cart::default.alert_option_not_found')
+                ));
+
                 $this->validateMenuItemOption(
-                    $menuOptions->get($cartItemOption->id),
+                    $menuItemOption,
                     $cartItemOption->values->toArray()
                 );
             });

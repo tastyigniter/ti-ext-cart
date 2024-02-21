@@ -183,22 +183,27 @@ class OrderManager
             $data['email'] = $this->customer->email;
         }
 
-        $addressId = null;
-        if ($address = array_get($data, 'address', [])) {
+        if (array_key_exists('address_1', $data)) {
             $address['customer_id'] = $this->getCustomerId();
+            $address['address_1'] = array_pull($data, 'address_1');
+            $address['address_2'] = array_pull($data, 'address_2');
+            $address['city'] = array_pull($data, 'city');
+            $address['state'] = array_pull($data, 'state');
+            $address['postcode'] = array_pull($data, 'postcode');
+            $address['country_id'] = array_pull($data, 'country_id');
 
-            $addressId = array_get($data, 'address_id');
-            $addressId = !empty($addressId) ? $addressId : Address::createOrUpdateFromRequest($address)->getKey();
+            if (empty($addressId = array_get($data, 'address_id'))) {
+                $addressId = Address::createOrUpdateFromRequest($address)->getKey();
+            }
 
             // Update customer default address
-            if ($this->customer) {
+            if ($this->customer && $this->customer->address_id != $addressId) {
                 $this->customer->address_id = $addressId;
-                $this->customer->save();
+                $this->customer->saveQuietly();
             }
         }
 
         $order->fill($data);
-        $order->address_id = $addressId;
         $this->applyRequiredAttributes($order);
 
         $order->save();
@@ -217,8 +222,12 @@ class OrderManager
     {
         Event::fire('igniter.checkout.beforePayment', [$order, $data]);
 
-        if (!strlen($order->payment) && $this->processPaymentLessForm($order)) {
-            return true;
+        if (!strlen($order->payment) && $order->order_total <= 0) {
+            return $this->processPaymentLessForm($order);
+        }
+
+        if ($order->order_total > 0 && !strlen($order->payment)) {
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
         }
 
         $paymentMethod = $this->getPayment($order->payment);
@@ -320,10 +329,6 @@ class OrderManager
      */
     protected function processPaymentLessForm($order)
     {
-        if ($order->order_total > 0) {
-            return false;
-        }
-
         $order->updateOrderStatus(setting('default_order_status'), ['notify' => false]);
         $order->markAsPaymentProcessed();
 

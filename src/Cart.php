@@ -647,7 +647,7 @@ class Cart
      */
     protected function createModel()
     {
-        $modelClass = config('cart.model');
+        $modelClass = config('igniter-cart.model');
         if (!$modelClass || !class_exists($modelClass)) {
             throw new \LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
         }
