@@ -86,6 +86,9 @@ class Order extends Model
             'menu_options' => \Igniter\Cart\Models\OrderMenuOptionValue::class,
             'totals' => \Igniter\Cart\Models\OrderTotal::class,
         ],
+        'morphMany' => [
+            'review' => [\Igniter\Local\Models\Review::class],
+        ],
     ];
 
     protected array $queryModifierFilters = [

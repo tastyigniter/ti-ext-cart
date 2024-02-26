@@ -241,11 +241,6 @@ parameters:
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$customer_id\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$email\\.$#"
 			count: 2
 			path: src/Classes/OrderManager.php
@@ -806,7 +801,7 @@ parameters:
 			path: src/Models/MenuOptionValue.php
 
 		-
-			message: "#^Call to an undefined static method static\\(Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\)\\:\\:dropdown\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:dropdown\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOptionValue.php
 

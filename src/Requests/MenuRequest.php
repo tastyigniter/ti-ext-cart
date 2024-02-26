@@ -46,7 +46,7 @@ class MenuRequest extends FormRequest
             'menu_priority' => ['min:0', 'integer'],
             'special.special_id' => ['nullable', 'integer'],
             'special.type' => ['string', 'in:F,P'],
-            'special.special_price' => ['numeric', 'min:0'],
+            'special.special_price' => ['nullable', 'numeric', 'min:0'],
             'special.validity' => ['string', 'in:forever,period,recurring'],
             'special.start_date' => ['required_if:special.validity,period', 'nullable', 'date'],
             'special.end_date' => ['required_if:special.validity,period', 'nullable', 'date'],

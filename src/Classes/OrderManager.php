@@ -68,13 +68,9 @@ class OrderManager
      */
     public function loadOrder()
     {
-        $id = $this->getCurrentOrderId();
+        $customerId = $this->customer->customer_id ?? null;
 
-        $customerId = $this->customer
-            ? $this->customer->customer_id
-            : null;
-
-        $order = Order::find($id);
+        $order = Order::find($this->getCurrentOrderId());
 
         // Only users can view their own orders
         if (!$order || $order->customer_id != $customerId) {
@@ -157,6 +153,10 @@ class OrderManager
         }
 
         $userLocation = $collection->first();
+        if (!$userLocation->getStreetNumber() || !$userLocation->getStreetName()) {
+            throw new ApplicationException(lang('igniter.local::default.alert_missing_street_address'));
+        }
+
         $this->location->updateUserPosition($userLocation);
 
         if (!$area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates())) {
