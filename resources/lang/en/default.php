@@ -266,6 +266,7 @@ return [
         'button_back' => 'Back',
 
         'alert_reorder_success' => 'You have successfully added the menus from order ID %s to your order.',
+        'alert_reorder_failed' => 'Unable to reorder, please contact us.',
         'alert_cancel_success' => 'Order successfully canceled.',
         'alert_cancel_failed' => 'Unable to cancel order, please contact us.',
 
