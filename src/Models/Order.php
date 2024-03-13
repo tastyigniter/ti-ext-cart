@@ -27,10 +27,10 @@ use Igniter\User\Models\Concerns\HasCustomer;
  */
 class Order extends Model
 {
-    use HasFactory;
     use Assignable;
     use GeneratesHash;
     use HasCustomer;
+    use HasFactory;
     use HasInvoice;
     use Locationable;
     use LogsStatusHistory;
