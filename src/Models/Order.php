@@ -13,6 +13,7 @@ use Igniter\Cart\Events\OrderPaymentProcessedEvent;
 use Igniter\Cart\Models\Concerns\HasInvoice;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
 use Igniter\Flame\Database\Casts\Serialize;
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Main\Classes\MainController;
@@ -26,6 +27,7 @@ use Igniter\User\Models\Concerns\HasCustomer;
  */
 class Order extends Model
 {
+    use HasFactory;
     use Assignable;
     use GeneratesHash;
     use HasCustomer;
