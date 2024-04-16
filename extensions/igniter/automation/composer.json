@@ -1,0 +1,24 @@
+{
+  "name": "tastyigniter/ti-ext-automation",
+  "type": "tastyigniter-extension",
+  "description": "Configure automation rules to be triggered when other specific actions have taken place.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sam Poyigi",
+      "email": "sam@sampoyigi.com"
+    }
+  ],
+  "extra": {
+    "tastyigniter-extension": {
+      "code": "igniter.automation",
+      "name": "Automation",
+      "icon": {
+        "class": "fa fa-tasks",
+        "backgroundColor": "#25C7EE",
+        "color": "#FFF"
+      },
+      "homepage": "https://tastyigniter.com/marketplace/item/igniter-automation"
+    }
+  }
+}
