@@ -113,7 +113,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
 
         $this->vars['model'] = $model;
 
-        $this->suppressLayout = true;
+        $this->layout = '';
     }
 
     public function formExtendQuery($query)
