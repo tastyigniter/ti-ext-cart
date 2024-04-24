@@ -28,102 +28,6 @@ for **Igniter.Cart** in **Admin System > Updates > Browse Extensions**
 
 In the admin user interface you can manage the cart conditions.
 
-## Components
-
-| Name     | Page variable                  | Description                                      |
-| -------- | ------------------------------ | ------------------------------------------------ |
-| CartBox  | `@themeComponent('cartBox')`  | Show the contents of and manages the user's cart |
-| Checkout | `@themeComponent('checkout')` | Displays Checkout form on the page               |
-| OrderPage | `@themeComponent('orderPage')` | Displays a single order on the page               |
-| Orders | `@themeComponent('orders')` | Displays a list of orders on the page               |
-
-### CartBox Component
-
-**Properties**
-
-| Property                 | Description              | Example Value | Default Value |
-| ------------------------ | ------------------------ | ------------- | ------------- |
-| showCartItemThumb     | Show cart menu item image in the popup  | true/false        | false         |
-| cartItemThumbWidth     | Cart item image width   | 720        | 720         |
-| cartItemThumbHeight     | Cart item image height    | 300        | 300         |
-| checkStockCheckout     | Check cart item stock quantity            | true/false         | false         |
-| pageIsCheckout      | Value to determine if the user is on a checkout page             | true/false         | false         |
-| pageIsCart          | Display a standalone cart             | true/false         | false         |
-| hideZeroOptionPrices          | Whether to hide zero prices on options            | true/false         | false         |
-| checkoutPage          | Checkout page path            | checkout/checkout         | checkout/checkout         |
-| localBoxAlias          | Specify the LocalBox component alias used to refresh the localbox after the order type is changed            | localBox         | localBox         |
-
-**Variables available in templates**
-
-| Variable                  | Description                                                  |
-| ------------------------- | ------------------------------------------------------------ |
-| `{{ $cart }}` | Cart Class instance                                                |
-
-**Example:**
-
-```
----
-title: 'Checkout'
-permalink: /checkout
-
-'[cartBox]':
-    cartBoxTimeFormat: 'ddd hh:mm a'
-    checkStockCheckout: 0
-    pageIsCheckout: 0
-    pageIsCart: 0
-    checkoutPage: checkout/checkout
----
-...
-@themeComponent('cartBox')
-...
-```
-
-### Checkout Component
-
-**Properties**
-
-| Property                 | Description              | Example Value | Default Value |
-| ------------------------ | ------------------------ | ------------- | ------------- |
-| showCountryField                     | Show/hide the country checkout field            | true/false        | false         |
-| showAddress2Field                     | Show/hide the address 2 checkout field            | true/false        | true         |
-| showCityField                     | Show/hide the city checkout field            | true/false        | true         |
-| showStateField                     | Show/hide the state checkout field            | true/false        | true         |
-| agreeTermsPage                     | Terms and conditions page            |    page/terms     |          |
-| menusPage                     | Menus page            |    page/menus     |          |
-| redirectPage                     | Redirect page name           |    checkout/checkout    |    checkout/checkout      |
-| orderPage                     | Order page name            |    account/order     |     account/order     |
-| successPage                     | Order confirmation page name           |    checkout/success     |     checkout/success     |
-| successParamCode                     | URL routing code used for displaying the order confirmation page            | hash       | hash         |
-
-**Variables available in templates**
-
-| Variable                  | Description                                                  |
-| ------------------------- | ------------------------------------------------------------ |
-| `{{ $order }}` | Order Model instance                                          |
-| `{{ $paymentGateways }}` | Instances of available payment gateways                                          |
-
-**Example:**
-
-```
----
-title: 'Checkout'
-permalink: /checkout
-
-'[checkout]':
-    showCountryField: 0
-    showAddress2Field: 1
-    showCityField: 1
-    showStateField: 1
-    menusPage: local/menus
-    redirectPage: checkout/checkout
-    successPage: checkout/success
-    successParamCode: 'hash'
----
-...
-@themeComponent('checkout')
-...
-```
-
 ## Registering a new Cart Condition
 
 Here is an example of an extension registering a cart condition.
@@ -143,13 +47,13 @@ public function registerCartConditions()
 
 ## Automations
 
-## Events
+### Events
 
 - Order Placed Event
 - Order Status Update Event
 - Order Assigned Event
 
-## Conditions
+### Conditions
 
 - Order Attributes
 - Order Status Attributes
