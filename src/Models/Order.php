@@ -335,6 +335,7 @@ class Order extends Model
         $data['email'] = $model->email;
         $data['telephone'] = $model->telephone;
         $data['order_comment'] = $model->comment;
+        $data['delivery_comment'] = $model->delivery_comment;
 
         $data['order_type'] = $model->order_type_name;
         $data['order_time'] = Carbon::createFromTimeString($model->order_time)->isoFormat(lang('system::lang.moment.time_format'));
