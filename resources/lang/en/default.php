@@ -48,6 +48,8 @@ return [
     'text_mail_order_update' => 'Order status update email to customer',
     'text_mail_low_stock_alert' => 'Low stock alert email to location',
     'text_side_menu_order' => 'Orders',
+    'text_permission_menu_group' => 'Menu',
+    'text_permission_order_group' => 'Order',
     'text_permission_orders' => 'Edit orders',
     'text_permission_delete_orders' => 'Delete orders',
     'text_permission_assign_orders' => 'Assign orders',

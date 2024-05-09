@@ -169,35 +169,35 @@ class Extension extends BaseExtension
         return [
             'Admin.Allergens' => [
                 'label' => 'igniter.cart::default.text_permission_ingredients',
-                'group' => 'menu',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
             'Admin.Categories' => [
                 'label' => 'igniter.cart::default.text_permission_categories',
-                'group' => 'menu',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
             'Admin.Menus' => [
                 'label' => 'igniter.cart::default.text_permission_menus',
-                'group' => 'menu',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
             'Admin.Mealtimes' => [
                 'label' => 'igniter.cart::default.text_permission_mealtimes',
-                'group' => 'menu',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
             'Admin.Orders' => [
                 'label' => 'igniter.cart::default.text_permission_orders',
-                'group' => 'order',
+                'group' => 'igniter.cart::default.text_permission_order_group',
             ],
             'Admin.DeleteOrders' => [
                 'label' => 'igniter.cart::default.text_permission_delete_orders',
-                'group' => 'order',
+                'group' => 'igniter.cart::default.text_permission_order_group',
             ],
             'Admin.AssignOrders' => [
                 'label' => 'igniter.cart::default.text_permission_assign_orders',
-                'group' => 'order',
+                'group' => 'igniter.cart::default.text_permission_order_group',
             ],
             'Module.CartModule' => [
                 'description' => 'Manage cart extension settings',
-                'group' => 'order',
+                'group' => 'igniter.cart::default.text_permission_order_group',
             ],
         ];
     }
