@@ -237,26 +237,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$address_id\\.$#"
-			count: 3
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$email\\.$#"
 			count: 2
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$first_name\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$last_name\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$telephone\\.$#"
+			message: "#^Access to an undefined property Igniter\\\\User\\\\Models\\\\Customer\\:\\:\\$email\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
@@ -896,6 +881,11 @@ parameters:
 			path: src/Models/Order.php
 
 		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$delivery_comment\\.$#"
+			count: 1
+			path: src/Models/Order.php
+
+		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$email\\.$#"
 			count: 3
 			path: src/Models/Order.php
@@ -1164,11 +1154,6 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
 			count: 1
 			path: src/OrderTypes/Collection.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:getMinimumOrderTotal\\(\\)\\.$#"
-			count: 1
-			path: src/OrderTypes/Delivery.php
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:hasDelivery\\(\\)\\.$#"
