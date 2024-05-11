@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Classes;
 
+use Exception;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartItem;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
@@ -9,8 +10,10 @@ use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
+use Igniter\Cart\Models\Order;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Flame\Exception\ApplicationException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
@@ -453,5 +456,64 @@ class CartManager
     {
         return $this->location->orderTypeIsDelivery()
             && $this->location->deliveryAmount($this->cart->subtotal()) < 0;
+    }
+
+    //
+    // Reorder
+    //
+
+    public function addOrderMenus(Order $order)
+    {
+        $notes = [];
+
+        foreach ($order->getOrderMenus() as $orderMenu) {
+            try {
+                throw_unless($orderMenu->menu, new ApplicationException(
+                    lang('igniter.cart::default.alert_menu_not_found')
+                ));
+
+                $this->validateCartMenuItem($orderMenu->menu, $orderMenu->quantity);
+
+                if (is_string($orderMenu->option_values)) {
+                    $orderMenu->option_values = @unserialize($orderMenu->option_values);
+                }
+
+                if ($orderMenu->option_values instanceof Arrayable) {
+                    $orderMenu->option_values = $orderMenu->option_values->toArray();
+                }
+
+                $options = $this->prepareCartItemOptionsFromOrderMenu($orderMenu->menu, $orderMenu->option_values, $notes);
+
+                $this->cart->add($orderMenu->menu, $orderMenu->quantity, $options, $orderMenu->comment);
+            } catch (Exception $ex) {
+                $notes[] = $ex->getMessage();
+            }
+        }
+
+        return $notes;
+    }
+
+    protected function prepareCartItemOptionsFromOrderMenu($menuModel, $optionValues, &$notes)
+    {
+        $options = [];
+        foreach ($optionValues as $cartOption) {
+            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id'])) {
+                continue;
+            }
+
+            try {
+                $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
+
+                $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
+                    return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
+                })->toArray();
+
+                $options[] = $cartOption;
+            } catch (Exception $ex) {
+                $notes[] = $ex->getMessage();
+            }
+        }
+
+        return $options;
     }
 }

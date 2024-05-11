@@ -34,4 +34,26 @@ class CartSettings extends Model
     //
     //
     //
+
+    public function tippingEnabled()
+    {
+        return (bool)self::get('enable_tipping');
+    }
+
+    public function tippingAmounts()
+    {
+        $result = [];
+
+        $tipValueType = self::get('tip_value_type', 'F');
+        $amounts = (array)self::get('tip_amounts', []);
+
+        $amounts = sort_array($amounts, 'priority');
+
+        foreach ($amounts as $index => $amount) {
+            $amount['valueType'] = $tipValueType;
+            $result[$index] = (object)$amount;
+        }
+
+        return $result;
+    }
 }
