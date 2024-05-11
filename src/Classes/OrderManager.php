@@ -77,6 +77,10 @@ class OrderManager
             $order = Order::make($this->getCustomerAttributes());
         }
 
+        if (!$order->isPaymentProcessed()) {
+            $this->applyRequiredAttributes($order);
+        }
+
         return $order;
     }
 
