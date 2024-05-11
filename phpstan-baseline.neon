@@ -486,6 +486,11 @@ parameters:
 			path: src/Http/Middleware/CartMiddleware.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
+			count: 3
+			path: src/Models/CartSettings.php
+
+		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:menus\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Category.php
