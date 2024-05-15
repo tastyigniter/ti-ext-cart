@@ -80,7 +80,12 @@ class Menu extends Model implements Buyable
         'orderType' => 'applyOrderType',
     ];
 
-    protected array $queryModifierSorts = ['menu_priority asc', 'menu_priority desc'];
+    protected array $queryModifierSorts = [
+        'menu_priority asc', 'menu_priority desc',
+        'menu_name asc', 'menu_name desc',
+        'menu_id asc', 'menu_id desc',
+        'menu_price asc', 'menu_price desc',
+    ];
 
     protected array $queryModifierSearchableFields = ['menu_name', 'menu_description'];
 
@@ -248,11 +253,11 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        if ($this->mealtimes->contains(fn ($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+        if ($this->mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
             return false;
         }
 
-        if ($this->ingredients->contains(fn ($ingredient) => !$ingredient->isEnabled())) {
+        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
             return false;
         }
 
