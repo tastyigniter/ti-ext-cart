@@ -214,9 +214,6 @@ return [
         'label_comment' => 'Leave a note',
         'label_delivery_comment' => 'Leave a note for the driver',
         'label_ip' => 'IP Address',
-        'label_checkout_terms' => 'Checkout Terms',
-
-        'help_checkout_terms' => 'Require customers to agree to terms before checkout',
 
         'button_agree_terms' => 'I Agree',
 
