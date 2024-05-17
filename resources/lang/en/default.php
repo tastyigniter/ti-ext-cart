@@ -236,7 +236,6 @@ return [
 
     'orders' => [
         'text_heading' => 'Recent Orders',
-        'text_my_account' => 'My Account',
         'text_view_heading' => 'My Order View',
         'text_empty' => 'There are no orders available.',
         'text_leave_review' => 'Leave review',
