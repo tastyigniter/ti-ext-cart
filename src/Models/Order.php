@@ -103,6 +103,10 @@ class Order extends Model
     protected array $queryModifierSorts = [
         'order_id asc', 'order_id desc',
         'created_at asc', 'created_at desc',
+        'total asc', 'total desc',
+        'order_date asc', 'order_date desc',
+        'order_time asc', 'order_time desc',
+        'order_type asc', 'order_type desc',
     ];
 
     protected array $queryModifierSearchableFields = ['order_id', 'first_name', 'last_name', 'email', 'telephone'];
