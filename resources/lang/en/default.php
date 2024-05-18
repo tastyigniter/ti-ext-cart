@@ -226,7 +226,7 @@ return [
         'alert_no_menu_to_order' => 'Please, add some menus before you checkout!',
         'alert_no_selected_local' => 'Please select your local restaurant<',
         'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
-        'alert_outside_hours' => 'The selected time is outside our %s hours',
+        'alert_outside_hours' => 'Your selected order time is outside our %s hours',
         'alert_customer_not_logged' => 'Almost there, Please login or register to complete checkout.',
         'alert_delivery_area_changed' => 'Your delivery area has changed, please confirm the delivery cost.',
 
