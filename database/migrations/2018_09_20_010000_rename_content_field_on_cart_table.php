@@ -15,7 +15,7 @@ return new class extends Migration
             return;
         }
 
-        Schema::table('igniter_cart_cart', function (Blueprint $table) {
+        Schema::table('igniter_cart_cart', function(Blueprint $table) {
             $table->renameColumn('content', 'data');
         });
     }

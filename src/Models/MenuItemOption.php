@@ -76,7 +76,7 @@ class MenuItemOption extends Model
 
     public function getOptionValuesAttribute()
     {
-        return $this->option->option_values->map(function ($optionValue) {
+        return $this->option->option_values->map(function($optionValue) {
             $menuOptionValue = $this->menu_option_values->firstWhere('option_value_id', $optionValue->getKey());
 
             $optionValue->menu_option_value_id = $menuOptionValue?->menu_option_value_id;

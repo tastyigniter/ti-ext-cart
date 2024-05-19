@@ -6,7 +6,7 @@ trait Stockable
 {
     public static function bootStockable()
     {
-        self::extend(function (self $model) {
+        self::extend(function(self $model) {
             $model->relation['morphMany']['stocks'] = [
                 \Igniter\Cart\Models\Stock::class, 'name' => 'stockable', 'delete' => true,
             ];
@@ -72,7 +72,7 @@ trait Stockable
             return false;
         }
 
-        return $stocks->filter(function ($stock) {
+        return $stocks->filter(function($stock) {
             return $stock->outOfStock();
         })->isNotEmpty();
     }

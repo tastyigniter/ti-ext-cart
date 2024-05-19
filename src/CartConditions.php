@@ -10,21 +10,21 @@ class CartConditions extends Collection
     {
         return $this
             ->sorted()
-            ->reduce(function ($total, CartCondition $condition) use ($content) {
+            ->reduce(function($total, CartCondition $condition) use ($content) {
                 return $condition->withTarget($content)->apply($total);
             }, $content->subtotal());
     }
 
     public function applied()
     {
-        return $this->filter(function (CartCondition $condition) {
+        return $this->filter(function(CartCondition $condition) {
             return $condition->isValid();
         });
     }
 
     public function sorted()
     {
-        return $this->sortBy(function ($condition) {
+        return $this->sortBy(function($condition) {
             return $condition->priority;
         });
     }

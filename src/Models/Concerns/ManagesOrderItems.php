@@ -16,7 +16,7 @@ trait ManagesOrderItems
     public function subtractStock()
     {
         $orderMenuOptions = $this->getOrderMenuOptions();
-        $this->getOrderMenus()->each(function ($orderMenu) use ($orderMenuOptions) {
+        $this->getOrderMenus()->each(function($orderMenu) use ($orderMenuOptions) {
             if (!$menu = Menu::find($orderMenu->menu_id)) {
                 return true;
             }
@@ -26,7 +26,7 @@ trait ManagesOrderItems
 
             $orderMenuOptions
                 ->where('order_menu_id', $orderMenu->order_menu_id)
-                ->each(function ($orderMenuOption) {
+                ->each(function($orderMenuOption) {
                     if (!$menuItemOptionValue = MenuItemOptionValue::find(
                         $orderMenuOption->menu_option_value_id
                     )) {

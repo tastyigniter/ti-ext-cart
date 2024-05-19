@@ -19,7 +19,7 @@ return new class extends Migration
             return;
         }
 
-        Schema::create('igniter_cart_cart', function (Blueprint $table) {
+        Schema::create('igniter_cart_cart', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->string('identifier');
             $table->string('instance');

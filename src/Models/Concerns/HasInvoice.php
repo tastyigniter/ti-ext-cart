@@ -9,11 +9,11 @@ trait HasInvoice
 {
     public static function bootHasInvoice()
     {
-        self::extend(function (self $model) {
+        self::extend(function(self $model) {
             $model->addCasts(['invoice_date' => 'datetime']);
         });
 
-        static::saved(function (self $model) {
+        static::saved(function(self $model) {
             if ($model->isPaymentProcessed() && !$model->hasInvoice()) {
                 $model->generateInvoice();
             }

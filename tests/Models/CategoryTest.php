@@ -4,7 +4,7 @@ namespace Tests\Models;
 
 use Igniter\Cart\Models\Category;
 
-it('can create a category and assign it to a location', function () {
+it('can create a category and assign it to a location', function() {
     //    $location = Location::factory()->create();
     //    $category = Category::factory()->make();
     //    $category->locations = [$location->getKey()];
@@ -13,7 +13,7 @@ it('can create a category and assign it to a location', function () {
     $this->assertTrue(true);
 });
 
-it('should fail to create a category when no name is provided', function () {
+it('should fail to create a category when no name is provided', function() {
     try {
         $category = Category::factory()->make();
         $category->name = null;

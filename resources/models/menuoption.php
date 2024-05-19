@@ -51,7 +51,7 @@ $config['list']['columns'] = [
         'label' => 'lang:igniter.cart::default.menu_options.column_display_type',
         'type' => 'text',
         'searchable' => true,
-        'formatter' => function ($record, $column, $value) {
+        'formatter' => function($record, $column, $value) {
             return $value ? ucwords($value) : '--';
         },
     ],

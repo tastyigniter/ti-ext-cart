@@ -10,8 +10,8 @@ class CategoryScope extends Scope
 {
     public function addWhereHasMenus()
     {
-        return function (Builder $builder) {
-            return $builder->whereExists(function ($q) {
+        return function(Builder $builder) {
+            return $builder->whereExists(function($q) {
                 $prefix = DB::getTablePrefix();
                 $q->select(DB::raw(1))
                     ->from('menu_categories')
