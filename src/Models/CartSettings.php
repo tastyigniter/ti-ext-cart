@@ -35,12 +35,12 @@ class CartSettings extends Model
     //
     //
 
-    public function tippingEnabled()
+    public static function tippingEnabled()
     {
         return (bool)self::get('enable_tipping');
     }
 
-    public function tippingAmounts()
+    public static function tippingAmounts()
     {
         $result = [];
 

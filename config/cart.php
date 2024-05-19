@@ -26,7 +26,5 @@ return [
 
     'destroyOnLogout' => false,
 
-    'conditions' => [],
-
     'abandonedCart' => false,
 ];

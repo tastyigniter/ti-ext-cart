@@ -87,7 +87,7 @@ class Extension extends BaseExtension
 
         LocationModel::implement(LocationAction::class);
 
-        Customers::extendFormFields(function (Form $form) {
+        Customers::extendFormFields(function(Form $form) {
             if (!$form->model instanceof Customer) {
                 return;
             }
@@ -336,7 +336,7 @@ class Extension extends BaseExtension
 
     protected function bindCartEvents()
     {
-        Event::listen('igniter.user.login', function () {
+        Event::listen('igniter.user.login', function() {
             if (Models\CartSettings::get('abandoned_cart')
                 && Facades\Cart::content()->isEmpty()
             ) {
@@ -344,7 +344,7 @@ class Extension extends BaseExtension
             }
         });
 
-        Event::listen('igniter.user.logout', function () {
+        Event::listen('igniter.user.logout', function() {
             if (Models\CartSettings::get('destroy_on_logout')) {
                 Facades\Cart::destroy();
             }
@@ -353,7 +353,7 @@ class Extension extends BaseExtension
 
     protected function bindCheckoutEvents()
     {
-        Event::listen('payregister.paypalexpress.extendFields', function ($payment, &$fields, $order, $data) {
+        Event::listen('payregister.paypalexpress.extendFields', function($payment, &$fields, $order, $data) {
             if ($tax = $order->getOrderTotals()->firstWhere('code', 'tax')) {
                 $fields['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
                     'currency_code' => $fields['purchase_units'][0]['amount']['currency_code'],
@@ -362,7 +362,7 @@ class Extension extends BaseExtension
             }
         });
 
-        Event::listen('admin.order.paymentProcessed', function (Order $model) {
+        Event::listen('admin.order.paymentProcessed', function(Order $model) {
             Notifications\OrderCreatedNotification::make()->subject($model)->broadcast();
 
             $model->mailSend('igniter.cart::mail.order', 'customer');
@@ -370,14 +370,14 @@ class Extension extends BaseExtension
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
         });
 
-        Event::listen('admin.order.beforePaymentProcessed', function (Order $model) {
+        Event::listen('admin.order.beforePaymentProcessed', function(Order $model) {
             $model->subtractStock();
         });
     }
 
     protected function bindOrderStatusEvent()
     {
-        Event::listen('admin.statusHistory.beforeAddStatus', function ($model, $object, $statusId, $previousStatus) {
+        Event::listen('admin.statusHistory.beforeAddStatus', function($model, $object, $statusId, $previousStatus) {
             if (!$object instanceof Order) {
                 return;
             }
@@ -385,7 +385,7 @@ class Extension extends BaseExtension
             Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], true);
         });
 
-        Event::listen('admin.statusHistory.added', function ($model, $statusHistory) {
+        Event::listen('admin.statusHistory.added', function($model, $statusHistory) {
             if (!$model instanceof Order) {
                 return;
             }
@@ -393,7 +393,7 @@ class Extension extends BaseExtension
             Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], true);
         });
 
-        Event::listen('admin.assignable.assigned', function ($model) {
+        Event::listen('admin.assignable.assigned', function($model) {
             if (!$model instanceof Order) {
                 return;
             }
@@ -404,16 +404,16 @@ class Extension extends BaseExtension
 
     protected function registerCart(): void
     {
-        $this->app->singleton('cart', function ($app) {
+        $this->app->singleton('cart', function($app) {
             $this->app['config']->set('igniter-cart.model', Models\Cart::class);
             $this->app['config']->set('igniter-cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
             $this->app['config']->set('igniter-cart.destroyOnLogout', Models\CartSettings::get('destroy_on_logout'));
 
-            $this->app['events']->fire('cart.beforeRegister', [$this]);
+            $this->app['events']->dispatch('cart.beforeRegister', [$this]);
 
             $instance = new Cart($app['session'], $app['events']);
 
-            $this->app['events']->fire('cart.afterRegister', [$instance, $this]);
+            $this->app['events']->dispatch('cart.afterRegister', [$instance, $this]);
 
             return $instance;
         });
@@ -421,7 +421,7 @@ class Extension extends BaseExtension
 
     protected function registerSystemSettings()
     {
-        Settings::registerCallback(function (Settings $manager) {
+        Settings::registerCallback(function(Settings $manager) {
             $manager->registerSettingItems('core', [
                 'order' => [
                     'label' => 'lang:igniter.cart::default.text_tab_order',

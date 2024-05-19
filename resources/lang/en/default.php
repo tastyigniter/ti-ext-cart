@@ -74,7 +74,7 @@ return [
     'button_apply_tip' => 'Apply Tip',
     'button_view_cart' => 'Back to My Order',
 
-    'column_condition_name' => 'Name',
+    'column_condition_name' => 'Unique code',
     'column_condition_priority' => 'Priority',
     'column_condition_title' => 'Label',
     'column_tip_amount' => 'Amount',
@@ -192,6 +192,7 @@ return [
         'text_no_payment' => 'No payment method selected',
         'text_comment' => 'Your comment',
         'text_no_comment' => 'You did not leave a comment',
+        'text_checkout_terms' => 'checkout terms and conditions',
 
         'label_customer_name' => 'Customer Name',
         'label_first_name' => 'First Name',

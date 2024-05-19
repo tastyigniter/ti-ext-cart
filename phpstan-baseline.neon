@@ -201,6 +201,11 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
+			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$location_id\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
 			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php

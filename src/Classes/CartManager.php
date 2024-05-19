@@ -220,7 +220,7 @@ class CartManager
         $selected = collect($selected);
         $menuOptions = $menuOptions->keyBy('menu_option_id')->sortBy('priority');
 
-        return $menuOptions->map(function (MenuItemOption $menuOption) use ($selected) {
+        return $menuOptions->map(function(MenuItemOption $menuOption) use ($selected) {
             $selectedOption = $selected->get($menuOption->getKey());
             $selectedValues = array_filter((array)array_get($selectedOption, 'option_values', []));
 
@@ -248,7 +248,7 @@ class CartManager
         $menuOptionValues = $menuOptionValues->keyBy('menu_option_value_id')->sortBy('priority');
 
         return $menuOptionValues
-            ->map(function (MenuItemOptionValue $optionValue) use ($selectedValues) {
+            ->map(function(MenuItemOptionValue $optionValue) use ($selectedValues) {
                 $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
                 if (!in_array($optionValue->menu_option_value_id, $selectedIds)
                     && !(array_get($selectedIds, $optionValue->menu_option_value_id) === true
@@ -280,14 +280,14 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
         }
 
-        $this->cart->content()->each(function (CartItem $cartItem) {
+        $this->cart->content()->each(function(CartItem $cartItem) {
             $menuItem = $cartItem->model;
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
             $menuOptions = $menuItem->menu_options->keyBy('menu_option_id');
 
-            $cartItem->options->each(function ($cartItemOption) use ($menuOptions) {
+            $cartItem->options->each(function($cartItemOption) use ($menuOptions) {
                 throw_unless($menuItemOption = $menuOptions->get($cartItemOption->id), new ApplicationException(
                     lang('igniter.cart::default.alert_option_not_found')
                 ));
@@ -343,7 +343,7 @@ class CartManager
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
                     $menuItem->menu_name,
-                    $menuItem->mealtimes->map(function ($mealtime) {
+                    $menuItem->mealtimes->map(function($mealtime) {
                         return sprintf(
                             lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
                             $mealtime->mealtime_name,
@@ -413,7 +413,7 @@ class CartManager
         }
 
         if ($menuOption->display_type == 'quantity') {
-            $countSelected = array_reduce($selectedValues, function ($qty, $selectedValue) {
+            $countSelected = array_reduce($selectedValues, function($qty, $selectedValue) {
                 return $qty + $selectedValue['qty'];
             });
         } else {
@@ -462,9 +462,12 @@ class CartManager
     // Reorder
     //
 
-    public function addOrderMenus(Order $order)
+    public function restoreWithOrderMenus(Order $order)
     {
         $notes = [];
+
+        $currentInstance = $this->cart->currentInstance();
+        $this->cart->instance('location-'.$order->location_id);
 
         foreach ($order->getOrderMenus() as $orderMenu) {
             try {
@@ -490,6 +493,8 @@ class CartManager
             }
         }
 
+        $this->cart->instance($currentInstance);
+
         return $notes;
     }
 
@@ -504,7 +509,7 @@ class CartManager
             try {
                 $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
 
-                $cartOption['values'] = $cartOption['values']->filter(function ($cartOptionValue) use ($menuOption) {
+                $cartOption['values'] = $cartOption['values']->filter(function($cartOptionValue) use ($menuOption) {
                     return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
                 })->toArray();
 

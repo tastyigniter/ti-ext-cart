@@ -46,16 +46,16 @@ return [
                                 'label' => 'lang:igniter.cart::default.column_condition_priority',
                                 'type' => 'hidden',
                             ],
+                            'label' => [
+                                'label' => 'lang:igniter.cart::default.column_condition_title',
+                                'type' => 'text',
+                            ],
                             'name' => [
                                 'label' => 'lang:igniter.cart::default.column_condition_name',
                                 'type' => 'text',
                                 'attributes' => [
                                     'readonly' => true,
                                 ],
-                            ],
-                            'label' => [
-                                'label' => 'lang:igniter.cart::default.column_condition_title',
-                                'type' => 'text',
                             ],
                             'status' => [
                                 'label' => 'lang:admin::lang.label_status',

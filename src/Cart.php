@@ -92,7 +92,7 @@ class Cart
     public function add($buyable, $qty = 0, array $options = [], $comment = null)
     {
         if ($this->isMulti($buyable)) {
-            return array_map(function ($item) {
+            return array_map(function($item) {
                 return $this->add($item);
             }, $buyable);
         }
@@ -352,7 +352,7 @@ class Cart
     {
         $this->fireEvent('condition.clearing');
 
-        $this->getConditions()->each(function (CartCondition $condition) {
+        $this->getConditions()->each(function(CartCondition $condition) {
             $condition->clearMetaData();
         });
 
@@ -444,7 +444,7 @@ class Cart
     {
         $content = $this->getContent();
 
-        $content->each(function (CartItem $cartItem) use ($condition) {
+        $content->each(function(CartItem $cartItem) use ($condition) {
             $this->applyConditionToItem($condition, $cartItem);
         });
 
@@ -460,7 +460,7 @@ class Cart
     {
         $content = $this->getContent();
 
-        $content->each(function (CartItem $cartItem) use ($condition) {
+        $content->each(function(CartItem $cartItem) use ($condition) {
             $cartItem->conditions->forget($condition->name);
         });
 
@@ -474,7 +474,7 @@ class Cart
     {
         $content = $this->getContent();
 
-        $content->each(function (CartItem $cartItem) {
+        $content->each(function(CartItem $cartItem) {
             $cartItem->clearConditions();
         });
 
@@ -658,6 +658,23 @@ class Cart
     //
     // Session
     //
+
+    public function keepSession(Closure $callback)
+    {
+        if (config('igniter-cart.destroyOnLogout')) {
+            return $callback();
+        }
+
+        $cartContent = $this->getContent();
+        $cartConditions = $this->getConditions();
+
+        $result = $callback();
+
+        $this->putSession('content', $cartContent);
+        $this->putSession('conditions', $cartConditions);
+
+        return $result;
+    }
 
     protected function getSession($key, $default = null)
     {
