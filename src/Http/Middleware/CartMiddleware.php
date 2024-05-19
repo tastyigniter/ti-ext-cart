@@ -19,7 +19,7 @@ class CartMiddleware
 
     public function terminate($request, $response)
     {
-        if (config('cart.abandonedCart')) {
+        if (config('igniter-cart.abandonedCart')) {
             $this->storeUserCart();
         }
     }

@@ -133,6 +133,10 @@ $config['form']['fields'] = [
         'type' => 'permalink',
         'comment' => 'lang:igniter::admin.help_permalink',
         'span' => 'right',
+        'preset' => [
+            'field' => 'name',
+            'type' => 'slug',
+        ],
     ],
     'parent_id' => [
         'label' => 'lang:igniter.cart::default.categories.label_parent',
