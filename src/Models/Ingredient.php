@@ -64,7 +64,7 @@ class Ingredient extends Model
 
     public function scopeWhereHasMenus($query)
     {
-        return $query->whereExists(function ($q) {
+        return $query->whereExists(function($q) {
             $q->select(DB::raw(1))
                 ->from('ingredientables')
                 ->join('menus', 'menus.menu_id', '=', 'ingredientables.ingredientable_id')

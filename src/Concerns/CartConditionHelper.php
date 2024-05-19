@@ -11,7 +11,7 @@ trait CartConditionHelper
 
     protected function validate($rules)
     {
-        $validated = collect($rules)->filter(function ($rule) {
+        $validated = collect($rules)->filter(function($rule) {
             return $this->ruleIsValid($rule);
         })->count();
 

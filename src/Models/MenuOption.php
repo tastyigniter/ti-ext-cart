@@ -155,7 +155,7 @@ class MenuOption extends Model
             'option_id' => $this->getKey(),
         ]);
 
-        $this->option_values()->get()->each(function ($optionValue) use ($menuItemOption) {
+        $this->option_values()->get()->each(function($optionValue) use ($menuItemOption) {
             $menuItemOption->menu_option_values()->create([
                 'option_value_id' => $optionValue->option_value_id,
                 'priority' => $optionValue->priority,

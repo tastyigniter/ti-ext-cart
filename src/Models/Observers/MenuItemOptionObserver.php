@@ -11,7 +11,7 @@ class MenuItemOptionObserver
         $menuItemOption->restorePurgedValues();
 
         if (array_key_exists('menu_option_values', $attributes = $menuItemOption->getAttributes())) {
-            $menuItemOption->addMenuOptionValues(array_filter(array_map(function ($value) {
+            $menuItemOption->addMenuOptionValues(array_filter(array_map(function($value) {
                 if (array_get($value, 'is_enabled')) {
                     unset($value['is_enabled']);
 

@@ -298,7 +298,7 @@ class OrderManager
 
     public function getCartTotals()
     {
-        $totals = $this->cart->conditions()->map(function (CartCondition $condition) {
+        $totals = $this->cart->conditions()->map(function(CartCondition $condition) {
             return [
                 'code' => $condition->name,
                 'title' => $condition->getLabel(),

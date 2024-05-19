@@ -101,7 +101,7 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
     public function isInclusive()
     {
         return collect($this->getActions())
-            ->filter(function ($action) {
+            ->filter(function($action) {
                 return array_get($action, 'inclusive', false);
             })
             ->isNotEmpty();
@@ -138,10 +138,10 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
         $this->calculatedValue = 0;
 
         return collect($this->getActions())
-            ->map(function ($action) use ($subTotal) {
+            ->map(function($action) use ($subTotal) {
                 return $this->processActionValue($action, $subTotal);
             })
-            ->reduce(function ($total, $action) {
+            ->reduce(function($total, $action) {
                 return $this->calculateActionValue($action, $total);
             }, $subTotal);
     }

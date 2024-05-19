@@ -143,7 +143,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function hasOptionValue($valueIndex)
     {
-        return $this->options->search(function ($option) use ($valueIndex) {
+        return $this->options->search(function($option) use ($valueIndex) {
             return in_array($valueIndex, $option->values->pluck('id')->all());
         });
     }
@@ -304,7 +304,7 @@ class CartItem implements Arrayable, Jsonable
             return $options;
         }
 
-        return new CartItemOptions(array_map(function ($option) {
+        return new CartItemOptions(array_map(function($option) {
             return CartItemOption::fromArray($option);
         }, $options));
     }
