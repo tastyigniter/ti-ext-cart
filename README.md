@@ -28,7 +28,7 @@ php artisan igniter:up
 
 ## Getting started
 
-You can configure the Cart extension by navigating to **System > Settings**. The settings available are:
+You can configure the Cart extension by navigating to _Manage > Settings > Cart settings_. The settings available are:
 
 - **Cart Settings**: Configure the cart settings such as the abandoned cart and destroy cart after user logout.
 - **Cart Conditions**: Rename the cart conditions labels and enable/disable them. Also customize the cart conditions sort order.
@@ -56,7 +56,7 @@ You can configure the delivery and pickup order settings for each location in th
 
 ### Order settings
 
-You can configure the order settings for all locations in the admin area. Navigate to the _System > Settings > Order_ admin page. You can set the following order settings for all locations:
+You can configure the order settings for all locations in the admin area. Navigate to the _Manage > Settings > Order_ admin page. You can set the following order settings for all locations:
 
 - **Allow guest orders:** Enable or disable guest orders for all locations. Can be overridden by location settings.
 - **Reject orders outside delivery areas:** Enable or disable orders outside the delivery area. Customers must enter a valid address within the delivery area to place an order.
