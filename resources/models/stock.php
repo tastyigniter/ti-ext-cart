@@ -4,19 +4,19 @@ return [
     'list' => [
         'columns' => [
             'staff_name' => [
-                'title' => 'lang:admin::lang.stocks.column_staff_name',
+                'title' => 'lang:igniter.cart::default.stocks.column_staff_name',
             ],
             'order_id' => [
                 'title' => 'lang:igniter.cart::default.orders.label_order_id',
             ],
             'state_text' => [
-                'title' => 'lang:admin::lang.stocks.label_stock_action',
+                'title' => 'lang:igniter.cart::default.stocks.label_stock_action',
             ],
             'quantity' => [
-                'title' => 'lang:admin::lang.stocks.column_quantity',
+                'title' => 'lang:igniter.cart::default.stocks.column_quantity',
             ],
             'created_at_since' => [
-                'title' => 'lang:admin::lang.stocks.column_created_at',
+                'title' => 'lang:igniter.cart::default.stocks.column_created_at',
             ],
         ],
     ],
