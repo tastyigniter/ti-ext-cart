@@ -284,11 +284,8 @@ class Order extends Model
 
     public function mailGetRecipients($type)
     {
-        $emailSetting = setting('order_email');
-        is_array($emailSetting) || $emailSetting = [];
-
         $recipients = [];
-        if (in_array($type, $emailSetting)) {
+        if (in_array($type, (array)setting('order_email', []))) {
             switch ($type) {
                 case 'customer':
                     $recipients[] = [$this->email, $this->customer_name];
