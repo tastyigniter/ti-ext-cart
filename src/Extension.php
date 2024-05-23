@@ -373,32 +373,39 @@ class Extension extends BaseExtension
         Event::listen('admin.order.beforePaymentProcessed', function(Order $model) {
             $model->subtractStock();
         });
+
+        Event::listen('igniter.cart.orderStatusAdded', function(Order $model, $statusHistory) {
+            if ($statusHistory->notify) {
+                $model->reloadRelations();
+                $model->mailSend('igniter.cart::mail.order_update', 'customer');
+            }
+        });
     }
 
     protected function bindOrderStatusEvent()
     {
-        Event::listen('admin.statusHistory.beforeAddStatus', function($model, $object, $statusId, $previousStatus) {
-            if (!$object instanceof Order) {
+        Event::listen('admin.statusHistory.beforeAddStatus', function($statusHistory, $order, $statusId, $previousStatus) {
+            if (!$order instanceof Order) {
                 return;
             }
 
-            Event::fire('igniter.cart.beforeAddOrderStatus', [$model, $object, $statusId, $previousStatus], true);
+            Event::fire('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
         });
 
-        Event::listen('admin.statusHistory.added', function($model, $statusHistory) {
-            if (!$model instanceof Order) {
+        Event::listen('admin.statusHistory.added', function($order, $statusHistory) {
+            if (!$order instanceof Order) {
                 return;
             }
 
-            Event::fire('igniter.cart.orderStatusAdded', [$model, $statusHistory], true);
+            Event::fire('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
         });
 
-        Event::listen('admin.assignable.assigned', function($model) {
-            if (!$model instanceof Order) {
+        Event::listen('admin.assignable.assigned', function($order, $assignableLog) {
+            if (!$order instanceof Order) {
                 return;
             }
 
-            Event::fire('igniter.cart.orderAssigned', [$model], true);
+            Event::fire('igniter.cart.orderAssigned', [$order, $assignableLog], true);
         });
     }
 
