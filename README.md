@@ -423,6 +423,9 @@ The Cart extension fires the following events during the checkout process:
 | `admin.order.canceled` |   When an order is canceled.    |      The `Order` model instance     |
 | `admin.order.beforeRefundProcessed` |    Before an order is marked as refunded.   |      The `Order` model instance     |
 | `admin.order.refundProcessed` |   After an order is marked as refunded.   |      The `Order` model instance     |
+| `igniter.cart.beforeAddOrderStatus` |   Before adding an order status.    |      The `StatusHistory` model instance, `Order` model instance, `$statusId` status ID and the `$previousStatus` previous status ID      |
+| `igniter.cart.orderStatusAdded` |   After an order status is added.    |      The `Order` model instance and `StatusHistory` model instance      |
+| `igniter.cart.orderAssigned` |   After an order is assigned to a staff member.    |      The `Order` model instance and `User` model instance      |
 
 Here is an example of hooking an event in the `boot` method of an extension class:
 
