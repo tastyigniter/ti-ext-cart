@@ -100,7 +100,7 @@ class Stock extends Model
             $this->saveQuietly();
 
             if ($this->hasLowStock() && $this->shouldAlertOnLowStock($state)) {
-                $this->mailSend('igniter.admin::_mail.low_stock_alert', 'location');
+                $this->mailSend('igniter.cart::mail.low_stock_alert', 'location');
 
                 // Prevent duplicate low stock alerts
                 $this->updateQuietly(['low_stock_alert_sent' => true]);
