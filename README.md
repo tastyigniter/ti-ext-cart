@@ -67,7 +67,7 @@ You can configure the order settings for all locations in the admin area. Naviga
 
 ### Adding items to the cart
 
-You can add items to the cart using the `add` method on the `Igniter\Cart\Facades\Cart` facade. 
+You can add items to the cart using the `add` method on the `Igniter\Cart\Facades\Cart` facade.
 
 Here's an example of **adding a single item** to the cart using an array of item details:
 
@@ -607,16 +607,16 @@ An automation event class used to capture the `admin.order.paymentProcessed` sys
 - `invoice_date`: The date the invoice was generated.
 - `order_payment`: The order payment method code.
 - `order_menus`: An array of order menu items. Each item contains the following parameters:
-    - `menu_name`: The menu item name.
-    - `menu_quantity`: The menu item quantity.
-    - `menu_price`: The menu item price.
-    - `menu_subtotal`: The menu item subtotal.
-    - `menu_options`: A string of menu item options.
-    - `menu_comment`: The menu item comment.
+  - `menu_name`: The menu item name.
+  - `menu_quantity`: The menu item quantity.
+  - `menu_price`: The menu item price.
+  - `menu_subtotal`: The menu item subtotal.
+  - `menu_options`: A string of menu item options.
+  - `menu_comment`: The menu item comment.
 - `order_totals`: An array of order totals. Each total contains the following parameters:
-    - `order_total_title`: The total title.
-    - `order_total_value`: The total value.
-    - `priority`: The total priority.
+  - `order_total_title`: The total title.
+  - `order_total_value`: The total value.
+  - `priority`: The total priority.
 - `order_address`: The order delivery address.
 - `location_logo`: The path to the location logo.
 - `location_name`: The location name.
@@ -744,7 +744,7 @@ The Cart Library used with this extension will fire some global events that can 
 
 Here is an example of how to listen for a cart event from your extension `boot` method:
 
-```
+```php
 Event::listen('cart.updated', function($cart, $cartItem) {
     // ...
 });
