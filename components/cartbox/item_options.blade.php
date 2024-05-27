@@ -27,7 +27,7 @@
                     value="{{ $menuOption->menu_option_id }}"
                 />
                 <div class="option-group">
-                    @if($menuOption->display_type !== 'select' && $optionValues->count() >= $limitCartItemOptionsValues)
+                    @if($menuOption->display_type !== 'select' && $limitCartItemOptionsValues && $optionValues->count() >= $limitCartItemOptionsValues)
                         @partial('@item_option_'.$menuOption->display_type, [
                             'index' => $index,
                             'cartItem' => $cartItem,

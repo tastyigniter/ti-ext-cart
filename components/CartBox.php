@@ -51,7 +51,7 @@ class CartBox extends \System\Classes\BaseComponent
             'limitCartItemOptionsValues' => [
                 'label' => 'Limit number of item option values',
                 'type' => 'number',
-                'default' => 6,
+                'default' => 0,
                 'validationRule' => 'nullable|integer',
             ],
             'checkStockCheckout' => [
@@ -111,7 +111,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
         $this->page['hideZeroOptionPrices'] = (bool)$this->property('hideZeroOptionPrices');
-        $this->page['limitCartItemOptionsValues'] = $this->property('limitCartItemOptionsValues');
+        $this->page['limitCartItemOptionsValues'] = $this->property('limitCartItemOptionsValues', 0);
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');

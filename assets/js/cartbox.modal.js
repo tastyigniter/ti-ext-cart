@@ -175,8 +175,8 @@
         var $el = $(event.currentTarget),
             $container = $el.closest('[data-control="item-option"]')
 
-        $el.hide()
-        $container.find('.hidden-item-options').show()
+        $el.fadeOut()
+        $container.find('.hidden-item-options').fadeIn()
     };
 
     CartBoxModal.DEFAULTS = {
