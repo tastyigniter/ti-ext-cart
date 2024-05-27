@@ -48,6 +48,7 @@ return [
     'button_apply_coupon' => 'Apply Coupon',
     'button_apply_tip' => 'Apply Tip',
     'button_view_cart' => 'Back to My Order',
+    'button_show_more_options' => 'Show more',
 
     'column_condition_name' => 'Name',
     'column_condition_priority' => 'Priority',

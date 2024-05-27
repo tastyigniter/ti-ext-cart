@@ -27,11 +27,32 @@
                     value="{{ $menuOption->menu_option_id }}"
                 />
                 <div class="option-group">
-                    @partial('@item_option_'.$menuOption->display_type, [
-                        'index' => $index,
-                        'cartItem' => $cartItem,
-                        'optionValues' => $optionValues->sortBy('priority'),
-                    ])
+                    @if($menuOption->display_type !== 'select' && $limitCartItemOptionsValues && $optionValues->count() >= $limitCartItemOptionsValues)
+                        @partial('@item_option_'.$menuOption->display_type, [
+                            'index' => $index,
+                            'cartItem' => $cartItem,
+                            'optionValues' => $optionValues->sortBy('priority')->slice(0, $limitCartItemOptionsValues),
+                        ])
+
+                        <div class="hidden-item-options" style="display: none;">
+                            @partial('@item_option_'.$menuOption->display_type, [
+                                'index' => $index,
+                                'cartItem' => $cartItem,
+                                'optionValues' => $optionValues->sortBy('priority')->slice($limitCartItemOptionsValues-1),
+                            ])
+                        </div>
+                        <button
+                            type="button"
+                            data-toggle="more-options"
+                            class="btn btn-link"
+                        >@lang('igniter.cart::default.button_show_more_options')</button>
+                    @else
+                        @partial('@item_option_'.$menuOption->display_type, [
+                            'index' => $index,
+                            'cartItem' => $cartItem,
+                            'optionValues' => $optionValues->sortBy('priority'),
+                        ])
+                    @endif
                 </div>
             @endif
         </div>
