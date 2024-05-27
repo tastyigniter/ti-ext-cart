@@ -48,6 +48,12 @@ class CartBox extends \System\Classes\BaseComponent
                 'span' => 'right',
                 'validationRule' => 'nullable|integer',
             ],
+            'limitCartItemOptionsValues' => [
+                'label' => 'Limit number of item option values',
+                'type' => 'number',
+                'default' => 6,
+                'validationRule' => 'nullable|integer',
+            ],
             'checkStockCheckout' => [
                 'label' => 'lang:igniter.cart::default.help_stock_checkout',
                 'type' => 'switch',
@@ -105,6 +111,7 @@ class CartBox extends \System\Classes\BaseComponent
         $this->page['pageIsCart'] = $this->property('pageIsCart');
         $this->page['pageIsCheckout'] = $this->property('pageIsCheckout');
         $this->page['hideZeroOptionPrices'] = (bool)$this->property('hideZeroOptionPrices');
+        $this->page['limitCartItemOptionsValues'] = $this->property('limitCartItemOptionsValues');
 
         $this->page['checkoutEventHandler'] = $this->getEventHandler('onProceedToCheckout');
         $this->page['updateCartItemEventHandler'] = $this->getEventHandler('onUpdateCart');
