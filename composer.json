@@ -24,8 +24,8 @@
   },
   "require-dev": {
     "laravel/pint": "^1.2",
-    "nunomaduro/larastan": "^2.4.0",
-    "orchestra/testbench": "^8.5",
+    "larastan/larastan": "^2.4.0",
+    "sampoyigi/testbench": "^8.5",
     "pestphp/pest-plugin-laravel": "^2.0",
     "igniterlabs/ti-ext-importexport": "v4.x-dev as 4.0"
   },
