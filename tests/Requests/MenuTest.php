@@ -2,7 +2,7 @@
 
 namespace Tests\Requests;
 
-use Igniter\Cart\Requests\MenuRequest;
+use Igniter\Cart\Http\Requests\MenuRequest;
 
 it('has required rule for inputs:
     menu_name, menu_price, categories.*, ingredients.*, mealtimes.*, minimum_qty',

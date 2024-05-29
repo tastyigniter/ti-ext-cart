@@ -2,7 +2,7 @@
 
 namespace Tests\Requests;
 
-use Igniter\Cart\Requests\IngredientRequest;
+use Igniter\Cart\Http\Requests\IngredientRequest;
 
 it('has rules for name input', function() {
     $rules = array_get((new IngredientRequest)->rules(), 'name');

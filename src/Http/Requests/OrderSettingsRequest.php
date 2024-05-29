@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\Cart\Requests;
+namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
 
@@ -19,11 +19,11 @@ class OrderSettingsRequest extends FormRequest
             'invoice_prefix' => lang('igniter.cart::default.label_invoice_prefix'),
             'invoice_logo' => lang('igniter.cart::default.label_invoice_logo'),
 
-            'tax_mode' => lang('igniter::system.settings.label_tax_mode'),
-            'tax_title' => lang('igniter::system.settings.label_tax_title'),
-            'tax_percentage' => lang('igniter::system.settings.label_tax_percentage'),
-            'tax_menu_price' => lang('igniter::system.settings.label_tax_menu_price'),
-            'tax_delivery_charge' => lang('igniter::system.settings.label_tax_delivery_charge'),
+            'tax_mode' => lang('igniter.cart::default.label_tax_mode'),
+            'tax_title' => lang('igniter.cart::default.label_tax_title'),
+            'tax_percentage' => lang('igniter.cart::default.label_tax_percentage'),
+            'tax_menu_price' => lang('igniter.cart::default.label_tax_menu_price'),
+            'tax_delivery_charge' => lang('igniter.cart::default.label_tax_delivery_charge'),
         ];
     }
 

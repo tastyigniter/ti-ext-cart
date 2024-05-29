@@ -2,7 +2,7 @@
 
 namespace Tests\Requests;
 
-use Igniter\Cart\Requests\CategoryRequest;
+use Igniter\Cart\Http\Requests\CategoryRequest;
 
 it('has rules for name input', function() {
     $rules = array_get((new CategoryRequest)->rules(), 'name');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Igniter\Cart\Requests;
+namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
 

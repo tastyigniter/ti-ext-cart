@@ -16,7 +16,6 @@ use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\CategoryScope;
 use Igniter\Cart\Models\Scopes\MenuScope;
 use Igniter\Cart\Models\Scopes\OrderScope;
-use Igniter\Cart\Requests\OrderSettingsRequest;
 use Igniter\Flame\Igniter;
 use Igniter\Local\Models\Location as LocationModel;
 use Igniter\System\Classes\BaseExtension;
@@ -313,7 +312,7 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/checkoutsettings',
-                'request' => \Igniter\Cart\Requests\CheckoutSettingsRequest::class,
+                'request' => \Igniter\Cart\Http\Requests\CheckoutSettingsRequest::class,
             ],
             'delivery' => [
                 'label' => 'igniter.cart::default.settings.text_tab_delivery',
@@ -321,7 +320,7 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/deliverysettings',
-                'request' => \Igniter\Cart\Requests\DeliverySettingsRequest::class,
+                'request' => \Igniter\Cart\Http\Requests\DeliverySettingsRequest::class,
             ],
             'collection' => [
                 'label' => 'igniter.cart::default.settings.text_tab_collection',
@@ -329,7 +328,7 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/collectionsettings',
-                'request' => \Igniter\Cart\Requests\CollectionSettingsRequest::class,
+                'request' => \Igniter\Cart\Http\Requests\CollectionSettingsRequest::class,
             ],
         ];
     }
@@ -438,7 +437,7 @@ class Extension extends BaseExtension
                     'permission' => ['Site.Settings'],
                     'url' => admin_url('settings/edit/order'),
                     'form' => 'igniter.cart::/models/ordersettings',
-                    'request' => OrderSettingsRequest::class,
+                    'request' => \Igniter\Cart\Http\Requests\OrderSettingsRequest::class,
                 ],
             ]);
         });
