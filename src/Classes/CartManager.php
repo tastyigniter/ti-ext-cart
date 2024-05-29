@@ -306,7 +306,10 @@ class CartManager
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
         }
 
-        if ($this->location->orderTypeIsDelivery() && $this->location->requiresUserPosition() && !$this->location->userPosition()->isValid()) {
+        if ($this->location->orderTypeIsDelivery()
+            && $this->location->requiresUserPosition()
+            && (!$this->location->userPosition()->isValid() || !$this->location->checkDeliveryCoverage())
+        ) {
             throw new ApplicationException(lang('igniter.local::default.alert_no_search_query'));
         }
     }
