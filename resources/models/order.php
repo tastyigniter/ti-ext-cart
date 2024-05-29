@@ -198,7 +198,7 @@ $config['form']['fields'] = [
         'type' => 'statuseditor',
         'span' => 'right',
         'form' => 'orderstatus',
-        'request' => \Igniter\Cart\Requests\OrderStatusRequest::class,
+        'request' => \Igniter\Cart\Http\Requests\OrderStatusRequest::class,
     ],
 ];
 

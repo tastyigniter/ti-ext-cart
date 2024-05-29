@@ -26,7 +26,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menu_options.text_form_name',
         'model' => \Igniter\Cart\Models\MenuOption::class,
-        'request' => \Igniter\Cart\Requests\MenuOptionRequest::class,
+        'request' => \Igniter\Cart\Http\Requests\MenuOptionRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
             'redirect' => 'menu_options/edit/{option_id}',

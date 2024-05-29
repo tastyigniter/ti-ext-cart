@@ -28,7 +28,7 @@ class Categories extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.categories.text_form_name',
         'model' => \Igniter\Cart\Models\Category::class,
-        'request' => \Igniter\Cart\Requests\CategoryRequest::class,
+        'request' => \Igniter\Cart\Http\Requests\CategoryRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
             'redirect' => 'categories/edit/{category_id}',

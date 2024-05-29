@@ -2,7 +2,7 @@
 
 namespace Tests\Requests;
 
-use Igniter\Cart\Requests\MealtimeRequest;
+use Igniter\Cart\Http\Requests\MealtimeRequest;
 
 it('has required rule for inputs', function() {
     expect('required')->toBeIn(array_get((new MealtimeRequest)->rules(), 'mealtime_name'))

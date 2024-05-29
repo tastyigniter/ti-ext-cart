@@ -26,7 +26,7 @@ class Menus extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menus.text_form_name',
         'model' => \Igniter\Cart\Models\Menu::class,
-        'request' => \Igniter\Cart\Requests\MenuRequest::class,
+        'request' => \Igniter\Cart\Http\Requests\MenuRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
             'redirect' => 'menus/edit/{menu_id}',
