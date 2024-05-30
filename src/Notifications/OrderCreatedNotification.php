@@ -38,4 +38,9 @@ class OrderCreatedNotification extends Notification
     {
         return 'fa-clipboard-list';
     }
+
+    public function getAlias(): string
+    {
+        return 'order-created';
+    }
 }

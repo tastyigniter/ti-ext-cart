@@ -336,8 +336,8 @@ return [
 
         'notify_status_updated_title' => 'Order status updated',
         'notify_assigned_title' => 'Order assigned',
-        'notify_status_updated' => '<b>%s</b> updated order (#%d) status to <b>%s</b>',
-        'notify_assigned' => '<b>%s</b> assigned order (#%d) to <b>%s</b>',
+        'notify_status_updated' => '%s updated order (#%d) status to <b>%s</b>',
+        'notify_assigned' => '%s assigned order (#%d) to <b>%s</b>',
 
         'alert_invoice_not_generated' => 'Invoice has not yet been generated.',
     ],
