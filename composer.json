@@ -18,6 +18,7 @@
   "require": {
     "tastyigniter/core": "dev-master",
     "tastyigniter/ti-ext-automation": "v4.x-dev as 4.0",
+    "tastyigniter/ti-ext-coupons": "v4.x-dev as 4.0",
     "tastyigniter/ti-ext-local": "v4.x-dev as 4.0",
     "tastyigniter/ti-ext-payregister": "v4.x-dev as 4.0",
     "tastyigniter/ti-ext-user": "v4.x-dev as 4.0"
