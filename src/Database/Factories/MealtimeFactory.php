@@ -14,7 +14,7 @@ class MealtimeFactory extends Factory
             'mealtime_name' => $this->faker->sentence(2),
             'start_time' => $this->faker->time('H:i'),
             'end_time' => $this->faker->time('H:i'),
-            'mealtime_status' => $this->faker->boolean(),
+            'mealtime_status' => true,
         ];
     }
 }

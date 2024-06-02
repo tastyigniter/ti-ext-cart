@@ -2,7 +2,7 @@
 
 namespace Igniter\Cart\Models;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
@@ -44,9 +44,9 @@ class Mealtime extends Model
 
     public $timestamps = true;
 
-    public function getDropdownOptions()
+    public static function getDropdownOptions()
     {
-        $this->whereIsEnabled()->dropdown('mealtime_name');
+        return self::whereIsEnabled()->dropdown('mealtime_name');
     }
 
     //
@@ -55,17 +55,13 @@ class Mealtime extends Model
 
     public function isAvailable($datetime = null)
     {
-        if (is_null($datetime)) {
-            $datetime = Carbon::now();
-        }
-
-        if (!$datetime instanceof Carbon) {
-            $datetime = Carbon::parse($datetime);
-        }
+        $datetime = is_null($datetime)
+            ? CarbonImmutable::now()
+            : CarbonImmutable::parse($datetime);
 
         return $datetime->between(
-            $datetime->copy()->setTimeFromTimeString($this->start_time),
-            $datetime->copy()->setTimeFromTimeString($this->end_time)
+            $datetime->setTimeFromTimeString($this->start_time),
+            $datetime->setTimeFromTimeString($this->end_time)
         );
     }
 

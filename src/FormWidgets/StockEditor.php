@@ -81,7 +81,7 @@ class StockEditor extends BaseFormWidget
             $stockActionState = array_get($saveData, 'stock_action.state');
 
             $formWidget->model->updateStock($stockActionQty, $stockActionState, [
-                'user_id' => $this->controller->getUser()->getKey(),
+                'user_id' => $this->controller->getUser()?->getKey(),
             ]);
         }
 
@@ -105,8 +105,11 @@ class StockEditor extends BaseFormWidget
     protected function getAvailableLocations()
     {
         $locations = $this->model->getStockableLocations();
+        if ($locations && $locations->isNotEmpty()) {
+            return $locations;
+        }
 
-        return $locations && $locations->isNotEmpty() ? $locations : AdminAuth::user()->getAvailableLocations();
+        return AdminAuth::user()?->getAvailableLocations() ?? collect();
     }
 
     protected function makeStockFormWidget($location)

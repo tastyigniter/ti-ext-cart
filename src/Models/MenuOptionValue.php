@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Models;
 
 use Igniter\Cart\Models\Concerns\Stockable;
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Sortable;
 
@@ -11,6 +12,7 @@ use Igniter\Flame\Database\Traits\Sortable;
  */
 class MenuOptionValue extends Model
 {
+    use HasFactory;
     use Sortable;
     use Stockable;
 

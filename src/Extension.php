@@ -388,7 +388,7 @@ class Extension extends BaseExtension
                 return;
             }
 
-            Event::fire('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
+            Event::dispatch('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
         });
 
         Event::listen('admin.statusHistory.added', function($order, $statusHistory) {
@@ -396,7 +396,7 @@ class Extension extends BaseExtension
                 return;
             }
 
-            Event::fire('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
+            Event::dispatch('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
         });
 
         Event::listen('admin.assignable.assigned', function($order, $assignableLog) {
@@ -404,7 +404,7 @@ class Extension extends BaseExtension
                 return;
             }
 
-            Event::fire('igniter.cart.orderAssigned', [$order, $assignableLog], true);
+            Event::dispatch('igniter.cart.orderAssigned', [$order, $assignableLog], true);
         });
     }
 

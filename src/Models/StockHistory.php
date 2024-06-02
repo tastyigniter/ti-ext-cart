@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 
 /**
@@ -9,6 +10,8 @@ use Igniter\Flame\Database\Model;
  */
 class StockHistory extends Model
 {
+    use HasFactory;
+
     /**
      * @var string The database table name
      */

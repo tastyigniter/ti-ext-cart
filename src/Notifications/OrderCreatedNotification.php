@@ -10,7 +10,7 @@ class OrderCreatedNotification extends Notification
     public function getRecipients(): array
     {
         return User::query()->isEnabled()
-            ->whereHasOrDoesntHaveLocation($this->subject->location->getKey())
+            ->whereHasOrDoesntHaveLocation($this->subject->location?->getKey())
             ->get()->all();
     }
 

@@ -6,7 +6,6 @@ use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\System\Models\Concerns\Switchable;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Ingredients Model Class
@@ -64,13 +63,7 @@ class Ingredient extends Model
 
     public function scopeWhereHasMenus($query)
     {
-        return $query->whereExists(function($q) {
-            $q->select(DB::raw(1))
-                ->from('ingredientables')
-                ->join('menus', 'menus.menu_id', '=', 'ingredientables.ingredientable_id')
-                ->where('ingredientables.allergenable_type', 'menus')
-                ->whereIsEnabled();
-        });
+        return $query->whereHas('menus')->whereIsEnabled();
     }
 
     public function scopeIsAllergen($query)

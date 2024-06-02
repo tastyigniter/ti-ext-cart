@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Models;
 
 use Carbon\Carbon;
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\System\Models\Concerns\Switchable;
 
@@ -11,6 +12,7 @@ use Igniter\System\Models\Concerns\Switchable;
  */
 class MenuSpecial extends Model
 {
+    use HasFactory;
     use Switchable;
 
     public const SWITCHABLE_COLUMN = 'special_status';
@@ -104,6 +106,8 @@ class MenuSpecial extends Model
                 $end = $now->copy()->setTimeFromTimeString($this->recurring_to);
 
                 return !$now->between($start, $end);
+            default:
+                return true;
         }
     }
 

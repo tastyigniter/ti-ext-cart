@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Facades\Location;
@@ -12,6 +13,7 @@ use Igniter\Local\Models\Concerns\Locationable;
  */
 class MenuOption extends Model
 {
+    use HasFactory;
     use Locationable;
     use Purgeable;
 
@@ -80,11 +82,6 @@ class MenuOption extends Model
     //
     // Helpers
     //
-
-    public function isRequired()
-    {
-        return $this->required;
-    }
 
     public function isSelectDisplayType()
     {

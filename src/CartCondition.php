@@ -7,12 +7,11 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
-use Serializable;
 
 /**
  * CartCondition class
  */
-abstract class CartCondition implements Arrayable, Jsonable, Serializable
+abstract class CartCondition implements Arrayable, Jsonable
 {
     use CartConditionHelper;
 
@@ -343,20 +342,20 @@ abstract class CartCondition implements Arrayable, Jsonable, Serializable
     /**
      * String representation of object
      */
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize($this->toArray());
+        return $this->toArray();
     }
 
     /**
      * Constructs the object
      *
-     * @param string $serialized <p>
+     * @param array $data
      *
      * @return void
      */
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        $this->fillFromConfig(unserialize($serialized));
+        $this->fillFromConfig($data);
     }
 }

@@ -37,7 +37,7 @@ class Tip extends CartCondition
         }
 
         $value = $this->getMetaData('amount');
-        if (preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) === false || $value < 0) {
+        if (!preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) || $value <= 0) {
             $this->removeMetaData('amount');
             flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
         }
@@ -53,7 +53,7 @@ class Tip extends CartCondition
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
 
         return [
-            ['value' => "+{$amount}", 'valuePrecision' => $precision],
+            ['value' => "+{$amount}", 'valuePrecision' => (int)$precision],
         ];
     }
 }
