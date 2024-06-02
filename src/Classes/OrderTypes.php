@@ -9,7 +9,7 @@ class OrderTypes
 {
     protected ?array $registeredOrderTypes = null;
 
-    protected static array $registeredCallbacks = [];
+    protected array $registeredCallbacks = [];
 
     public function makeOrderTypes($location): Collection
     {
@@ -19,7 +19,7 @@ class OrderTypes
             });
     }
 
-    public function getOrderType($code): AbstractOrderType
+    public function getOrderType($code): array
     {
         return array_get($this->listOrderTypes(), $code);
     }
@@ -35,7 +35,7 @@ class OrderTypes
 
     protected function loadOrderTypes()
     {
-        foreach (self::$registeredCallbacks as $callback) {
+        foreach ($this->registeredCallbacks as $callback) {
             $callback($this);
         }
 
@@ -65,8 +65,8 @@ class OrderTypes
         ]);
     }
 
-    public static function registerCallback(callable $definitions)
+    public function registerCallback(callable $definitions)
     {
-        self::$registeredCallbacks[] = $definitions;
+        $this->registeredCallbacks[] = $definitions;
     }
 }

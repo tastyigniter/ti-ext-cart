@@ -101,7 +101,7 @@ trait CartConditionHelper
      */
     protected function cleanValue($value)
     {
-        return str_replace(['%', '-', '+', '*', '/'], '', $value);
+        return str_replace(['%', '-', '+', '*', '/'], '', $value) ?: 0;
     }
 
     protected function operandValue($key)

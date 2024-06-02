@@ -40,7 +40,7 @@ trait HasInvoice
 
     public function hasInvoice()
     {
-        return !empty($this->invoice_date);
+        return !empty($this->invoice_date) && !empty($this->invoice_prefix);
     }
 
     public function generateInvoice()
@@ -56,10 +56,9 @@ trait HasInvoice
             ? $this->generateInvoicePrefix($invoiceDate)
             : $this->invoice_prefix;
 
-        $this->newQuery()->where($this->getKeyName(), $this->getKey())->update([
-            'invoice_date' => $invoiceDate,
-            'invoice_prefix' => $invoicePrefix,
-        ]);
+        $this->invoice_date = $invoiceDate;
+        $this->invoice_prefix = $invoicePrefix;
+        $this->saveQuietly();
 
         return $this->invoice_number;
     }

@@ -80,7 +80,7 @@ class Category extends Model
 
     public static function getDropdownOptions()
     {
-        return self::pluck('name', 'category_id');
+        return self::whereIsEnabled()->pluck('name', 'category_id');
     }
 
     //

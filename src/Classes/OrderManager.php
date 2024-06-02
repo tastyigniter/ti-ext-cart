@@ -181,7 +181,7 @@ class OrderManager
      */
     public function saveOrder($order, array $data)
     {
-        Event::fire('igniter.checkout.beforeSaveOrder', [$order, $data]);
+        Event::dispatch('igniter.checkout.beforeSaveOrder', [$order, $data]);
 
         if ($this->customer) {
             $data['email'] = $this->customer->email;
@@ -217,14 +217,14 @@ class OrderManager
         $order->addOrderMenus($this->cart->content()->all());
         $order->addOrderTotals($this->getCartTotals());
 
-        Event::fire('igniter.checkout.afterSaveOrder', [$order]);
+        Event::dispatch('igniter.checkout.afterSaveOrder', [$order]);
 
         return $order;
     }
 
     public function processPayment($order, array $data)
     {
-        Event::fire('igniter.checkout.beforePayment', [$order, $data]);
+        Event::dispatch('igniter.checkout.beforePayment', [$order, $data]);
 
         if (!strlen($order->payment) && $order->order_total <= 0) {
             return $this->processPaymentLessForm($order);
@@ -408,7 +408,7 @@ class OrderManager
 
     public function getCurrentPaymentCode()
     {
-        return $this->getSession('paymentCode') ?: optional($this->getDefaultPayment() ?: $this->getPaymentGateways()->first())->code;
+        return $this->getSession('paymentCode') ?: $this->getDefaultPayment()?->code;
     }
 
     public function applyCurrentPaymentFee($code)

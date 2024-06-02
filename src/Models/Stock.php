@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\System\Traits\SendsMailTemplate;
@@ -11,6 +12,7 @@ use Igniter\System\Traits\SendsMailTemplate;
  */
 class Stock extends Model
 {
+    use HasFactory;
     use Locationable;
     use SendsMailTemplate;
 

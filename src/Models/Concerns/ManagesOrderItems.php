@@ -15,16 +15,15 @@ trait ManagesOrderItems
      */
     public function subtractStock()
     {
-        $orderMenuOptions = $this->getOrderMenuOptions();
-        $this->getOrderMenus()->each(function($orderMenu) use ($orderMenuOptions) {
+        $this->getOrderMenus()->each(function($orderMenu) {
             if (!$menu = Menu::find($orderMenu->menu_id)) {
                 return true;
             }
 
-            optional($menu->getStockByLocation($this->location))
-                ->updateStockSold($this->getKey(), $orderMenu->quantity);
+            $menu->getStockByLocation($this->location)
+                ?->updateStockSold($this->getKey(), $orderMenu->quantity);
 
-            $orderMenuOptions
+            $this->menu_options
                 ->where('order_menu_id', $orderMenu->order_menu_id)
                 ->each(function($orderMenuOption) {
                     if (!$menuItemOptionValue = MenuItemOptionValue::find(
@@ -37,8 +36,8 @@ trait ManagesOrderItems
                         return true;
                     }
 
-                    optional($menuOptionValue->getStockByLocation($this->location))
-                        ->updateStockSold($this->getKey(), $orderMenuOption->quantity);
+                    $menuOptionValue->getStockByLocation($this->location)
+                        ?->updateStockSold($this->getKey(), $orderMenuOption->quantity);
                 });
         });
     }
@@ -98,11 +97,7 @@ trait ManagesOrderItems
         $this->menus()->delete();
         $this->menu_options()->delete();
 
-        foreach ($content as $rowId => $cartItem) {
-            if ($rowId != $cartItem->rowId) {
-                continue;
-            }
-
+        foreach ($content as $cartItem) {
             $orderMenu = $this->menus()->create([
                 'menu_id' => $cartItem->id,
                 'name' => $cartItem->name,

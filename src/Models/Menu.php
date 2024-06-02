@@ -91,7 +91,7 @@ class Menu extends Model implements Buyable
 
     public function getMenuPriceFromAttribute()
     {
-        if (!$this->menu_options) {
+        if (!$this->menu_options || $this->menu_options->isEmpty()) {
             return $this->menu_price;
         }
 
@@ -112,18 +112,6 @@ class Menu extends Model implements Buyable
     public function hasOptions()
     {
         return count($this->menu_options);
-    }
-
-    /**
-     * Subtract or add to menu stock quantity
-     *
-     * @param int $quantity
-     * @param bool $subtract
-     * @return bool TRUE on success, or FALSE on failure
-     */
-    public function updateStock($quantity = 0, $subtract = true)
-    {
-        traceLog('Menu::updateStock() has been deprecated, use Stock::updateStock() instead.');
     }
 
     /**
@@ -280,7 +268,7 @@ class Menu extends Model implements Buyable
 
     public function isSpecial()
     {
-        return $this->special?->active();
+        return $this->special?->active() ?? false;
     }
 
     public function checkMinQuantity($quantity = 0)

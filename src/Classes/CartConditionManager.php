@@ -20,11 +20,15 @@ class CartConditionManager
 
     public function makeCondition($className, array $config = [])
     {
-        if (!class_exists($className)) {
+        if (!array_key_exists($className, $this->registeredConditions ?? [])) {
             throw new \LogicException(sprintf("The Cart Condition class '%s' has not been registered", $className));
         }
 
-        return new $className($config);
+        if (!class_exists($className)) {
+            throw new \LogicException(sprintf("The Cart Condition class '%s' does not exist", $className));
+        }
+
+        return new $className(array_merge($this->registeredConditions[$className], $config));
     }
 
     public function listRegisteredConditions()

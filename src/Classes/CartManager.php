@@ -10,7 +10,6 @@ use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
-use Igniter\Cart\Models\Order;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Flame\Exception\ApplicationException;
 use Illuminate\Contracts\Support\Arrayable;
@@ -47,6 +46,11 @@ class CartManager
     public function getCart()
     {
         return $this->cart;
+    }
+
+    public function cartInstance(int $locationId)
+    {
+        return $this->cart->instance('location-'.$locationId);
     }
 
     public function getCartItem($rowId)
@@ -167,8 +171,8 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
-        $condition = Event::fire('igniter.cart.beforeApplyCoupon', [$code], true);
-        if ($condition instanceof CartCondition) {
+        $condition = Event::dispatch('igniter.cart.beforeApplyCoupon', [$code], true);
+        if (!is_array($condition) && $condition instanceof CartCondition) {
             return $condition;
         }
 
@@ -452,7 +456,7 @@ class CartManager
 
     public function cartTotalIsBelowMinimumOrder()
     {
-        return !$this->location->checkMinimumOrder($this->cart->subtotal());
+        return !$this->location->checkMinimumOrderTotal($this->cart->subtotal());
     }
 
     public function deliveryChargeIsUnavailable()
@@ -465,14 +469,11 @@ class CartManager
     // Reorder
     //
 
-    public function restoreWithOrderMenus(Order $order)
+    public function restoreWithOrderMenus(Collection $orderMenuItems)
     {
         $notes = [];
 
-        $currentInstance = $this->cart->currentInstance();
-        $this->cart->instance('location-'.$order->location_id);
-
-        foreach ($order->getOrderMenus() as $orderMenu) {
+        foreach ($orderMenuItems as $orderMenu) {
             try {
                 throw_unless($orderMenu->menu, new ApplicationException(
                     lang('igniter.cart::default.alert_menu_not_found')
@@ -495,8 +496,6 @@ class CartManager
                 $notes[] = $ex->getMessage();
             }
         }
-
-        $this->cart->instance($currentInstance);
 
         return $notes;
     }

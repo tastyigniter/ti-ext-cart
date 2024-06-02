@@ -24,7 +24,7 @@ class OrderPlaced extends BaseEvent
             $params = $order->mailGetData();
         }
 
-        $params['status'] = $order->status;
+        $params['status'] = $order->status ?? null;
 
         return $params;
     }

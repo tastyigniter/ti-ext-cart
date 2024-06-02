@@ -2,12 +2,14 @@
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Flame\Database\Traits\Validation;
 
 class MenuItemOption extends Model
 {
+    use HasFactory;
     use Purgeable;
     use Validation;
 
@@ -97,11 +99,6 @@ class MenuItemOption extends Model
     public function isRequired()
     {
         return $this->is_required;
-    }
-
-    public function isSelectDisplayType()
-    {
-        return $this->display_type === 'select';
     }
 
     /**

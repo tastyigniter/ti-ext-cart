@@ -537,7 +537,7 @@ class Cart
             $cartItem->associate($buyable);
         } else {
             $cartItem = CartItem::fromArray($buyable);
-            $cartItem->setQuantity(array_get($buyable, 'qty'));
+            $cartItem->setQuantity(array_get($buyable, 'qty', $qty));
         }
 
         return $cartItem;

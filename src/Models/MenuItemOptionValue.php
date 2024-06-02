@@ -2,6 +2,7 @@
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Validation;
 
@@ -10,6 +11,7 @@ use Igniter\Flame\Database\Traits\Validation;
  */
 class MenuItemOptionValue extends Model
 {
+    use HasFactory;
     use Validation;
 
     protected static $optionValuesCollection;
@@ -70,17 +72,5 @@ class MenuItemOptionValue extends Model
     public function isDefault()
     {
         return $this->is_default == 1;
-    }
-
-    /**
-     * Subtract or add to menu option item stock quantity
-     *
-     * @param int $quantity
-     * @param bool $subtract
-     * @return bool TRUE on success, or FALSE on failure
-     */
-    public function updateStock($quantity = 0, $subtract = true)
-    {
-        traceLog('MenuItemOptionValue::updateStock() has been deprecated, use Stock::updateStock() instead.');
     }
 }
