@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Requests;
+namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\IngredientRequest;
 

@@ -201,17 +201,7 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$location_id\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Call to static method whereIsEnabled\\(\\) on an unknown class Igniter\\\\Coupons\\\\Models\\\\Coupon\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:whereIsEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php
 
@@ -296,11 +286,6 @@ parameters:
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
-			count: 3
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
 			count: 3
 			path: src/Contracts/Buyable.php
@@ -348,11 +333,6 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Http\\\\Controllers\\\\Customers\\:\\:extendFormFields\\(\\)\\.$#"
 			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Event\\:\\:fire\\(\\)\\.$#"
-			count: 3
 			path: src/Extension.php
 
 		-
@@ -501,7 +481,7 @@ parameters:
 			path: src/Models/Category.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:pluck\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:whereIsEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Category.php
 
@@ -526,7 +506,7 @@ parameters:
 			path: src/Models/Mealtime.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:whereIsEnabled\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:whereIsEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Mealtime.php
 
@@ -611,11 +591,6 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Function traceLog invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
 			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuAllergens\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: src/Models/Menu.php
@@ -637,11 +612,6 @@ parameters:
 
 		-
 			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuSpecial\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:updateStock\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: src/Models/Menu.php
 
@@ -686,11 +656,6 @@ parameters:
 			path: src/Models/MenuImport.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$display_type\\.$#"
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$is_required\\.$#"
 			count: 1
 			path: src/Models/MenuItemOption.php
@@ -721,22 +686,7 @@ parameters:
 			path: src/Models/MenuItemOptionValue.php
 
 		-
-			message: "#^Function traceLog invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Models/MenuItemOptionValue.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:updateStock\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/MenuItemOptionValue.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:\\$display_type\\.$#"
-			count: 1
-			path: src/Models/MenuOption.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:\\$required\\.$#"
 			count: 1
 			path: src/Models/MenuOption.php
 
@@ -937,7 +887,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$menu_options\\.$#"
-			count: 1
+			count: 2
 			path: src/Models/Order.php
 
 		-
