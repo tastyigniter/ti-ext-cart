@@ -58,7 +58,7 @@ it('configures stock history model correctly', function() {
         ->and($stockHistory->getKeyName())->toBe('id')
         ->and($stockHistory->getGuarded())->toBe([])
         ->and($stockHistory->getAppends())->toBe([
-            'staff_name', 'state_text', 'created_at_since'
+            'staff_name', 'state_text', 'created_at_since',
         ])
         ->and($stockHistory->getMorphClass())->toBe('stock_history');
 });
