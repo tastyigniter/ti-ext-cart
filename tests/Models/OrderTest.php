@@ -13,6 +13,7 @@ use Igniter\Cart\Events\OrderPaymentProcessedEvent;
 use Igniter\Cart\Models\Concerns\HasInvoice;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
 use Igniter\Cart\Models\Order;
+use Igniter\Cart\Models\Scopes\OrderScope;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\PayRegister\Models\Payment;
@@ -270,5 +271,7 @@ it('configures order model correctly', function() {
             'customer_name', 'order_type_name', 'order_date_time', 'formatted_address', 'status_name',
         ])
         ->and($order->getHidden())->toEqual(['cart'])
-        ->and($order->timestamps)->toBeTrue();
+        ->and($order->timestamps)->toBeTrue()
+        ->and($order->getMorphClass())->toBe('orders')
+        ->and($order->getGlobalScopes())->toHaveKey(OrderScope::class);
 });

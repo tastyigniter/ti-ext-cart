@@ -82,5 +82,6 @@ it('configures stock model correctly', function() {
     expect($stock->getTable())->toBe('stocks')
         ->and($stock->getKeyName())->toBe('id')
         ->and($stock->getGuarded())->toBe(['quantity'])
-        ->and($stock->timestamps)->toBeTrue();
+        ->and($stock->timestamps)->toBeTrue()
+        ->and($stock->getMorphClass())->toBe('stocks');
 });

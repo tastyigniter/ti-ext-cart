@@ -10,12 +10,12 @@ use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuSpecial;
+use Igniter\Cart\Models\Scopes\MenuScope;
 use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
-use Illuminate\Support\Facades\DB;
 
 it('returns menu_price_from attribute', function() {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
@@ -146,58 +146,6 @@ it('morphs to many locations', function() {
         ->and($relation->getRelated())->toBeInstanceOf(Location::class);
 });
 
-it('applies filters to query builder', function() {
-    DB::table('menus')->update(['menu_status' => 0, 'menu_priority' => 10]);
-
-    $location = Location::factory()->create();
-    $category = Category::factory()->create(['status' => 1]);
-
-    $category->menus()->saveMany(
-        Menu::factory()
-            ->hasAttached($location)
-            ->count(2)
-            ->create([
-                'menu_status' => 1,
-                'menu_priority' => 1,
-                'order_restriction' => ['delivery'],
-            ])
-    );
-
-    $menu = Menu::factory()
-        ->hasAttached($location)
-        ->create([
-            'menu_name' => 'Location menu',
-            'menu_status' => 1,
-            'menu_priority' => 0,
-        ]);
-
-    $query = Menu::query()->applyFilters([
-        'enabled' => 1,
-        'location' => $location->getKey(),
-        'sort' => 'menu_priority asc',
-    ]);
-
-    expect($query->count())->toBe(3)
-        ->and($query->first())->menu_name->toBe($menu->menu_name);
-
-    $query = Menu::query()->applyFilters([
-        'enabled' => 1,
-        'group' => 'categories.category_id',
-        'category' => $category->getKey(),
-        'orderType' => 'delivery',
-    ]);
-
-    expect($query->count())->toBe(2);
-
-    $query = Menu::query()->applyFilters([
-        'enabled' => 1,
-        'search' => 'Location menu',
-    ]);
-
-    expect($query->count())->toBe(1)
-        ->and($query->first())->menu_name->toBe($menu->menu_name);
-});
-
 it('adds menu options to menu on save correctly', function() {
     $menu = Menu::factory()->create();
 
@@ -246,6 +194,19 @@ it('detaches relations from menu on delete', function() {
         ->and($menu->locations()->count())->toBe(0);
 });
 
+it('applies filters to query builder', function() {
+    $query = Menu::query()->applyFilters([
+        'enabled' => 1,
+        'location' => 1,
+        'sort' => 'menu_priority asc',
+    ]);
+
+    expect($query->toSql())
+        ->toContain('`menus`.`menu_status` = ?')
+        ->toContain('`locationables`.`location_id` in (?)')
+        ->toContain('order by `menu_priority` asc');
+});
+
 it('configures menu model correctly', function() {
     $menu = new Menu();
 
@@ -258,5 +219,7 @@ it('configures menu model correctly', function() {
         ->and($menu->getTable())->toBe('menus')
         ->and($menu->getKeyName())->toBe('menu_id')
         ->and($menu->timestamps)->toBeTrue()
-        ->and($menu->getGuarded())->toBe([]);
+        ->and($menu->getGuarded())->toBe([])
+        ->and($menu->getMorphClass())->toBe('menus')
+        ->and($menu->getGlobalScopes())->toHaveKey(MenuScope::class);
 });

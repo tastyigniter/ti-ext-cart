@@ -60,6 +60,7 @@ it('configures ingredient model correctly', function() {
         ->and($ingredient->getTable())->toBe('ingredients')
         ->and($ingredient->getKeyName())->toBe('ingredient_id')
         ->and($ingredient->getGuarded())->toBe([])
+        ->and($ingredient->getMorphClass())->toBe('ingredients')
         ->and($ingredient->mediable())->toHaveKey('thumb')
         ->and($ingredient->timestamps)->toBeTrue();
 });
