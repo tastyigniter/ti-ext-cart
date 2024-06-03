@@ -28,7 +28,7 @@ it('loads ingredient preview page', function() {
     $ingredient = Ingredient::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.ingredients', ['slug' => 'edit/'.$ingredient->getKey()]))
+        ->get(route('igniter.cart.ingredients', ['slug' => 'preview/'.$ingredient->getKey()]))
         ->assertOk();
 });
 

@@ -28,7 +28,7 @@ it('loads mealtime preview page', function() {
     $mealtime = Mealtime::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.mealtimes', ['slug' => 'edit/'.$mealtime->getKey()]))
+        ->get(route('igniter.cart.mealtimes', ['slug' => 'preview/'.$mealtime->getKey()]))
         ->assertOk();
 });
 

@@ -24,7 +24,7 @@ it('loads order preview page', function() {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.orders', ['slug' => 'edit/'.$order->getKey()]))
+        ->get(route('igniter.cart.orders', ['slug' => 'preview/'.$order->getKey()]))
         ->assertOk();
 });
 
