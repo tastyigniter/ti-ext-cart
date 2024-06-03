@@ -28,7 +28,7 @@ it('loads category preview page', function() {
     $category = Category::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.categories', ['slug' => 'edit/'.$category->getKey()]))
+        ->get(route('igniter.cart.categories', ['slug' => 'preview/'.$category->getKey()]))
         ->assertOk();
 });
 

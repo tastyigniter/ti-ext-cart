@@ -28,7 +28,7 @@ it('loads menu preview page', function() {
     $menu = Menu::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.menus', ['slug' => 'edit/'.$menu->getKey()]))
+        ->get(route('igniter.cart.menus', ['slug' => 'preview/'.$menu->getKey()]))
         ->assertOk();
 });
 

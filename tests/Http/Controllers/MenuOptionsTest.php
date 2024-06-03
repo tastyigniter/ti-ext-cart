@@ -28,7 +28,7 @@ it('loads menu option preview page', function() {
     $menuOption = MenuOption::factory()->create();
 
     actingAsSuperUser()
-        ->get(route('igniter.cart.menu_options', ['slug' => 'edit/'.$menuOption->getKey()]))
+        ->get(route('igniter.cart.menu_options', ['slug' => 'preview/'.$menuOption->getKey()]))
         ->assertOk();
 });
 
