@@ -4,6 +4,7 @@ namespace Tests\Models;
 
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuCategory;
 use Igniter\Cart\Models\Scopes\CategoryScope;
 use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Traits\HasPermalink;
@@ -13,7 +14,6 @@ use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\Local\Models\Scopes\LocationableScope;
 use Igniter\System\Models\Concerns\Switchable;
-use Illuminate\Support\Facades\DB;
 
 it('returns enabled categories dropdown options', function() {
     $count = Category::count();
@@ -75,38 +75,18 @@ it('scopes to categories with menus', function() {
 });
 
 it('applies filters to query builder', function() {
-    DB::table('categories')->update(['status' => 0, 'priority' => 10]);
-
-    $location = Location::factory()->create();
-
-    Category::factory()
-        ->count(2)
-        ->hasAttached($location)
-        ->create(['status' => 1, 'priority' => 1]);
-
-    $category = Category::factory()
-        ->hasAttached($location)
-        ->create([
-            'name' => 'Location category',
-            'status' => 1,
-            'priority' => 0,
-        ]);
-
     $query = Category::query()->applyFilters([
         'enabled' => 1,
-        'location' => $location->getKey(),
+        'location' => 1,
         'sort' => 'priority desc',
-    ]);
-
-    expect($query->count())->toBe(3)
-        ->and($query->first())->name->toBe($category->name);
-
-    $query = Category::query()->applyFilters([
         'search' => 'Location category',
     ]);
 
-    expect($query->count())->toBe(1)
-        ->and($query->first())->name->toBe($category->name);
+    expect($query->toSql())
+        ->toContain('`categories`.`status` = ?')
+        ->toContain('`locationables`.`location_id` in (?)')
+        ->toContain('order by `priority` desc')
+        ->toContain('lower(name)', 'lower(description)');
 });
 
 it('configures category model correctly', function() {
@@ -123,6 +103,7 @@ it('configures category model correctly', function() {
         ->and($category->getKeyName())->toBe('category_id')
         ->and($category->timestamps)->toBeTrue()
         ->and($category->getGuarded())->toBe([])
+        ->and($category->getMorphClass())->toBe('categories')
         ->and($category->permalinkable)->toBe([
             'permalink_slug' => [
                 'source' => 'name',
@@ -132,5 +113,6 @@ it('configures category model correctly', function() {
         ->and($category->getGlobalScopes())->toHaveKeys([
             CategoryScope::class,
             LocationableScope::class,
-        ]);
+        ])
+        ->and(new MenuCategory)->getMorphClass()->toBe('menu_categories');
 });

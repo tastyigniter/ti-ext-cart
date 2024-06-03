@@ -20,5 +20,6 @@ it('configures menu option value model correctly', function() {
             'sortOrderColumn' => 'priority',
             'sortWhenCreating' => true,
         ])
-        ->and($menuOptionValue->timestamps)->toBeFalse();
+        ->and($menuOptionValue->timestamps)->toBeFalse()
+        ->and($menuOptionValue->getMorphClass())->toBe('menu_option_values');
 });

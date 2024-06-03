@@ -126,5 +126,6 @@ it('configures menu special model correctly', function() {
             'end_date', 'special_price', 'type',
             'validity', 'recurring_every',
             'recurring_from', 'recurring_to',
-        ]);
+        ])
+        ->and($menuSpecial->getMorphClass())->toBe('menus_specials');
 });

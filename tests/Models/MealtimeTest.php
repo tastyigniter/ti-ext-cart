@@ -4,6 +4,8 @@ namespace Igniter\Cart\Tests\Models;
 
 use Carbon\Carbon;
 use Igniter\Cart\Models\Mealtime;
+use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\System\Models\Concerns\Switchable;
 
 it('returns enabled mealtime dropdown options', function() {
     $count = Mealtime::count();
@@ -44,4 +46,15 @@ it('checks if mealtime is available now', function() {
     $this->travelTo(now()->setHours(13));
 
     expect($mealtime->isAvailableNow())->toBeTrue();
+});
+
+it('configures mealtime model correctly', function() {
+    $mealtime = new Mealtime;
+
+    expect(class_uses_recursive($mealtime))
+        ->toContain(Locationable::class)
+        ->toContain(Switchable::class)
+        ->and($mealtime->getTable())->toBe('mealtime')
+        ->and($mealtime->getKeyName())->toBe('mealtime_id')
+        ->and($mealtime->getMorphClass())->toBe('mealtimes');
 });

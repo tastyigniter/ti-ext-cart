@@ -84,5 +84,6 @@ it('configures menu option model correctly', function() {
             'display_type',
         ])
         ->and($menuOption->timestamps)->toBeTrue()
+        ->and($menuOption->getMorphClass())->toBe('menu_options')
         ->and($menuOption->getPurgeableAttributes())->toEqual(['values']);
 });

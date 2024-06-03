@@ -49,5 +49,6 @@ it('configures menu item option value model correctly', function() {
             'is_default',
         ])
         ->and($menuItemOptionValue->timestamps)->toBeTrue()
-        ->and($menuItemOptionValue->getAppends())->toEqual(['name', 'price']);
+        ->and($menuItemOptionValue->getAppends())->toEqual(['name', 'price'])
+        ->and($menuItemOptionValue->getMorphClass())->toBe('menu_item_option_values');
 });
