@@ -5,7 +5,7 @@ namespace Igniter\Cart\Tests\CartConditions;
 use Igniter\Cart\CartConditions\Tip;
 use Igniter\Cart\Models\CartSettings;
 
-beforeEach(function () {
+beforeEach(function() {
     $this->tip = new Tip(['label' => 'Test Tip']);
 });
 
@@ -49,7 +49,7 @@ it('gets actions with fixed tip amount', function() {
     $this->tip->onLoad();
 
     expect($this->tip->getActions())->toBe([
-        ['value' => '+10', 'valuePrecision' => 2]
+        ['value' => '+10', 'valuePrecision' => 2],
     ]);
 });
 
@@ -61,7 +61,7 @@ it('gets actions with percentage tip amount', function() {
     $this->tip->onLoad();
 
     expect($this->tip->getActions())->toBe([
-        ['value' => '+10%', 'valuePrecision' => 2]
+        ['value' => '+10%', 'valuePrecision' => 2],
     ]);
 });
 
@@ -73,6 +73,6 @@ it('gets actions with custom tip amount', function() {
     $this->tip->onLoad();
 
     expect($this->tip->getActions())->toBe([
-        ['value' => '+10', 'valuePrecision' => 2]
+        ['value' => '+10', 'valuePrecision' => 2],
     ]);
 });

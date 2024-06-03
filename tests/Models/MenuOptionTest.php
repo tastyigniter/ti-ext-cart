@@ -2,7 +2,6 @@
 
 namespace Igniter\Cart\Tests\Models;
 
-
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuOption;

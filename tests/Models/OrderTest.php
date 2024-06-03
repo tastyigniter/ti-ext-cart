@@ -59,7 +59,7 @@ it('gets formatted address attribute correctly', function() {
             'city' => 'City',
             'state' => 'State',
             'postcode' => '12345',
-            'country_id' => Country::factory()->state(['status' => 1, 'country_name' => 'Country'])
+            'country_id' => Country::factory()->state(['status' => 1, 'country_name' => 'Country']),
         ]))
         ->create();
 
@@ -264,10 +264,10 @@ it('configures order model correctly', function() {
         ->and($order->getTable())->toBe('orders')
         ->and($order->getKeyName())->toBe('order_id')
         ->and($order->getGuarded())->toEqual([
-            'ip_address', 'user_agent', 'hash', 'total_items', 'order_total'
+            'ip_address', 'user_agent', 'hash', 'total_items', 'order_total',
         ])
         ->and($order->getAppends())->toEqual([
-            'customer_name', 'order_type_name', 'order_date_time', 'formatted_address', 'status_name'
+            'customer_name', 'order_type_name', 'order_date_time', 'formatted_address', 'status_name',
         ])
         ->and($order->getHidden())->toEqual(['cart'])
         ->and($order->timestamps)->toBeTrue();

@@ -7,8 +7,9 @@ use Igniter\Local\Classes\WorkingSchedule;
 use Igniter\Local\Exceptions\WorkingHourException;
 use Igniter\Local\Models\Location;
 
-beforeEach(function () {
-    $this->orderType = new class(new Location, ['code' => 'test', 'name' => 'Test']) extends AbstractOrderType {
+beforeEach(function() {
+    $this->orderType = new class(new Location, ['code' => 'test', 'name' => 'Test']) extends AbstractOrderType
+    {
         public function getOpenDescription(): string
         {
             // TODO: Implement getOpenDescription() method.

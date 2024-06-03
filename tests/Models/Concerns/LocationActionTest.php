@@ -12,7 +12,7 @@ it('allows guest order correctly', function() {
     $location = Location::factory()->create();
     $settings = $location->settings()->create([
         'item' => 'checkout',
-        'data' => ['guest_order' => 1]
+        'data' => ['guest_order' => 1],
     ]);
 
     expect((new LocationAction($location))->allowGuestOrder())->toBeTrue();
@@ -20,7 +20,7 @@ it('allows guest order correctly', function() {
     setting()->set(['guest_order' => 1]);
     $settings->update([
         'item' => 'checkout',
-        'data' => ['guest_order' => -1]
+        'data' => ['guest_order' => -1],
     ]);
 
     expect((new LocationAction($location))->allowGuestOrder())->toBeTrue();
@@ -43,7 +43,7 @@ it('lists available payments correctly', function() {
     unset($location->settings);
     $location->settings()->create([
         'item' => 'checkout',
-        'data' => ['payments' => ['cash']]
+        'data' => ['payments' => ['cash']],
     ]);
 
     expect($locationAction->listAvailablePayments()->count())->toBe(0);
@@ -54,7 +54,7 @@ it('gets order time interval correctly', function() {
 
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['time_interval' => 60]
+        'data' => ['time_interval' => 60],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -66,7 +66,7 @@ it('checks if should add lead time correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['add_lead_time' => 1]
+        'data' => ['add_lead_time' => 1],
     ]);
 
     expect((new LocationAction($location))
@@ -77,7 +77,7 @@ it('gets order lead time correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['lead_time' => 60]
+        'data' => ['lead_time' => 60],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -89,7 +89,7 @@ it('gets order time restriction correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['time_restriction' => 60]
+        'data' => ['time_restriction' => 60],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -101,7 +101,7 @@ it('gets order cancellation timeout correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['cancellation_timeout' => 60]
+        'data' => ['cancellation_timeout' => 60],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -113,7 +113,7 @@ it('gets minimum order total correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['min_order_amount' => 60]
+        'data' => ['min_order_amount' => 60],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -125,7 +125,7 @@ it('checks if has order type correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['is_enabled' => 1]
+        'data' => ['is_enabled' => 1],
     ]);
 
     expect((new LocationAction($location))->hasDelivery())->toBeTrue();
@@ -135,7 +135,7 @@ it('checks if has future order correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['future_days' => ['is_enabled' => 1]]
+        'data' => ['future_days' => ['is_enabled' => 1]],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -147,7 +147,7 @@ it('gets future order days correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['future_orders' => ['days' => 60]]
+        'data' => ['future_orders' => ['days' => 60]],
     ]);
 
     $locationAction = new LocationAction($location);
@@ -159,7 +159,7 @@ it('gets minimum future order days correctly', function() {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
-        'data' => ['future_orders' => ['min_days' => 6]]
+        'data' => ['future_orders' => ['min_days' => 6]],
     ]);
 
     $locationAction = new LocationAction($location);

@@ -27,8 +27,8 @@ it('evaluates isTrue correctly for status_id', function() {
 
     $orderStatusAttribute = new OrderStatusAttribute(new RuleCondition([
         'options' => [
-            ['attribute' => 'status_id', 'operator' => 'is', 'value' => $status->getKey()]
-        ]
+            ['attribute' => 'status_id', 'operator' => 'is', 'value' => $status->getKey()],
+        ],
     ]));
 
     $params = ['status' => $status];
@@ -40,8 +40,8 @@ it('evaluates isTrue correctly for status_name', function($attribute, $value) {
 
     $orderStatusAttribute = new OrderStatusAttribute(new RuleCondition([
         'options' => [
-            ['attribute' => $attribute, 'operator' => 'is', 'value' => $value]
-        ]
+            ['attribute' => $attribute, 'operator' => 'is', 'value' => $value],
+        ],
     ]));
 
     $params = ['status' => $status];

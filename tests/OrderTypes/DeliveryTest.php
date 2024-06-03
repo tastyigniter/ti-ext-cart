@@ -10,7 +10,7 @@ beforeEach(function() {
     $location = LocationModel::factory()->create();
     $this->settings = $location->settings()->create([
         'item' => LocationModel::DELIVERY,
-        'data' => ['lead_time' => 60]
+        'data' => ['lead_time' => 60],
     ]);
     $this->delivery = new Delivery($location, [
         'code' => LocationModel::DELIVERY, 'name' => 'Delivery',
@@ -45,7 +45,7 @@ it('returns active status correctly', function() {
 it('returns disabled status correctly', function() {
     $this->settings->update([
         'item' => LocationModel::DELIVERY,
-        'data' => ['is_enabled' => 0]
+        'data' => ['is_enabled' => 0],
     ]);
 
     expect($this->delivery->isDisabled())->toBeTrue();

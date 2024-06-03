@@ -349,10 +349,6 @@ abstract class CartCondition implements Arrayable, Jsonable
 
     /**
      * Constructs the object
-     *
-     * @param array $data
-     *
-     * @return void
      */
     public function __unserialize(array $data): void
     {

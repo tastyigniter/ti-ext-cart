@@ -4,7 +4,7 @@ namespace Igniter\Cart\Tests\CartConditions;
 
 use Igniter\Cart\CartConditions\Tax;
 
-beforeEach(function () {
+beforeEach(function() {
     $this->tax = new Tax(['label' => 'VAT: %s']);
 });
 
@@ -68,7 +68,7 @@ it('gets actions with inclusive tax', function() {
     $taxRate /= (100 + $taxRate) / 100;
 
     expect($this->tax->getActions())->toBe([
-        ['value' => '+'.$taxRate.'%', 'inclusive' => true, 'valuePrecision' => 2]
+        ['value' => '+'.$taxRate.'%', 'inclusive' => true, 'valuePrecision' => 2],
     ]);
 });
 
@@ -82,6 +82,6 @@ it('gets actions without inclusive tax', function() {
     $this->tax->onLoad();
 
     expect($this->tax->getActions())->toBe([
-        ['value' => '+10%', 'inclusive' => false, 'valuePrecision' => 2]
+        ['value' => '+10%', 'inclusive' => false, 'valuePrecision' => 2],
     ]);
 });

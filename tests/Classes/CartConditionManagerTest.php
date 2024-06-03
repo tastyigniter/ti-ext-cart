@@ -9,7 +9,7 @@ it('makes condition', function() {
     $manager = new CartConditionManager();
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
-        'label' => 'Test Cart Condition'
+        'label' => 'Test Cart Condition',
     ]);
 
     $condition = $manager->makeCondition(TestCartCondition::class, ['label' => 'Override Test Cart Condition']);
@@ -21,14 +21,14 @@ it('makes condition', function() {
 it('throws exception for unregistered condition', function() {
     $manager = new CartConditionManager();
 
-     expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(\LogicException::class);
+    expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(\LogicException::class);
 });
 
 it('lists registered conditions', function() {
     $manager = new CartConditionManager();
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
-        'label' => 'Test Cart Condition'
+        'label' => 'Test Cart Condition',
     ]);
 
     $conditions = $manager->listRegisteredConditions();
@@ -42,7 +42,7 @@ it('loads registered conditions', function() {
     $manager->registerCallback(function($manager) {
         $manager->registerCondition(TestCartCondition::class, [
             'name' => 'testCartCondition',
-            'label' => 'Test Cart Condition'
+            'label' => 'Test Cart Condition',
         ]);
     });
 
@@ -58,8 +58,8 @@ it('registers conditions', function() {
     $manager->registerConditions([
         TestCartCondition::class => [
             'name' => 'testCartCondition',
-            'label' => 'Test Cart Condition'
-        ]
+            'label' => 'Test Cart Condition',
+        ],
     ]);
 
     $conditions = $manager->listRegisteredConditions();

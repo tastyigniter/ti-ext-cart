@@ -12,7 +12,7 @@ use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Models\Location as LocationModel;
 use Illuminate\Support\Facades\App;
 
-beforeEach(function () {
+beforeEach(function() {
     $this->location = LocationModel::factory()->create();
     resolve('location')->setModel($this->location);
 
@@ -100,7 +100,7 @@ it('throws exception when adding menu item that does not belong to current locat
     $menu->locations()->attach(LocationModel::factory()->create());
 
     expect(fn() => $this->manager->addCartItem($menu->getKey(), [
-        'quantity' => 1
+        'quantity' => 1,
     ]))->toThrow(ApplicationException::class);
 });
 

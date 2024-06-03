@@ -14,7 +14,7 @@ it('configures menu option value model correctly', function() {
             'name',
             'price',
             'ingredients',
-            'priority'
+            'priority',
         ])
         ->and($menuOptionValue->sortable)->toEqual([
             'sortOrderColumn' => 'priority',
