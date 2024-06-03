@@ -3,20 +3,20 @@
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\PayRegister\Models\Payment;
 
-beforeEach(function () {
+beforeEach(function() {
     $this->paymentFee = new PaymentFee([
         'label' => 'Test Fee',
-        'metaData' => ['code' => 'test']
+        'metaData' => ['code' => 'test'],
     ]);
 });
 
-it('gets label with percentage fee', function () {
+it('gets label with percentage fee', function() {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
             'order_fee_type' => 2,
             'order_fee' => 10,
-        ]
+        ],
     ]);
 
     $this->paymentFee->beforeApply();
@@ -24,13 +24,13 @@ it('gets label with percentage fee', function () {
     expect($this->paymentFee->getLabel())->toBe('Test Fee [10%]');
 });
 
-it('gets label without percentage fee', function () {
+it('gets label without percentage fee', function() {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
             'order_fee_type' => 1,
             'order_fee' => 10,
-        ]
+        ],
     ]);
 
     $this->paymentFee->beforeApply();
@@ -38,31 +38,31 @@ it('gets label without percentage fee', function () {
     expect($this->paymentFee->getLabel())->toBe('Test Fee');
 });
 
-it('before apply with no payment code', function () {
+it('before apply with no payment code', function() {
     $paymentFee = new PaymentFee(['label' => 'Test Fee']);
 
     expect($paymentFee->beforeApply())->toBeFalse();
 });
 
-it('before apply with no fee', function () {
+it('before apply with no fee', function() {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
             'order_fee_type' => 1,
             'order_fee' => 0,
-        ]
+        ],
     ]);
 
     expect($this->paymentFee->beforeApply())->toBeFalse();
 });
 
-it('gets actions with percentage fee', function () {
+it('gets actions with percentage fee', function() {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
             'order_fee_type' => 2,
             'order_fee' => 10,
-        ]
+        ],
     ]);
 
     $this->paymentFee->beforeApply();
@@ -70,13 +70,13 @@ it('gets actions with percentage fee', function () {
     expect($this->paymentFee->getActions())->toBe([['value' => '+10%']]);
 });
 
-it('gets actions without percentage fee', function () {
+it('gets actions without percentage fee', function() {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
             'order_fee_type' => 1,
             'order_fee' => 10,
-        ]
+        ],
     ]);
 
     $this->paymentFee->beforeApply();

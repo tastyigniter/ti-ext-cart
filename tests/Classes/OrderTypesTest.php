@@ -39,7 +39,7 @@ it('registers order types', function() {
     $orderTypes = new OrderTypes();
 
     $orderTypes->registerOrderTypes([
-        Delivery::class => ['code' => 'delivery', 'name' => 'Delivery']
+        Delivery::class => ['code' => 'delivery', 'name' => 'Delivery'],
     ]);
 
     $result = $orderTypes->listOrderTypes();

@@ -10,7 +10,6 @@ it('returns option name attribute', function() {
         ->for(MenuOptionValue::factory(['name' => 'Option Value Name'])->create(), 'option_value')
         ->create();
 
-
     expect($menuItemOptionValue->name)->toBe('Option Value Name');
 });
 

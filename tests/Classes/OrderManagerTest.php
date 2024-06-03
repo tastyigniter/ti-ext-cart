@@ -16,7 +16,7 @@ use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 
-beforeEach(function () {
+beforeEach(function() {
     $this->location = LocationModel::factory()->create();
     resolve('location')->setModel($this->location);
 
@@ -100,7 +100,7 @@ it('saves order', function() {
     $data = [
         'first_name' => 'Test',
         'last_name' => 'User',
-        'email' => 'test@example.com'
+        'email' => 'test@example.com',
     ];
 
     expect($this->manager->saveOrder($order, $data))->toBeInstanceOf(Order::class);
@@ -155,8 +155,8 @@ it('gets cart totals', function() {
             'label' => 'Test Tip',
             'metaData' => [
                 'amount' => 10,
-                'isCustom' => true
-            ]
+                'isCustom' => true,
+            ],
         ])
     );
 

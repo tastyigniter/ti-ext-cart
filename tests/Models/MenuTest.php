@@ -33,7 +33,7 @@ it('checks if menu is available', function() {
     $menu = Menu::factory()
         ->has(Mealtime::factory()->state([
             'start_time' => '10:00:00',
-            'end_time' => '20:00:00'
+            'end_time' => '20:00:00',
         ]), 'mealtimes')
         ->create();
 

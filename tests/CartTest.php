@@ -36,10 +36,10 @@ it('adds item with options to the cart correctly', function() {
                     [
                         'id' => 111,
                         'name' => 'Large',
-                        'price' => 2.00
+                        'price' => 2.00,
                     ],
                 ],
-            ]
+            ],
         ],
     ], 1);
 
@@ -52,7 +52,7 @@ it('adds item with conditions to the cart correctly', function() {
         'name' => 'VAT',
         'type' => 'tax',
         'target' => 'total',
-        'value' => '10%'
+        'value' => '10%',
     ]);
 
     Location::setModel(LocationModel::factory()->create());
@@ -71,7 +71,7 @@ it('updates item in the cart correctly', function() {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $this->cart->update($cartItem->rowId, 2);
@@ -83,7 +83,7 @@ it('removes item from the cart correctly', function() {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $this->cart->remove($cartItem->rowId);
@@ -95,14 +95,14 @@ it('applies conditions to the cart correctly', function() {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $condition = new Tax([
         'name' => 'VAT',
         'type' => 'tax',
         'target' => 'total',
-        'value' => '10%'
+        'value' => '10%',
     ]);
     $this->cart->loadCondition($condition);
 
@@ -113,7 +113,7 @@ it('clears the cart correctly', function() {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $this->cart->destroy();
@@ -125,7 +125,7 @@ it('searches the cart correctly', function() {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $searchResult = $this->cart->search(function($cartItem, $rowId) {
@@ -139,7 +139,7 @@ it('stores the cart correctly', function() {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $this->cart->store('test');
@@ -151,7 +151,7 @@ it('restores the cart correctly', function() {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
-        'price' => 10.00
+        'price' => 10.00,
     ], 1);
 
     $this->cart->store('test');

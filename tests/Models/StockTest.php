@@ -20,6 +20,7 @@ it('updates stock correctly', function() {
 
     Event::assertDispatched('admin.stock.updated', function($event, $args) use ($stock) {
         [$updatedStock, $history, $stockQty] = $args;
+
         return $updatedStock->getKey() === $stock->getKey();
     });
 });

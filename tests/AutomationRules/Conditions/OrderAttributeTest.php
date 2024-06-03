@@ -85,8 +85,8 @@ it('evaluates isTrue correctly', function() {
 
     $orderAttribute = new OrderAttribute(new RuleCondition([
         'options' => [
-            ['attribute' => 'first_name', 'operator' => 'is', 'value' => 'John']
-        ]
+            ['attribute' => 'first_name', 'operator' => 'is', 'value' => 'John'],
+        ],
     ]));
 
     $params = ['order' => $order];
