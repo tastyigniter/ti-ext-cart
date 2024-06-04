@@ -4,6 +4,7 @@ namespace Igniter\Cart\Tests\Http\Middleware;
 
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Local\Contracts\LocationInterface;
 use Igniter\Local\Facades\Location;
 use Igniter\User\Facades\Auth;
@@ -39,7 +40,7 @@ it('handles request without location', function() {
 });
 
 it('terminates with abandoned cart and authenticated user', function() {
-    config(['igniter-cart.abandonedCart' => true]);
+    CartSettings::set('abandoned_cart', true);
 
     $userMock = Mockery::mock(User::class);
     $userMock->shouldReceive('getKey')->andReturn(1);
@@ -53,7 +54,7 @@ it('terminates with abandoned cart and authenticated user', function() {
 });
 
 it('terminates without abandoned cart', function() {
-    config(['igniter-cart.abandonedCart' => false]);
+    CartSettings::set('abandoned_cart', false);
     Auth::expects('check')->never();
     Cart::expects('store')->never();
 
@@ -62,7 +63,7 @@ it('terminates without abandoned cart', function() {
 });
 
 it('terminates with abandoned cart but unauthenticated user', function() {
-    config(['igniter-cart.abandonedCart' => true]);
+    CartSettings::set('abandoned_cart', true);
     Auth::shouldReceive('check')->andReturn(false);
     Cart::expects('content')->never();
 
@@ -71,7 +72,7 @@ it('terminates with abandoned cart but unauthenticated user', function() {
 });
 
 it('terminates with abandoned cart, authenticated user but empty cart', function() {
-    config(['igniter-cart.abandonedCart' => true]);
+    CartSettings::set('abandoned_cart', true);
     Auth::shouldReceive('check')->andReturn(true);
     Cart::shouldReceive('content')->andReturn(collect());
     Cart::expects('store')->never();
