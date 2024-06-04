@@ -285,7 +285,7 @@ class OrderManager
                     'title' => $condition->getLabel(),
                     'value' => $condition->getValue(),
                     'priority' => $condition->getPriority() ?: 1,
-                    'is_summable' => !$condition->isInclusive(),
+                    'is_summable' => false,
                 ];
 
                 if (array_key_exists($condition->name, $itemConditions)) {
