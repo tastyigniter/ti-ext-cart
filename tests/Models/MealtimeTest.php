@@ -54,7 +54,7 @@ it('configures mealtime model correctly', function() {
     expect(class_uses_recursive($mealtime))
         ->toContain(Locationable::class)
         ->toContain(Switchable::class)
-        ->and($mealtime->getTable())->toBe('mealtime')
+        ->and($mealtime->getTable())->toBe('mealtimes')
         ->and($mealtime->getKeyName())->toBe('mealtime_id')
         ->and($mealtime->getMorphClass())->toBe('mealtimes');
 });
