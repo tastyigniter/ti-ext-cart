@@ -7,6 +7,7 @@ use Igniter\Cart\Http\Middleware\CartMiddleware;
 use Igniter\Local\Contracts\LocationInterface;
 use Igniter\Local\Facades\Location;
 use Igniter\User\Facades\Auth;
+use Igniter\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mockery;
@@ -39,9 +40,12 @@ it('handles request without location', function() {
 
 it('terminates with abandoned cart and authenticated user', function() {
     config(['igniter-cart.abandonedCart' => true]);
+
+    $userMock = Mockery::mock(User::class);
+    $userMock->shouldReceive('getKey')->andReturn(1);
     Auth::shouldReceive('check')->andReturn(true);
     Cart::shouldReceive('content')->andReturn(collect(['item']));
-    Auth::shouldReceive('getUser')->andReturn((object)['getKey' => 1]);
+    Auth::shouldReceive('getUser')->andReturn($userMock);
     Cart::shouldReceive('store')->with(1);
 
     $middleware = new CartMiddleware();
