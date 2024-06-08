@@ -196,7 +196,7 @@ class Order extends Model
             return false;
         }
 
-        return $this->order_datetime->diffInRealMinutes() > $timeout;
+        return floor($this->order_datetime->diffInRealMinutes()) > $timeout;
     }
 
     /**
