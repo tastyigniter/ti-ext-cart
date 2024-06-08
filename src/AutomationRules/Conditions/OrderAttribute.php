@@ -69,7 +69,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = now();
 
         return $currentDateTime->isAfter($order->order_datetime)
-            ? $order->order_datetime->diffInRealHours($currentDateTime)
+            ? floor($order->order_datetime->diffInUTCHour($currentDateTime))
             : 0;
     }
 
@@ -78,7 +78,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = now();
 
         return $currentDateTime->isBefore($order->order_datetime)
-            ? $currentDateTime->diffInRealHours($order->order_datetime)
+            ? floor($currentDateTime->diffInUTCHour($order->order_datetime))
             : 0;
     }
 
@@ -87,7 +87,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = now();
 
         return $currentDateTime->isAfter($order->order_datetime)
-            ? $order->order_datetime->diffInDays($currentDateTime)
+            ? floor($order->order_datetime->diffInDays($currentDateTime))
             : 0;
     }
 
@@ -96,7 +96,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         $currentDateTime = now();
 
         return $currentDateTime->isBefore($order->order_datetime)
-            ? $currentDateTime->diffInDays($order->order_datetime)
+            ? floor($currentDateTime->diffInDays($order->order_datetime))
             : 0;
     }
 

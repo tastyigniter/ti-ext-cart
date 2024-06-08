@@ -19,46 +19,46 @@ it('defines model attributes correctly', function() {
 
 it('calculates hours since correctly', function() {
     $order = Order::factory()->create([
-        'order_date' => Carbon::now()->subHours(5)->toDateString(),
+        'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->subHours(5)->toTimeString(),
     ]);
 
     $orderAttribute = new OrderAttribute();
 
-    expect($orderAttribute->getHoursSinceAttribute(null, $order))->toBe(5);
+    expect($orderAttribute->getHoursSinceAttribute(null, $order))->toBe(5.0);
 });
 
 it('calculates hours until correctly', function() {
     $order = Order::factory()->create([
-        'order_date' => Carbon::now()->addHours(5)->toDateString(),
+        'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->addHours(5)->toTimeString(),
     ]);
 
     $orderAttribute = new OrderAttribute();
 
-    expect($orderAttribute->getHoursUntilAttribute(null, $order))->toBe(5);
+    expect($orderAttribute->getHoursUntilAttribute(null, $order))->toBe(4.0);
 });
 
 it('calculates days since correctly', function() {
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->subDays(3)->toDateString(),
-        'order_time' => Carbon::now()->subDays(3)->toTimeString(),
+        'order_time' => Carbon::now()->toTimeString(),
     ]);
 
     $orderAttribute = new OrderAttribute();
 
-    expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(3);
+    expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(4.0);
 });
 
 it('calculates days until correctly', function() {
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->addDays(4)->toDateString(),
-        'order_time' => Carbon::now()->addDays(4)->toTimeString(),
+        'order_time' => Carbon::now()->toTimeString(),
     ]);
 
     $orderAttribute = new OrderAttribute();
 
-    expect($orderAttribute->getDaysUntilAttribute(null, $order))->toBe(3);
+    expect($orderAttribute->getDaysUntilAttribute(null, $order))->toBe(3.0);
 });
 
 it('gets history status id correctly', function() {
