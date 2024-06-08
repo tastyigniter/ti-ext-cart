@@ -29,6 +29,7 @@ it('calculates hours since correctly', function() {
 });
 
 it('calculates hours until correctly', function() {
+    $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->addHours(5)->toTimeString(),
@@ -40,6 +41,7 @@ it('calculates hours until correctly', function() {
 });
 
 it('calculates days since correctly', function() {
+    $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->subDays(3)->toDateString(),
         'order_time' => Carbon::now()->toTimeString(),
@@ -47,7 +49,7 @@ it('calculates days since correctly', function() {
 
     $orderAttribute = new OrderAttribute();
 
-    expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(4.0);
+    expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(3.0);
 });
 
 it('calculates days until correctly', function() {
