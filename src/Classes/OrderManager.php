@@ -298,6 +298,26 @@ class OrderManager
 
     public function getCartTotals()
     {
+        $itemConditions = [];
+        foreach ($this->cart->content() as $cartItem) {
+            foreach ($cartItem->conditions ?? [] as $condition) {
+                $total = [
+                    'code' => $condition->name,
+                    'title' => $condition->getLabel(),
+                    'value' => $condition->getValue(),
+                    'priority' => $condition->getPriority() ?: 1,
+                    'is_summable' => false,
+                ];
+
+                if (array_key_exists($condition->name, $itemConditions)) {
+                    $itemConditions[$condition->name]['value'] += $total['value'];
+                    continue;
+                }
+
+                $itemConditions[$condition->name] = $total;
+            }
+        }
+
         $totals = $this->cart->conditions()->map(function(CartCondition $condition) {
             return [
                 'code' => $condition->name,
@@ -306,7 +326,7 @@ class OrderManager
                 'priority' => $condition->getPriority() ?: 1,
                 'is_summable' => !$condition->isInclusive(),
             ];
-        })->all();
+        })->merge($itemConditions)->all();
 
         $totals['subtotal'] = [
             'code' => 'subtotal',
