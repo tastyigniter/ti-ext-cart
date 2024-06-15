@@ -64,7 +64,7 @@ it('gets formatted address attribute correctly', function() {
         ]))
         ->create();
 
-    expect($order->formatted_address)->toBe("123 Main St\nApt. 035\nCity 12345\nCountry");
+    expect($order->formatted_address)->toBe("123 Main St, Apt. 035, City 12345, State, Country");
 });
 
 it('checks if order is completed', function() {
