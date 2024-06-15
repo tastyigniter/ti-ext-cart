@@ -18,6 +18,8 @@ it('defines model attributes correctly', function() {
 });
 
 it('calculates hours since correctly', function() {
+    $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
+
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->subHours(5)->toTimeString(),
