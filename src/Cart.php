@@ -8,7 +8,7 @@ use Igniter\Cart\Concerns\ActsAsItemable;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Exceptions\UnknownModelException;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Session\SessionManager;
 
 class Cart
