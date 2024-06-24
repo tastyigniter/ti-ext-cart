@@ -13,6 +13,7 @@ return [
     'text_tab_title_order' => 'Order',
     'text_menu_price_include_tax' => 'Menu prices already include tax',
     'text_apply_tax_on_menu_price' => 'Apply tax on top of my menu price',
+    'text_charts_orders' => 'Orders',
 
     'text_basket' => 'Basket',
     'text_update_heading' => 'Updating menu choices',

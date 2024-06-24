@@ -12,7 +12,7 @@ class MenuFactory extends Factory
     {
         return [
             'menu_name' => $this->faker->sentence(2),
-            'menu_price' => $this->faker->randomFloat(),
+            'menu_price' => $this->faker->randomFloat(null, 0, 100),
             'minimum_qty' => 1,
             'menu_status' => 1,
         ];

@@ -2,7 +2,10 @@
 
 namespace Igniter\Cart;
 
+use Igniter\Admin\DashboardWidgets\Charts;
+use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Admin\Widgets\Form;
+use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Menu;
@@ -83,6 +86,7 @@ class Extension extends BaseExtension
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
+        $this->extendDashboardChartsDatasets();
 
         LocationModel::implement(LocationAction::class);
 
@@ -123,6 +127,10 @@ class Extension extends BaseExtension
                     ],
                 ],
             ], 'primary');
+        });
+
+        Statistics::registerCards(function() {
+            return (new RegistersDashboardCards())();
         });
     }
 
@@ -440,6 +448,25 @@ class Extension extends BaseExtension
                     'request' => \Igniter\Cart\Http\Requests\OrderSettingsRequest::class,
                 ],
             ]);
+        });
+    }
+
+    protected function extendDashboardChartsDatasets()
+    {
+        Charts::extend(function($charts) {
+            $charts->bindEvent('charts.extendDatasets', function() use ($charts) {
+                $charts->addDataset('reports', [
+                    'sets' => [
+                        'orders' => [
+                            'label' => 'lang:igniter.cart::default.text_charts_orders',
+                            'color' => '#64B5F6',
+                            'model' => Order::class,
+                            'column' => 'order_date',
+                            'priority' => 20,
+                        ],
+                    ],
+                ]);
+            });
         });
     }
 }
