@@ -152,23 +152,17 @@ abstract class CartCondition implements Arrayable, Jsonable
     /**
      * Called before condition is loaded into cart session
      */
-    public function onLoad()
-    {
-    }
+    public function onLoad() {}
 
     /**
      * Called before the applying of condition on the entire cart.
      */
-    public function beforeApply()
-    {
-    }
+    public function beforeApply() {}
 
     /**
      * Called after the applying of condition on the entire cart.
      */
-    public function afterApply()
-    {
-    }
+    public function afterApply() {}
 
     /**
      * Returns the rules for this cart condition.
@@ -193,16 +187,12 @@ abstract class CartCondition implements Arrayable, Jsonable
     /**
      * Called once when the condition validation passes.
      */
-    public function whenValid()
-    {
-    }
+    public function whenValid() {}
 
     /**
      * Called once when the condition validation fails.
      */
-    public function whenInvalid()
-    {
-    }
+    public function whenInvalid() {}
 
     //
     // Getters and Setters
