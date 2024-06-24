@@ -4,6 +4,4 @@ namespace Igniter\Cart\Exceptions;
 
 use RuntimeException;
 
-class InvalidRowIDException extends RuntimeException
-{
-}
+class InvalidRowIDException extends RuntimeException {}

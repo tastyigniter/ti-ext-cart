@@ -4,6 +4,4 @@ namespace Igniter\Cart\Exceptions;
 
 use RuntimeException;
 
-class CartAlreadyStoredException extends RuntimeException
-{
-}
+class CartAlreadyStoredException extends RuntimeException {}

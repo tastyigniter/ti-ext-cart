@@ -13,37 +13,37 @@ class RegistersDashboardCards
             'sale' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_sale',
                 'icon' => ' text-success fa fa-4x fa-line-chart',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'lost_sale' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_lost_sale',
                 'icon' => ' text-danger fa fa-4x fa-line-chart',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'cash_payment' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_cash_payment',
                 'icon' => ' text-warning fa fa-4x fa-money-bill',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'order' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_order',
                 'icon' => ' text-success fa fa-4x fa-shopping-cart',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'delivery_order' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_delivery_order',
                 'icon' => ' text-primary fa fa-4x fa-truck',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'collection_order' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_collection_order',
                 'icon' => ' text-info fa fa-4x fa-shopping-bag',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
             'completed_order' => [
                 'label' => 'lang:igniter::admin.dashboard.text_total_completed_order',
                 'icon' => ' text-success fa fa-4x fa-receipt',
-                'valueFrom' => [$this, 'getValue']
+                'valueFrom' => [$this, 'getValue'],
             ],
         ];
     }
