@@ -34,6 +34,8 @@ class CartManager
      */
     protected $settings;
 
+    protected $menuItemCache = [];
+
     public function __construct()
     {
         $this->cart = App::make('cart');
@@ -68,7 +70,11 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_selected'));
         }
 
-        return Menu::findBy($menuId, $this->location->current());
+        if (array_key_exists($menuId, $this->menuItemCache)) {
+            return $this->menuItemCache[$menuId];
+        }
+
+        return $this->menuItemCache[$menuId] = Menu::findBy($menuId, $this->location->current());
     }
 
     public function addCartItem($menuId, array $properties = [])
@@ -285,7 +291,7 @@ class CartManager
         }
 
         $this->cart->content()->each(function(CartItem $cartItem) {
-            $menuItem = $cartItem->model;
+            $menuItem = $this->findMenuItem($cartItem->id);
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
