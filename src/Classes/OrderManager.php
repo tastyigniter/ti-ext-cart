@@ -304,7 +304,7 @@ class OrderManager
                 $total = [
                     'code' => $condition->name,
                     'title' => $condition->getLabel(),
-                    'value' => $condition->getValue(),
+                    'value' => is_numeric($value = $condition->getValue()) ? $value : 0,
                     'priority' => $condition->getPriority() ?: 1,
                     'is_summable' => false,
                 ];
@@ -322,7 +322,7 @@ class OrderManager
             return [
                 'code' => $condition->name,
                 'title' => $condition->getLabel(),
-                'value' => $condition->getValue(),
+                'value' => is_numeric($value = $condition->getValue()) ? $value : 0,
                 'priority' => $condition->getPriority() ?: 1,
                 'is_summable' => !$condition->isInclusive(),
             ];
