@@ -255,6 +255,14 @@ class Extension extends BaseExtension
     public function registerNavigation(): array
     {
         return [
+            'orders' => [
+                'priority' => 10,
+                'class' => 'orders',
+                'icon' => 'fa-file-invoice-dollar',
+                'href' => admin_url('orders'),
+                'title' => lang('igniter.cart::default.text_side_menu_order'),
+                'permission' => 'Admin.Orders',
+            ],
             'restaurant' => [
                 'child' => [
                     'menus' => [
@@ -270,17 +278,6 @@ class Extension extends BaseExtension
                         'href' => admin_url('mealtimes'),
                         'title' => lang('igniter.cart::default.text_side_menu_mealtimes'),
                         'permission' => 'Admin.Mealtimes',
-                    ],
-                ],
-            ],
-            'sales' => [
-                'child' => [
-                    'orders' => [
-                        'priority' => 10,
-                        'class' => 'orders',
-                        'href' => admin_url('orders'),
-                        'title' => lang('igniter.cart::default.text_side_menu_order'),
-                        'permission' => 'Admin.Orders',
                     ],
                 ],
             ],
@@ -455,15 +452,13 @@ class Extension extends BaseExtension
     {
         Charts::extend(function($charts) {
             $charts->bindEvent('charts.extendDatasets', function() use ($charts) {
-                $charts->addDataset('reports', [
-                    'sets' => [
-                        'orders' => [
-                            'label' => 'lang:igniter.cart::default.text_charts_orders',
-                            'color' => '#64B5F6',
-                            'model' => Order::class,
-                            'column' => 'order_date',
-                            'priority' => 20,
-                        ],
+                $charts->mergeDataset('reports', 'sets', [
+                    'orders' => [
+                        'label' => 'lang:igniter.cart::default.text_charts_orders',
+                        'color' => '#64B5F6',
+                        'model' => Order::class,
+                        'column' => 'order_date',
+                        'priority' => 20,
                     ],
                 ]);
             });

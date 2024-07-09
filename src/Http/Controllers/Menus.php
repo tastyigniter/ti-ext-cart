@@ -62,4 +62,9 @@ class Menus extends AdminController
 
         AdminMenu::setContext('menus', 'restaurant');
     }
+
+    public function listExtendQuery($query)
+    {
+        $query->with('stocks');
+    }
 }

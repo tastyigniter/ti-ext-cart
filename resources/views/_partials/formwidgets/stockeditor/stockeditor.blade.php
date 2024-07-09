@@ -15,14 +15,28 @@
         {!! $field->getAttributes() !!}
     />
 
-    <a
-        class="btn btn-light {{ $previewMode ? 'disabled' : '' }}"
-        data-toggle="record-editor"
-        data-handler="{{ $this->getEventHandler('onLoadRecord') }}"
-    >@lang('igniter.cart::default.stocks.button_manage_stock')</a>
-    <a
-        class="btn btn-light {{ $previewMode ? 'disabled' : '' }}"
-        data-toggle="record-editor"
-        data-handler="{{ $this->getEventHandler('onLoadHistory') }}"
-    >@lang('igniter.cart::default.stocks.button_stock_history')</a>
+    <button
+        class="btn btn-light dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+    ><i class="fa fa-ellipsis"></i></button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <a
+                class="dropdown-item {{ $previewMode ? 'disabled' : '' }}"
+                href="#"
+                data-toggle="record-editor"
+                data-handler="{{ $this->getEventHandler('onLoadRecord') }}"
+            >@lang('igniter.cart::default.stocks.button_manage_stock')</a>
+        </li>
+        <li>
+            <a
+                class="dropdown-item {{ $previewMode ? 'disabled' : '' }}"
+                href="#"
+                data-toggle="record-editor"
+                data-handler="{{ $this->getEventHandler('onLoadHistory') }}"
+            >@lang('igniter.cart::default.stocks.button_stock_history')</a>
+        </li>
+    </ul>
 </div>
