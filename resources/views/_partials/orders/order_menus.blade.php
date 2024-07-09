@@ -53,7 +53,8 @@
             @php $thickLine = ($total->code == 'order_total' || $total->code == 'total') @endphp
             <tr>
                 <td
-                    class="{{ ($loop->iteration !== 1) ? 'border-top-0' : '' }} text-muted text-left"
+                    class="border-0 text-muted text-end"
+                    colspan="3"
                 >
                     {{ $total->title }}
                     @if($total->code == 'subtotal')
@@ -61,10 +62,8 @@
                             class="text-muted">({{ $formModel->total_items }} @lang('igniter.cart::default.orders.label_total_items'))</span>
                     @endif
                 </td>
-                <td class="{{ ($loop->iteration !== 1) ? 'border-top-0' : '' }}"></td>
-                <td class="{{ ($loop->iteration !== 1) ? 'border-top-0' : '' }}"></td>
                 <td
-                    class="{{ ($loop->iteration !== 1) ? 'border-top-0' : '' }} font-weight-bold text-right"
+                    class="border-0 font-weight-bold text-right"
                 >{{ currency_format($total->value) }}</td>
             </tr>
         @endforeach

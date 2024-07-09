@@ -94,10 +94,9 @@ it('registers navigation correctly', function() {
 
     expect($navigation)->toBeArray()
         ->and($navigation)->toHaveKey('restaurant')
-        ->and($navigation)->toHaveKey('sales')
+        ->and($navigation)->toHaveKey('orders')
         ->and($navigation['restaurant']['child'])->toHaveKey('menus')
-        ->and($navigation['restaurant']['child'])->toHaveKey('mealtimes')
-        ->and($navigation['sales']['child'])->toHaveKey('orders');
+        ->and($navigation['restaurant']['child'])->toHaveKey('mealtimes');
 });
 
 it('registers form widgets correctly', function() {

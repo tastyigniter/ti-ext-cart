@@ -23,7 +23,7 @@ class PaymentFee extends CartCondition
 
     public function beforeApply()
     {
-        if (!strlen($paymentCode = $this->getMetaData('code'))) {
+        if (!strlen($paymentCode = $this->getMetaData('code', ''))) {
             return false;
         }
 

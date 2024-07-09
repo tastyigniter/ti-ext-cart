@@ -21,6 +21,31 @@ $config['list']['toolbar'] = [
             'class' => 'btn btn-primary',
             'href' => 'ingredients/create',
         ],
+        'more' => [
+            'label' => '<i class="fa fa-ellipsis"></i>',
+            'class' => 'btn btn-default',
+            'type' => 'dropdown',
+            'menuItems' => [
+                'menus' => [
+                    'label' => 'lang:igniter.cart::default.text_side_menu_menu',
+                    'class' => 'dropdown-item',
+                    'href' => 'menus',
+                    'permission' => 'Admin.Menus',
+                ],
+                'categories' => [
+                    'label' => 'lang:igniter.cart::default.text_side_menu_category',
+                    'class' => 'dropdown-item',
+                    'href' => 'categories',
+                    'permission' => 'Admin.Categories',
+                ],
+                'menu_options' => [
+                    'label' => 'lang:igniter.cart::default.menu_options.text_options',
+                    'class' => 'dropdown-item',
+                    'href' => 'menu_options',
+                    'permission' => 'Admin.Menus',
+                ],
+            ],
+        ],
     ],
 ];
 

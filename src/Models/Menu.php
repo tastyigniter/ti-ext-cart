@@ -87,7 +87,7 @@ class Menu extends Model implements Buyable
         'menu_price asc', 'menu_price desc',
     ];
 
-    protected array $queryModifierSearchableFields = ['menu_name', 'menu_description'];
+    protected array $queryModifierSearchableFields = ['menu_name', 'menu_description', 'menu_price'];
 
     public function getMenuPriceFromAttribute()
     {

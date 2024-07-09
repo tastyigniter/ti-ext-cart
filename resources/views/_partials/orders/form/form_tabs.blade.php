@@ -18,7 +18,7 @@
 <div class="tab-content">
     @foreach($tabs as $name => $fields)
         <div
-            class="tab-pane p-3 {{ (('#'.$tabs->section.'tab-'.$loop->iteration) == $activeTab) ? 'active' : '' }}"
+            @class(['tab-pane p-3', 'bg-light' => $loop->first, 'active' => (('#'.$tabs->section.'tab-'.$loop->iteration) == $activeTab)])
             id="{{ $tabs->section.'tab-'.$loop->iteration }}">
             <div class="form-fields">
                 @if($loop->iteration == 1)
