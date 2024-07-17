@@ -10,7 +10,6 @@ use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\Order;
 use Igniter\Local\Models\Location as LocationModel;
 use Igniter\PayRegister\Models\Payment;
-use Igniter\PayRegister\Payments\Cod;
 use Igniter\User\Models\Address;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\App;
@@ -47,35 +46,16 @@ it('gets order by hash', function() {
 });
 
 it('gets default payment with valid class_name', function() {
-    Payment::factory()->create([
-        'code' => 'cod',
-        'class_name' => Cod::class,
-        'status' => 1,
-        'is_default' => 1,
-    ]);
-
     expect($this->manager->getDefaultPayment())->toBeInstanceOf(Payment::class);
 });
 
 it('gets payment with valid class_name', function() {
-    $payment = Payment::factory()->create([
-        'code' => 'cod',
-        'class_name' => Cod::class,
-        'status' => 1,
-        'is_default' => 1,
-    ]);
+    $payment = Payment::firstWhere('code', 'cod');
 
     expect($this->manager->getPayment($payment->code))->toBeInstanceOf(Payment::class);
 });
 
 it('has location payments', function() {
-    Payment::factory()->create([
-        'code' => 'cod',
-        'class_name' => Cod::class,
-        'status' => 1,
-        'is_default' => 1,
-    ]);
-
     $this->location->settings()->create([
         'item' => 'checkout.payments',
         'data' => ['invalid-code'],
@@ -114,12 +94,7 @@ it('processes payment', function() {
         'admin.order.paymentProcessed',
     ]);
 
-    $payment = Payment::factory()->create([
-        'code' => 'cod',
-        'class_name' => Cod::class,
-        'status' => 1,
-        'is_default' => 1,
-    ]);
+    $payment = Payment::firstWhere('code', 'cod');
 
     $order = Order::factory()->create([
         'payment' => $payment->code,
@@ -179,16 +154,16 @@ it('applies payment fee cart condition', function() {
 });
 
 it('returns default payment code when current payment code is not set', function() {
-    $payment = Payment::factory()->create([
-        'code' => 'cod',
-        'class_name' => Cod::class,
-        'status' => 1,
-        'is_default' => 1,
-    ]);
+    $payment = Payment::firstWhere('code', 'cod');
 
     expect($this->manager->getCurrentPaymentCode())->toBe($payment->code);
 });
 
 it('returns null when default payment is not set', function() {
+    $payment = Payment::firstWhere('code', 'cod');
+    $payment->status = 0;
+    $payment->is_default = 0;
+    $payment->save();
+
     expect($this->manager->getCurrentPaymentCode())->toBeNull();
 });

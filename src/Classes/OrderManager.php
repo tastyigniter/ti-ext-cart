@@ -81,6 +81,13 @@ class OrderManager
             $this->applyRequiredAttributes($order);
         }
 
+        if (!$order->exists) {
+            $order->save();
+            $this->setCurrentOrderId($order->order_id);
+            $order->addOrderMenus($this->cart->content()->all());
+            $order->addOrderTotals($this->getCartTotals());
+        }
+
         return $order;
     }
 
@@ -212,8 +219,6 @@ class OrderManager
 
         $order->save();
 
-        $this->setCurrentOrderId($order->order_id);
-
         $order->addOrderMenus($this->cart->content()->all());
         $order->addOrderTotals($this->getCartTotals());
 
@@ -288,10 +293,10 @@ class OrderManager
         $customer = $this->customer;
 
         return [
-            'first_name' => $customer->first_name ?? null,
-            'last_name' => $customer->last_name ?? null,
-            'email' => $customer->email ?? null,
-            'telephone' => $customer->telephone ?? null,
+            'first_name' => $customer->first_name ?? '',
+            'last_name' => $customer->last_name ?? '',
+            'email' => $customer->email ?? '',
+            'telephone' => $customer->telephone ?? '',
             'address_id' => $customer->address_id ?? null,
         ];
     }

@@ -131,7 +131,7 @@ it('destroys cart session on logout correctly', function() {
 
 it('adds tax info to paypalexpress request parameters', function() {
     $fields = $data = [];
-    $payment = Payment::factory()->create(['code' => 'paypalexpress']);
+    $payment = Payment::firstWhere('code', 'paypalexpress');
     $order = Order::factory()->create();
     $order->totals()->create([
         'code' => 'tax',
