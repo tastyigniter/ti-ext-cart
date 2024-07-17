@@ -112,6 +112,7 @@ $config['list']['columns'] = [
         'select' => 'status_name',
         'type' => 'partial',
         'path' => 'statuses/status_column',
+        'cssClass' => 'overflow-visible',
     ],
     'payment' => [
         'label' => 'lang:igniter.cart::default.orders.column_payment',
