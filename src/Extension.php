@@ -130,7 +130,7 @@ class Extension extends BaseExtension
         });
 
         Statistics::registerCards(function() {
-            return (new RegistersDashboardCards())();
+            return (new RegistersDashboardCards)();
         });
     }
 

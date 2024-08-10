@@ -16,7 +16,7 @@ beforeEach(function() {
     $this->location = LocationModel::factory()->create();
     resolve('location')->setModel($this->location);
 
-    $this->manager = new CartManager();
+    $this->manager = new CartManager;
 });
 
 it('gets cart', function() {

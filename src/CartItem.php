@@ -155,7 +155,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function clearConditions()
     {
-        $this->conditions = new CartItemConditions();
+        $this->conditions = new CartItemConditions;
 
         return $this;
     }

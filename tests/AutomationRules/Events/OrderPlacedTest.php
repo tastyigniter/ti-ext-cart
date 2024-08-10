@@ -7,7 +7,7 @@ use Igniter\Cart\AutomationRules\Events\OrderPlaced;
 use Igniter\Cart\Models\Order;
 
 it('has a name and description', function() {
-    $event = new OrderPlaced();
+    $event = new OrderPlaced;
     expect($event->eventDetails())->toHaveKeys(['name', 'description']);
 });
 
@@ -31,7 +31,7 @@ it('returns empty array if order is not provided', function() {
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 
-    $params = OrderPlaced::makeParamsFromEvent([new \stdClass()]);
+    $params = OrderPlaced::makeParamsFromEvent([new \stdClass]);
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 });

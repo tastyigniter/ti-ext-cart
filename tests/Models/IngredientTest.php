@@ -22,7 +22,7 @@ it('counts menus', function() {
 });
 
 it('morphs to many menus', function() {
-    $ingredient = new Ingredient();
+    $ingredient = new Ingredient;
     $relation = $ingredient->menus();
 
     expect($relation->getRelated())->toBeInstanceOf(Menu::class)
@@ -30,7 +30,7 @@ it('morphs to many menus', function() {
 });
 
 it('morphs to many menu option values', function() {
-    $ingredient = new Ingredient();
+    $ingredient = new Ingredient;
     $relation = $ingredient->menu_option_values();
 
     expect($relation->getRelated())->toBeInstanceOf(MenuOptionValue::class)

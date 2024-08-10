@@ -37,7 +37,7 @@ it('counts menus', function() {
 });
 
 it('belongs to parent category', function() {
-    $category = new Category();
+    $category = new Category;
     $relation = $category->parent_cat();
 
     expect($relation->getRelated())->toBeInstanceOf(Category::class)
@@ -46,7 +46,7 @@ it('belongs to parent category', function() {
 });
 
 it('belongs to many menus', function() {
-    $category = new Category();
+    $category = new Category;
     $relation = $category->menus();
 
     expect($relation->getRelated())->toBeInstanceOf(Menu::class)
@@ -54,7 +54,7 @@ it('belongs to many menus', function() {
 });
 
 it('morphs to many locations', function() {
-    $category = new Category();
+    $category = new Category;
     $relation = $category->locations();
 
     expect($relation->getMorphType())->toBe('locationable_type')
@@ -90,7 +90,7 @@ it('applies filters to query builder', function() {
 });
 
 it('configures category model correctly', function() {
-    $category = new Category();
+    $category = new Category;
 
     expect(class_uses_recursive($category))
         ->toContain(HasMedia::class)

@@ -6,7 +6,7 @@ use Igniter\Automation\Models\RuleCondition;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 
 it('defines model attributes correctly', function() {
-    $orderStatusAttribute = new OrderStatusAttribute();
+    $orderStatusAttribute = new OrderStatusAttribute;
 
     $attributes = $orderStatusAttribute->defineModelAttributes();
 
@@ -14,7 +14,7 @@ it('defines model attributes correctly', function() {
 });
 
 it('throws exception when no status in params', function() {
-    $orderStatusAttribute = new OrderStatusAttribute();
+    $orderStatusAttribute = new OrderStatusAttribute;
 
     $this->expectException(AutomationException::class);
 
