@@ -652,7 +652,7 @@ class Cart
             throw new \LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
         }
 
-        return new $modelClass();
+        return new $modelClass;
     }
 
     //

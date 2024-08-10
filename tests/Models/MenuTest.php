@@ -92,14 +92,14 @@ it('checks if menu does not have order type restriction', function() {
 });
 
 it('has many menu_options', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->menu_options();
 
     expect($relation->getRelated())->toBeInstanceOf(MenuItemOption::class);
 });
 
 it('has one special', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->special();
 
     expect($relation->getRelated())->toBeInstanceOf(MenuSpecial::class)
@@ -107,7 +107,7 @@ it('has one special', function() {
 });
 
 it('belongs to many categories', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->categories();
 
     expect($relation->getRelated())->toBeInstanceOf(Category::class)
@@ -115,7 +115,7 @@ it('belongs to many categories', function() {
 });
 
 it('belongs to many mealtimes', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->mealtimes();
 
     expect($relation->getRelated())->toBeInstanceOf(Mealtime::class)
@@ -123,7 +123,7 @@ it('belongs to many mealtimes', function() {
 });
 
 it('morphs to many allergens', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->allergens();
 
     expect($relation->getMorphType())->toBe('ingredientable_type')
@@ -131,7 +131,7 @@ it('morphs to many allergens', function() {
 });
 
 it('morphs to many ingredients', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->ingredients();
 
     expect($relation->getMorphType())->toBe('ingredientable_type')
@@ -139,7 +139,7 @@ it('morphs to many ingredients', function() {
 });
 
 it('morphs to many locations', function() {
-    $menu = new Menu();
+    $menu = new Menu;
     $relation = $menu->locations();
 
     expect($relation->getMorphType())->toBe('locationable_type')
@@ -208,7 +208,7 @@ it('applies filters to query builder', function() {
 });
 
 it('configures menu model correctly', function() {
-    $menu = new Menu();
+    $menu = new Menu;
 
     expect(class_uses_recursive($menu))
         ->toContain(HasMedia::class)

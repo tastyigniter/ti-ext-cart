@@ -6,7 +6,7 @@ use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\Models\Order;
 
 it('defines model attributes correctly', function() {
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     $attributes = $orderAttribute->defineModelAttributes();
 
@@ -25,7 +25,7 @@ it('calculates hours since correctly', function() {
         'order_time' => Carbon::now()->subHours(5)->toTimeString(),
     ]);
 
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     expect($orderAttribute->getHoursSinceAttribute(null, $order))->toBe(5.0);
 });
@@ -37,7 +37,7 @@ it('calculates hours until correctly', function() {
         'order_time' => Carbon::now()->addHours(5)->toTimeString(),
     ]);
 
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     expect($orderAttribute->getHoursUntilAttribute(null, $order))->toBe(4.0);
 });
@@ -49,7 +49,7 @@ it('calculates days since correctly', function() {
         'order_time' => Carbon::now()->toTimeString(),
     ]);
 
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(3.0);
 });
@@ -60,13 +60,13 @@ it('calculates days until correctly', function() {
         'order_time' => Carbon::now()->toTimeString(),
     ]);
 
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     expect($orderAttribute->getDaysUntilAttribute(null, $order))->toBe(3.0);
 });
 
 it('gets history status id correctly', function() {
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
     $order = Mockery::mock(Order::class);
     $order->shouldReceive('status_history->pluck')->andReturn(collect([1, 2, 3]));
 
@@ -74,7 +74,7 @@ it('gets history status id correctly', function() {
 });
 
 it('throws exception when no order in params', function() {
-    $orderAttribute = new OrderAttribute();
+    $orderAttribute = new OrderAttribute;
 
     $this->expectException(\Igniter\Automation\AutomationException::class);
 

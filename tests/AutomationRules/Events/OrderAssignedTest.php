@@ -8,7 +8,7 @@ use Igniter\Cart\Models\Order;
 use Igniter\User\Models\User;
 
 it('has a name and description', function() {
-    $event = new OrderAssigned();
+    $event = new OrderAssigned;
     expect($event->eventDetails())->toHaveKeys(['name', 'description']);
 });
 
@@ -34,7 +34,7 @@ it('returns array with missing order', function() {
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 
-    $params = OrderAssigned::makeParamsFromEvent([new \stdClass()]);
+    $params = OrderAssigned::makeParamsFromEvent([new \stdClass]);
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 });

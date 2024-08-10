@@ -7,7 +7,7 @@ use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
 use Igniter\Cart\Models\Order;
 
 it('has a name and description', function() {
-    $event = new NewOrderStatus();
+    $event = new NewOrderStatus;
     expect($event->eventDetails())->toHaveKeys(['name', 'description']);
 });
 
@@ -31,7 +31,7 @@ it('returns array with missing order', function() {
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 
-    $params = NewOrderStatus::makeParamsFromEvent([new \stdClass()]);
+    $params = NewOrderStatus::makeParamsFromEvent([new \stdClass]);
 
     expect($params)->toBeArray()->not->toHaveKey('order');
 });

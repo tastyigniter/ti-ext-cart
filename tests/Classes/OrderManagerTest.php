@@ -20,7 +20,7 @@ beforeEach(function() {
     resolve('location')->setModel($this->location);
 
     $this->customer = Customer::factory()->create();
-    $this->manager = new OrderManager();
+    $this->manager = new OrderManager;
 });
 
 it('gets customer id', function() {

@@ -6,7 +6,7 @@ use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Tests\Classes\Fixtures\TestCartCondition;
 
 it('makes condition', function() {
-    $manager = new CartConditionManager();
+    $manager = new CartConditionManager;
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
         'label' => 'Test Cart Condition',
@@ -19,13 +19,13 @@ it('makes condition', function() {
 });
 
 it('throws exception for unregistered condition', function() {
-    $manager = new CartConditionManager();
+    $manager = new CartConditionManager;
 
     expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(\LogicException::class);
 });
 
 it('lists registered conditions', function() {
-    $manager = new CartConditionManager();
+    $manager = new CartConditionManager;
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
         'label' => 'Test Cart Condition',
@@ -38,7 +38,7 @@ it('lists registered conditions', function() {
 });
 
 it('loads registered conditions', function() {
-    $manager = new CartConditionManager();
+    $manager = new CartConditionManager;
     $manager->registerCallback(function($manager) {
         $manager->registerCondition(TestCartCondition::class, [
             'name' => 'testCartCondition',
@@ -54,7 +54,7 @@ it('loads registered conditions', function() {
 });
 
 it('registers conditions', function() {
-    $manager = new CartConditionManager();
+    $manager = new CartConditionManager;
     $manager->registerConditions([
         TestCartCondition::class => [
             'name' => 'testCartCondition',

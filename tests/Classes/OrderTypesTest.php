@@ -8,8 +8,8 @@ use Igniter\Local\Models\Location as LocationModel;
 use Illuminate\Support\Collection;
 
 it('makes order types', function() {
-    $orderTypes = new OrderTypes();
-    $location = new LocationModel();
+    $orderTypes = new OrderTypes;
+    $location = new LocationModel;
 
     $result = $orderTypes->makeOrderTypes($location);
 
@@ -17,7 +17,7 @@ it('makes order types', function() {
 });
 
 it('gets order type', function() {
-    $orderTypes = new OrderTypes();
+    $orderTypes = new OrderTypes;
 
     $result = $orderTypes->getOrderType('delivery');
 
@@ -28,7 +28,7 @@ it('gets order type', function() {
 });
 
 it('lists order types', function() {
-    $orderTypes = new OrderTypes();
+    $orderTypes = new OrderTypes;
 
     $result = $orderTypes->listOrderTypes();
 
@@ -36,7 +36,7 @@ it('lists order types', function() {
 });
 
 it('registers order types', function() {
-    $orderTypes = new OrderTypes();
+    $orderTypes = new OrderTypes;
 
     $orderTypes->registerOrderTypes([
         Delivery::class => ['code' => 'delivery', 'name' => 'Delivery'],
@@ -48,7 +48,7 @@ it('registers order types', function() {
 });
 
 it('registers order type', function() {
-    $orderTypes = new OrderTypes();
+    $orderTypes = new OrderTypes;
 
     $orderTypes->registerOrderType(Delivery::class, ['code' => 'delivery', 'name' => 'Delivery']);
 
@@ -58,7 +58,7 @@ it('registers order type', function() {
 });
 
 it('registers callback', function() {
-    $orderTypes = new OrderTypes();
+    $orderTypes = new OrderTypes;
 
     $orderTypes->registerCallback(function($orderTypes) {
         $orderTypes->registerOrderType('TestOrderType', ['code' => 'test']);

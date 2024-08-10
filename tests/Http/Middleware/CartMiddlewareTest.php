@@ -19,8 +19,8 @@ it('handles request with location', function() {
     Location::shouldReceive('getId')->andReturn(1);
     Cart::shouldReceive('instance')->with('location-1');
 
-    $middleware = new CartMiddleware();
-    $response = $middleware->handle(new Request(), function() {
+    $middleware = new CartMiddleware;
+    $response = $middleware->handle(new Request, function() {
         return true;
     });
 
@@ -31,8 +31,8 @@ it('handles request without location', function() {
     Location::shouldReceive('current')->andReturn(null);
     Cart::expects('instance')->never();
 
-    $middleware = new CartMiddleware();
-    $response = $middleware->handle(new Request(), function() {
+    $middleware = new CartMiddleware;
+    $response = $middleware->handle(new Request, function() {
         return true;
     });
 
@@ -49,8 +49,8 @@ it('terminates with abandoned cart and authenticated user', function() {
     Auth::shouldReceive('getUser')->andReturn($userMock);
     Cart::shouldReceive('store')->with(1);
 
-    $middleware = new CartMiddleware();
-    expect($middleware->terminate(new Request(), new Response()))->toBeNull();
+    $middleware = new CartMiddleware;
+    expect($middleware->terminate(new Request, new Response))->toBeNull();
 });
 
 it('terminates without abandoned cart', function() {
@@ -58,8 +58,8 @@ it('terminates without abandoned cart', function() {
     Auth::expects('check')->never();
     Cart::expects('store')->never();
 
-    $middleware = new CartMiddleware();
-    expect($middleware->terminate(new Request(), new Response()))->toBeNull();
+    $middleware = new CartMiddleware;
+    expect($middleware->terminate(new Request, new Response))->toBeNull();
 });
 
 it('terminates with abandoned cart but unauthenticated user', function() {
@@ -67,8 +67,8 @@ it('terminates with abandoned cart but unauthenticated user', function() {
     Auth::shouldReceive('check')->andReturn(false);
     Cart::expects('content')->never();
 
-    $middleware = new CartMiddleware();
-    expect($middleware->terminate(new Request(), new Response()))->toBeNull();
+    $middleware = new CartMiddleware;
+    expect($middleware->terminate(new Request, new Response))->toBeNull();
 });
 
 it('terminates with abandoned cart, authenticated user but empty cart', function() {
@@ -77,6 +77,6 @@ it('terminates with abandoned cart, authenticated user but empty cart', function
     Cart::shouldReceive('content')->andReturn(collect());
     Cart::expects('store')->never();
 
-    $middleware = new CartMiddleware();
-    expect($middleware->terminate(new Request(), new Response()))->toBeNull();
+    $middleware = new CartMiddleware;
+    expect($middleware->terminate(new Request, new Response))->toBeNull();
 });
