@@ -9,6 +9,5 @@ return [
         'minimum_qty' => 'lang:igniter.cart::default.menus.label_minimum_qty',
         'categories' => 'lang:igniter.cart::default.menus.label_category',
         'menu_status' => 'lang:admin::lang.label_status',
-        'mealtimes' => 'lang:igniter.cart::default.menus.label_mealtime',
     ],
 ];
