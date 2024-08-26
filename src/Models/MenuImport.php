@@ -11,8 +11,6 @@ class MenuImport extends ImportModel
 
     protected $primaryKey = 'menu_id';
 
-    protected $mealtimeNameCache = [];
-
     protected $categoryNameCache = [];
 
     public function importData($results)
@@ -29,13 +27,9 @@ class MenuImport extends ImportModel
                     $menuItem = $this->findDuplicateMenuItem($data) ?: $menuItem;
                 }
 
-                $except = ['menu_id', 'categories', 'mealtimes'];
+                $except = ['menu_id', 'categories'];
                 foreach (array_except($data, $except) as $attribute => $value) {
                     $menuItem->{$attribute} = $value ?: null;
-                }
-
-                if ($mealtime = $this->findMealtimeFromName($data)) {
-                    $menuItem->mealtime_id = $mealtime->mealtime_id;
                 }
 
                 $menuExists = $menuItem->exists;
@@ -62,21 +56,6 @@ class MenuImport extends ImportModel
         $menuItem = Menu::where('menu_name', $menuName);
 
         return $menuItem->first();
-    }
-
-    protected function findMealtimeFromName($data)
-    {
-        if (!$name = array_get($data, 'mealtimes')) {
-            return null;
-        }
-
-        if (isset($this->mealtimeNameCache[$name])) {
-            return $this->mealtimeNameCache[$name];
-        }
-
-        $mealtime = Mealtime::where('mealtime_name', $name)->first();
-
-        return $this->mealtimeNameCache[$name] = $mealtime;
     }
 
     protected function getCategoryIdsForMenuItem($data)
