@@ -5,6 +5,7 @@ namespace Igniter\Cart;
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Admin\Widgets\Form;
+use Igniter\Cart\Classes\CheckoutForm;
 use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -73,6 +74,7 @@ class Extension extends BaseExtension
 
         $this->registerCart();
         $this->registerSystemSettings();
+        $this->registerCheckoutForm();
 
         AliasLoader::getInstance()->alias('Cart', Facades\Cart::class);
     }
@@ -463,5 +465,10 @@ class Extension extends BaseExtension
                 ]);
             });
         });
+    }
+
+    protected function registerCheckoutForm(): void
+    {
+        $this->app->singleton(CheckoutForm::class);
     }
 }
