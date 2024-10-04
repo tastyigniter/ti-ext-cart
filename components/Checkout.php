@@ -74,7 +74,7 @@ class Checkout extends BaseComponent
             'showPostcodeField' => [
                 'label' => 'Whether to display the postcode form field',
                 'type' => 'switch',
-                'default' => false,
+                'default' => true,
                 'validationRule' => 'required|boolean',
             ],
             'showCountryField' => [
@@ -251,7 +251,7 @@ class Checkout extends BaseComponent
 
         $this->validateCheckoutSecurity();
 
-        return rescue(function () use ($data) {
+        return rescue(function() use ($data) {
             $order = $this->getOrder();
 
             $this->validateCheckout($data, $order);
@@ -269,7 +269,7 @@ class Checkout extends BaseComponent
 
             if ($redirect = $this->isOrderMarkedAsProcessed())
                 return $redirect;
-        }, function (\Throwable $ex) {
+        }, function(\Throwable $ex) {
             flash()->warning($ex->getMessage())->important();
 
             return Redirect::back()->withInput();
@@ -349,7 +349,7 @@ class Checkout extends BaseComponent
             'email.unique' => lang('igniter.cart::default.checkout.error_email_exists'),
         ]);
 
-        if ($this->checkoutStep === 'details' && $order->isDeliveryType()) {
+        if ($this->checkoutStep === 'details' && $order->isDeliveryType() && Location::requiresUserPosition()) {
             $this->orderManager->validateDeliveryAddress(array_get($data, 'address', []));
         }
 
