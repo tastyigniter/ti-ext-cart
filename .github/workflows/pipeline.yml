@@ -1,4 +1,4 @@
-name: :package_name CI Pipeline
+name: Cart CI Pipeline
 
 on: [ push, pull_request, workflow_dispatch ]
 
