@@ -150,15 +150,10 @@ class OrderManager
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
         }
 
-        $addressString = implode(' ', array_only($address, [
+        $collection = app('geocoder')->geocode(implode(' ', array_only($address, [
             'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
-        ]));
+        ])));
 
-        if (!$this->location->requiresUserPosition()) {
-            return;
-        }
-
-        $collection = app('geocoder')->geocode($addressString);
         if (!$collection || $collection->isEmpty()) {
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
         }
