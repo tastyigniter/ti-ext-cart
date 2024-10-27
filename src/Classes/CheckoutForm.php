@@ -9,12 +9,15 @@ class CheckoutForm extends Form
 {
     public function __construct(
         public ?array $config = [],
-    ) {
-        $this->fields = $config['fields'] ?? [];
-    }
+    ) {}
 
     public function initialize()
     {
+        $this->fillFromConfig([
+            'fields',
+            'model',
+        ]);
+
         $this->defineFormFields();
     }
 
