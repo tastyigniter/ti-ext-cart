@@ -139,10 +139,11 @@ class RegistersDashboardCards
     protected function getTotalDeliveryOrderSum(callable $callback): string
     {
         $query = Order::query();
-        $query->where(function($query) {
-            $query->where('order_type', '1');
-            $query->orWhere('order_type', 'delivery');
-        });
+        $query->whereIn('status_id', Settings::get('completed_order_status') ?? [])
+            ->where(function($query) {
+                $query->where('order_type', '1');
+                $query->orWhere('order_type', 'delivery');
+            });
 
         $callback($query);
 
@@ -155,10 +156,11 @@ class RegistersDashboardCards
     protected function getTotalCollectionOrderSum(callable $callback): string
     {
         $query = Order::query();
-        $query->where(function($query) {
-            $query->where('order_type', '2');
-            $query->orWhere('order_type', 'collection');
-        });
+        $query->whereIn('status_id', Settings::get('completed_order_status') ?? [])
+            ->where(function($query) {
+                $query->where('order_type', '2');
+                $query->orWhere('order_type', 'collection');
+            });
 
         $callback($query);
 

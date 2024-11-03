@@ -30,21 +30,21 @@ it('adds item with options to the cart correctly', function() {
         'price' => 10.00,
         'options' => [
             [
-                'id' => 11,
+                'id' => 111,
                 'name' => 'Size',
                 'values' => [
-                    [
-                        'id' => 111,
-                        'name' => 'Large',
-                        'price' => 2.00,
-                    ],
                 ],
+            ],
+            [
+                'id' => 222,
+                'name' => 'Topings',
+                'price' => 2.00,
             ],
         ],
     ], 1);
 
     expect($this->cart->content())->toHaveCount(1)
-        ->and($cartItem->options->count())->toEqual(1);
+        ->and($cartItem->options->count())->toEqual(2);
 });
 
 it('adds item with conditions to the cart correctly', function() {

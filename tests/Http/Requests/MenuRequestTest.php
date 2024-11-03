@@ -4,81 +4,83 @@ namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\MenuRequest;
 
-it('has required rule for inputs: menu_name, menu_price, categories.*, ingredients.*, mealtimes.*, minimum_qty', function() {
-    $rules = (new MenuRequest)->rules();
-    expect('required')->toBeIn(array_get($rules, 'menu_name'))
-        ->and('required')->toBeIn(array_get($rules, 'menu_price'))
-        ->and('required')->toBeIn(array_get($rules, 'categories.*'))
-        ->and('required')->toBeIn(array_get($rules, 'ingredients.*'))
-        ->and('required')->toBeIn(array_get($rules, 'mealtimes.*'))
-        ->and('required')->toBeIn(array_get($rules, 'minimum_qty'));
+it('returns correct attribute labels', function() {
+    $request = new MenuRequest();
+
+    $attributes = $request->attributes();
+
+    expect($attributes)->toHaveKey('menu_name', lang('igniter::admin.label_name'))
+        ->and($attributes)->toHaveKey('menu_description', lang('igniter::admin.label_description'))
+        ->and($attributes)->toHaveKey('menu_price', lang('igniter.cart::default.menus.label_price'))
+        ->and($attributes)->toHaveKey('categories.*', lang('igniter.cart::default.menus.label_category'))
+        ->and($attributes)->toHaveKey('ingredients.*', lang('igniter.cart::default.menus.label_ingredients'))
+        ->and($attributes)->toHaveKey('mealtimes.*', lang('igniter.cart::default.menus.label_mealtime'))
+        ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'))
+        ->and($attributes)->toHaveKey('minimum_qty', lang('igniter.cart::default.menus.label_minimum_qty'))
+        ->and($attributes)->toHaveKey('order_restriction.*', lang('igniter.cart::default.menus.label_order_restriction'))
+        ->and($attributes)->toHaveKey('menu_status', lang('igniter::admin.label_status'))
+        ->and($attributes)->toHaveKey('mealtime_id', lang('igniter.cart::default.menus.label_mealtime'))
+        ->and($attributes)->toHaveKey('menu_priority', lang('igniter.cart::default.menus.label_menu_priority'))
+        ->and($attributes)->toHaveKey('menu_option_values', lang('igniter.cart::default.menu_options.label_option_value_id'));
 });
 
-it('has string rule for inputs: menu_name, menu_description, order_restriction.*', function() {
-    $rules = (new MenuRequest)->rules();
-    expect('string')->toBeIn(array_get($rules, 'menu_name'))
-        ->and('string')->toBeIn(array_get($rules, 'menu_description'))
-        ->and('string')->toBeIn(array_get($rules, 'order_restriction.*'));
-});
+it('returns correct validation rules', function() {
+    $request = new MenuRequest();
 
-it('has between:2,255 rule for menu_name input', function() {
-    $rules = (new MenuRequest)->rules();
+    $rules = $request->rules();
 
-    expect('between:2,255')->toBeIn(array_get($rules, 'menu_name'));
-});
-
-it('has between:2,1028 rule for menu_description input', function() {
-    $rules = (new MenuRequest)->rules();
-
-    expect('between:2,1028')->toBeIn(array_get($rules, 'menu_description'));
-});
-
-it('has numeric rule for menu_price input', function() {
-    $rules = (new MenuRequest)->rules();
-
-    expect('numeric')->toBeIn(array_get($rules, 'menu_price'));
-});
-
-it('has min:0 rule for menu_price, menu_priority input', function() {
-    $rules = (new MenuRequest)->rules();
-
-    expect('min:0')->toBeIn(array_get($rules, 'menu_price'))
-        ->and('min:0')->toBeIn(array_get($rules, 'menu_priority'));
-});
-
-it('has min:1 rule for minimum_qty input', function() {
-    $rules = (new MenuRequest)->rules();
-
-    expect('min:1')->toBeIn(array_get($rules, 'minimum_qty'));
-});
-
-it('has boolean rule for menu_status input', function() {
-    $rules = (new MenuRequest)->rules();
-
-    expect('boolean')->toBeIn(array_get($rules, 'menu_status'));
-});
-
-it('has sometimes rule for inputs: categories.*, ingredients.*, mealtimes.*, minimum_qty', function() {
-    $rules = (new MenuRequest)->rules();
-    expect('sometimes')->toBeIn(array_get($rules, 'categories.*'))
-        ->and('sometimes')->toBeIn(array_get($rules, 'ingredients.*'))
-        ->and('sometimes')->toBeIn(array_get($rules, 'mealtimes.*'))
-        ->and('sometimes')->toBeIn(array_get($rules, 'minimum_qty'));
-});
-
-it('has integer rule for inputs: categories.*, ingredients.*, mealtimes.*, locations.*, minimum_qty, mealtime_id, menu_priority', function() {
-    $rules = (new MenuRequest)->rules();
-    expect('integer')->toBeIn(array_get($rules, 'categories.*'))
-        ->and('integer')->toBeIn(array_get($rules, 'ingredients.*'))
-        ->and('integer')->toBeIn(array_get($rules, 'mealtimes.*'))
-        ->and('integer')->toBeIn(array_get($rules, 'locations.*'))
-        ->and('integer')->toBeIn(array_get($rules, 'minimum_qty'))
-        ->and('integer')->toBeIn(array_get($rules, 'mealtime_id'))
-        ->and('integer')->toBeIn(array_get($rules, 'menu_priority'));
-});
-
-it('has nullable rule for inputs: order_restriction.*, mealtime_id', function() {
-    $rules = (new MenuRequest)->rules();
-    expect('nullable')->toBeIn(array_get($rules, 'order_restriction.*'))
-        ->and('nullable')->toBeIn(array_get($rules, 'mealtime_id'));
+    expect($rules)->toHaveKey('menu_name')
+        ->and($rules)->toHaveKey('menu_description')
+        ->and($rules)->toHaveKey('menu_price')
+        ->and($rules)->toHaveKey('categories')
+        ->and($rules)->toHaveKey('categories.*')
+        ->and($rules)->toHaveKey('ingredients')
+        ->and($rules)->toHaveKey('ingredients.*')
+        ->and($rules)->toHaveKey('mealtimes')
+        ->and($rules)->toHaveKey('mealtimes.*')
+        ->and($rules)->toHaveKey('locations')
+        ->and($rules)->toHaveKey('locations.*')
+        ->and($rules)->toHaveKey('minimum_qty')
+        ->and($rules)->toHaveKey('order_restriction.*')
+        ->and($rules)->toHaveKey('menu_status')
+        ->and($rules)->toHaveKey('mealtime_id')
+        ->and($rules)->toHaveKey('menu_priority')
+        ->and($rules)->toHaveKey('special.special_id')
+        ->and($rules)->toHaveKey('special.type')
+        ->and($rules)->toHaveKey('special.special_price')
+        ->and($rules)->toHaveKey('special.validity')
+        ->and($rules)->toHaveKey('special.start_date')
+        ->and($rules)->toHaveKey('special.end_date')
+        ->and($rules)->toHaveKey('special.recurring_every')
+        ->and($rules)->toHaveKey('special.recurring_every.*')
+        ->and($rules)->toHaveKey('special.recurring_from')
+        ->and($rules)->toHaveKey('special.recurring_to')
+        ->and($rules)->toHaveKey('special.special_status')
+        ->and($rules['menu_name'])->toContain('required', 'string', 'between:2,255')
+        ->and($rules['menu_description'])->toContain('nullable', 'string', 'between:2,1028')
+        ->and($rules['menu_price'])->toContain('required', 'numeric', 'min:0')
+        ->and($rules['categories'])->toContain('nullable', 'array')
+        ->and($rules['categories.*'])->toContain('sometimes', 'required', 'integer')
+        ->and($rules['ingredients'])->toContain('nullable', 'array')
+        ->and($rules['ingredients.*'])->toContain('sometimes', 'required', 'integer')
+        ->and($rules['mealtimes'])->toContain('nullable', 'array')
+        ->and($rules['mealtimes.*'])->toContain('sometimes', 'required', 'integer')
+        ->and($rules['locations'])->toContain('nullable', 'array')
+        ->and($rules['locations.*'])->toContain('integer')
+        ->and($rules['minimum_qty'])->toContain('sometimes', 'required', 'integer', 'min:1')
+        ->and($rules['order_restriction.*'])->toContain('nullable', 'string')
+        ->and($rules['menu_status'])->toContain('boolean')
+        ->and($rules['mealtime_id'])->toContain('nullable', 'integer')
+        ->and($rules['menu_priority'])->toContain('min:0', 'integer')
+        ->and($rules['special.special_id'])->toContain('nullable', 'integer')
+        ->and($rules['special.type'])->toContain('string', 'in:F,P')
+        ->and($rules['special.special_price'])->toContain('nullable', 'numeric', 'min:0')
+        ->and($rules['special.validity'])->toContain('string', 'in:forever,period,recurring')
+        ->and($rules['special.start_date'])->toContain('required_if:special.validity,period', 'nullable', 'date')
+        ->and($rules['special.end_date'])->toContain('required_if:special.validity,period', 'nullable', 'date')
+        ->and($rules['special.recurring_every'])->toContain('required_if:special.validity,recurring', 'nullable', 'array')
+        ->and($rules['special.recurring_every.*'])->toContain('required_if:special.validity,recurring', 'integer')
+        ->and($rules['special.recurring_from'])->toContain('required_if:special.validity,recurring', 'nullable', 'date_format:H:i')
+        ->and($rules['special.recurring_to'])->toContain('required_if:special.validity,recurring', 'nullable', 'date_format:H:i')
+        ->and($rules['special.special_status'])->toContain('boolean');
 });

@@ -86,6 +86,7 @@ it('saves order', function() {
     expect($this->manager->saveOrder($order, $data))->toBeInstanceOf(Order::class);
 
     Event::assertDispatched('igniter.checkout.beforeSaveOrder');
+    Event::assertDispatched('igniter.checkout.afterSaveOrder');
 });
 
 it('processes payment', function() {
@@ -100,7 +101,11 @@ it('processes payment', function() {
         'payment' => $payment->code,
     ]);
 
-    expect($this->manager->processPayment($order, []))->toBeNull();
+    expect($this->manager->processPayment($order, []))->toBeNull()
+        ->and($order->processed)->toBeTrue();
+
+    Event::assertDispatched('igniter.checkout.beforePayment');
+    Event::assertDispatched('admin.order.paymentProcessed');
 });
 
 it('applies required attributes', function() {

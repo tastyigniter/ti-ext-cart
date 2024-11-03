@@ -4,18 +4,33 @@ namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\MealtimeRequest;
 
-it('has required rule for inputs', function() {
-    expect('required')->toBeIn(array_get((new MealtimeRequest)->rules(), 'mealtime_name'))
-        ->and('required')->toBeIn(array_get((new MealtimeRequest)->rules(), 'start_time'))
-        ->and('required')->toBeIn(array_get((new MealtimeRequest)->rules(), 'end_time'))
-        ->and('required')->toBeIn(array_get((new MealtimeRequest)->rules(), 'mealtime_status'));
+it('returns correct attribute labels', function() {
+    $request = new MealtimeRequest();
+
+    $attributes = $request->attributes();
+
+    expect($attributes)->toHaveKey('mealtime_name', lang('igniter.cart::default.mealtimes.label_mealtime_name'))
+        ->and($attributes)->toHaveKey('start_time', lang('igniter.cart::default.mealtimes.label_start_time'))
+        ->and($attributes)->toHaveKey('end_time', lang('igniter.cart::default.mealtimes.label_end_time'))
+        ->and($attributes)->toHaveKey('mealtime_status', lang('igniter::admin.label_status'))
+        ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'));
 });
 
-it('has max characters rule for mealtime_name input', function() {
-    expect('between:2,255')->toBeIn(array_get((new MealtimeRequest)->rules(), 'mealtime_name'));
-});
+it('returns correct validation rules', function() {
+    $request = new MealtimeRequest();
 
-it('has date_format:H:i rule for start_time and end_time input', function() {
-    expect('date_format:H:i')->toBeIn(array_get((new MealtimeRequest)->rules(), 'start_time'))
-        ->and('date_format:H:i')->toBeIn(array_get((new MealtimeRequest)->rules(), 'end_time'));
+    $rules = $request->rules();
+
+    expect($rules)->toHaveKey('mealtime_name')
+        ->and($rules)->toHaveKey('start_time')
+        ->and($rules)->toHaveKey('end_time')
+        ->and($rules)->toHaveKey('mealtime_status')
+        ->and($rules)->toHaveKey('locations')
+        ->and($rules)->toHaveKey('locations.*')
+        ->and($rules['mealtime_name'])->toContain('required', 'string', 'between:2,255')
+        ->and($rules['start_time'])->toContain('required', 'date_format:H:i')
+        ->and($rules['end_time'])->toContain('required', 'date_format:H:i')
+        ->and($rules['mealtime_status'])->toContain('required', 'boolean')
+        ->and($rules['locations'])->toContain('nullable', 'array')
+        ->and($rules['locations.*'])->toContain('integer');
 });
