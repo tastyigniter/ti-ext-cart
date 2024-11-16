@@ -43,7 +43,7 @@
     <div class="form-group">
         <div class="form-check">
             <input
-                id="terms-condition"
+                id="terms_condition"
                 type="checkbox"
                 name="terms_condition"
                 value="1"

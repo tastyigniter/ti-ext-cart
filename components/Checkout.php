@@ -388,7 +388,9 @@ class Checkout extends BaseComponent
             $namedRules = [];
 
         $namedRules[] = ['payment', 'lang:igniter.cart::default.checkout.label_payment_method', 'sometimes|required|alpha_dash'];
-        $namedRules[] = ['terms_condition', 'lang:button_agree_terms', 'sometimes|integer'];
+        if (strlen($this->getAgreeTermsPageSlug()) > 0) {
+            $namedRules[] = ['terms_condition', 'lang:button_agree_terms', 'required|integer'];
+        }
 
         return $namedRules;
     }
