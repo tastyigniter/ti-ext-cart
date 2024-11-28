@@ -38,7 +38,7 @@
                             @partial('@item_option_'.$menuOption->display_type, [
                                 'index' => $index,
                                 'cartItem' => $cartItem,
-                                'optionValues' => $optionValues->sortBy('priority')->slice($limitCartItemOptionsValues-1),
+                                'optionValues' => $optionValues->sortBy('priority')->slice($limitCartItemOptionsValues),
                             ])
                         </div>
                         <button
