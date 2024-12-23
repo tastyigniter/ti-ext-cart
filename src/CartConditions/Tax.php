@@ -60,15 +60,15 @@ class Tax extends CartCondition
         ];
     }
 
-    public function calculate($total)
+    public function calculate($subTotal)
     {
         $excludeDeliveryCharge = Location::orderTypeIsDelivery() && !$this->taxDelivery;
         if ($excludeDeliveryCharge) {
-            $deliveryCharge = Location::coveredArea()->deliveryAmount($total);
-            $total -= (float)$deliveryCharge;
+            $deliveryCharge = Location::coveredArea()->deliveryAmount($subTotal);
+            $subTotal -= (float)$deliveryCharge;
         }
 
-        $result = parent::calculate($total);
+        $result = parent::calculate($subTotal);
 
         if ($excludeDeliveryCharge) {
             $result += (float)$deliveryCharge;

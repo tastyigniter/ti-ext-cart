@@ -37,22 +37,22 @@ class CartConditionManager
             $this->loadRegisteredConditions();
         }
 
-        if (!is_array($this->registeredConditions)) {
-            return [];
-        }
-
         return $this->registeredConditions;
     }
 
     public function loadRegisteredConditions()
     {
+        if (is_null($this->registeredConditions)) {
+            $this->registeredConditions = [];
+        }
+
         foreach ($this->registeredCallbacks as $callback) {
             $callback($this);
         }
 
         // Load extensions cart conditions
         $registeredConditions = resolve(ExtensionManager::class)->getRegistrationMethodValues('registerCartConditions');
-        foreach ($registeredConditions as $extensionCode => $cartConditions) {
+        foreach ($registeredConditions as $cartConditions) {
             $this->registerConditions($cartConditions);
         }
     }

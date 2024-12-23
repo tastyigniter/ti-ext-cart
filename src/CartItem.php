@@ -143,9 +143,9 @@ class CartItem implements Arrayable, Jsonable
 
     public function hasOptionValue($valueIndex)
     {
-        return $this->options->search(function($option) use ($valueIndex) {
+        return $this->options->filter(function($option) use ($valueIndex) {
             return in_array($valueIndex, $option->values->pluck('id')->all());
-        });
+        })->isNotEmpty();
     }
 
     public function hasConditions()
@@ -263,7 +263,7 @@ class CartItem implements Arrayable, Jsonable
             $item->getBuyablePrice(),
             $options,
             $comment,
-            $conditions
+            $conditions,
         );
     }
 
@@ -280,7 +280,7 @@ class CartItem implements Arrayable, Jsonable
             $attributes['price'],
             array_get($attributes, 'options', []),
             array_get($attributes, 'comment'),
-            array_get($attributes, 'conditions', [])
+            array_get($attributes, 'conditions', []),
         );
     }
 

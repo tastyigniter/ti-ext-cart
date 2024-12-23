@@ -7,6 +7,7 @@ use Igniter\Cart\FormWidgets\StockEditor;
 use Igniter\Cart\Http\Controllers\Menus;
 use Igniter\Cart\Models\Menu;
 use Igniter\Local\Models\Location;
+use Igniter\User\Facades\AdminAuth;
 
 beforeEach(function() {
     $this->menuItem = Menu::factory()->create();
@@ -15,7 +16,7 @@ beforeEach(function() {
         new FormField('test_field', 'Stock editor'),
         [
             'model' => $this->menuItem,
-        ]
+        ],
     );
 });
 
@@ -37,6 +38,9 @@ it('gets save value', function() {
 });
 
 it('loads record', function() {
+    AdminAuth::shouldReceive('user')->andReturnSelf();
+    AdminAuth::shouldReceive('getAvailableLocations')->andReturn([Location::factory()->create()]);
+
     expect($this->stockEditorWidget->onLoadRecord())->toBeString();
 });
 

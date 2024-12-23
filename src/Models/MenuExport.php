@@ -33,10 +33,6 @@ class MenuExport extends ExportModel
 
     public function getCategoriesAttribute()
     {
-        if (!$this->menu_categories) {
-            return '';
-        }
-
-        return $this->encodeArrayValue($this->menu_categories->pluck('name')->all());
+        return $this->encodeArrayValue($this->menu_categories?->pluck('name')->all() ?? []);
     }
 }

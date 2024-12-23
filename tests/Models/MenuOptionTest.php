@@ -6,7 +6,17 @@ use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuOption;
 use Igniter\Cart\Models\MenuOptionValue;
+use Igniter\Local\Facades\Location as LocationFacade;
 use Igniter\Local\Models\Location;
+
+it('returns options with locations when locations are assigned', function() {
+    LocationFacade::shouldReceive('currentOrAssigned')->andReturn([1, 2]);
+
+    $result = MenuOption::getRecordEditorOptions();
+
+    expect($result)->toBeCollection()
+        ->and($result)->not()->toBeEmpty();
+});
 
 it('checks if menu option display type is select', function() {
     $menuOption = MenuOption::factory()->create(['display_type' => 'select']);
@@ -18,6 +28,15 @@ it('checks if menu option display type is not select', function() {
     $menuOption = MenuOption::factory()->create(['display_type' => 'radio']);
 
     expect($menuOption->isSelectDisplayType())->toBeFalse();
+});
+
+it('returns option values filtered by option_id', function() {
+    MenuOptionValue::factory()->create(['option_id' => 123]);
+
+    $result = MenuOption::getOptionValues(123);
+
+    expect($result)->toBeCollection()
+        ->and($result->count())->toBe(1);
 });
 
 it('checks if menu option values are added correctly', function() {
@@ -50,7 +69,7 @@ it('attaches menu option to menu', function() {
         ->has(MenuOptionValue::factory()->count(3), 'option_values')
         ->create();
 
-    $menuOption->attachToMenu($menu);
+    $menuOption->attachRecordTo($menu);
 
     $menuItemOption = MenuItemOption::where('menu_id', $menu->menu_id)
         ->where('option_id', $menuOption->option_id)

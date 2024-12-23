@@ -244,16 +244,6 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->priority = $priority;
     }
 
-    protected function getConfig($key, $default = null)
-    {
-        return array_get($this->config, $key, $default);
-    }
-
-    protected function setConfig($key, $value)
-    {
-        return array_set($this->config, $key, $value);
-    }
-
     public function getMetaData($key = null, $default = null)
     {
         $metaData = Session::get($this->getSessionKey(), []);

@@ -110,11 +110,7 @@ class Order extends Model
 
     public function listCustomerAddresses()
     {
-        if (!$this->customer) {
-            return [];
-        }
-
-        return $this->customer->addresses;
+        return $this->customer?->addresses ?? [];
     }
 
     //
@@ -133,20 +129,13 @@ class Order extends Model
         }
 
         return optional(
-            $this->location->availableOrderTypes()->get($this->order_type)
+            $this->location->availableOrderTypes()->get($this->order_type),
         )->getLabel();
     }
 
     public function getOrderDatetimeAttribute($value)
     {
-        if (!isset($this->attributes['order_date'])
-            && !isset($this->attributes['order_time'])
-        ) {
-            return null;
-        }
-
-        return make_carbon($this->attributes['order_date'])
-            ->setTimeFromTimeString($this->attributes['order_time']);
+        return make_carbon($this->order_date)->setTimeFromTimeString($this->order_time);
     }
 
     public function getFormattedAddressAttribute($value)
@@ -174,11 +163,7 @@ class Order extends Model
 
     public function isCompleted()
     {
-        if (!$this->isPaymentProcessed()) {
-            return false;
-        }
-
-        return $this->hasStatus(setting('completed_order_status'));
+        return $this->isPaymentProcessed() && $this->hasStatus(setting('completed_order_status'));
     }
 
     public function isCanceled()
@@ -266,7 +251,7 @@ class Order extends Model
         $id = $id ?: $this->status_id ?: setting('default_order_status');
 
         return $this->addStatusHistory(
-            Status::find($id), $options
+            Status::find($id), $options,
         );
     }
 
@@ -350,7 +335,7 @@ class Order extends Model
         $menus = $model->getOrderMenusWithOptions();
         foreach ($menus as $menu) {
             $optionData = [];
-            foreach ($menu->menu_options->groupBy('order_option_group') as $menuItemOptionGroupName => $menuItemOptions) {
+            foreach ($menu->menu_options as $menuItemOptionGroupName => $menuItemOptions) {
                 $optionData[] = $menuItemOptionGroupName;
                 foreach ($menuItemOptions as $menuItemOption) {
                     $optionData[] = $menuItemOption->quantity

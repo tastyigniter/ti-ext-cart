@@ -62,5 +62,11 @@ it('configures ingredient model correctly', function() {
         ->and($ingredient->getGuarded())->toBe([])
         ->and($ingredient->getMorphClass())->toBe('ingredients')
         ->and($ingredient->mediable())->toHaveKey('thumb')
-        ->and($ingredient->timestamps)->toBeTrue();
+        ->and($ingredient->timestamps)->toBeTrue()
+        ->and($ingredient->relation)->toEqual([
+            'morphedByMany' => [
+                'menus' => [\Igniter\Cart\Models\Menu::class, 'name' => 'ingredientable'],
+                'menu_option_values' => [\Igniter\Cart\Models\MenuOptionValue::class, 'name' => 'ingredientable'],
+            ],
+        ]);
 });

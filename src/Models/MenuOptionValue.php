@@ -53,7 +53,7 @@ class MenuOptionValue extends Model
 
     public static function getDropDownOptions()
     {
-        return static::dropdown('value');
+        return static::dropdown('name');
     }
 
     public function getAllergensOptions()
@@ -72,7 +72,7 @@ class MenuOptionValue extends Model
 
     public function getStockableName()
     {
-        return $this->value;
+        return $this->name;
     }
 
     public function getStockableLocations()
@@ -84,11 +84,6 @@ class MenuOptionValue extends Model
     // Events
     //
 
-    protected function beforeDelete()
-    {
-        $this->ingredients()->detach();
-    }
-
     /**
      * Create new or update existing menu allergens
      *
@@ -98,10 +93,6 @@ class MenuOptionValue extends Model
      */
     public function addMenuAllergens(array $allergenIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->ingredients()->sync($allergenIds);
     }
 }

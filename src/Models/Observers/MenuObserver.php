@@ -21,6 +21,8 @@ class MenuObserver
 
     public function deleting(Menu $menu)
     {
+        $menu->menu_options()->delete();
+        $menu->special()->delete();
         $menu->categories()->detach();
         $menu->mealtimes()->detach();
         $menu->ingredients()->detach();

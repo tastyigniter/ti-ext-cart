@@ -104,6 +104,17 @@ it('configures category model correctly', function() {
         ->and($category->timestamps)->toBeTrue()
         ->and($category->getGuarded())->toBe([])
         ->and($category->getMorphClass())->toBe('categories')
+        ->and($category->relation)->toEqual([
+            'belongsTo' => [
+                'parent_cat' => [\Igniter\Cart\Models\Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
+            ],
+            'belongsToMany' => [
+                'menus' => [\Igniter\Cart\Models\Menu::class, 'table' => 'menu_categories'],
+            ],
+            'morphToMany' => [
+                'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+            ],
+        ])
         ->and($category->permalinkable)->toBe([
             'permalink_slug' => [
                 'source' => 'name',

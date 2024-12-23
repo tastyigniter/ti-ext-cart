@@ -5,6 +5,15 @@ use Igniter\Automation\Models\RuleCondition;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\Models\Order;
 
+it('returns correct condition details', function() {
+    $result = (new OrderAttribute())->conditionDetails();
+
+    expect($result)->toBe([
+        'name' => 'Order attribute',
+        'description' => 'Order attributes',
+    ]);
+});
+
 it('defines model attributes correctly', function() {
     $orderAttribute = new OrderAttribute;
 

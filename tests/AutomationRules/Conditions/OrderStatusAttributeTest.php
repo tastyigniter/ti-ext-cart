@@ -5,6 +5,15 @@ use Igniter\Automation\AutomationException;
 use Igniter\Automation\Models\RuleCondition;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 
+it('returns correct condition details for order status attribute', function() {
+    $result = (new OrderStatusAttribute())->conditionDetails();
+
+    expect($result)->toBe([
+        'name' => 'Order status attribute',
+        'description' => 'Order status attributes',
+    ]);
+});
+
 it('defines model attributes correctly', function() {
     $orderStatusAttribute = new OrderStatusAttribute;
 

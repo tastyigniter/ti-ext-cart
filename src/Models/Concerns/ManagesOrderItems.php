@@ -4,7 +4,8 @@ namespace Igniter\Cart\Models\Concerns;
 
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOptionValue;
-use Illuminate\Support\Facades\DB;
+use Igniter\Cart\Models\OrderMenu;
+use Igniter\Cart\Models\OrderMenuOptionValue;
 
 trait ManagesOrderItems
 {
@@ -27,7 +28,7 @@ trait ManagesOrderItems
                 ->where('order_menu_id', $orderMenu->order_menu_id)
                 ->each(function($orderMenuOption) {
                     if (!$menuItemOptionValue = MenuItemOptionValue::find(
-                        $orderMenuOption->menu_option_value_id
+                        $orderMenuOption->menu_option_value_id,
                     )) {
                         return true;
                     }
@@ -71,6 +72,13 @@ trait ManagesOrderItems
     {
         $this->load('menus.menu_options');
 
+        $this->menus->each(function(OrderMenu $orderMenu) {
+            $orderMenuOptions = $orderMenu->menu_options->groupBy(function(OrderMenuOptionValue $orderMenuOptionValue) {
+                return $orderMenuOptionValue->menu_option->option_name;
+            });
+            $orderMenu->setRelation('menu_options', $orderMenuOptions);
+        });
+
         return $this->menus;
     }
 
@@ -89,11 +97,6 @@ trait ManagesOrderItems
      */
     public function addOrderMenus(array $content)
     {
-        $orderId = $this->getKey();
-        if (!is_numeric($orderId)) {
-            return false;
-        }
-
         $this->menus()->delete();
         $this->menu_options()->delete();
 
@@ -122,11 +125,6 @@ trait ManagesOrderItems
      */
     protected function addOrderMenuOptions($orderMenuId, $menuId, $menuOptions)
     {
-        $orderId = $this->getKey();
-        if (!is_numeric($orderId)) {
-            return false;
-        }
-
         foreach ($menuOptions as $menuOption) {
             foreach ($menuOption->values as $menuOptionValue) {
                 $this->menu_options()->create([
@@ -148,11 +146,6 @@ trait ManagesOrderItems
      */
     public function addOrderTotals(array $totals = [])
     {
-        $orderId = $this->getKey();
-        if (!is_numeric($orderId)) {
-            return false;
-        }
-
         foreach ($totals as $total) {
             $this->addOrUpdateOrderTotal($total);
         }
@@ -162,35 +155,23 @@ trait ManagesOrderItems
 
     public function addOrUpdateOrderTotal(array $total)
     {
-        return $this->orderTotalsQuery()->updateOrInsert([
-            'order_id' => $this->getKey(),
+        return $this->totals()->updateOrCreate([
             'code' => $total['code'],
         ], array_except($total, ['order_id', 'code']));
     }
 
     public function calculateTotals()
     {
-        $subtotal = $this->orderMenusQuery()
-            ->where('order_id', $this->getKey())
-            ->sum('subtotal');
+        $subtotal = $this->menus()->sum('subtotal');
+        $totalItems = $this->menus()->sum('quantity');
 
-        $total = $this->orderTotalsQuery()
-            ->where('order_id', $this->getKey())
-            ->where('is_summable', true)
-            ->sum('value');
+        $total = $this->totals()->where('is_summable', true)->sum('value');
 
         $orderTotal = max(0, $subtotal + $total);
 
-        $totalItems = $this->orderMenusQuery()
-            ->where('order_id', $this->getKey())
-            ->sum('quantity');
+        $this->totals()->where('code', 'subtotal')->update(['value' => $subtotal]);
 
-        $this->orderTotalsQuery()
-            ->where('order_id', $this->getKey())
-            ->where('code', 'subtotal')
-            ->update(['value' => $subtotal]);
-
-        $this->orderTotalsQuery()
+        $this->totals()
             ->where('order_id', $this->getKey())
             ->where('code', 'total')
             ->update(['value' => $orderTotal]);
@@ -199,20 +180,5 @@ trait ManagesOrderItems
             'total_items' => $totalItems,
             'order_total' => $orderTotal,
         ]);
-    }
-
-    public function orderMenusQuery()
-    {
-        return DB::table('order_menus');
-    }
-
-    public function orderMenuOptionsQuery()
-    {
-        return DB::table('order_menu_options');
-    }
-
-    public function orderTotalsQuery()
-    {
-        return DB::table('order_totals');
     }
 }

@@ -50,6 +50,8 @@ it('does not add menu specials when special attribute does not exist', function(
 });
 
 it('detaches categories, mealtimes, ingredients, and locations when deleting', function() {
+    $this->menu->shouldReceive('menu_options->delete')->once();
+    $this->menu->shouldReceive('special->delete')->once();
     $this->menu->shouldReceive('categories->detach')->once();
     $this->menu->shouldReceive('mealtimes->detach')->once();
     $this->menu->shouldReceive('ingredients->detach')->once();

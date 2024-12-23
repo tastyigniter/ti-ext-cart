@@ -154,7 +154,7 @@ class Cart
         if ($cartItem->qty <= 0) {
             $this->remove($cartItem->rowId);
 
-            return $cartItem->rowId;
+            return $cartItem;
         }
 
         $this->applyAllConditionsToItem($cartItem);
@@ -314,6 +314,11 @@ class Cart
         $conditions->apply($content = $this->getContent());
 
         return $conditions->applied();
+    }
+
+    public function conditionsWithoutApplied()
+    {
+        return $this->getConditions();
     }
 
     /**

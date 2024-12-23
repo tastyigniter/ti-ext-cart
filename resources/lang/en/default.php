@@ -222,6 +222,7 @@ return [
         'error_covered_area' => 'This restaurant currently does not deliver to your address',
         'error_delivery_less_current_time' => 'The %s Time can not be less than current time!',
         'error_invalid_payment' => 'The selected payment is invalid, please contact us',
+        'error_inactive_payment' => 'Selected payment method is inactive, try a different one.',
         'error_payment_profile_not_found' => 'The payment profile is not found, please contact us',
         'error_payment_partial' => 'View [%s] not found for payment: %s.',
         'error_email_exists' => 'An account exists with this email address. Please login to continue or use a different email address',
@@ -383,6 +384,7 @@ return [
         'column_name' => 'Option Name',
         'column_display_type' => 'Display Type',
 
+        'label_menu_id' => 'Menu ID',
         'label_option_name' => 'Option Name',
         'label_priority' => 'Priority',
         'label_display_type' => 'Display Type',

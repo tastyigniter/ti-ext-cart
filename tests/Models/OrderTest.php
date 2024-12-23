@@ -12,8 +12,12 @@ use Igniter\Cart\Events\OrderCanceledEvent;
 use Igniter\Cart\Events\OrderPaymentProcessedEvent;
 use Igniter\Cart\Models\Concerns\HasInvoice;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
+use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\OrderScope;
+use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\PayRegister\Models\Payment;
@@ -22,7 +26,19 @@ use Igniter\System\Traits\SendsMailTemplate;
 use Igniter\User\Models\Address;
 use Igniter\User\Models\Concerns\Assignable;
 use Igniter\User\Models\Concerns\HasCustomer;
+use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\Event;
+
+it('returns customer addresses', function() {
+    $customer = Customer::factory()->hasAddresses(3)->create();
+    $order = Order::factory()->create([
+        'customer_id' => $customer->getKey(),
+    ]);
+
+    $result = $order->listCustomerAddresses();
+
+    expect($result)->toBeCollection()->toHaveCount(3);
+});
 
 it('gets customer name attribute correctly', function() {
     $order = Order::factory()->create([
@@ -34,12 +50,15 @@ it('gets customer name attribute correctly', function() {
 });
 
 it('gets order type name attribute correctly', function() {
-    $location = Location::factory()->create();
-    $order = Order::factory()->for($location)->create([
+    $order = Order::factory()->create([
         'order_type' => Order::DELIVERY,
     ]);
 
     expect($order->order_type_name)->toBe(lang('igniter.local::default.text_delivery'));
+
+    $order->location = false;
+
+    expect($order->order_type_name)->toBe('delivery');
 });
 
 it('gets order datetime attribute correctly', function() {
@@ -65,6 +84,22 @@ it('gets formatted address attribute correctly', function() {
         ->create();
 
     expect($order->formatted_address)->toBe('123 Main St, Apt. 035, City 12345, State, Country');
+});
+
+it('returns correct URL with default parameters', function() {
+    $order = Order::factory()->create();
+
+    $result = $order->getUrl('order/view', ['foo' => 'bar']);
+
+    expect($result)->toBe(page_url('order/view', ['id' => $order->getKey(), 'hash' => $order->hash, 'foo' => 'bar']));
+});
+
+it('returns correct URL when params is null', function() {
+    $order = Order::factory()->create();
+
+    $result = $order->getUrl('order/view', null);
+
+    expect($result)->toBe(page_url('order/view', ['id' => $order->getKey(), 'hash' => $order->hash]));
 });
 
 it('checks if order is completed', function() {
@@ -113,6 +148,36 @@ it('checks if order is not canceled', function() {
     expect($order->isCanceled())->toBeFalse();
 });
 
+it('returns false when order cancellation timeout is not set', function() {
+    $order = Order::factory()->create();
+    $order->location = $location = mock(Location::class)->makePartial();
+    $location->shouldReceive('getOrderCancellationTimeout')->andReturn(null);
+
+    expect($order->isCancelable())->toBeFalse();
+});
+
+it('returns false when order datetime is not in the future', function() {
+    $order = Order::factory()->create([
+        'order_date' => Carbon::now()->subDay(3)->toDateString(),
+        'order_time' => Carbon::now()->subDay(3)->subMinutes(20)->toTimeString(),
+    ]);
+    $order->location = $location = mock(Location::class)->makePartial();
+    $location->shouldReceive('getOrderCancellationTimeout')->andReturn(60);
+
+    expect($order->isCancelable())->toBeFalse();
+});
+
+it('returns true when remaining time is greater than cancellation timeout', function() {
+    $order = Order::factory()->create([
+        'order_date' => Carbon::now()->toDateString(),
+        'order_time' => Carbon::now()->addMinutes(40)->toTimeString(),
+    ]);
+    $order->location = $location = mock(Location::class)->makePartial();
+    $location->shouldReceive('getOrderCancellationTimeout')->andReturn(30);
+
+    expect($order->isCancelable())->toBeTrue();
+});
+
 it('checks if order is delivery type', function() {
     $order = Order::factory()->create([
         'order_type' => Order::DELIVERY,
@@ -127,6 +192,16 @@ it('checks if order is collection type', function() {
     ]);
 
     expect($order->isCollectionType())->toBeTrue();
+});
+
+it('returns an array of order dates', function() {
+    $order = Order::factory()->create([
+        'created_at' => '2023-01-01 12:00:00',
+    ]);
+
+    $result = $order->getOrderDates();
+
+    expect($result)->toBeArray()->and($result)->toContain('January 2023');
 });
 
 it('checks if order payment is processed', function() {
@@ -225,6 +300,58 @@ it('gets mail recipients correctly for admin type', function() {
     expect($recipients)->toBe([[setting('site_email'), setting('site_name')]]);
 });
 
+it('returns empty array when type is not in order email settings', function() {
+    $order = Order::factory()->create([
+        'email' => 'customer@example.com',
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+    setting()->set('order_email', ['admin']);
+
+    $result = $order->mailGetReplyTo('admin');
+
+    expect($result)->toBeArray()
+        ->and($result)->toContain('customer@example.com')
+        ->and($result)->toContain('John Doe');
+});
+
+it('returns order data with all fields populated', function() {
+    $order = Order::factory()->create([
+        'address_id' => Address::factory(),
+    ]);
+    $menuItemOption = MenuItemOption::factory()->create();
+    $menuItemOptionValue = MenuItemOptionValue::factory()->create();
+    $orderMenu = $order->menus()->create([
+        'menu_id' => Menu::factory()->create()->getKey(),
+        'name' => 'Menu Name',
+        'quantity' => 5,
+        'price' => 20,
+        'subtotal' => 100,
+    ]);
+    $orderMenu->menu_options()->create([
+        'order_id' => $order->getKey(),
+        'order_menu_id' => $orderMenu->getKey(),
+        'order_option_name' => 'Option Name',
+        'order_option_price' => 10,
+        'menu_option_value_id' => $menuItemOptionValue->getKey(),
+        'menu_option_id' => $menuItemOption->getKey(),
+        'quantity' => 5,
+    ]);
+    $order->totals()->create([
+        'code' => 'subtotal',
+        'title' => 'Subtotal',
+        'value' => 100,
+    ]);
+
+    $result = $order->mailGetData();
+
+    expect($result['order_menus'])->not->toBeEmpty()
+        ->and($result['order_menus'][0]['menu_options'])->toContain('Option Name')
+        ->and($result['order_totals'])->not->toBeEmpty()
+        ->and($result['order_address'])->not->toBeEmpty()
+        ->and($result['location_name'])->not->toBeEmpty();
+});
+
 it('applies filters on the query builder', function() {
     $query = Order::query()->applyFilters([
         'customer' => 1,
@@ -273,5 +400,33 @@ it('configures order model correctly', function() {
         ->and($order->getHidden())->toEqual(['cart'])
         ->and($order->timestamps)->toBeTrue()
         ->and($order->getMorphClass())->toBe('orders')
+        ->and($order->getCasts())->toBe([
+            'order_id' => 'int',
+            'customer_id' => 'integer',
+            'location_id' => 'integer',
+            'address_id' => 'integer',
+            'total_items' => 'integer',
+            'cart' => Serialize::class,
+            'order_date' => 'date',
+            'order_time' => 'time',
+            'order_total' => 'float',
+            'notify' => 'boolean',
+            'processed' => 'boolean',
+            'order_time_is_asap' => 'boolean',
+            'assignee_id' => 'integer',
+            'assignee_group_id' => 'integer',
+            'assignee_updated_at' => 'datetime',
+            'invoice_date' => 'datetime',
+            'status_id' => 'integer',
+            'status_updated_at' => 'datetime',
+        ])
+        ->and($order->relation['belongsTo']['customer'])->toEqual(\Igniter\User\Models\Customer::class)
+        ->and($order->relation['belongsTo']['location'])->toEqual(\Igniter\Local\Models\Location::class)
+        ->and($order->relation['belongsTo']['address'])->toEqual(\Igniter\User\Models\Address::class)
+        ->and($order->relation['belongsTo']['payment_method'])->toEqual([\Igniter\PayRegister\Models\Payment::class, 'foreignKey' => 'payment', 'otherKey' => 'code'])
+        ->and($order->relation['hasMany']['payment_logs'])->toEqual(\Igniter\PayRegister\Models\PaymentLog::class)
+        ->and($order->relation['hasMany']['menus'])->toEqual(\Igniter\Cart\Models\OrderMenu::class)
+        ->and($order->relation['hasMany']['menu_options'])->toEqual(\Igniter\Cart\Models\OrderMenuOptionValue::class)
+        ->and($order->relation['hasMany']['totals'])->toEqual(\Igniter\Cart\Models\OrderTotal::class)
         ->and($order->getGlobalScopes())->toHaveKey(OrderScope::class);
 });

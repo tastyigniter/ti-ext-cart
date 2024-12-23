@@ -93,8 +93,6 @@ class MenuSpecial extends Model
         $now = Carbon::now();
 
         switch ($this->validity) {
-            case 'forever':
-                return false;
             case 'period':
                 return !$now->between($this->start_date, $this->end_date);
             case 'recurring':
@@ -106,8 +104,9 @@ class MenuSpecial extends Model
                 $end = $now->copy()->setTimeFromTimeString($this->recurring_to);
 
                 return !$now->between($start, $end);
+            case 'forever':
             default:
-                return true;
+                return false;
         }
     }
 

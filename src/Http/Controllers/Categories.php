@@ -71,8 +71,9 @@ class Categories extends AdminController
             $model->fixTree();
         }
 
-        if (Category::isBroken()) {
-            Category::fixTree();
+        $category = resolve(Category::class);
+        if ($category->isBroken()) {
+            $category->fixTree();
         }
     }
 }

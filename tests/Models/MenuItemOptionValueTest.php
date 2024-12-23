@@ -49,6 +49,24 @@ it('configures menu item option value model correctly', function() {
             'is_default',
         ])
         ->and($menuItemOptionValue->timestamps)->toBeTrue()
+        ->and($menuItemOptionValue->relation)->toEqual([
+            'belongsTo' => [
+                'menu' => [\Igniter\Cart\Models\Menu::class],
+                'option_value' => [\Igniter\Cart\Models\MenuOptionValue::class],
+                'menu_option' => [\Igniter\Cart\Models\MenuItemOption::class],
+            ],
+        ])
+        ->and($menuItemOptionValue->rules)->toEqual([
+            ['menu_option_id', 'igniter.cart::default.menu_options.label_option_value_id', 'required|integer'],
+            ['option_value_id', 'igniter.cart::default.menu_options.label_option_value', 'required|integer'],
+            ['override_price', 'igniter.cart::default.menu_options.label_option_price', 'nullable|numeric|min:0'],
+        ])
+        ->and($menuItemOptionValue->getCasts()['menu_option_value_id'])->toEqual('integer')
+        ->and($menuItemOptionValue->getCasts()['menu_option_id'])->toEqual('integer')
+        ->and($menuItemOptionValue->getCasts()['option_value_id'])->toEqual('integer')
+        ->and($menuItemOptionValue->getCasts()['override_price'])->toEqual('float')
+        ->and($menuItemOptionValue->getCasts()['priority'])->toEqual('integer')
+        ->and($menuItemOptionValue->getCasts()['is_default'])->toEqual('boolean')
         ->and($menuItemOptionValue->getAppends())->toEqual(['name', 'price'])
         ->and($menuItemOptionValue->getMorphClass())->toBe('menu_item_option_values');
 });

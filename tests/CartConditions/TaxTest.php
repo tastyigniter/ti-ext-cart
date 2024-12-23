@@ -3,6 +3,7 @@
 namespace Igniter\Cart\Tests\CartConditions;
 
 use Igniter\Cart\CartConditions\Tax;
+use Igniter\Local\Facades\Location;
 
 beforeEach(function() {
     $this->tax = new Tax(['label' => 'VAT: %s']);
@@ -84,4 +85,20 @@ it('gets actions without inclusive tax', function() {
     expect($this->tax->getActions())->toBe([
         ['value' => '+10%', 'inclusive' => false, 'valuePrecision' => 2],
     ]);
+});
+
+it('calculates tax excluding delivery charge when order type is delivery and taxDelivery is false', function() {
+    setting()->set([
+        'tax_mode' => 1,
+        'tax_menu_price' => 1,
+        'tax_percentage' => 10,
+    ]);
+
+    Location::shouldReceive('orderTypeIsDelivery')->andReturn(true);
+    Location::shouldReceive('coveredArea->deliveryAmount')->with(100.0)->andReturn(5.0);
+
+    $this->tax->onLoad();
+    $result = $this->tax->calculate(100.0);
+
+    expect($result)->toBe(109.5);
 });

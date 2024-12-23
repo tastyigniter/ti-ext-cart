@@ -22,11 +22,7 @@ trait HasInvoice
 
     public function getInvoiceNumberAttribute()
     {
-        if (!strlen($this->invoice_prefix)) {
-            return null;
-        }
-
-        return $this->invoice_prefix.$this->order_id;
+        return $this->getInvoiceNoAttribute();
     }
 
     public function getInvoiceNoAttribute()

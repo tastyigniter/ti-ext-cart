@@ -52,7 +52,7 @@ class MenuItemOption extends Model
     public $appends = ['option_name', 'display_type'];
 
     public $rules = [
-        ['menu_id', 'igniter.cart::default.menus.label_option', 'required|integer'],
+        ['menu_id', 'igniter.cart::default.menus.label_menu_id', 'required|integer'],
         ['option_id', 'igniter.cart::default.menus.label_option_id', 'required|integer'],
         ['priority', 'igniter.cart::default.menu_options.label_option', 'integer'],
         ['is_required', 'igniter.cart::default.menu_options.label_option_required', 'boolean'],
@@ -83,8 +83,8 @@ class MenuItemOption extends Model
 
             $optionValue->menu_option_value_id = $menuOptionValue?->menu_option_value_id;
             $optionValue->menu_option_id = $menuOptionValue?->menu_option_id ?? $optionValue->option_id;
-            $optionValue->option_value_id = $menuOptionValue->option_value_id ?? $optionValue->getKey();
-            $optionValue->price = $menuOptionValue->price ?? $optionValue->price;
+            $optionValue->option_value_id = $menuOptionValue?->option_value_id ?? $optionValue->getKey();
+            $optionValue->price = $menuOptionValue?->price ?? $optionValue->price;
             $optionValue->override_price = $menuOptionValue?->override_price;
             $optionValue->is_default = $menuOptionValue?->is_default;
             $optionValue->is_enabled = !is_null($menuOptionValue);
@@ -111,10 +111,6 @@ class MenuItemOption extends Model
     public function addMenuOptionValues(array $optionValues = [])
     {
         $menuOptionId = $this->getKey();
-        if (!is_numeric($menuOptionId)) {
-            return false;
-        }
-
         $idsToKeep = [];
         foreach ($optionValues as $value) {
             $menuOptionValue = $this->menu_option_values()->firstOrNew([

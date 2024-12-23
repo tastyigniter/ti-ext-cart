@@ -56,5 +56,10 @@ it('configures mealtime model correctly', function() {
         ->toContain(Switchable::class)
         ->and($mealtime->getTable())->toBe('mealtimes')
         ->and($mealtime->getKeyName())->toBe('mealtime_id')
-        ->and($mealtime->getMorphClass())->toBe('mealtimes');
+        ->and($mealtime->getMorphClass())->toBe('mealtimes')
+        ->and($mealtime->relation)->toEqual([
+            'morphToMany' => [
+                'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+            ],
+        ]);
 });

@@ -71,7 +71,7 @@ it('applies allergen filter correctly', function() {
     $applyAllergen($this->builder, $allergenId);
 });
 
-it('applies category filter correctly', function() {
+it('applies category filter with category id correctly', function() {
     $categoryId = 1;
     $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categoryId) {
         $query = Mockery::mock(Builder::class);
@@ -82,6 +82,19 @@ it('applies category filter correctly', function() {
 
     $applyCategory = $this->scope->addWhereHasCategory();
     $applyCategory($this->builder, $categoryId);
+});
+
+it('applies category filter with category slug correctly', function() {
+    $categorySlug = 'permalink-slug';
+    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categorySlug) {
+        $query = Mockery::mock(Builder::class);
+        $query->shouldReceive('whereSlug')->with($categorySlug)->once();
+        $callback($query);
+        return true;
+    }))->once()->andReturnSelf();
+
+    $applyCategory = $this->scope->addWhereHasCategory();
+    $applyCategory($this->builder, $categorySlug);
 });
 
 it('applies ingredient filter correctly', function() {

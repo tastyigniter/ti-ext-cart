@@ -5,7 +5,9 @@ namespace Igniter\Cart\Classes;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Flame\Geolite\Facades\Geocoder;
 use Igniter\Local\Classes\CoveredArea;
+use Igniter\Local\Classes\Location;
 use Igniter\System\Traits\SessionMaker;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Models\Address;
@@ -40,6 +42,13 @@ class OrderManager
         $this->cart = resolve(CartManager::class)->getCart();
         $this->location = App::make('location');
         $this->customer = Auth::customer();
+    }
+
+    public function setLocation(Location $location)
+    {
+        $this->location = $location;
+
+        return $this;
     }
 
     public function setCustomer(Customer $customer)
@@ -150,7 +159,7 @@ class OrderManager
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
         }
 
-        $collection = app('geocoder')->geocode(implode(' ', array_only($address, [
+        $collection = Geocoder::geocode(implode(' ', array_only($address, [
             'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
         ])));
 
@@ -236,21 +245,21 @@ class OrderManager
 
         $paymentMethod = $this->getPayment($order->payment);
         if (!$paymentMethod || !$paymentMethod->status) {
-            throw new ApplicationException('Selected payment method is inactive, try a different one.');
+            throw new ApplicationException(lang('igniter.cart::default.checkout.error_inactive_payment'));
         }
 
         if (!$paymentMethod->isApplicable($order->order_total, $paymentMethod)) {
             throw new ApplicationException(sprintf(
                 lang('igniter.payregister::default.alert_min_order_total'),
                 currency_format($paymentMethod->order_total),
-                $paymentMethod->name
+                $paymentMethod->name,
             ));
         }
 
         if ($paymentMethod->hasApplicableFee() && !optional($this->cart->getCondition('paymentFee'))->isApplied()) {
             throw new ApplicationException(sprintf(
                 lang('igniter.payregister::default.alert_missing_applicable_fee'),
-                $paymentMethod->name
+                $paymentMethod->name,
             ));
         }
 
@@ -435,10 +444,7 @@ class OrderManager
     {
         $this->setCurrentPaymentCode($code);
 
-        if (!$condition = $this->cart->getCondition('paymentFee')) {
-            return;
-        }
-
+        $condition = $this->cart->getCondition('paymentFee');
         $condition->setMetaData(['code' => $code]);
 
         $this->cart->loadCondition($condition);

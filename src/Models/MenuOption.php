@@ -90,17 +90,13 @@ class MenuOption extends Model
 
     /**
      * Return all option values by option_id
-     *
-     * @param int $option_id
-     *
-     * @return array
      */
-    public static function getOptionValues($option_id = null)
+    public static function getOptionValues($optionId = null)
     {
-        $query = self::orderBy('priority')->from('option_values');
+        $query = MenuOptionValue::orderBy('priority');
 
-        if ($option_id !== false) {
-            $query->where('option_id', $option_id);
+        if ($optionId) {
+            $query->where('option_id', $optionId);
         }
 
         return $query->get();

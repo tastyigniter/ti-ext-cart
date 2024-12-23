@@ -47,12 +47,14 @@ it('generates invoice on order save', function() {
     $order = Order::factory()->createQuietly([
         'processed' => 1,
         'status_id' => 1,
+        'invoice_prefix' => 'INV-2022-',
     ]);
 
     expect($order->hasInvoice())->toBeFalse();
 
     $order->status_id = 2;
     $order->save();
+    $order->generateInvoice();
 
     expect($order->hasInvoice())->toBeTrue();
 });

@@ -2,7 +2,76 @@
 
 namespace Igniter\Cart\Tests\Models;
 
+use Carbon\Carbon;
 use Igniter\Cart\Models\MenuSpecial;
+
+it('returns all days of the week for recurring options', function() {
+    $result = MenuSpecial::getRecurringEveryOptions();
+
+    expect($result)->toBeArray()
+        ->and($result)->toContain('Sun')
+        ->and($result)->toContain('Mon')
+        ->and($result)->toContain('Tue')
+        ->and($result)->toContain('Wed')
+        ->and($result)->toContain('Thu')
+        ->and($result)->toContain('Fri')
+        ->and($result)->toContain('Sat');
+});
+
+it('returns null for pretty end date when special is recurring', function() {
+    $menuSpecial = MenuSpecial::factory()->create([
+        'validity' => 'recurring',
+    ]);
+
+    $result = $menuSpecial->getPrettyEndDateAttribute();
+
+    expect($result)->toBeNull();
+});
+
+it('returns null for pretty end date when end date is not set', function() {
+    $menuSpecial = MenuSpecial::factory()->create([
+        'validity' => 'period',
+    ]);
+
+    $result = $menuSpecial->getPrettyEndDateAttribute();
+
+    expect($result)->toBeNull();
+});
+
+it('returns formatted pretty end date when special is not recurring and end date is set', function() {
+    $menuSpecial = MenuSpecial::factory()->create([
+        'validity' => 'period',
+        'end_date' => Carbon::parse('2023-12-31 23:59:59'),
+    ]);
+
+    $result = $menuSpecial->getPrettyEndDateAttribute();
+
+    expect($result)->toBe('31 Dec 2023 23:59');
+});
+
+it('returns provided value when type attribute is not empty', function() {
+    $menuSpecial1 = MenuSpecial::factory()->create([
+        'type' => '',
+    ]);
+    $menuSpecial2 = MenuSpecial::factory()->create([
+        'type' => 'P',
+    ]);
+
+    expect($menuSpecial1->type)->toBe('F')
+        ->and($menuSpecial2->type)->toBe('P');
+});
+
+it('returns provided value when validity attribute is not empty', function() {
+    $menuSpecial1 = MenuSpecial::factory()->create([
+        'validity' => '',
+    ]);
+    $menuSpecial2 = MenuSpecial::factory()->create([
+        'validity' => 'period',
+    ]);
+
+    expect($menuSpecial1->validity)->toBe('forever')
+        ->and($menuSpecial2->validity)->toBe('period');
+});
 
 it('checks if menu special is active', function() {
     $menuSpecial = MenuSpecial::factory()->create();
@@ -34,7 +103,7 @@ it('checks if menu special is not recurring', function() {
     expect($menuSpecial->isRecurring())->toBeFalse();
 });
 
-it('checks if menu special is expired', function() {
+it('checks if period menu special is expired', function() {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
         'start_date' => now()->subDays(4),
@@ -42,16 +111,27 @@ it('checks if menu special is expired', function() {
     ]);
 
     expect($menuSpecial->isExpired())->toBeTrue();
-});
 
-it('checks if menu special is not expired', function() {
-    $menuSpecial = MenuSpecial::factory()->create([
-        'validity' => 'period',
-        'start_date' => now()->subDays(4),
-        'end_date' => now()->addDay(),
-    ]);
+    $this->travelTo(now()->subDay(2));
 
     expect($menuSpecial->isExpired())->toBeFalse();
+});
+
+it('checks if recurring menu special is expired', function() {
+    $this->travelTo(now()->setDay(2)->setTimeFromTimeString('09:00'));
+
+    $menuSpecial = MenuSpecial::factory()->create([
+        'validity' => 'recurring',
+        'recurring_every' => [0, 1, 2, 3, 6],
+        'recurring_from' => '10:00',
+        'recurring_to' => '20:00',
+    ]);
+
+    expect($menuSpecial->isExpired())->toBeTrue();
+
+    $this->travelTo(now()->setDay(5)->setTimeFromTimeString('11:00'));
+
+    expect($menuSpecial->isExpired())->toBeTrue();
 });
 
 it('checks if menu special price is fixed amount', function() {

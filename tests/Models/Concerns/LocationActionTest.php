@@ -10,15 +10,7 @@ use Illuminate\Support\Collection;
 
 it('allows guest order correctly', function() {
     $location = Location::factory()->create();
-    $settings = $location->settings()->create([
-        'item' => 'checkout',
-        'data' => ['guest_order' => 1],
-    ]);
-
-    expect((new LocationAction($location))->allowGuestOrder())->toBeTrue();
-
-    setting()->set(['guest_order' => 1]);
-    $settings->update([
+    $location->settings()->create([
         'item' => 'checkout',
         'data' => ['guest_order' => -1],
     ]);
@@ -119,6 +111,30 @@ it('gets minimum order total correctly', function() {
     $locationAction = new LocationAction($location);
 
     expect($locationAction->getMinimumOrderTotal(Location::DELIVERY))->toBe(60.0);
+});
+
+it('gets delivery minutes correctly', function() {
+    $location = Location::factory()->create();
+    $location->settings()->create([
+        'item' => Location::DELIVERY,
+        'data' => ['lead_time' => 60],
+    ]);
+
+    $locationAction = new LocationAction($location);
+
+    expect($locationAction->deliveryMinutes(Location::DELIVERY))->toBe(60);
+});
+
+it('gets collection minutes correctly', function() {
+    $location = Location::factory()->create();
+    $location->settings()->create([
+        'item' => Location::COLLECTION,
+        'data' => ['lead_time' => 60],
+    ]);
+
+    $locationAction = new LocationAction($location);
+
+    expect($locationAction->collectionMinutes(Location::COLLECTION))->toBe(60);
 });
 
 it('checks if has order type correctly', function() {

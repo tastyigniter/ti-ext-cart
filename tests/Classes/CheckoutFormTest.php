@@ -55,7 +55,12 @@ it('returns validation attributes with prefixed keys', function() {
 });
 
 it('defines form fields correctly', function() {
-    $config = ['fields' => ['name' => ['label' => 'Name', 'type' => 'text']]];
+    $config = [
+        'fields' => [
+            'name' => ['label' => 'Name', 'type' => 'text'],
+            'country' => ['label' => 'Country', 'type' => 'select', 'options' => ['country' => 'Country']],
+        ],
+    ];
     $checkoutForm = new CheckoutForm($config);
 
     $checkoutForm->initialize();
@@ -64,5 +69,27 @@ it('defines form fields correctly', function() {
 
     expect($allFields)->toHaveKey('name')
         ->and($allFields['name']->label)->toEqual('Name')
-        ->and($allFields['name']->type)->toEqual('text');
+        ->and($allFields['name']->type)->toEqual('text')
+        ->and($allFields['country']->options())->toEqual(['country' => 'Country']);
+});
+
+it('does not define form fields when already defined', function() {
+    $config = [
+        'fields' => [
+            'name' => ['label' => 'Name', 'type' => 'text'],
+        ],
+    ];
+    $checkoutForm = new CheckoutForm($config);
+    $checkoutForm->initialize();
+    $allFields = $checkoutForm->getFields();
+
+    expect($allFields)->toHaveKey('name')
+        ->and($allFields['name']->label)->toEqual('Name');
+
+    $checkoutForm->config['fields']['name']['label'] = 'Full Name';
+    $checkoutForm->initialize();
+    $allFields = $checkoutForm->getFields();
+
+    expect($allFields)->toHaveKey('name')
+        ->and($allFields['name']->label)->toEqual('Name');
 });

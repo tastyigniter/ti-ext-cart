@@ -17,7 +17,7 @@ class MenuImport extends ImportModel
     {
         foreach ($results as $row => $data) {
             try {
-                if (!$name = array_get($data, 'menu_name')) {
+                if (!array_get($data, 'menu_name')) {
                     $this->logSkipped($row, 'Missing menu item name');
                     continue;
                 }

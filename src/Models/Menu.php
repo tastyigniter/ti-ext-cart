@@ -52,10 +52,10 @@ class Menu extends Model implements Buyable
 
     public $relation = [
         'hasMany' => [
-            'menu_options' => [\Igniter\Cart\Models\MenuItemOption::class, 'delete' => true],
+            'menu_options' => [\Igniter\Cart\Models\MenuItemOption::class],
         ],
         'hasOne' => [
-            'special' => [\Igniter\Cart\Models\MenuSpecial::class, 'delete' => true],
+            'special' => [\Igniter\Cart\Models\MenuSpecial::class],
         ],
         'belongsToMany' => [
             'categories' => [\Igniter\Cart\Models\Category::class, 'table' => 'menu_categories'],
@@ -135,10 +135,6 @@ class Menu extends Model implements Buyable
      */
     public function addMenuCategories(array $categoryIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->categories()->sync($categoryIds);
     }
 
@@ -151,10 +147,6 @@ class Menu extends Model implements Buyable
      */
     public function addMenuIngredients(array $ingredientIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->ingredients()->sync($ingredientIds);
     }
 
@@ -167,10 +159,6 @@ class Menu extends Model implements Buyable
      */
     public function addMenuMealtimes(array $mealtimeIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->mealtimes()->sync($mealtimeIds);
     }
 
@@ -184,10 +172,6 @@ class Menu extends Model implements Buyable
     public function addMenuOption(array $menuOptions = [])
     {
         $menuId = $this->getKey();
-        if (!is_numeric($menuId)) {
-            return false;
-        }
-
         $idsToKeep = [];
         foreach ($menuOptions as $option) {
             $option['menu_id'] = $menuId;
@@ -214,10 +198,6 @@ class Menu extends Model implements Buyable
     public function addMenuSpecial(array $menuSpecial = [])
     {
         $menuId = $this->getKey();
-        if (!is_numeric($menuId)) {
-            return false;
-        }
-
         $menuSpecial['menu_id'] = $menuId;
         $this->special()->updateOrCreate([
             'special_id' => $menuSpecial['special_id'] ?? null,

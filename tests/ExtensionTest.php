@@ -2,7 +2,10 @@
 
 namespace Igniter\Cart\Tests;
 
+use Igniter\Admin\DashboardWidgets\Charts;
+use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Admin\Models\StatusHistory;
+use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
@@ -11,15 +14,21 @@ use Igniter\Cart\AutomationRules\Events\OrderPlaced;
 use Igniter\Cart\Extension;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\FormWidgets\StockEditor;
+use Igniter\Cart\Http\Controllers\Menus;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
 use Igniter\Cart\Models\CartSettings;
+use Igniter\Cart\Models\MenuExport;
+use Igniter\Cart\Models\MenuImport;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Notifications\OrderCreatedNotification;
+use Igniter\Flame\Database\Model;
 use Igniter\PayRegister\Models\Payment;
+use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
+use Igniter\User\Http\Controllers\Customers;
+use Igniter\User\Models\AssignableLog;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 use Mockery;
@@ -87,6 +96,19 @@ it('registers mail templates correctly', function() {
         ->and($templates)->toHaveKey('igniter.cart::mail.low_stock_alert');
 });
 
+it('registers import export setup for menu items', function() {
+    $extension = new Extension(app());
+
+    $result = $extension->registerImportExport();
+
+    expect($result['import']['menus']['label'])->toBe('Import Menu Items')
+        ->and($result['import']['menus']['model'])->toBe(MenuImport::class)
+        ->and($result['import']['menus']['configFile'])->toBe('igniter.cart::/models/menuimport')
+        ->and($result['export']['menus']['label'])->toBe('Export Menu Items')
+        ->and($result['export']['menus']['model'])->toBe(MenuExport::class)
+        ->and($result['export']['menus']['configFile'])->toBe('igniter.cart::/models/menuexport');
+});
+
 it('registers navigation correctly', function() {
     $extension = new Extension(app());
 
@@ -106,6 +128,45 @@ it('registers form widgets correctly', function() {
 
     expect($widgets)->toBeArray()
         ->and($widgets)->toHaveKey(StockEditor::class);
+});
+
+it('registers location settings correctly', function() {
+    $extension = new Extension(app());
+
+    $result = $extension->registerLocationSettings();
+
+    expect($result)->toEqual([
+        'checkout' => [
+            'label' => 'igniter.cart::default.settings.text_tab_checkout',
+            'description' => 'igniter.cart::default.settings.text_tab_desc_checkout',
+            'icon' => 'fa fa-sliders',
+            'priority' => 0,
+            'form' => 'igniter.cart::/models/checkoutsettings',
+            'request' => \Igniter\Cart\Http\Requests\CheckoutSettingsRequest::class,
+        ],
+        'delivery' => [
+            'label' => 'igniter.cart::default.settings.text_tab_delivery',
+            'description' => 'igniter.cart::default.settings.text_tab_desc_delivery',
+            'icon' => 'fa fa-sliders',
+            'priority' => 0,
+            'form' => 'igniter.cart::/models/deliverysettings',
+            'request' => \Igniter\Cart\Http\Requests\DeliverySettingsRequest::class,
+        ],
+        'collection' => [
+            'label' => 'igniter.cart::default.settings.text_tab_collection',
+            'description' => 'igniter.cart::default.settings.text_tab_desc_collection',
+            'icon' => 'fa fa-sliders',
+            'priority' => 0,
+            'form' => 'igniter.cart::/models/collectionsettings',
+            'request' => \Igniter\Cart\Http\Requests\CollectionSettingsRequest::class,
+        ],
+    ]);
+});
+
+it('returns registered core settings', function() {
+    $items = (new Settings)->listSettingItems();
+
+    expect(collect($items['core'])->firstWhere('code', 'order'))->not->toBeNull();
 });
 
 it('restores cart session on login correctly', function() {
@@ -155,18 +216,21 @@ it('subtracts stocks before payment is processed', function() {
 });
 
 it('sends order confirmation after payment is processed', function() {
-    Notification::fake();
+    $orderMock = Mockery::mock(Order::class)->makePartial();
     $notificationMock = Mockery::mock(OrderCreatedNotification::class);
-    $notificationMock->shouldReceive('subject->broadcast')->andReturnSelf();
+    $notificationMock->shouldReceive('subject')->with($orderMock)->andReturnSelf();
+    $notificationMock->shouldReceive('broadcast')->andReturnSelf();
     app()->instance(OrderCreatedNotification::class, $notificationMock);
-
-    $orderMock = Mockery::mock(Order::class);
+    $assignableLog = Mockery::mock(AssignableLog::class)->makePartial();
+    $orderMock->shouldReceive('mailGetData')->andReturn([]);
     $orderMock->shouldReceive('mailSend')->with('igniter.cart::mail.order', 'customer')->once();
     $orderMock->shouldReceive('mailSend')->with('igniter.cart::mail.order_alert', 'location')->once();
     $orderMock->shouldReceive('mailSend')->with('igniter.cart::mail.order_alert', 'admin')->once();
+    $orderMock->shouldReceive('redeemCoupon')->once();
 
     event('admin.order.paymentProcessed', [$orderMock]);
-})->skip('Notification::fake() is not working');
+    event('admin.assignable.assigned', [$orderMock, $assignableLog]);
+});
 
 it('sends order update after status is updated', function() {
     Mail::fake();
@@ -187,4 +251,43 @@ it('adds cart middleware to frontend routes', function() {
     $middlewareGroups = Route::getMiddlewareGroups();
     expect($middlewareGroups)->toHaveKey('igniter')
         ->and($middlewareGroups['igniter'])->toContain(CartMiddleware::class);
+});
+
+it('returns registered dashboard charts', function() {
+    $charts = new class(resolve(Menus::class)) extends Charts
+    {
+        public function testDatasets()
+        {
+            return $this->listSets();
+        }
+    };
+    $datasets = $charts->testDatasets();
+
+    expect($datasets['reports']['sets']['orders']['model'])->toBe(Order::class);
+});
+
+it('returns registered dashboard statistic widgets', function() {
+    $statistics = new class(resolve(Menus::class)) extends Statistics
+    {
+        public function testCards()
+        {
+            return $this->listCards();
+        }
+    };
+    $cards = $statistics->testCards();
+
+    expect($cards)->not->toBeEmpty();
+});
+
+it('adds orders tab to customer edit form', function() {
+    $model = mock(Model::class)->makePartial();
+    $form = new Form(resolve(Customers::class), ['model' => $model, 'context' => 'edit']);
+    $form->bindToController();
+
+    $customer = mock(Customer::class)->makePartial();
+    $form = new Form(resolve(Customers::class), ['model' => $customer, 'context' => 'edit']);
+    $form->bindToController();
+    $fields = $form->getFields();
+
+    expect($fields['orders']->tab)->toBe('lang:igniter.cart::default.text_tab_orders');
 });

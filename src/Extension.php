@@ -12,9 +12,11 @@ use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuOption;
+use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Cart\Models\Observers\MenuItemOptionObserver;
 use Igniter\Cart\Models\Observers\MenuObserver;
 use Igniter\Cart\Models\Observers\MenuOptionObserver;
+use Igniter\Cart\Models\Observers\MenuOptionValueObserver;
 use Igniter\Cart\Models\Observers\OrderObserver;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\CategoryScope;
@@ -35,6 +37,7 @@ class Extension extends BaseExtension
     protected $observers = [
         MenuItemOption::class => MenuItemOptionObserver::class,
         MenuOption::class => MenuOptionObserver::class,
+        MenuOptionValue::class => MenuOptionValueObserver::class,
         Menu::class => MenuObserver::class,
         Order::class => OrderObserver::class,
     ];
@@ -391,27 +394,21 @@ class Extension extends BaseExtension
     protected function bindOrderStatusEvent()
     {
         Event::listen('admin.statusHistory.beforeAddStatus', function($statusHistory, $order, $statusId, $previousStatus) {
-            if (!$order instanceof Order) {
-                return;
+            if ($order instanceof Order) {
+                Event::dispatch('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
             }
-
-            Event::dispatch('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
         });
 
         Event::listen('admin.statusHistory.added', function($order, $statusHistory) {
-            if (!$order instanceof Order) {
-                return;
+            if ($order instanceof Order) {
+                Event::dispatch('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
             }
-
-            Event::dispatch('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
         });
 
         Event::listen('admin.assignable.assigned', function($order, $assignableLog) {
-            if (!$order instanceof Order) {
-                return;
+            if ($order instanceof Order) {
+                Event::dispatch('igniter.cart.orderAssigned', [$order, $assignableLog], true);
             }
-
-            Event::dispatch('igniter.cart.orderAssigned', [$order, $assignableLog], true);
         });
     }
 

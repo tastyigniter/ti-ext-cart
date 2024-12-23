@@ -4,6 +4,7 @@ namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Tests\Classes\Fixtures\TestCartCondition;
+use LogicException;
 
 it('makes condition', function() {
     $manager = new CartConditionManager;
@@ -21,7 +22,15 @@ it('makes condition', function() {
 it('throws exception for unregistered condition', function() {
     $manager = new CartConditionManager;
 
-    expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(\LogicException::class);
+    expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(LogicException::class);
+});
+
+it('throws exception when class does not exist', function() {
+    $manager = new CartConditionManager();
+    $manager->registerCondition('NonExistentClass', ['name' => 'testCondition']);
+
+    expect(fn() => $manager->makeCondition('NonExistentClass'))
+        ->toThrow(LogicException::class, "The Cart Condition class 'NonExistentClass' does not exist");
 });
 
 it('lists registered conditions', function() {

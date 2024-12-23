@@ -16,11 +16,23 @@ use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
+use Illuminate\Support\Facades\Event;
 
 it('returns menu_price_from attribute', function() {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
 
     expect($menu->menu_price_from)->toBe(10.00);
+});
+
+it('returns menu_price_from attribute with menu options', function() {
+    $menu = Menu::factory()->create(['menu_price' => 10.00]);
+    $menuItemOption = $menu->menu_options()->create(['option_id' => 1]);
+    $menuItemOption->menu_option_values()->create([
+        'option_value_id' => 1,
+        'override_price' => 5.00,
+    ]);
+
+    expect($menu->menu_price_from)->toBe(5.00);
 });
 
 it('return minimum_qty attribute', function() {
@@ -29,7 +41,50 @@ it('return minimum_qty attribute', function() {
     expect($menu->minimum_qty)->toBe(2);
 });
 
+it('returns true when menu has options', function() {
+    $menu = Menu::factory()->create();
+    $menu->menu_options()->create(['option_id' => 1]);
+
+    $result = $menu->hasOptions();
+
+    expect($result)->toBe(1);
+});
+
+it('adds menu allergens when allergen ids are provided', function() {
+    $menu = Menu::factory()->create();
+
+    $result = $menu->addMenuAllergens([1, 2, 3]);
+
+    expect($result)->toBeNull();
+});
+
+it('adds menu categories when menu exists', function() {
+    $menu = Menu::factory()->create();
+
+    $result = $menu->addMenuCategories([1, 2, 3]);
+
+    expect($result)->toBeNull();
+});
+
+it('adds menu ingredients when menu exists', function() {
+    $menu = Menu::factory()->create();
+
+    $result = $menu->addMenuIngredients([1, 2, 3]);
+
+    expect($result)->toBeNull();
+});
+
+it('adds menu mealtimes when menu exists', function() {
+    $menu = Menu::factory()->create();
+
+    $result = $menu->addMenuMealtimes([1, 2, 3]);
+
+    expect($result)->toBeNull();
+});
+
 it('checks if menu is available', function() {
+    $this->travelTo(Carbon::createFromTime(12)->toDateTimeString());
+
     $menu = Menu::factory()
         ->has(Mealtime::factory()->state([
             'start_time' => '10:00:00',
@@ -37,9 +92,7 @@ it('checks if menu is available', function() {
         ]), 'mealtimes')
         ->create();
 
-    $datetime = Carbon::createFromTime(12);
-
-    expect($menu->isAvailable($datetime))->toBeTrue();
+    expect($menu->isAvailable())->toBeTrue();
 });
 
 it('checks if menu is not available', function() {
@@ -50,7 +103,40 @@ it('checks if menu is not available', function() {
         ]), 'mealtimes')
         ->create();
 
-    $datetime = Carbon::createFromTime(8);
+    $datetime = Carbon::createFromTime(8)->toDateTimeString();
+
+    expect($menu->isAvailable($datetime))->toBeFalse();
+});
+
+it('checks if menu is not available when it has disabled ingredient', function() {
+    $menu = Menu::factory()
+        ->has(Mealtime::factory()->state([
+            'start_time' => '10:00:00',
+            'end_time' => '20:00:00',
+        ]), 'mealtimes')
+        ->has(Ingredient::factory()->state([
+            'status' => false,
+        ]), 'ingredients')
+        ->create();
+
+    $datetime = Carbon::createFromTime(12);
+
+    expect($menu->isAvailable($datetime))->toBeFalse();
+});
+
+it('checks if menu is not available when event returns false', function() {
+    $menu = Menu::factory()
+        ->has(Mealtime::factory()->state([
+            'start_time' => '10:00:00',
+            'end_time' => '20:00:00',
+        ]), 'mealtimes')
+        ->create();
+
+    Event::listen('admin.menu.isAvailable', function($datetime, $menu) {
+        return false;
+    });
+
+    $datetime = Carbon::createFromTime(12);
 
     expect($menu->isAvailable($datetime))->toBeFalse();
 });
@@ -89,6 +175,18 @@ it('checks if menu does not have order type restriction', function() {
     ]);
 
     expect($menu->hasOrderTypeRestriction('collection'))->toBeTrue();
+});
+
+it('returns special price when menu is special', function() {
+    $menu = mock(Menu::class)->makePartial();
+    $menu->shouldReceive('isSpecial')->andReturn(true);
+    $menu->shouldReceive('extendableGet')->with('menu_price')->andReturn(100);
+    $menu->shouldReceive('extendableGet')->with('special')->andReturnSelf();
+    $menu->shouldReceive('getMenuPrice')->with(100)->andReturn(80);
+
+    $result = $menu->getBuyablePrice();
+
+    expect($result)->toBe(80);
 });
 
 it('has many menu_options', function() {

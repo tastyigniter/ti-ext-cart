@@ -2,6 +2,8 @@
 
 namespace Igniter\Cart\Concerns;
 
+use InvalidArgumentException;
+
 trait CartConditionHelper
 {
     /**
@@ -57,7 +59,6 @@ trait CartConditionHelper
 
     protected function calculateActionValue($action, $total)
     {
-        $action = $this->parseAction($action);
         $actionValue = array_get($action, 'value', 0);
         $calculatedValue = array_get($action, 'cleanValue', 0);
         $actionMultiplier = array_get($action, 'multiplier');
@@ -158,12 +159,12 @@ trait CartConditionHelper
 
     protected function parseAction($action)
     {
-        if ($action == []) {
+        if (is_array($action) && !$action) {
             return $action;
         }
 
         if (!array_key_exists('value', $action)) {
-            throw new \InvalidArgumentException(sprintf('Cart condition action [%s] format is invalid on %s.', $action, get_class($this)));
+            throw new InvalidArgumentException(sprintf('Cart condition action [%s] format is invalid on %s.', json_encode($action), get_class($this)));
         }
 
         return $action;
