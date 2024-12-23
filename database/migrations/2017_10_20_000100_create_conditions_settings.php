@@ -25,7 +25,7 @@ return new class extends Migration
 
         $table = DB::table('extension_settings')->where('item', 'igniter_cart_settings');
         if (!$table->exists()) {
-            $table->update(['data' => serialize(['conditions' => $conditions])]);
+            $table->update(['data' => json_encode(['conditions' => $conditions])]);
         }
     }
 
