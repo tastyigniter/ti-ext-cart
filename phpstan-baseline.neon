@@ -331,6 +331,11 @@ parameters:
 			path: src/Extension.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Flame\\\\Support\\\\Facades\\\\Igniter\\:\\:runningInAdmin\\(\\)\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getId\\(\\)\\.$#"
 			count: 1
 			path: src/Extension.php
