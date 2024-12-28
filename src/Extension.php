@@ -22,7 +22,7 @@ use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\CategoryScope;
 use Igniter\Cart\Models\Scopes\MenuScope;
 use Igniter\Cart\Models\Scopes\OrderScope;
-use Igniter\Flame\Igniter;
+use Igniter\Flame\Support\Facades\Igniter;
 use Igniter\Local\Models\Location as LocationModel;
 use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
