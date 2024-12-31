@@ -1,3 +1,10 @@
+<p align="center">
+    <a href="https://github.com/tastyigniter/ti-ext-cart/actions"><img src="https://github.com/tastyigniter/ti-ext-cart/actions/workflows/pipeline.yml/badge.svg" alt="Build Status"></a>
+    <a href="https://packagist.org/packages/tastyigniter/ti-ext-cart"><img src="https://img.shields.io/packagist/dt/tastyigniter/ti-ext-cart" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/tastyigniter/ti-ext-cart"><img src="https://img.shields.io/packagist/v/tastyigniter/ti-ext-cart" alt="Latest Stable Version"></a>
+    <a href="https://packagist.org/packages/tastyigniter/ti-ext-cart"><img src="https://img.shields.io/packagist/l/tastyigniter/ti-ext-cart" alt="License"></a>
+</p>
+
 ## Introduction
 
 The TastyIgniter Cart extension provides a straightforward and adaptable shopping cart solution.
