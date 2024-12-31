@@ -14,7 +14,7 @@ class CategoryFactory extends Factory
             'name' => $this->faker->sentence(2),
             'description' => $this->faker->paragraph(),
             'priority' => $this->faker->randomDigit(),
-            'status' => $this->faker->boolean(),
+            'status' => 1,
         ];
     }
 }
