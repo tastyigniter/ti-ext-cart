@@ -291,11 +291,6 @@ parameters:
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Flame\\\\Geolite\\\\Facades\\\\Geocoder\\:\\:geocode\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
@@ -311,28 +306,8 @@ parameters:
 			path: src/Contracts/Buyable.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:content\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:destroy\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:restore\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
 			count: 4
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Flame\\\\Support\\\\Facades\\\\Igniter\\:\\:runningInAdmin\\(\\)\\.$#"
-			count: 1
 			path: src/Extension.php
 
 		-
@@ -401,37 +376,7 @@ parameters:
 			path: src/Http/Controllers/Categories.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Categories.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Ingredients.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Mealtimes.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/MenuOptions.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Menus.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Http\\\\Controllers\\\\Orders\\:\\:formFindModelObject\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Orders.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
 
@@ -444,21 +389,6 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:content\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:instance\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:store\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:current\\(\\)\\.$#"
@@ -1167,11 +1097,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:hasDelivery\\(\\)\\.$#"
-			count: 1
-			path: src/OrderTypes/Delivery.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:subtotal\\(\\)\\.$#"
 			count: 1
 			path: src/OrderTypes/Delivery.php
 
