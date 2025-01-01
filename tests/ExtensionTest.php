@@ -23,13 +23,13 @@ use Igniter\Cart\Models\Order;
 use Igniter\Cart\Notifications\OrderCreatedNotification;
 use Igniter\Flame\Database\Model;
 use Igniter\PayRegister\Models\Payment;
+use Igniter\System\Mail\AnonymousTemplateMailable;
 use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
 use Igniter\User\Models\AssignableLog;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 use Mockery;
 
@@ -234,18 +234,19 @@ it('sends order confirmation after payment is processed', function() {
 
 it('sends order update after status is updated', function() {
     Mail::fake();
-    Queue::fake();
+    $order = Order::factory()->create();
+    $statusHistory = StatusHistory::factory()->create([
+        'object_id' => $order->order_id,
+        'object_type' => 'orders',
+        'notify' => true,
+    ]);
 
-    $orderMock = Mockery::mock(Order::class);
-    $orderMock->shouldReceive('reloadRelations')->once();
-    $orderMock->shouldReceive('mailSend')->with('igniter.cart::mail.order_update', 'customer')->once();
-    $orderMock->shouldReceive('mailGetData')->andReturn([]);
+    event('igniter.cart.orderStatusAdded', [$order, $statusHistory]);
 
-    $statusHistoryMock = Mockery::mock(StatusHistory::class);
-    $statusHistoryMock->shouldReceive('extendableGet')->with('notify')->andReturnTrue();
-
-    event('igniter.cart.orderStatusAdded', [$orderMock, $statusHistoryMock]);
-})->skip('Queue::fake() is not working');
+    Mail::assertQueued(AnonymousTemplateMailable::class, function($mail) use ($order) {
+        return $mail->getTemplateCode() === 'igniter.cart::mail.order_update';
+    });
+});
 
 it('adds cart middleware to frontend routes', function() {
     $middlewareGroups = Route::getMiddlewareGroups();
