@@ -51,12 +51,12 @@ parameters:
 			path: src/CartConditions/PaymentFee.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:coveredArea\\(\\)\\.$#"
+			message: "#^Result of static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderTypeIsDelivery\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: src/CartConditions/Tax.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderTypeIsDelivery\\(\\)\\.$#"
+			message: "#^Undefined variable\\: \\$deliveryCharge$#"
 			count: 1
 			path: src/CartConditions/Tax.php
 
@@ -391,16 +391,6 @@ parameters:
 			path: src/Http/Controllers/Orders.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:current\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:check\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Middleware/CartMiddleware.php
@@ -647,11 +637,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:orderBy\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuOption.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:currentOrAssigned\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOption.php
 
@@ -1091,7 +1076,7 @@ parameters:
 			path: src/OrderTypes/Collection.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
+			message: "#^Result of static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: src/OrderTypes/Collection.php
 
@@ -1101,11 +1086,6 @@ parameters:
 			path: src/OrderTypes/Delivery.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:coveredArea\\(\\)\\.$#"
-			count: 1
-			path: src/OrderTypes/Delivery.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
+			message: "#^Result of static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: src/OrderTypes/Delivery.php
