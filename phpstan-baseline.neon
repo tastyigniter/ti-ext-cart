@@ -291,12 +291,12 @@ parameters:
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:customer\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\User\\\\Models\\\\Address\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Models\\\\Address\\:\\:find\\(\\)\\.$#"
+			message: "#^Result of static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:customer\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
@@ -311,17 +311,17 @@ parameters:
 			path: src/Extension.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\User\\\\Http\\\\Controllers\\\\Customers\\:\\:extendFormFields\\(\\)\\.$#"
 			count: 1
 			path: src/Extension.php
 
 		-
 			message: "#^Method Igniter\\\\Admin\\\\Widgets\\\\Form\\:\\:addTabFields\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: src/Extension.php
+
+		-
+			message: "#^Result of static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getId\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: src/Extension.php
 
@@ -356,12 +356,12 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:whereIn\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:getAvailableLocations\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\AdminAuth\\:\\:user\\(\\)\\.$#"
+			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:whereIn\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
 
@@ -391,12 +391,7 @@ parameters:
 			path: src/Http/Controllers/Orders.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:check\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getUser\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:getKey\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Middleware/CartMiddleware.php
 
