@@ -118,7 +118,7 @@ it('checks if period menu special is expired', function() {
 });
 
 it('checks if recurring menu special is expired', function() {
-    $this->travelTo(now()->setDay(2)->setTimeFromTimeString('09:00'));
+    $this->travelTo(now()->weekday(2)->setTimeFromTimeString('09:00'));
 
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'recurring',
@@ -129,7 +129,7 @@ it('checks if recurring menu special is expired', function() {
 
     expect($menuSpecial->isExpired())->toBeTrue();
 
-    $this->travelTo(now()->setDay(5)->setTimeFromTimeString('11:00'));
+    $this->travelTo(now()->weekday(5)->setTimeFromTimeString('11:00'));
 
     expect($menuSpecial->isExpired())->toBeTrue();
 });
