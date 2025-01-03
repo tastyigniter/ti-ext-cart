@@ -13,6 +13,25 @@ use Igniter\System\Models\Concerns\Switchable;
 
 /**
  * Category Model Class
+ *
+ * @property int $category_id
+ * @property string $name
+ * @property string|null $description
+ * @property int|null $parent_id
+ * @property int $priority
+ * @property bool $status
+ * @property int|null $nest_left
+ * @property int|null $nest_right
+ * @property string|null $permalink_slug
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Kalnoy\Nestedset\Collection<int, Category> $children
+ * @property-read int|null $children_count
+ * @property-read mixed $count_menus
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Igniter\Flame\Database\Attach\Media> $media
+ * @property-read int|null $media_count
+ * @property-read Category|null $parent
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Category extends Model
 {

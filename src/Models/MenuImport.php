@@ -5,6 +5,21 @@ namespace Igniter\Cart\Models;
 use Exception;
 use IgniterLabs\ImportExport\Models\ImportModel;
 
+/**
+ * MenuImport Model Class
+ *
+ * @property int $menu_id
+ * @property string $menu_name
+ * @property string $menu_description
+ * @property string $menu_price
+ * @property int $minimum_qty
+ * @property boolean $menu_status
+ * @property int $menu_priority
+ * @property string|null $order_restriction
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @mixin \Igniter\Flame\Database\Model
+ */
 class MenuImport extends ImportModel
 {
     protected $table = 'menus';

@@ -8,6 +8,18 @@ use Igniter\Flame\Database\Traits\Validation;
 
 /**
  * MenuItemOptionValue Model Class
+ *
+ * @property int $menu_option_value_id
+ * @property int $menu_option_id
+ * @property int $option_value_id
+ * @property float|null $override_price
+ * @property int $priority
+ * @property bool|null $is_default
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $name
+ * @property-read mixed $price
+ * @mixin \Igniter\Flame\Database\Model
  */
 class MenuItemOptionValue extends Model
 {

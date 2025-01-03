@@ -24,6 +24,49 @@ use Igniter\User\Models\Concerns\HasCustomer;
 
 /**
  * Order Model Class
+ *
+ * @property int $order_id
+ * @property int|null $customer_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $telephone
+ * @property int $location_id
+ * @property int|null $address_id
+ * @property mixed $cart
+ * @property int $total_items
+ * @property string|null $comment
+ * @property string $payment
+ * @property string $order_type
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property mixed $order_time
+ * @property \Illuminate\Support\Carbon $order_date
+ * @property float|null $order_total
+ * @property int $status_id
+ * @property string $ip_address
+ * @property string $user_agent
+ * @property int|null $assignee_id
+ * @property int|null $assignee_group_id
+ * @property string|null $invoice_prefix
+ * @property \Illuminate\Support\Carbon|null $invoice_date
+ * @property string|null $hash
+ * @property bool|null $processed
+ * @property \Illuminate\Support\Carbon|null $status_updated_at
+ * @property \Illuminate\Support\Carbon|null $assignee_updated_at
+ * @property bool $order_time_is_asap
+ * @property string|null $delivery_comment
+ * @property-read mixed $customer_name
+ * @property-read mixed $formatted_address
+ * @property-read mixed $invoice_no
+ * @property-read mixed $invoice_number
+ * @property-read mixed $order_datetime
+ * @property-read mixed $order_type_name
+ * @property-read string|null $status_color
+ * @property-read string|null $status_name
+ * @method static \Igniter\Flame\Database\Builder<static>|Order whereHasAutoAssignGroup()
+ * @method static \Igniter\Flame\Database\Builder<static>|Order whereHasStatusInHistory(string|int $statusId)
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Order extends Model
 {
@@ -379,9 +422,10 @@ class Order extends Model
             $data['location_address'] = format_address($model->location->getAddress());
         }
 
+        /** @var StatusHistory $statusHistory */
         $statusHistory = StatusHistory::applyRelated($model)->whereStatusIsLatest($model->status_id)->first();
-        $data['status_name'] = $statusHistory ? optional($statusHistory->status)->status_name : null;
-        $data['status_comment'] = $statusHistory ? $statusHistory->comment : null;
+        $data['status_name'] = $statusHistory?->status?->status_name;
+        $data['status_comment'] = $statusHistory?->comment;
 
         $controller = MainController::getController();
         $data['order_view_url'] = $controller->pageUrl('account/order', [

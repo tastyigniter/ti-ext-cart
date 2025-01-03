@@ -7,6 +7,19 @@ use Igniter\Flame\Database\Model;
 
 /**
  * Stock History Model Class
+ *
+ * @property int $id
+ * @property int $stock_id
+ * @property int|null $user_id
+ * @property int|null $order_id
+ * @property string $state
+ * @property int $quantity
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $created_at_since
+ * @property-read mixed $staff_name
+ * @property-read mixed $state_text
+ * @mixin \Igniter\Flame\Database\Model
  */
 class StockHistory extends Model
 {

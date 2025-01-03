@@ -2,6 +2,20 @@
 
 namespace Igniter\Cart\Models;
 
+/**
+ * OrderMenuOptionValue Model
+ *
+ * @property int $order_option_id
+ * @property int $order_id
+ * @property string $order_option_name
+ * @property float|null $order_option_price
+ * @property int $order_menu_id
+ * @property int $menu_option_id
+ * @property int $menu_option_value_id
+ * @property int|null $quantity
+ * @property-read mixed $order_option_category
+ * @mixin \Igniter\Flame\Database\Model
+ */
 class OrderMenuOptionValue extends \Igniter\Flame\Database\Model
 {
     protected $table = 'order_menu_options';

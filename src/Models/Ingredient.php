@@ -9,6 +9,18 @@ use Igniter\System\Models\Concerns\Switchable;
 
 /**
  * Ingredients Model Class
+ *
+ * @property int $ingredient_id
+ * @property string $name
+ * @property string $description
+ * @property bool $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $is_allergen
+ * @property-read mixed $count_menus
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Igniter\Flame\Database\Attach\Media> $media
+ * @property-read int|null $media_count
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Ingredient extends Model
 {

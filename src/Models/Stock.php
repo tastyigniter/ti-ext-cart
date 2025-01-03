@@ -9,6 +9,19 @@ use Igniter\System\Traits\SendsMailTemplate;
 
 /**
  * Stocks Model Class
+ *
+ * @property int $id
+ * @property int $location_id
+ * @property int $stockable_id
+ * @property string $stockable_type
+ * @property int|null $quantity
+ * @property bool $low_stock_alert
+ * @property int $low_stock_threshold
+ * @property bool $is_tracked
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $low_stock_alert_sent
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Stock extends Model
 {

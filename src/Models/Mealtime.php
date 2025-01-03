@@ -10,6 +10,15 @@ use Igniter\System\Models\Concerns\Switchable;
 
 /**
  * Mealtime Model Class
+ *
+ * @property int $mealtime_id
+ * @property string $mealtime_name
+ * @property mixed $start_time
+ * @property mixed $end_time
+ * @property bool $mealtime_status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Mealtime extends Model
 {
@@ -61,7 +70,7 @@ class Mealtime extends Model
 
         return $datetime->between(
             $datetime->setTimeFromTimeString($this->start_time),
-            $datetime->setTimeFromTimeString($this->end_time)
+            $datetime->setTimeFromTimeString($this->end_time),
         );
     }
 

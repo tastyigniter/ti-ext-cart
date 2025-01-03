@@ -434,7 +434,7 @@ class CartManager
         }
 
         if ($menuOption->display_type == 'quantity') {
-            $countSelected = array_reduce($selectedValues, function($qty, $selectedValue) {
+            $countSelected = (int)array_reduce($selectedValues, function($qty, $selectedValue) {
                 return $qty + $selectedValue['qty'];
             });
         } else {

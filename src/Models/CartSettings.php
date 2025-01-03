@@ -6,7 +6,7 @@ use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Flame\Database\Model;
 
 /**
- * @method static instance()
+ * @method static CartSettings instance()
  */
 class CartSettings extends Model
 {

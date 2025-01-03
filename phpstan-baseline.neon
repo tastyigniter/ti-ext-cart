@@ -141,32 +141,7 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_name\\.$#"
-			count: 4
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$minimum_qty\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$stocks\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$display_type\\.$#"
-			count: 2
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$max_selected\\.$#"
-			count: 3
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_id\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php
 
@@ -176,32 +151,7 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$min_selected\\.$#"
-			count: 3
-			path: src/Classes/CartManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$option\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$option_name\\.$#"
-			count: 3
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$menu_option_value_id\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$price\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php
 
@@ -221,22 +171,7 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Static call to instance method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:instance\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:\\$name\\.$#"
-			count: 2
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:\\$order_total\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:\\$status\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
@@ -421,16 +356,6 @@ parameters:
 			path: src/Models/Ingredient.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:\\$end_time\\.$#"
-			count: 1
-			path: src/Models/Mealtime.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:\\$start_time\\.$#"
-			count: 1
-			path: src/Models/Mealtime.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:whereIsEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Mealtime.php
@@ -451,23 +376,8 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_name\\.$#"
-			count: 2
-			path: src/Models/Menu.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_options\\.$#"
 			count: 2
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_price\\.$#"
-			count: 3
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$minimum_qty\\.$#"
-			count: 1
 			path: src/Models/Menu.php
 
 		-
@@ -571,11 +481,6 @@ parameters:
 			path: src/Models/MenuImport.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$is_required\\.$#"
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_values\\.$#"
 			count: 1
 			path: src/Models/MenuItemOption.php
@@ -601,21 +506,6 @@ parameters:
 			path: src/Models/MenuItemOption.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$is_default\\.$#"
-			count: 1
-			path: src/Models/MenuItemOptionValue.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:\\$override_price\\.$#"
-			count: 1
-			path: src/Models/MenuItemOptionValue.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:\\$display_type\\.$#"
-			count: 1
-			path: src/Models/MenuOption.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:menu_option_values\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOption.php
@@ -634,11 +524,6 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:orderBy\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOption.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Models/MenuOptionValue.php
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:\\$option\\.$#"
@@ -674,41 +559,6 @@ parameters:
 			message: "#^Method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:addMenuAllergens\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: src/Models/MenuOptionValue.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$end_date\\.$#"
-			count: 4
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$recurring_from\\.$#"
-			count: 1
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$recurring_to\\.$#"
-			count: 1
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$special_price\\.$#"
-			count: 2
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$start_date\\.$#"
-			count: 1
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$type\\.$#"
-			count: 1
-			path: src/Models/MenuSpecial.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuSpecial\\:\\:\\$validity\\.$#"
-			count: 3
-			path: src/Models/MenuSpecial.php
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:categories\\(\\)\\.$#"
@@ -751,62 +601,12 @@ parameters:
 			path: src/Models/Observers/MenuOptionValueObserver.php
 
 		-
+			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Models\\\\StatusHistory\\:\\:\\$status\\.$#"
+			count: 1
+			path: src/Models/Order.php
+
+		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$address\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$comment\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$customer_name\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$delivery_comment\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$email\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$first_name\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$hash\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$invoice_date\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$invoice_number\\.$#"
-			count: 4
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$invoice_prefix\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$last_name\\.$#"
 			count: 2
 			path: src/Models/Order.php
 
@@ -826,51 +626,6 @@ parameters:
 			path: src/Models/Order.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_date\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_datetime\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_id\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_time\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_type\\.$#"
-			count: 5
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$order_type_name\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$processed\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$status_id\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$telephone\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$totals\\.$#"
 			count: 1
 			path: src/Models/Order.php
@@ -882,11 +637,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\OrderMenuOptionValue\\:\\:\\$menu_option\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$status_name\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
@@ -922,11 +672,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\StatusHistory\\:\\:applyRelated\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
@@ -976,33 +721,8 @@ parameters:
 			path: src/Models/Scopes/OrderScope.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$is_tracked\\.$#"
-			count: 3
-			path: src/Models/Stock.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$location\\.$#"
 			count: 3
-			path: src/Models/Stock.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$low_stock_alert\\.$#"
-			count: 1
-			path: src/Models/Stock.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$low_stock_alert_sent\\.$#"
-			count: 2
-			path: src/Models/Stock.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$low_stock_threshold\\.$#"
-			count: 2
-			path: src/Models/Stock.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$quantity\\.$#"
-			count: 7
 			path: src/Models/Stock.php
 
 		-
@@ -1014,36 +734,6 @@ parameters:
 			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:shouldAlertOnLowStock\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/Models/Stock.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$created_at\\.$#"
-			count: 1
-			path: src/Models/StockHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$order_id\\.$#"
-			count: 1
-			path: src/Models/StockHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$quantity\\.$#"
-			count: 1
-			path: src/Models/StockHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$state\\.$#"
-			count: 2
-			path: src/Models/StockHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$stock_id\\.$#"
-			count: 1
-			path: src/Models/StockHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:\\$user_id\\.$#"
-			count: 1
-			path: src/Models/StockHistory.php
 
 		-
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"

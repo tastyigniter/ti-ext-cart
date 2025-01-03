@@ -9,6 +9,14 @@ use Igniter\Flame\Database\Traits\Sortable;
 
 /**
  * MenuOptionValue Model Class
+ *
+ * @property int $option_value_id
+ * @property int $option_id
+ * @property string $name
+ * @property float|null $price
+ * @property int $priority
+ * @property-read mixed $stock_qty
+ * @mixin \Igniter\Flame\Database\Model
  */
 class MenuOptionValue extends Model
 {

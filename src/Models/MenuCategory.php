@@ -6,6 +6,10 @@ use Igniter\Flame\Database\Model;
 
 /**
  * MenuCategory Model Class
+ *
+ * @property int $menu_id
+ * @property int $category_id
+ * @mixin \Igniter\Flame\Database\Model
  */
 class MenuCategory extends Model
 {

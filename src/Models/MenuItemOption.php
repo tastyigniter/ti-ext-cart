@@ -7,6 +7,23 @@ use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Flame\Database\Traits\Validation;
 
+/**
+ * MenuItemOption Model Class
+ *
+ * @property int $menu_option_id
+ * @property int $option_id
+ * @property int $menu_id
+ * @property bool $is_required
+ * @property int $priority
+ * @property int $min_selected
+ * @property int $max_selected
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $display_type
+ * @property-read mixed $option_name
+ * @property-read mixed $option_values
+ * @mixin \Igniter\Flame\Database\Model
+ */
 class MenuItemOption extends Model
 {
     use HasFactory;

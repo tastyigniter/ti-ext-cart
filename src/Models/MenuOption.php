@@ -10,6 +10,14 @@ use Igniter\Local\Models\Concerns\Locationable;
 
 /**
  * MenuOption Model Class
+ *
+ * @property int $option_id
+ * @property string $option_name
+ * @property string $display_type
+ * @property int $priority
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @mixin \Igniter\Flame\Database\Model
  */
 class MenuOption extends Model
 {

@@ -14,6 +14,22 @@ use Igniter\System\Models\Concerns\Switchable;
 
 /**
  * Menu Model Class
+ *
+ * @property int $menu_id
+ * @property string $menu_name
+ * @property string $menu_description
+ * @property float $menu_price
+ * @property int $minimum_qty
+ * @property boolean $menu_status
+ * @property int $menu_priority
+ * @property array|null $order_restriction
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $menu_price_from
+ * @property-read mixed $stock_qty
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Igniter\Flame\Database\Attach\Media> $media
+ * @property-read int|null $media_count
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Menu extends Model implements Buyable
 {

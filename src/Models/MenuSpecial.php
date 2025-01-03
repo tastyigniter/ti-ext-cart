@@ -9,6 +9,22 @@ use Igniter\System\Models\Concerns\Switchable;
 
 /**
  * MenuSpecial Model Class
+ *
+ * @property int $special_id
+ * @property int $menu_id
+ * @property \Illuminate\Support\Carbon|null $start_date
+ * @property \Illuminate\Support\Carbon|null $end_date
+ * @property float|null $special_price
+ * @property bool $special_status
+ * @property string $type
+ * @property string $validity
+ * @property array|null $recurring_every
+ * @property mixed|null $recurring_from
+ * @property mixed|null $recurring_to
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property-read mixed $pretty_end_date
+ * @mixin \Igniter\Flame\Database\Model
  */
 class MenuSpecial extends Model
 {
