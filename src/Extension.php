@@ -4,8 +4,8 @@ namespace Igniter\Cart;
 
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
-use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\Classes\CheckoutForm;
+use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
 use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -28,7 +28,6 @@ use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
-use Igniter\User\Models\Customer;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 
@@ -95,44 +94,7 @@ class Extension extends BaseExtension
 
         LocationModel::implement(LocationAction::class);
 
-        Customers::extendFormFields(function(Form $form) {
-            if (!$form->model instanceof Customer) {
-                return;
-            }
-
-            $form->addTabFields([
-                'orders' => [
-                    'tab' => 'lang:igniter.cart::default.text_tab_orders',
-                    'type' => 'datatable',
-                    'context' => ['edit', 'preview'],
-                    'useAjax' => true,
-                    'defaultSort' => ['order_id', 'desc'],
-                    'columns' => [
-                        'order_id' => [
-                            'title' => 'lang:igniter::admin.column_id',
-                        ],
-                        'customer_name' => [
-                            'title' => 'lang:igniter.cart::default.orders.column_customer_name',
-                        ],
-                        'status_name' => [
-                            'title' => 'lang:igniter::admin.label_status',
-                        ],
-                        'order_type_name' => [
-                            'title' => 'lang:igniter::admin.label_type',
-                        ],
-                        'order_total' => [
-                            'title' => 'lang:igniter.cart::default.orders.column_total',
-                        ],
-                        'order_time' => [
-                            'title' => 'lang:igniter.cart::default.orders.column_time',
-                        ],
-                        'order_date' => [
-                            'title' => 'lang:igniter.cart::default.orders.column_date',
-                        ],
-                    ],
-                ],
-            ], 'primary');
-        });
+        Customers::extendFormFields(new AddsCustomerOrdersTabFields());
 
         Statistics::registerCards(function() {
             return (new RegistersDashboardCards)();

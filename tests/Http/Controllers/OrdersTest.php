@@ -38,11 +38,11 @@ it('loads order invoice page', function() {
         ->assertOk();
 });
 
-it('deletes order from edit page', function() {
+it('deletes order from list page', function() {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
-        ->post(route('igniter.cart.orders', ['slug' => 'edit/'.$order->getKey()]), [], [
+        ->post(route('igniter.cart.orders'), ['checked' => [$order->getKey()]], [
             'X-Requested-With' => 'XMLHttpRequest',
             'X-IGNITER-REQUEST-HANDLER' => 'onDelete',
         ]);
@@ -50,11 +50,11 @@ it('deletes order from edit page', function() {
     expect(Order::find($order->getKey()))->toBeNull();
 });
 
-it('deletes order from list page', function() {
+it('deletes order from edit page', function() {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
-        ->post(route('igniter.cart.orders'), ['checked' => [$order->getKey()]], [
+        ->post(route('igniter.cart.orders', ['slug' => 'edit/'.$order->getKey()]), [], [
             'X-Requested-With' => 'XMLHttpRequest',
             'X-IGNITER-REQUEST-HANDLER' => 'onDelete',
         ]);

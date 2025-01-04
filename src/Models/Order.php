@@ -220,7 +220,7 @@ class Order extends Model
             return false;
         }
 
-        if (!$this->order_datetime->isFuture()) {
+        if ($this->order_datetime->isPast()) {
             return false;
         }
 

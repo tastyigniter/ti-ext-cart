@@ -4,6 +4,7 @@ namespace Igniter\Cart\Tests;
 
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
+use Igniter\Admin\Http\Controllers\Dashboard;
 use Igniter\Admin\Models\StatusHistory;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
@@ -14,7 +15,6 @@ use Igniter\Cart\AutomationRules\Events\OrderPlaced;
 use Igniter\Cart\Extension;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\FormWidgets\StockEditor;
-use Igniter\Cart\Http\Controllers\Menus;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\MenuExport;
@@ -255,7 +255,7 @@ it('adds cart middleware to frontend routes', function() {
 });
 
 it('returns registered dashboard charts', function() {
-    $charts = new class(resolve(Menus::class)) extends Charts
+    $charts = new class(resolve(Dashboard::class)) extends Charts
     {
         public function testDatasets()
         {
@@ -268,7 +268,7 @@ it('returns registered dashboard charts', function() {
 });
 
 it('returns registered dashboard statistic widgets', function() {
-    $statistics = new class(resolve(Menus::class)) extends Statistics
+    $statistics = new class(resolve(Dashboard::class)) extends Statistics
     {
         public function testCards()
         {
@@ -277,14 +277,27 @@ it('returns registered dashboard statistic widgets', function() {
     };
     $cards = $statistics->testCards();
 
-    expect($cards)->not->toBeEmpty();
+    expect(array_keys($cards))->toContain(
+        'sale',
+        'lost_sale',
+        'cash_payment',
+        'order',
+        'delivery_order',
+        'collection_order',
+        'completed_order',
+    );
 });
 
-it('adds orders tab to customer edit form', function() {
+it('does not add orders tab to customer edit form when model is invalid', function() {
     $model = mock(Model::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $model, 'context' => 'edit']);
     $form->bindToController();
+    $fields = $form->getFields();
 
+    expect($fields)->not->toHaveKey('orders');
+});
+
+it('adds orders tab to customer edit form', function() {
     $customer = mock(Customer::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $customer, 'context' => 'edit']);
     $form->bindToController();
