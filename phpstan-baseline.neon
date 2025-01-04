@@ -281,11 +281,6 @@ parameters:
 			path: src/Http/Controllers/Orders.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Orders.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
@@ -627,11 +622,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Optional\\:\\:getLabel\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
