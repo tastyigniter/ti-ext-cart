@@ -4,9 +4,9 @@ namespace Igniter\Cart\Models;
 
 use Carbon\Carbon;
 use Igniter\Admin\Models\Concerns\GeneratesHash;
+use Igniter\Admin\Models\Concerns\LogsStatusHistory;
 use Igniter\Admin\Models\Status;
 use Igniter\Admin\Models\StatusHistory;
-use Igniter\Admin\Traits\LogsStatusHistory;
 use Igniter\Cart\Events\OrderBeforePaymentProcessedEvent;
 use Igniter\Cart\Events\OrderCanceledEvent;
 use Igniter\Cart\Events\OrderPaymentProcessedEvent;
@@ -18,7 +18,7 @@ use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Main\Classes\MainController;
 use Igniter\PayRegister\Models\PaymentLog;
-use Igniter\System\Traits\SendsMailTemplate;
+use Igniter\System\Models\Concerns\SendsMailTemplate;
 use Igniter\User\Models\Concerns\Assignable;
 use Igniter\User\Models\Concerns\HasCustomer;
 
