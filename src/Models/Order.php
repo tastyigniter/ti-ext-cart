@@ -178,7 +178,7 @@ class Order extends Model
 
     public function getOrderDatetimeAttribute($value)
     {
-        return make_carbon($this->order_date)->setTimeFromTimeString($this->order_time);
+        return make_carbon($this->order_date)->setTimeFromTimeString($this->order_time ?? '00:00:00');
     }
 
     public function getFormattedAddressAttribute($value)
