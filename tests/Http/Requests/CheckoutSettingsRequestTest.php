@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
-use Illuminate\Support\Facades\Validator;
 
-it('returns correct attribute labels', function () {
-    $request = new CheckoutSettingsRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new CheckoutSettingsRequest;
 
     $attributes = $request->attributes();
 
@@ -16,8 +17,8 @@ it('returns correct attribute labels', function () {
         ->and($attributes)->toHaveKey('payments.*', lang('igniter.payregister::default.label_payments'));
 });
 
-it('returns correct validation rules', function () {
-    $request = new CheckoutSettingsRequest();
+it('returns correct validation rules', function(): void {
+    $request = new CheckoutSettingsRequest;
 
     $rules = $request->rules();
 

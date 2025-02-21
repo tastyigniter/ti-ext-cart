@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\Order;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\Local\Models\Location;
 
 class OrderFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\Order::class;
+    protected $model = Order::class;
 
     public function definition(): array
     {

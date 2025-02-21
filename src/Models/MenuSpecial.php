@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Carbon\Carbon;
@@ -24,7 +26,7 @@ use Igniter\System\Models\Concerns\Switchable;
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property-read mixed $pretty_end_date
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuSpecial extends Model
 {
@@ -57,7 +59,7 @@ class MenuSpecial extends Model
         'recurring_every' => 'array',
     ];
 
-    public static function getRecurringEveryOptions()
+    public static function getRecurringEveryOptions(): array
     {
         return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     }
@@ -87,7 +89,7 @@ class MenuSpecial extends Model
             return false;
         }
 
-        return !($this->isExpired() === true);
+        return $this->isExpired() !== true;
     }
 
     public function daysRemaining()
@@ -99,7 +101,7 @@ class MenuSpecial extends Model
         return $this->end_date->diffForHumans();
     }
 
-    public function isRecurring()
+    public function isRecurring(): bool
     {
         return $this->validity == 'recurring';
     }
@@ -126,7 +128,7 @@ class MenuSpecial extends Model
         }
     }
 
-    public function isFixed()
+    public function isFixed(): bool
     {
         return $this->type !== 'P';
     }

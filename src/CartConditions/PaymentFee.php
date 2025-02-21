@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\CartConditions;
 
 use Igniter\Cart\CartCondition;
@@ -9,9 +11,9 @@ class PaymentFee extends CartCondition
 {
     protected $paymentModel;
 
-    public $priority = 600;
+    public ?int $priority = 600;
 
-    public function getLabel()
+    public function getLabel(): string
     {
         $paymentFeeType = (int)optional($this->paymentModel)->order_fee_type;
         $paymentFee = optional($this->paymentModel)->order_fee;
@@ -21,9 +23,9 @@ class PaymentFee extends CartCondition
             : lang($this->label);
     }
 
-    public function beforeApply()
+    public function beforeApply(): ?bool
     {
-        if (!strlen($paymentCode = $this->getMetaData('code', ''))) {
+        if ((string)($paymentCode = $this->getMetaData('code', '')) === '') {
             return false;
         }
 
@@ -33,12 +35,14 @@ class PaymentFee extends CartCondition
 
         // only apply if payment has applicable fee
         $paymentFee = optional($this->paymentModel)->order_fee;
-        if (!($paymentFee > 0)) {
+        if ($paymentFee <= 0) {
             return false;
         }
+
+        return null;
     }
 
-    public function getActions()
+    public function getActions(): array
     {
         $paymentFeeType = (int)optional($this->paymentModel)->order_fee_type;
         $paymentFee = optional($this->paymentModel)->order_fee ?? 0;

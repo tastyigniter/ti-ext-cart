@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
+use Igniter\User\Models\User;
+use Illuminate\Support\Carbon;
 
 /**
  * Stock History Model Class
@@ -14,12 +18,12 @@ use Igniter\Flame\Database\Model;
  * @property int|null $order_id
  * @property string $state
  * @property int $quantity
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read mixed $created_at_since
  * @property-read mixed $staff_name
  * @property-read mixed $state_text
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class StockHistory extends Model
 {
@@ -44,15 +48,15 @@ class StockHistory extends Model
 
     public $relation = [
         'belongsTo' => [
-            'stock' => \Igniter\Cart\Models\Stock::class,
-            'user' => \Igniter\User\Models\User::class,
-            'order' => \Igniter\Cart\Models\Order::class,
+            'stock' => Stock::class,
+            'user' => User::class,
+            'order' => Order::class,
         ],
     ];
 
     public $timestamps = true;
 
-    public static function createHistory(Stock $stock, int $quantity, $state, array $options = [])
+    public static function createHistory(Stock $stock, int $quantity, $state, array $options = []): static
     {
         $model = new static;
         $model->stock_id = $stock->getKey();
@@ -70,12 +74,12 @@ class StockHistory extends Model
         return $this->user->name ?? null;
     }
 
-    public function getStateTextAttribute()
+    public function getStateTextAttribute(): string
     {
         return lang('igniter.cart::default.stocks.text_action_'.$this->state);
     }
 
-    public function getCreatedAtSinceAttribute()
+    public function getCreatedAtSinceAttribute(): ?string
     {
         return $this->created_at ? time_elapsed($this->created_at) : null;
     }

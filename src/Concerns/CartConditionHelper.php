@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Concerns;
 
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 trait CartConditionHelper
 {
     /**
-     * @var \Illuminate\Support\Collection
+     * @var Collection
      */
     protected $actionCollection;
 
-    protected function validate($rules)
+    protected function validate(array $rules): bool
     {
         $validated = collect($rules)->filter(function($rule) {
             return $this->ruleIsValid($rule);
@@ -28,18 +31,16 @@ trait CartConditionHelper
 
     /**
      * Added for backward compatibility
-     *
-     * @return float|string
      */
-    protected function processValue($subTotal)
+    protected function processValue(float $subTotal): int|float
     {
         return $this->calculate($subTotal);
     }
 
-    protected function processActionValue($action, $total)
+    protected function processActionValue(array $action, float $total): array
     {
         $action = $this->parseAction($action);
-        $actionValue = array_get($action, 'value', 0);
+        $actionValue = array_get($action, 'value', '0');
         $actionValuePrecision = (int)array_get($action, 'valuePrecision', 2);
 
         if ($this->valueIsPercentage($actionValue)) {
@@ -57,35 +58,35 @@ trait CartConditionHelper
         return $action;
     }
 
-    protected function calculateActionValue($action, $total)
+    protected function calculateActionValue(array $action, float $total): float
     {
-        $actionValue = array_get($action, 'value', 0);
+        $actionValue = (string)array_get($action, 'value', 0);
         $calculatedValue = array_get($action, 'cleanValue', 0);
         $actionMultiplier = array_get($action, 'multiplier');
         $actionMax = array_get($action, 'max', false);
 
         $result = $total;
-        if ($this->actionIsInclusive($action)) {
-            $result = $total;
-        } elseif ($this->valueIsToBeSubtracted($actionValue)) {
-            $result = ($total - $calculatedValue);
-        } elseif ($this->valueIsToBeAdded($actionValue)) {
-            $result = ($total + $calculatedValue);
-        } elseif ($this->valueIsToBeMultiplied($actionValue)) {
-            $result = ($total * $calculatedValue);
-        } elseif ($this->valueIsToBeDivided($actionValue)) {
-            $result = (float)($total / $calculatedValue);
+        if (!$this->actionIsInclusive($action)) {
+            if ($this->valueIsToBeSubtracted($actionValue)) {
+                $result = ($total - $calculatedValue);
+            } elseif ($this->valueIsToBeAdded($actionValue)) {
+                $result = ($total + $calculatedValue);
+            } elseif ($this->valueIsToBeMultiplied($actionValue)) {
+                $result = ($total * $calculatedValue);
+            } elseif ($this->valueIsToBeDivided($actionValue)) {
+                $result = $total / $calculatedValue;
+            }
         }
 
         if ($actionMultiplier) {
-            $result = (float)($total * $this->operandValue($actionMultiplier));
+            $result = $total * $this->operandValue($actionMultiplier);
         }
 
         if ($this->actionHasReachedMax($actionMax, $result)) {
             $result = $actionMax;
         }
 
-        return max($result, 0);
+        return (float)max($result, 0);
     }
 
     protected function actionHasReachedMax($actionMax, $value)
@@ -95,18 +96,18 @@ trait CartConditionHelper
 
     /**
      * Removes some arithmetic signs (%,+,-, /, *) only
-     *
-     * @param string $include
-     *
-     * @return mixed
      */
-    protected function cleanValue($value)
+    protected function cleanValue(string $value): int|float|string
     {
         return str_replace(['%', '-', '+', '*', '/'], '', $value) ?: 0;
     }
 
-    protected function operandValue($key)
+    protected function operandValue(int|string $key): int|float|string
     {
+        if (!is_string($key)) {
+            return $key;
+        }
+
         if (property_exists($this, $key)) {
             return $this->{$key};
         }
@@ -118,38 +119,30 @@ trait CartConditionHelper
         return $key;
     }
 
-    protected function ruleIsValid($rule)
+    protected function ruleIsValid(string $rule): bool
     {
         [$leftOperand, $operator, $rightOperand] = $this->parseRule($rule);
         $leftOperand = $this->operandValue($leftOperand);
         $rightOperand = $this->operandValue($rightOperand);
 
-        switch ($operator) {
-            case '=':
-                return $leftOperand == $rightOperand;
-            case '==':
-                return $leftOperand === $rightOperand;
-            case '!=':
-                return $leftOperand != $rightOperand;
-            case '<':
-                return $leftOperand < $rightOperand;
-            case '<=':
-                return $leftOperand <= $rightOperand;
-            case '>':
-                return $leftOperand > $rightOperand;
-            case '>=':
-                return $leftOperand >= $rightOperand;
-        }
-
-        return false;
+        return match ($operator) {
+            '=' => $leftOperand == $rightOperand,
+            '==' => $leftOperand === $rightOperand,
+            '!=' => $leftOperand != $rightOperand,
+            '<' => $leftOperand < $rightOperand,
+            '<=' => $leftOperand <= $rightOperand,
+            '>' => $leftOperand > $rightOperand,
+            '>=' => $leftOperand >= $rightOperand,
+            default => false,
+        };
     }
 
-    protected function parseRule($rule)
+    protected function parseRule(string $rule): array
     {
-        preg_match('/([a-zA-Z0-9\-?]+)(?:\s*)([\=\!\<\>]{1,2})(?:\s*)([\-?a-zA-Z0-9]+)/', $rule, $matches);
+        preg_match('/([a-zA-Z0-9\-?]+)\s*([\=\!\<\>]{1,2})\s*([\-?a-zA-Z0-9]+)/', $rule, $matches);
 
-        if (!count($matches)) {
-            throw new \InvalidArgumentException(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
+        if ($matches === []) {
+            throw new InvalidArgumentException(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
         }
 
         array_shift($matches);
@@ -157,9 +150,9 @@ trait CartConditionHelper
         return $matches;
     }
 
-    protected function parseAction($action)
+    protected function parseAction(array $action): array
     {
-        if (is_array($action) && !$action) {
+        if ($action === []) {
             return $action;
         }
 
@@ -170,57 +163,47 @@ trait CartConditionHelper
         return $action;
     }
 
-    protected function actionIsInclusive($action)
+    protected function actionIsInclusive(array $action): bool
     {
         return array_get($action, 'inclusive', false);
     }
 
     /**
      * Check if value is a percentage
-     *
-     * @return bool
      */
-    protected function valueIsPercentage($value)
+    protected function valueIsPercentage(string $value): bool
     {
         return preg_match('/%/', $value) == 1;
     }
 
     /**
      * Check if value is a subtract
-     *
-     * @return bool
      */
-    protected function valueIsToBeSubtracted($value)
+    protected function valueIsToBeSubtracted(string $value): bool
     {
         return preg_match('/\-/', $value) == 1;
     }
 
     /**
      * Check if value is to be added
-     *
-     * @return bool
      */
-    protected function valueIsToBeAdded($value)
+    protected function valueIsToBeAdded(string $value): bool
     {
         return preg_match('/\+/', $value) == 1;
     }
 
     /**
      * Check if value is to be added
-     *
-     * @return bool
      */
-    protected function valueIsToBeMultiplied($value)
+    protected function valueIsToBeMultiplied(string $value): bool
     {
         return preg_match('/\*/', $value) == 1;
     }
 
     /**
      * Check if value is to be added
-     *
-     * @return bool
      */
-    protected function valueIsToBeDivided($value)
+    protected function valueIsToBeDivided(string $value): bool
     {
         return preg_match('/\\//', $value) == 1;
     }
@@ -229,7 +212,7 @@ trait CartConditionHelper
     // Session
     //
 
-    protected function getSessionKey()
+    protected function getSessionKey(): string
     {
         return sprintf($this->sessionKey, $this->name);
     }

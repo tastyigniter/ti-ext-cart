@@ -1,24 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Controllers;
 
+use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
+use Igniter\Admin\Http\Actions\FormController;
+use Igniter\Admin\Http\Actions\ListController;
 use Igniter\Admin\Models\Status;
+use Igniter\Cart\Http\Requests\OrderRequest;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\FlashException;
+use Igniter\Local\Http\Actions\LocationAwareController;
+use Igniter\User\Http\Actions\AssigneeController;
+use Illuminate\Http\RedirectResponse;
 
-class Orders extends \Igniter\Admin\Classes\AdminController
+class Orders extends AdminController
 {
     public array $implement = [
-        \Igniter\Admin\Http\Actions\ListController::class,
-        \Igniter\Admin\Http\Actions\FormController::class,
-        \Igniter\Local\Http\Actions\LocationAwareController::class,
-        \Igniter\User\Http\Actions\AssigneeController::class,
+        ListController::class,
+        FormController::class,
+        LocationAwareController::class,
+        AssigneeController::class,
     ];
 
     public array $listConfig = [
         'list' => [
-            'model' => \Igniter\Cart\Models\Order::class,
+            'model' => Order::class,
             'title' => 'lang:igniter.cart::default.orders.text_title',
             'emptyMessage' => 'lang:igniter.cart::default.orders.text_empty',
             'defaultSort' => ['order_id', 'DESC'],
@@ -28,8 +37,8 @@ class Orders extends \Igniter\Admin\Classes\AdminController
 
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.orders.text_form_name',
-        'model' => \Igniter\Cart\Models\Order::class,
-        'request' => \Igniter\Cart\Http\Requests\OrderRequest::class,
+        'model' => Order::class,
+        'request' => OrderRequest::class,
         'edit' => [
             'title' => 'lang:igniter::admin.form.edit_title',
             'redirect' => 'orders/edit/{order_id}',
@@ -51,7 +60,7 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         'Admin.DeleteOrders',
     ];
 
-    public static function getSlug()
+    public static function getSlug(): string
     {
         return 'orders';
     }
@@ -63,11 +72,11 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         AdminMenu::setContext('orders', 'sales');
     }
 
-    public function index()
+    public function index(): void
     {
         $this->asExtension('ListController')->index();
 
-        $this->vars['statusesOptions'] = \Igniter\Admin\Models\Status::getDropdownOptionsForOrder();
+        $this->vars['statusesOptions'] = Status::getDropdownOptionsForOrder();
     }
 
     public function index_onDelete()
@@ -76,10 +85,10 @@ class Orders extends \Igniter\Admin\Classes\AdminController
             new FlashException(lang('igniter::admin.alert_user_restricted')),
         );
 
-        return $this->asExtension(\Igniter\Admin\Http\Actions\ListController::class)->index_onDelete();
+        return $this->asExtension(ListController::class)->index_onDelete();
     }
 
-    public function index_onUpdateStatus()
+    public function index_onUpdateStatus(): RedirectResponse
     {
         $model = Order::find((int)post('recordId'));
         $status = Status::find((int)post('statusId'));
@@ -97,10 +106,10 @@ class Orders extends \Igniter\Admin\Classes\AdminController
             new FlashException(lang('igniter::admin.alert_user_restricted')),
         );
 
-        return $this->asExtension(\Igniter\Admin\Http\Actions\FormController::class)->edit_onDelete($context, $recordId);
+        return $this->asExtension(FormController::class)->edit_onDelete($context, $recordId);
     }
 
-    public function invoice($context, $recordId = null)
+    public function invoice($context, $recordId = null): void
     {
         $model = $this->formFindModelObject($recordId);
 
@@ -113,10 +122,10 @@ class Orders extends \Igniter\Admin\Classes\AdminController
         $this->layout = '';
     }
 
-    public function formExtendQuery($query)
+    public function formExtendQuery($query): void
     {
         $query->with([
-            'status_history' => function($q) {
+            'status_history' => function($q): void {
                 $q->orderBy('created_at', 'desc');
             },
         ]);

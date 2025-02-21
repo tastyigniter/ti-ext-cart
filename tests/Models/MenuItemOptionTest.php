@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
+use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOption;
@@ -9,7 +12,7 @@ use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Flame\Database\Traits\Validation;
 
-it('returns option name attribute', function() {
+it('returns option name attribute', function(): void {
     $menuItemOption = MenuItemOption::factory()
         ->for(MenuOption::factory()->create([
             'option_name' => 'Option Name',
@@ -19,7 +22,7 @@ it('returns option name attribute', function() {
     expect($menuItemOption)->option_name->toBe('Option Name');
 });
 
-it('returns display type attribute', function() {
+it('returns display type attribute', function(): void {
     $menuItemOption = MenuItemOption::factory()
         ->for(MenuOption::factory()->create([
             'display_type' => 'radio',
@@ -29,7 +32,7 @@ it('returns display type attribute', function() {
     expect($menuItemOption)->display_type->toBe('radio');
 });
 
-it('returns option values with menu option values when they exist', function() {
+it('returns option values with menu option values when they exist', function(): void {
     $menuOption = MenuOption::factory()->create(['display_type' => 'radio']);
     $menuOptionValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['price' => 10]);
     $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create();
@@ -54,7 +57,7 @@ it('returns option values with menu option values when they exist', function() {
         ->and($firstResult->is_enabled)->toBeTrue();
 });
 
-it('returns option values with default values when menu option values do not exist', function() {
+it('returns option values with default values when menu option values do not exist', function(): void {
     $menuOption = MenuOption::factory()->create(['display_type' => 'radio']);
     $menuOptionValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['price' => 10]);
     $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create();
@@ -72,7 +75,7 @@ it('returns option values with default values when menu option values do not exi
         ->and($result->first()->is_enabled)->toBeFalse();
 });
 
-it('checks if menu item option is required', function() {
+it('checks if menu item option is required', function(): void {
     $menuItemOption = MenuItemOption::factory()->create([
         'is_required' => true,
     ]);
@@ -80,7 +83,7 @@ it('checks if menu item option is required', function() {
     expect($menuItemOption->isRequired())->toBeTrue();
 });
 
-it('checks if menu item option is not required', function() {
+it('checks if menu item option is not required', function(): void {
     $menuItemOption = MenuItemOption::factory()->create([
         'is_required' => false,
     ]);
@@ -88,7 +91,7 @@ it('checks if menu item option is not required', function() {
     expect($menuItemOption->isRequired())->toBeFalse();
 });
 
-it('checks if menu item option values are added correctly', function() {
+it('checks if menu item option values are added correctly', function(): void {
     $menuItemOption = MenuItemOption::factory()->create();
 
     expect($menuItemOption->addMenuOptionValues([
@@ -98,7 +101,7 @@ it('checks if menu item option values are added correctly', function() {
     ]))->toBe(3);
 });
 
-it('adds values to menu item options on save correctly', function() {
+it('adds values to menu item options on save correctly', function(): void {
     $menuItemOption = MenuItemOption::factory()->create();
 
     $menuItemOption->menu_option_values = [
@@ -112,7 +115,7 @@ it('adds values to menu item options on save correctly', function() {
     expect($menuItemOption->menu_option_values()->count())->toBe(3);
 });
 
-it('configures menu item option model correctly', function() {
+it('configures menu item option model correctly', function(): void {
     $menuItemOption = new MenuItemOption;
 
     expect(class_uses_recursive($menuItemOption))
@@ -128,14 +131,14 @@ it('configures menu item option model correctly', function() {
         ->and($menuItemOption->relation)->toEqual([
             'hasMany' => [
                 'menu_option_values' => [
-                    \Igniter\Cart\Models\MenuItemOptionValue::class,
+                    MenuItemOptionValue::class,
                     'foreignKey' => 'menu_option_id',
                     'delete' => true,
                 ],
             ],
             'belongsTo' => [
-                'menu' => [\Igniter\Cart\Models\Menu::class],
-                'option' => [\Igniter\Cart\Models\MenuOption::class],
+                'menu' => [Menu::class],
+                'option' => [MenuOption::class],
             ],
         ])
         ->and($menuItemOption->rules)->toEqual([

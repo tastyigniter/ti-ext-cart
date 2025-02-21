@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\PayRegister\Models\Payment;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->paymentFee = new PaymentFee([
         'label' => 'Test Fee',
         'metaData' => ['code' => 'test'],
     ]);
 });
 
-it('gets label with percentage fee', function() {
+it('gets label with percentage fee', function(): void {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
@@ -24,7 +26,7 @@ it('gets label with percentage fee', function() {
     expect($this->paymentFee->getLabel())->toBe('Test Fee [10%]');
 });
 
-it('gets label without percentage fee', function() {
+it('gets label without percentage fee', function(): void {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
@@ -38,13 +40,13 @@ it('gets label without percentage fee', function() {
     expect($this->paymentFee->getLabel())->toBe('Test Fee');
 });
 
-it('before apply with no payment code', function() {
+it('before apply with no payment code', function(): void {
     $paymentFee = new PaymentFee(['label' => 'Test Fee']);
 
     expect($paymentFee->beforeApply())->toBeFalse();
 });
 
-it('before apply with no fee', function() {
+it('before apply with no fee', function(): void {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
@@ -56,7 +58,7 @@ it('before apply with no fee', function() {
     expect($this->paymentFee->beforeApply())->toBeFalse();
 });
 
-it('gets actions with percentage fee', function() {
+it('gets actions with percentage fee', function(): void {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [
@@ -70,7 +72,7 @@ it('gets actions with percentage fee', function() {
     expect($this->paymentFee->getActions())->toBe([['value' => '+10%']]);
 });
 
-it('gets actions without percentage fee', function() {
+it('gets actions without percentage fee', function(): void {
     Payment::factory()->create([
         'code' => 'test',
         'data' => [

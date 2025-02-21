@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Igniter\Cart\Concerns\CartConditionHelper;
@@ -21,26 +23,20 @@ abstract class CartCondition implements Arrayable, Jsonable
 
     /**
      * The name for this cart condition.
-     *
-     * @var string
      */
-    public $name = 'default';
+    public string $name = 'default';
 
     /**
      * The label for this cart condition.
-     *
-     * @var int|float
      */
-    public $label;
+    public ?string $label = null;
 
     /**
      * The priority for this cart condition.
-     *
-     * @var int
      */
-    public $priority = 0;
+    public ?int $priority = 0;
 
-    public $removeable = false;
+    public bool $removeable = false;
 
     //
     // Object properties
@@ -48,10 +44,7 @@ abstract class CartCondition implements Arrayable, Jsonable
 
     protected $sessionKey = 'cart.conditions.%s';
 
-    /**
-     * @var \Igniter\Cart\CartContent|\Igniter\Cart\CartItem
-     */
-    protected $target;
+    protected null|CartContent|CartItem $target = null;
 
     protected $passed;
 
@@ -75,7 +68,7 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->fillFromConfig($config);
     }
 
-    public function fillFromConfig($config)
+    public function fillFromConfig($config): void
     {
         $this->label = array_get($config, 'label', $this->label);
         $this->name = array_get($config, 'name', $this->name);
@@ -137,10 +130,10 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->calculatedValue = 0;
 
         return collect($this->getActions())
-            ->map(function($action) use ($subTotal) {
+            ->map(function($action) use ($subTotal): array {
                 return $this->processActionValue($action, $subTotal);
             })
-            ->reduce(function($total, $action) {
+            ->reduce(function($total, $action): float {
                 return $this->calculateActionValue($action, $total);
             }, $subTotal);
     }
@@ -198,14 +191,14 @@ abstract class CartCondition implements Arrayable, Jsonable
     // Getters and Setters
     //
 
-    public function withTarget($target)
+    public function withTarget(CartContent|CartItem|null $target)
     {
         $this->target = $target;
 
         return $this;
     }
 
-    public function setCartContent($cartContent)
+    public function setCartContent(CartContent|CartItem|null $cartContent)
     {
         traceLog('CartCondition::setCartContent() is deprecated. See CartCondition::withTarget()');
 
@@ -239,7 +232,7 @@ abstract class CartCondition implements Arrayable, Jsonable
      *
      * @param int $priority
      */
-    public function setPriority($priority = 999)
+    public function setPriority(?int $priority = 999): void
     {
         $this->priority = $priority;
     }
@@ -254,7 +247,7 @@ abstract class CartCondition implements Arrayable, Jsonable
         return Arr::get($metaData, $key, $default);
     }
 
-    public function setMetaData($key, $value = null)
+    public function setMetaData($key, $value = null): void
     {
         $metaData = Session::get($this->getSessionKey(), []);
 
@@ -269,7 +262,7 @@ abstract class CartCondition implements Arrayable, Jsonable
         Session::put($this->getSessionKey(), $metaData);
     }
 
-    public function removeMetaData($key = null)
+    public function removeMetaData($key = null): void
     {
         $metaData = Session::get($this->getSessionKey(), []);
 
@@ -282,7 +275,7 @@ abstract class CartCondition implements Arrayable, Jsonable
         Session::put($this->getSessionKey(), $metaData);
     }
 
-    public function clearMetaData()
+    public function clearMetaData(): void
     {
         Session::pull($this->getSessionKey());
     }

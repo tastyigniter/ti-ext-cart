@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Cart\Models\Menu;
 
-it('loads menus page', function() {
+it('loads menus page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.menus'))
         ->assertOk();
 });
 
-it('loads create menu page', function() {
+it('loads create menu page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.menus', ['slug' => 'create']))
         ->assertOk();
 });
 
-it('loads edit menu page', function() {
+it('loads edit menu page', function(): void {
     $menu = Menu::factory()->create();
 
     actingAsSuperUser()
@@ -24,7 +26,7 @@ it('loads edit menu page', function() {
         ->assertOk();
 });
 
-it('loads menu preview page', function() {
+it('loads menu preview page', function(): void {
     $menu = Menu::factory()->create();
 
     actingAsSuperUser()
@@ -32,7 +34,7 @@ it('loads menu preview page', function() {
         ->assertOk();
 });
 
-it('updates menu', function() {
+it('updates menu', function(): void {
     $menu = Menu::factory()->create();
 
     actingAsSuperUser()
@@ -49,7 +51,7 @@ it('updates menu', function() {
     expect(Menu::find($menu->getKey()))->menu_name->toBe('Updated Menu');
 });
 
-it('deletes menu', function() {
+it('deletes menu', function(): void {
     $menu = Menu::factory()->create();
 
     actingAsSuperUser()

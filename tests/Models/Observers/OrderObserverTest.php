@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Observers;
 
 use Igniter\Cart\Models\Observers\OrderObserver;
 use Igniter\Cart\Models\Order;
 use Mockery;
 
-beforeEach(function() {
-    $this->observer = new OrderObserver();
+beforeEach(function(): void {
+    $this->observer = new OrderObserver;
     $this->order = Mockery::mock(Order::class)->makePartial();
 });
 
-it('fills hash, ip_address, and user_agent when creating', function() {
+it('fills hash, ip_address, and user_agent when creating', function(): void {
     request()->headers->set('REMOTE_ADDR', '127.0.0.1');
     request()->headers->set('User-Agent', 'test-agent');
 
@@ -26,7 +28,7 @@ it('fills hash, ip_address, and user_agent when creating', function() {
     $this->observer->creating($this->order);
 });
 
-it('handles missing user agent gracefully', function() {
+it('handles missing user agent gracefully', function(): void {
     request()->headers->set('REMOTE_ADDR', '127.0.0.1');
     request()->headers->set('User-Agent', null);
 

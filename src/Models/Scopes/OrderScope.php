@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Scopes;
 
 use Carbon\Carbon;
@@ -12,8 +14,8 @@ class OrderScope extends Scope
     {
         return function(Builder $builder, $range) {
             return $builder->whereBetweenOrderDateTime(
-                Carbon::parse(array_get($range, 'startAt', false))->format('Y-m-d H:i:s'),
-                Carbon::parse(array_get($range, 'endAt', false))->format('Y-m-d H:i:s')
+                Carbon::parse(array_get($range, 'startAt'))->format('Y-m-d H:i:s'),
+                Carbon::parse(array_get($range, 'endAt'))->format('Y-m-d H:i:s'),
             );
         };
     }
@@ -31,7 +33,7 @@ class OrderScope extends Scope
             return $builder->whereRaw(
                 '? between DATE_SUB(ADDTIME(order_date, order_time), INTERVAL (duration - 2) MINUTE)'.
                 ' and DATE_ADD(ADDTIME(order_date, order_time), INTERVAL duration MINUTE)',
-                [$dateTime]
+                [$dateTime],
             );
         };
     }

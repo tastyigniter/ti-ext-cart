@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\OrderStatusRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new OrderStatusRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new OrderStatusRequest;
 
     $attributes = $request->attributes();
 
@@ -17,8 +19,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('assignee_id', lang('igniter::admin.statuses.label_assignee'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new OrderStatusRequest();
+it('returns correct validation rules', function(): void {
+    $request = new OrderStatusRequest;
 
     $rules = $request->rules();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\CartConditions;
 
 use Igniter\Cart\CartCondition;
@@ -16,18 +18,18 @@ class Tax extends CartCondition
 
     protected $taxRateLabel;
 
-    public $priority = 300;
+    public ?int $priority = 300;
 
     protected $taxDelivery;
 
-    public function getLabel()
+    public function getLabel(): string
     {
         $label = $this->taxInclusive ? "{$this->taxRateLabel}% ".lang('igniter.cart::default.text_vat_included') : "{$this->taxRateLabel}%";
 
         return sprintf(lang($this->label), $label);
     }
 
-    public function onLoad()
+    public function onLoad(): void
     {
         $this->taxMode = (bool)setting('tax_mode', 1);
         $this->taxInclusive = !((bool)setting('tax_menu_price', 1));
@@ -39,15 +41,13 @@ class Tax extends CartCondition
         $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
 
-    public function beforeApply()
+    public function beforeApply(): ?bool
     {
         // only calculate taxes if enabled
-        if (!$this->taxMode || !$this->taxRate) {
-            return false;
-        }
+        return $this->taxMode && $this->taxRate;
     }
 
-    public function getActions()
+    public function getActions(): array
     {
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
 

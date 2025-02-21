@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Igniter\System\Classes\ExtensionManager;
+use LogicException;
 
 class CartConditionManager
 {
@@ -21,11 +24,11 @@ class CartConditionManager
     public function makeCondition($className, array $config = [])
     {
         if (!array_key_exists($className, $this->registeredConditions ?? [])) {
-            throw new \LogicException(sprintf("The Cart Condition class '%s' has not been registered", $className));
+            throw new LogicException(sprintf("The Cart Condition class '%s' has not been registered", $className));
         }
 
         if (!class_exists($className)) {
-            throw new \LogicException(sprintf("The Cart Condition class '%s' does not exist", $className));
+            throw new LogicException(sprintf("The Cart Condition class '%s' does not exist", $className));
         }
 
         return new $className(array_merge($this->registeredConditions[$className], $config));
@@ -40,7 +43,7 @@ class CartConditionManager
         return $this->registeredConditions;
     }
 
-    public function loadRegisteredConditions()
+    public function loadRegisteredConditions(): void
     {
         if (is_null($this->registeredConditions)) {
             $this->registeredConditions = [];
@@ -57,7 +60,7 @@ class CartConditionManager
         }
     }
 
-    public function registerConditions(array $conditions)
+    public function registerConditions(array $conditions): void
     {
         if ($this->registeredConditions === null) {
             $this->registeredConditions = [];
@@ -68,7 +71,7 @@ class CartConditionManager
         }
     }
 
-    public function registerCondition($className, $conditionInfo = null)
+    public function registerCondition($className, $conditionInfo = null): void
     {
         if ($this->registeredConditions === null) {
             $this->registeredConditions = [];
@@ -88,7 +91,7 @@ class CartConditionManager
         $this->registeredConditionHints[$conditionName] = $className;
     }
 
-    public function registerCallback(callable $definitions)
+    public function registerCallback(callable $definitions): void
     {
         $this->registeredCallbacks[] = $definitions;
     }

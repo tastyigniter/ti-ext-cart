@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Menu;
@@ -9,7 +11,7 @@ use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Local\Facades\Location as LocationFacade;
 use Igniter\Local\Models\Location;
 
-it('returns options with locations when locations are assigned', function() {
+it('returns options with locations when locations are assigned', function(): void {
     LocationFacade::shouldReceive('currentOrAssigned')->andReturn([1, 2]);
 
     $result = MenuOption::getRecordEditorOptions();
@@ -18,19 +20,19 @@ it('returns options with locations when locations are assigned', function() {
         ->and($result)->not()->toBeEmpty();
 });
 
-it('checks if menu option display type is select', function() {
+it('checks if menu option display type is select', function(): void {
     $menuOption = MenuOption::factory()->create(['display_type' => 'select']);
 
     expect($menuOption->isSelectDisplayType())->toBeTrue();
 });
 
-it('checks if menu option display type is not select', function() {
+it('checks if menu option display type is not select', function(): void {
     $menuOption = MenuOption::factory()->create(['display_type' => 'radio']);
 
     expect($menuOption->isSelectDisplayType())->toBeFalse();
 });
 
-it('returns option values filtered by option_id', function() {
+it('returns option values filtered by option_id', function(): void {
     MenuOptionValue::factory()->create(['option_id' => 123]);
 
     $result = MenuOption::getOptionValues(123);
@@ -39,7 +41,7 @@ it('returns option values filtered by option_id', function() {
         ->and($result->count())->toBe(1);
 });
 
-it('checks if menu option values are added correctly', function() {
+it('checks if menu option values are added correctly', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     expect($menuOption->addOptionValues([
@@ -49,7 +51,7 @@ it('checks if menu option values are added correctly', function() {
     ]))->toBe(3);
 });
 
-it('adds values to menu options on save correctly', function() {
+it('adds values to menu options on save correctly', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     $menuOption->values = [
@@ -63,7 +65,7 @@ it('adds values to menu options on save correctly', function() {
     expect($menuOption->option_values()->count())->toBe(3);
 });
 
-it('attaches menu option to menu', function() {
+it('attaches menu option to menu', function(): void {
     $menu = Menu::factory()->create();
     $menuOption = MenuOption::factory()
         ->has(MenuOptionValue::factory()->count(3), 'option_values')
@@ -79,7 +81,7 @@ it('attaches menu option to menu', function() {
         ->and($menuItemOption->menu_option_values()->count())->toBe(3);
 });
 
-it('detaches location from menu option on delete', function() {
+it('detaches location from menu option on delete', function(): void {
     $location = Location::factory()->create();
     $menuOption = MenuOption::factory()
         ->hasAttached($location)
@@ -92,7 +94,7 @@ it('detaches location from menu option on delete', function() {
     expect($menuOption->locations()->count())->toBe(0);
 });
 
-it('configures menu option model correctly', function() {
+it('configures menu option model correctly', function(): void {
     $menuOption = new MenuOption;
 
     expect($menuOption->getTable())->toBe('menu_options')

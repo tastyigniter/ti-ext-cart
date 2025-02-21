@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use InvalidArgumentException;
 
 class CartItemOptionValue implements Arrayable, Jsonable
 {
@@ -37,28 +40,22 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * CartItem constructor.
-     *
-     * @param int|string $id
-     * @param string $name
-     * @param float $price
-     * @param array $options
-     * @param null $comment
      */
-    public function __construct($id, $name, $price)
+    public function __construct(int|string $id, string $name, float $price)
     {
-        if (!strlen($id)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item option value identifier.');
+        if ($id === 0 || strlen((string)$id) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item option value identifier.');
         }
-        if (!strlen($name)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item option value name.');
+        if (strlen($name) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item option value name.');
         }
-        if (!is_numeric($price) || strlen($price) < 0) {
-            throw new \InvalidArgumentException('Please supply a valid cart item option value price.');
+        if ($price < 0) {
+            throw new InvalidArgumentException('Please supply a valid cart item option value price.');
         }
 
         $this->id = $id;
         $this->name = $name;
-        $this->price = (float)$price;
+        $this->price = $price;
     }
 
     /**
@@ -74,10 +71,8 @@ class CartItemOptionValue implements Arrayable, Jsonable
     /**
      * Returns the subtotal.
      * Subtotal is price for whole CartItem with options
-     *
-     * @return string
      */
-    public function subtotal()
+    public function subtotal(): int|float
     {
         return $this->qty * $this->price;
     }
@@ -87,10 +82,10 @@ class CartItemOptionValue implements Arrayable, Jsonable
      *
      * @param int|float $qty
      */
-    public function setQuantity($qty)
+    public function setQuantity($qty): void
     {
         if (!is_numeric($qty)) {
-            throw new \InvalidArgumentException('Please supply a valid item option quantity.');
+            throw new InvalidArgumentException('Please supply a valid item option quantity.');
         }
 
         $this->qty = $qty;
@@ -98,10 +93,8 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * Update the cart item option value from an array.
-     *
-     * @return void
      */
-    public function updateFromArray(array $attributes)
+    public function updateFromArray(array $attributes): void
     {
         $this->id = array_get($attributes, 'id', $this->id);
         $this->name = array_get($attributes, 'name', $this->name);
@@ -111,15 +104,13 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @return \Igniter\Cart\CartItemOptionValue
      */
-    public static function fromArray(array $attributes)
+    public static function fromArray(array $attributes): self
     {
         $instance = new self(
             $attributes['id'],
             $attributes['name'],
-            $attributes['price']
+            $attributes['price'],
         );
 
         $instance->qty = array_get($attributes, 'qty', $instance->qty);

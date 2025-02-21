@@ -1,15 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Attach\HasMedia;
+use Igniter\Flame\Database\Attach\Media;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\HasPermalink;
 use Igniter\Flame\Database\Traits\NestedTree;
 use Igniter\Flame\Database\Traits\Sortable;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
+use Illuminate\Support\Carbon;
+use Kalnoy\Nestedset\Collection;
 
 /**
  * Category Model Class
@@ -23,15 +29,15 @@ use Igniter\System\Models\Concerns\Switchable;
  * @property int|null $nest_left
  * @property int|null $nest_right
  * @property string|null $permalink_slug
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Kalnoy\Nestedset\Collection<int, Category> $children
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Category> $children
  * @property-read int|null $children_count
  * @property-read mixed $count_menus
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Igniter\Flame\Database\Attach\Media> $media
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Media> $media
  * @property-read int|null $media_count
  * @property-read Category|null $parent
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class Category extends Model
 {
@@ -73,10 +79,10 @@ class Category extends Model
             'parent_cat' => [\Igniter\Cart\Models\Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
         ],
         'belongsToMany' => [
-            'menus' => [\Igniter\Cart\Models\Menu::class, 'table' => 'menu_categories'],
+            'menus' => [Menu::class, 'table' => 'menu_categories'],
         ],
         'morphToMany' => [
-            'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+            'locations' => [Location::class, 'name' => 'locationable'],
         ],
     ];
 
@@ -106,9 +112,9 @@ class Category extends Model
     // Accessors & Mutators
     //
 
-    public function getDescriptionAttribute($value)
+    public function getDescriptionAttribute($value): string
     {
-        return strip_tags(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+        return strip_tags(html_entity_decode((string)$value, ENT_QUOTES, 'UTF-8'));
     }
 
     public function getCountMenusAttribute($value)

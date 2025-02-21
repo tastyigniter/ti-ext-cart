@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\Menu;
 use Igniter\Flame\Database\Factories\Factory;
 
 class MenuFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\Menu::class;
+    protected $model = Menu::class;
 
     public function definition(): array
     {

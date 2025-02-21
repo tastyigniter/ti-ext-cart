@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Carbon\Carbon;
+use Igniter\Automation\AutomationException;
 use Igniter\Automation\Models\RuleCondition;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\Models\Order;
 
-it('returns correct condition details', function() {
-    $result = (new OrderAttribute())->conditionDetails();
+it('returns correct condition details', function(): void {
+    $result = (new OrderAttribute)->conditionDetails();
 
     expect($result)->toBe([
         'name' => 'Order attribute',
@@ -14,7 +17,7 @@ it('returns correct condition details', function() {
     ]);
 });
 
-it('defines model attributes correctly', function() {
+it('defines model attributes correctly', function(): void {
     $orderAttribute = new OrderAttribute;
 
     $attributes = $orderAttribute->defineModelAttributes();
@@ -26,7 +29,7 @@ it('defines model attributes correctly', function() {
     ]);
 });
 
-it('calculates hours since correctly', function() {
+it('calculates hours since correctly', function(): void {
     $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
 
     $order = Order::factory()->create([
@@ -39,7 +42,7 @@ it('calculates hours since correctly', function() {
     expect($orderAttribute->getHoursSinceAttribute(null, $order))->toBe(5.0);
 });
 
-it('calculates hours until correctly', function() {
+it('calculates hours until correctly', function(): void {
     $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->toDateString(),
@@ -51,7 +54,7 @@ it('calculates hours until correctly', function() {
     expect($orderAttribute->getHoursUntilAttribute(null, $order))->toBe(4.0);
 });
 
-it('calculates days since correctly', function() {
+it('calculates days since correctly', function(): void {
     $this->travelTo(Carbon::now()->setHour(8)->setMinute(0)->setSecond(0));
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->subDays(3)->toDateString(),
@@ -63,7 +66,7 @@ it('calculates days since correctly', function() {
     expect($orderAttribute->getDaysSinceAttribute(null, $order))->toBe(3.0);
 });
 
-it('calculates days until correctly', function() {
+it('calculates days until correctly', function(): void {
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->addDays(4)->toDateString(),
         'order_time' => Carbon::now()->toTimeString(),
@@ -74,7 +77,7 @@ it('calculates days until correctly', function() {
     expect($orderAttribute->getDaysUntilAttribute(null, $order))->toBe(3.0);
 });
 
-it('gets history status id correctly', function() {
+it('gets history status id correctly', function(): void {
     $orderAttribute = new OrderAttribute;
     $order = Mockery::mock(Order::class);
     $order->shouldReceive('status_history->pluck')->andReturn(collect([1, 2, 3]));
@@ -82,16 +85,16 @@ it('gets history status id correctly', function() {
     expect($orderAttribute->getHistoryStatusIdAttribute(null, $order))->toBe('1,2,3');
 });
 
-it('throws exception when no order in params', function() {
+it('throws exception when no order in params', function(): void {
     $orderAttribute = new OrderAttribute;
 
-    $this->expectException(\Igniter\Automation\AutomationException::class);
+    $this->expectException(AutomationException::class);
 
     $params = [];
     $orderAttribute->isTrue($params);
 });
 
-it('evaluates isTrue correctly', function() {
+it('evaluates isTrue correctly', function(): void {
     $order = Order::factory()->create([
         'first_name' => 'John',
     ]);

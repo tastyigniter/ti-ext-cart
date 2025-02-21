@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Tests\Classes\Fixtures\TestCartCondition;
 use LogicException;
 
-it('makes condition', function() {
+it('makes condition', function(): void {
     $manager = new CartConditionManager;
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
@@ -19,21 +21,21 @@ it('makes condition', function() {
         ->and($condition->getLabel())->toBe('Override Test Cart Condition');
 });
 
-it('throws exception for unregistered condition', function() {
+it('throws exception for unregistered condition', function(): void {
     $manager = new CartConditionManager;
 
     expect(fn() => $manager->makeCondition('NonExistentClass'))->toThrow(LogicException::class);
 });
 
-it('throws exception when class does not exist', function() {
-    $manager = new CartConditionManager();
+it('throws exception when class does not exist', function(): void {
+    $manager = new CartConditionManager;
     $manager->registerCondition('NonExistentClass', ['name' => 'testCondition']);
 
     expect(fn() => $manager->makeCondition('NonExistentClass'))
         ->toThrow(LogicException::class, "The Cart Condition class 'NonExistentClass' does not exist");
 });
 
-it('lists registered conditions', function() {
+it('lists registered conditions', function(): void {
     $manager = new CartConditionManager;
     $manager->registerCondition(TestCartCondition::class, [
         'name' => 'testCartCondition',
@@ -46,9 +48,9 @@ it('lists registered conditions', function() {
         ->and($conditions)->toHaveKey(TestCartCondition::class);
 });
 
-it('loads registered conditions', function() {
+it('loads registered conditions', function(): void {
     $manager = new CartConditionManager;
-    $manager->registerCallback(function($manager) {
+    $manager->registerCallback(function($manager): void {
         $manager->registerCondition(TestCartCondition::class, [
             'name' => 'testCartCondition',
             'label' => 'Test Cart Condition',
@@ -62,7 +64,7 @@ it('loads registered conditions', function() {
         ->and($conditions[TestCartCondition::class]['label'])->toBe('Test Cart Condition');
 });
 
-it('registers conditions', function() {
+it('registers conditions', function(): void {
     $manager = new CartConditionManager;
     $manager->registerConditions([
         TestCartCondition::class => [

@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests;
 
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartContent;
 use InvalidArgumentException;
 
-it('validates rules correctly', function() {
+it('validates rules correctly', function(): void {
     $traitObject = new class extends CartCondition
     {
-        public function testValidate()
+        public function testValidate(): bool
         {
             return $this->validate($this->getRules());
         }
 
-        public function getRules()
+        public function getRules(): array
         {
             return [
                 '10 = 10',
@@ -35,17 +37,17 @@ it('validates rules correctly', function() {
         ->and($traitObject->whenInvalid())->toBeNull();
 });
 
-it('calculates action value correctly', function() {
+it('calculates action value correctly', function(): void {
     $traitObject = new class extends CartCondition
     {
         public $testValue = 10;
 
-        public function testProcessValue($subtotal)
+        public function testProcessValue(float $subtotal): int|float
         {
             return $this->processValue($subtotal);
         }
 
-        public function getActions()
+        public function getActions(): array
         {
             return [
                 ['value' => '-10'],
@@ -79,31 +81,31 @@ it('calculates action value correctly', function() {
     $traitObject->removeMetaData();
 });
 
-it('throws exception when parse rule fails', function() {
+it('throws exception when parse rule fails', function(): void {
     $traitObject = new class extends CartCondition
     {
-        public function testParseRule($rule)
+        public function testParseRule(string $rule): array
         {
             return $this->parseRule($rule);
         }
     };
 
-    expect(fn() => $traitObject->testParseRule('20 === 20'))->toThrow(InvalidArgumentException::class);
+    expect(fn(): array => $traitObject->testParseRule('20 === 20'))->toThrow(InvalidArgumentException::class);
 });
 
-it('throws exception when parse action fails', function() {
+it('throws exception when parse action fails', function(): void {
     $traitObject = new class extends CartCondition
     {
-        public function testProcessValue($subtotal)
+        public function testProcessValue(float $subtotal): int|float
         {
             return $this->processValue($subtotal);
         }
 
-        public function getActions()
+        public function getActions(): array
         {
             return [['inclusive' => true]];
         }
     };
 
-    expect(fn() => $traitObject->testProcessValue(20))->toThrow(InvalidArgumentException::class);
+    expect(fn(): int|float => $traitObject->testProcessValue(20))->toThrow(InvalidArgumentException::class);
 });

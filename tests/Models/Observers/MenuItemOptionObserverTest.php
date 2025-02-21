@@ -1,23 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Observers;
 
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\Observers\MenuItemOptionObserver;
 use Mockery;
 
-beforeEach(function() {
-    $this->observer = new MenuItemOptionObserver();
+beforeEach(function(): void {
+    $this->observer = new MenuItemOptionObserver;
     $this->menuItemOption = Mockery::mock(MenuItemOption::class)->makePartial();
 });
 
-it('restores purged values when saved', function() {
+it('restores purged values when saved', function(): void {
     $this->menuItemOption->shouldReceive('restorePurgedValues')->once();
 
     $this->observer->saved($this->menuItemOption);
 });
 
-it('adds menu option values when is_enabled is true', function() {
+it('adds menu option values when is_enabled is true', function(): void {
     $attributes = [
         'menu_option_values' => [
             ['is_enabled' => true, 'value' => 'Option 1'],
@@ -33,7 +35,7 @@ it('adds menu option values when is_enabled is true', function() {
     $this->observer->saved($this->menuItemOption);
 });
 
-it('does not add menu option values when is_enabled is false', function() {
+it('does not add menu option values when is_enabled is false', function(): void {
     $attributes = [
         'menu_option_values' => [
             ['is_enabled' => false, 'value' => 'Option 1'],
@@ -48,7 +50,7 @@ it('does not add menu option values when is_enabled is false', function() {
     $this->observer->saved($this->menuItemOption);
 });
 
-it('handles empty menu_option_values gracefully', function() {
+it('handles empty menu_option_values gracefully', function(): void {
     $attributes = [
         'menu_option_values' => [],
     ];

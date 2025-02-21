@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
+use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Models\ExportModel;
 
 /**
@@ -12,13 +15,13 @@ use IgniterLabs\ImportExport\Models\ExportModel;
  * @property string $menu_description
  * @property string $menu_price
  * @property int $minimum_qty
- * @property boolean $menu_status
+ * @property bool $menu_status
  * @property int $menu_priority
  * @property string|null $order_restriction
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property-read mixed $categories
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuExport extends ExportModel
 {
@@ -28,7 +31,7 @@ class MenuExport extends ExportModel
 
     public $relation = [
         'belongsToMany' => [
-            'menu_categories' => [\Igniter\Cart\Models\Category::class, 'table' => 'menu_categories', 'foreignKey' => 'menu_id'],
+            'menu_categories' => [Category::class, 'table' => 'menu_categories', 'foreignKey' => 'menu_id'],
         ],
     ];
 

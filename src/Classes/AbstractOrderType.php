@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Igniter\Cart\Contracts\OrderTypeInterface;
@@ -17,7 +19,7 @@ abstract class AbstractOrderType implements OrderTypeInterface
     protected $name;
 
     /**
-     * @var \Igniter\Local\Classes\WorkingSchedule
+     * @var WorkingSchedule
      */
     protected $schedule;
 

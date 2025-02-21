@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\MealtimeRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new MealtimeRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new MealtimeRequest;
 
     $attributes = $request->attributes();
 
@@ -16,8 +18,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new MealtimeRequest();
+it('returns correct validation rules', function(): void {
+    $request = new MealtimeRequest;
 
     $rules = $request->rules();
 

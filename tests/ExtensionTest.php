@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests;
 
 use Igniter\Admin\DashboardWidgets\Charts;
@@ -12,10 +14,16 @@ use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
 use Igniter\Cart\AutomationRules\Events\OrderAssigned;
 use Igniter\Cart\AutomationRules\Events\OrderPlaced;
+use Igniter\Cart\CartConditions\PaymentFee;
+use Igniter\Cart\CartConditions\Tax;
+use Igniter\Cart\CartConditions\Tip;
 use Igniter\Cart\Extension;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\FormWidgets\StockEditor;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
+use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
+use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\MenuExport;
 use Igniter\Cart\Models\MenuImport;
@@ -33,18 +41,18 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Mockery;
 
-it('registers cart conditions correctly', function() {
+it('registers cart conditions correctly', function(): void {
     $extension = new Extension(app());
 
     $conditions = $extension->registerCartConditions();
 
     expect($conditions)->toBeArray()
-        ->and($conditions)->toHaveKey(\Igniter\Cart\CartConditions\PaymentFee::class)
-        ->and($conditions)->toHaveKey(\Igniter\Cart\CartConditions\Tax::class)
-        ->and($conditions)->toHaveKey(\Igniter\Cart\CartConditions\Tip::class);
+        ->and($conditions)->toHaveKey(PaymentFee::class)
+        ->and($conditions)->toHaveKey(Tax::class)
+        ->and($conditions)->toHaveKey(Tip::class);
 });
 
-it('registers automation rules correctly', function() {
+it('registers automation rules correctly', function(): void {
     $extension = new Extension(app());
 
     $rules = $extension->registerAutomationRules();
@@ -57,7 +65,7 @@ it('registers automation rules correctly', function() {
         ->and($rules['conditions'])->toContain(OrderAttribute::class, OrderStatusAttribute::class);
 });
 
-it('registers permissions correctly', function() {
+it('registers permissions correctly', function(): void {
     $extension = new Extension(app());
 
     $permissions = $extension->registerPermissions();
@@ -73,7 +81,7 @@ it('registers permissions correctly', function() {
         ->and($permissions)->toHaveKey('Module.CartModule');
 });
 
-it('registers settings correctly', function() {
+it('registers settings correctly', function(): void {
     $extension = new Extension(app());
 
     $settings = $extension->registerSettings();
@@ -84,7 +92,7 @@ it('registers settings correctly', function() {
         ->and($settings['settings']['permissions'])->toBe(['Module.CartModule']);
 });
 
-it('registers mail templates correctly', function() {
+it('registers mail templates correctly', function(): void {
     $extension = new Extension(app());
 
     $templates = $extension->registerMailTemplates();
@@ -96,7 +104,7 @@ it('registers mail templates correctly', function() {
         ->and($templates)->toHaveKey('igniter.cart::mail.low_stock_alert');
 });
 
-it('registers import export setup for menu items', function() {
+it('registers import export setup for menu items', function(): void {
     $extension = new Extension(app());
 
     $result = $extension->registerImportExport();
@@ -109,7 +117,7 @@ it('registers import export setup for menu items', function() {
         ->and($result['export']['menus']['configFile'])->toBe('igniter.cart::/models/menuexport');
 });
 
-it('registers navigation correctly', function() {
+it('registers navigation correctly', function(): void {
     $extension = new Extension(app());
 
     $navigation = $extension->registerNavigation();
@@ -121,7 +129,7 @@ it('registers navigation correctly', function() {
         ->and($navigation['restaurant']['child'])->toHaveKey('mealtimes');
 });
 
-it('registers form widgets correctly', function() {
+it('registers form widgets correctly', function(): void {
     $extension = new Extension(app());
 
     $widgets = $extension->registerFormWidgets();
@@ -130,7 +138,7 @@ it('registers form widgets correctly', function() {
         ->and($widgets)->toHaveKey(StockEditor::class);
 });
 
-it('registers location settings correctly', function() {
+it('registers location settings correctly', function(): void {
     $extension = new Extension(app());
 
     $result = $extension->registerLocationSettings();
@@ -142,7 +150,7 @@ it('registers location settings correctly', function() {
             'icon' => 'fa fa-sliders',
             'priority' => 0,
             'form' => 'igniter.cart::/models/checkoutsettings',
-            'request' => \Igniter\Cart\Http\Requests\CheckoutSettingsRequest::class,
+            'request' => CheckoutSettingsRequest::class,
         ],
         'delivery' => [
             'label' => 'igniter.cart::default.settings.text_tab_delivery',
@@ -150,7 +158,7 @@ it('registers location settings correctly', function() {
             'icon' => 'fa fa-sliders',
             'priority' => 0,
             'form' => 'igniter.cart::/models/deliverysettings',
-            'request' => \Igniter\Cart\Http\Requests\DeliverySettingsRequest::class,
+            'request' => DeliverySettingsRequest::class,
         ],
         'collection' => [
             'label' => 'igniter.cart::default.settings.text_tab_collection',
@@ -158,18 +166,18 @@ it('registers location settings correctly', function() {
             'icon' => 'fa fa-sliders',
             'priority' => 0,
             'form' => 'igniter.cart::/models/collectionsettings',
-            'request' => \Igniter\Cart\Http\Requests\CollectionSettingsRequest::class,
+            'request' => CollectionSettingsRequest::class,
         ],
     ]);
 });
 
-it('returns registered core settings', function() {
+it('returns registered core settings', function(): void {
     $items = (new Settings)->listSettingItems();
 
     expect(collect($items['core'])->firstWhere('code', 'order'))->not->toBeNull();
 });
 
-it('restores cart session on login correctly', function() {
+it('restores cart session on login correctly', function(): void {
     CartSettings::set('abandoned_cart', 1);
     $customer = Customer::factory()->create();
 
@@ -181,7 +189,7 @@ it('restores cart session on login correctly', function() {
     event('igniter.user.login', [$customer]);
 });
 
-it('destroys cart session on logout correctly', function() {
+it('destroys cart session on logout correctly', function(): void {
     CartSettings::set('destroy_on_logout', 1);
     $customer = Customer::factory()->create();
 
@@ -190,7 +198,7 @@ it('destroys cart session on logout correctly', function() {
     event('igniter.user.logout', [$customer]);
 });
 
-it('adds tax info to paypalexpress request parameters', function() {
+it('adds tax info to paypalexpress request parameters', function(): void {
     $fields = $data = [];
     $payment = Payment::firstWhere('code', 'paypalexpress');
     $order = Order::factory()->create();
@@ -208,14 +216,14 @@ it('adds tax info to paypalexpress request parameters', function() {
         ->and(array_get($fields, 'purchase_units.0.amount.breakdown.tax_total.currency_code'))->toBe('GBP');
 });
 
-it('subtracts stocks before payment is processed', function() {
+it('subtracts stocks before payment is processed', function(): void {
     $orderMock = Mockery::mock(Order::class);
     $orderMock->shouldReceive('subtractStock')->once();
 
     event('admin.order.beforePaymentProcessed', [$orderMock]);
 });
 
-it('sends order confirmation after payment is processed', function() {
+it('sends order confirmation after payment is processed', function(): void {
     $orderMock = Mockery::mock(Order::class)->makePartial();
     $notificationMock = Mockery::mock(OrderCreatedNotification::class);
     $notificationMock->shouldReceive('subject')->with($orderMock)->andReturnSelf();
@@ -232,7 +240,7 @@ it('sends order confirmation after payment is processed', function() {
     event('admin.assignable.assigned', [$orderMock, $assignableLog]);
 });
 
-it('sends order update after status is updated', function() {
+it('sends order update after status is updated', function(): void {
     Mail::fake();
     $order = Order::factory()->create();
     $statusHistory = StatusHistory::factory()->create([
@@ -243,18 +251,18 @@ it('sends order update after status is updated', function() {
 
     event('igniter.cart.orderStatusAdded', [$order, $statusHistory]);
 
-    Mail::assertQueued(AnonymousTemplateMailable::class, function($mail) use ($order) {
+    Mail::assertQueued(AnonymousTemplateMailable::class, function($mail): bool {
         return $mail->getTemplateCode() === 'igniter.cart::mail.order_update';
     });
 });
 
-it('adds cart middleware to frontend routes', function() {
+it('adds cart middleware to frontend routes', function(): void {
     $middlewareGroups = Route::getMiddlewareGroups();
     expect($middlewareGroups)->toHaveKey('igniter')
         ->and($middlewareGroups['igniter'])->toContain(CartMiddleware::class);
 });
 
-it('returns registered dashboard charts', function() {
+it('returns registered dashboard charts', function(): void {
     $charts = new class(resolve(Dashboard::class)) extends Charts
     {
         public function testDatasets()
@@ -267,10 +275,10 @@ it('returns registered dashboard charts', function() {
     expect($datasets['reports']['sets']['orders']['model'])->toBe(Order::class);
 });
 
-it('returns registered dashboard statistic widgets', function() {
+it('returns registered dashboard statistic widgets', function(): void {
     $statistics = new class(resolve(Dashboard::class)) extends Statistics
     {
-        public function testCards()
+        public function testCards(): array
         {
             return $this->listCards();
         }
@@ -288,7 +296,7 @@ it('returns registered dashboard statistic widgets', function() {
     );
 });
 
-it('does not add orders tab to customer edit form when model is invalid', function() {
+it('does not add orders tab to customer edit form when model is invalid', function(): void {
     $model = mock(Model::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $model, 'context' => 'edit']);
     $form->bindToController();
@@ -297,7 +305,7 @@ it('does not add orders tab to customer edit form when model is invalid', functi
     expect($fields)->not->toHaveKey('orders');
 });
 
-it('adds orders tab to customer edit form', function() {
+it('adds orders tab to customer edit form', function(): void {
     $customer = mock(Customer::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $customer, 'context' => 'edit']);
     $form->bindToController();

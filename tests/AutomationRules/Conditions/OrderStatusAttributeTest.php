@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Igniter\Admin\Models\Status;
 use Igniter\Automation\AutomationException;
 use Igniter\Automation\Models\RuleCondition;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 
-it('returns correct condition details for order status attribute', function() {
-    $result = (new OrderStatusAttribute())->conditionDetails();
+it('returns correct condition details for order status attribute', function(): void {
+    $result = (new OrderStatusAttribute)->conditionDetails();
 
     expect($result)->toBe([
         'name' => 'Order status attribute',
@@ -14,7 +16,7 @@ it('returns correct condition details for order status attribute', function() {
     ]);
 });
 
-it('defines model attributes correctly', function() {
+it('defines model attributes correctly', function(): void {
     $orderStatusAttribute = new OrderStatusAttribute;
 
     $attributes = $orderStatusAttribute->defineModelAttributes();
@@ -22,7 +24,7 @@ it('defines model attributes correctly', function() {
     expect($attributes)->toHaveKeys(['status_id', 'status_name', 'notify_customer']);
 });
 
-it('throws exception when no status in params', function() {
+it('throws exception when no status in params', function(): void {
     $orderStatusAttribute = new OrderStatusAttribute;
 
     $this->expectException(AutomationException::class);
@@ -31,7 +33,7 @@ it('throws exception when no status in params', function() {
     $orderStatusAttribute->isTrue($params);
 });
 
-it('evaluates isTrue correctly for status_id', function() {
+it('evaluates isTrue correctly for status_id', function(): void {
     $status = Status::factory()->create();
 
     $orderStatusAttribute = new OrderStatusAttribute(new RuleCondition([
@@ -44,7 +46,7 @@ it('evaluates isTrue correctly for status_id', function() {
     expect($orderStatusAttribute->isTrue($params))->toBeTrue();
 });
 
-it('evaluates isTrue correctly for status_name', function($attribute, $value) {
+it('evaluates isTrue correctly for status_name', function($attribute, $value): void {
     $status = Status::factory()->create([$attribute => $value]);
 
     $orderStatusAttribute = new OrderStatusAttribute(new RuleCondition([

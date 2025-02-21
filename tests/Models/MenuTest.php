@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Carbon\Carbon;
@@ -18,13 +20,13 @@ use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
 use Illuminate\Support\Facades\Event;
 
-it('returns menu_price_from attribute', function() {
+it('returns menu_price_from attribute', function(): void {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
 
     expect($menu->menu_price_from)->toBe(10.00);
 });
 
-it('returns menu_price_from attribute with menu options', function() {
+it('returns menu_price_from attribute with menu options', function(): void {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
     $menuItemOption = $menu->menu_options()->create(['option_id' => 1]);
     $menuItemOption->menu_option_values()->create([
@@ -35,13 +37,13 @@ it('returns menu_price_from attribute with menu options', function() {
     expect($menu->menu_price_from)->toBe(5.00);
 });
 
-it('return minimum_qty attribute', function() {
+it('return minimum_qty attribute', function(): void {
     $menu = Menu::factory()->create(['minimum_qty' => 2]);
 
     expect($menu->minimum_qty)->toBe(2);
 });
 
-it('returns true when menu has options', function() {
+it('returns true when menu has options', function(): void {
     $menu = Menu::factory()->create();
     $menu->menu_options()->create(['option_id' => 1]);
 
@@ -50,7 +52,7 @@ it('returns true when menu has options', function() {
     expect($result)->toBe(1);
 });
 
-it('adds menu allergens when allergen ids are provided', function() {
+it('adds menu allergens when allergen ids are provided', function(): void {
     $menu = Menu::factory()->create();
 
     $result = $menu->addMenuAllergens([1, 2, 3]);
@@ -58,7 +60,7 @@ it('adds menu allergens when allergen ids are provided', function() {
     expect($result)->toBeNull();
 });
 
-it('adds menu categories when menu exists', function() {
+it('adds menu categories when menu exists', function(): void {
     $menu = Menu::factory()->create();
 
     $result = $menu->addMenuCategories([1, 2, 3]);
@@ -66,7 +68,7 @@ it('adds menu categories when menu exists', function() {
     expect($result)->toBeNull();
 });
 
-it('adds menu ingredients when menu exists', function() {
+it('adds menu ingredients when menu exists', function(): void {
     $menu = Menu::factory()->create();
 
     $result = $menu->addMenuIngredients([1, 2, 3]);
@@ -74,7 +76,7 @@ it('adds menu ingredients when menu exists', function() {
     expect($result)->toBeNull();
 });
 
-it('adds menu mealtimes when menu exists', function() {
+it('adds menu mealtimes when menu exists', function(): void {
     $menu = Menu::factory()->create();
 
     $result = $menu->addMenuMealtimes([1, 2, 3]);
@@ -82,7 +84,7 @@ it('adds menu mealtimes when menu exists', function() {
     expect($result)->toBeNull();
 });
 
-it('checks if menu is available', function() {
+it('checks if menu is available', function(): void {
     $this->travelTo(Carbon::createFromTime(12)->toDateTimeString());
 
     $menu = Menu::factory()
@@ -95,7 +97,7 @@ it('checks if menu is available', function() {
     expect($menu->isAvailable())->toBeTrue();
 });
 
-it('checks if menu is not available', function() {
+it('checks if menu is not available', function(): void {
     $menu = Menu::factory()
         ->has(Mealtime::factory()->state([
             'start_time' => '10:00:00',
@@ -108,7 +110,7 @@ it('checks if menu is not available', function() {
     expect($menu->isAvailable($datetime))->toBeFalse();
 });
 
-it('checks if menu is not available when it has disabled ingredient', function() {
+it('checks if menu is not available when it has disabled ingredient', function(): void {
     $menu = Menu::factory()
         ->has(Mealtime::factory()->state([
             'start_time' => '10:00:00',
@@ -124,7 +126,7 @@ it('checks if menu is not available when it has disabled ingredient', function()
     expect($menu->isAvailable($datetime))->toBeFalse();
 });
 
-it('checks if menu is not available when event returns false', function() {
+it('checks if menu is not available when event returns false', function(): void {
     $menu = Menu::factory()
         ->has(Mealtime::factory()->state([
             'start_time' => '10:00:00',
@@ -132,7 +134,7 @@ it('checks if menu is not available when event returns false', function() {
         ]), 'mealtimes')
         ->create();
 
-    Event::listen('admin.menu.isAvailable', function($datetime, $menu) {
+    Event::listen('admin.menu.isAvailable', function($datetime, $menu): false {
         return false;
     });
 
@@ -141,7 +143,7 @@ it('checks if menu is not available when event returns false', function() {
     expect($menu->isAvailable($datetime))->toBeFalse();
 });
 
-it('checks if menu is special', function() {
+it('checks if menu is special', function(): void {
     $menu = Menu::factory()
         ->has(MenuSpecial::factory()->state(['special_status' => 1]), 'special')
         ->create();
@@ -149,19 +151,19 @@ it('checks if menu is special', function() {
     expect($menu->isSpecial())->toBeTrue();
 });
 
-it('checks if menu is not special', function() {
+it('checks if menu is not special', function(): void {
     $menu = Menu::factory()->create();
 
     expect($menu->isSpecial())->toBeFalse();
 });
 
-it('check quantity is above minimum quantity', function() {
+it('check quantity is above minimum quantity', function(): void {
     $menu = Menu::factory()->create(['minimum_qty' => 2]);
 
     expect($menu->checkMinQuantity(3))->toBeTrue();
 });
 
-it('checks if menu has order type restriction', function() {
+it('checks if menu has order type restriction', function(): void {
     $menu = Menu::factory()->create([
         'order_restriction' => ['delivery'],
     ]);
@@ -169,7 +171,7 @@ it('checks if menu has order type restriction', function() {
     expect($menu->hasOrderTypeRestriction('delivery'))->toBeFalse();
 });
 
-it('checks if menu does not have order type restriction', function() {
+it('checks if menu does not have order type restriction', function(): void {
     $menu = Menu::factory()->create([
         'order_restriction' => ['delivery'],
     ]);
@@ -177,7 +179,7 @@ it('checks if menu does not have order type restriction', function() {
     expect($menu->hasOrderTypeRestriction('collection'))->toBeTrue();
 });
 
-it('returns special price when menu is special', function() {
+it('returns special price when menu is special', function(): void {
     $menu = mock(Menu::class)->makePartial();
     $menu->shouldReceive('isSpecial')->andReturn(true);
     $menu->shouldReceive('extendableGet')->with('menu_price')->andReturn(100);
@@ -189,14 +191,14 @@ it('returns special price when menu is special', function() {
     expect($result)->toBe(80);
 });
 
-it('has many menu_options', function() {
+it('has many menu_options', function(): void {
     $menu = new Menu;
     $relation = $menu->menu_options();
 
     expect($relation->getRelated())->toBeInstanceOf(MenuItemOption::class);
 });
 
-it('has one special', function() {
+it('has one special', function(): void {
     $menu = new Menu;
     $relation = $menu->special();
 
@@ -204,7 +206,7 @@ it('has one special', function() {
         ->and($relation->getForeignKeyName())->toBe('menu_id');
 });
 
-it('belongs to many categories', function() {
+it('belongs to many categories', function(): void {
     $menu = new Menu;
     $relation = $menu->categories();
 
@@ -212,7 +214,7 @@ it('belongs to many categories', function() {
         ->and($relation->getTable())->toBe('menu_categories');
 });
 
-it('belongs to many mealtimes', function() {
+it('belongs to many mealtimes', function(): void {
     $menu = new Menu;
     $relation = $menu->mealtimes();
 
@@ -220,7 +222,7 @@ it('belongs to many mealtimes', function() {
         ->and($relation->getTable())->toBe('menu_mealtimes');
 });
 
-it('morphs to many allergens', function() {
+it('morphs to many allergens', function(): void {
     $menu = new Menu;
     $relation = $menu->allergens();
 
@@ -228,7 +230,7 @@ it('morphs to many allergens', function() {
         ->and($relation->getRelated())->toBeInstanceOf(Ingredient::class);
 });
 
-it('morphs to many ingredients', function() {
+it('morphs to many ingredients', function(): void {
     $menu = new Menu;
     $relation = $menu->ingredients();
 
@@ -236,7 +238,7 @@ it('morphs to many ingredients', function() {
         ->and($relation->getRelated())->toBeInstanceOf(Ingredient::class);
 });
 
-it('morphs to many locations', function() {
+it('morphs to many locations', function(): void {
     $menu = new Menu;
     $relation = $menu->locations();
 
@@ -244,7 +246,7 @@ it('morphs to many locations', function() {
         ->and($relation->getRelated())->toBeInstanceOf(Location::class);
 });
 
-it('adds menu options to menu on save correctly', function() {
+it('adds menu options to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
     $menu->menu_options = [
@@ -257,7 +259,7 @@ it('adds menu options to menu on save correctly', function() {
     expect($menu->menu_options()->count())->toBe(2);
 });
 
-it('adds special to menu on save correctly', function() {
+it('adds special to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
     $menu->special = [
@@ -271,7 +273,7 @@ it('adds special to menu on save correctly', function() {
     expect($menu->special()->count())->toBe(1);
 });
 
-it('detaches relations from menu on delete', function() {
+it('detaches relations from menu on delete', function(): void {
     $menu = Menu::factory()
         ->has(Category::factory()->count(2), 'categories')
         ->has(Mealtime::factory()->count(2), 'mealtimes')
@@ -292,7 +294,7 @@ it('detaches relations from menu on delete', function() {
         ->and($menu->locations()->count())->toBe(0);
 });
 
-it('applies filters to query builder', function() {
+it('applies filters to query builder', function(): void {
     $query = Menu::query()->applyFilters([
         'enabled' => 1,
         'location' => 1,
@@ -305,7 +307,7 @@ it('applies filters to query builder', function() {
         ->toContain('order by `menu_priority` asc');
 });
 
-it('configures menu model correctly', function() {
+it('configures menu model correctly', function(): void {
     $menu = new Menu;
 
     expect(class_uses_recursive($menu))

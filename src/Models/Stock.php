@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
+use Illuminate\Support\Carbon;
 
 /**
  * Stocks Model Class
@@ -18,10 +22,10 @@ use Igniter\System\Models\Concerns\SendsMailTemplate;
  * @property bool $low_stock_alert
  * @property int $low_stock_threshold
  * @property bool $is_tracked
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property bool $low_stock_alert_sent
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class Stock extends Model
 {
@@ -62,10 +66,10 @@ class Stock extends Model
 
     public $relation = [
         'belongsTo' => [
-            'location' => \Igniter\Local\Models\Location::class,
+            'location' => Location::class,
         ],
         'hasMany' => [
-            'history' => \Igniter\Cart\Models\StockHistory::class,
+            'history' => StockHistory::class,
         ],
         'morphTo' => [
             'stockable' => [],
@@ -74,7 +78,7 @@ class Stock extends Model
 
     public $timestamps = true;
 
-    public function getStockActionOptions()
+    public function getStockActionOptions(): array
     {
         return [
             self::STATE_NONE => 'lang:igniter.cart::default.stocks.text_action_none',
@@ -100,7 +104,7 @@ class Stock extends Model
     // Helpers
     //
 
-    public function updateStock(int $quantity, $state = null, array $options = [])
+    public function updateStock(int $quantity, $state = null, array $options = []): bool
     {
         if ($this->shouldUpdateStock($state)) {
             $stockQty = $this->computeStockQuantity($state, $quantity);
@@ -114,7 +118,7 @@ class Stock extends Model
             $this->quantity = $stockQty;
             $this->saveQuietly();
 
-            if ($this->hasLowStock() && $this->shouldAlertOnLowStock($state)) {
+            if ($this->hasLowStock() && $this->shouldAlertOnLowStock()) {
                 $this->mailSend('igniter.cart::mail.low_stock_alert', 'location');
 
                 // Prevent duplicate low stock alerts
@@ -127,7 +131,7 @@ class Stock extends Model
         return true;
     }
 
-    public function updateStockSold(int $orderId, int $quantity)
+    public function updateStockSold(int $orderId, int $quantity): bool
     {
         return $this->updateStock($quantity, self::STATE_SOLD, [
             'order_id' => $orderId,
@@ -143,12 +147,12 @@ class Stock extends Model
         return $this->quantity >= $quantity;
     }
 
-    public function outOfStock()
+    public function outOfStock(): bool
     {
         return $this->is_tracked && $this->quantity <= 0;
     }
 
-    public function hasLowStock()
+    public function hasLowStock(): bool
     {
         return $this->low_stock_threshold && $this->low_stock_threshold >= $this->quantity;
     }
@@ -162,7 +166,7 @@ class Stock extends Model
         return strlen($state) && $state !== self::STATE_NONE;
     }
 
-    protected function computeStockQuantity($state, int $quantity)
+    protected function computeStockQuantity($state, int $quantity): int
     {
         $stockQty = 0;
         switch ($state) {
@@ -192,14 +196,14 @@ class Stock extends Model
         return !$this->low_stock_alert_sent;
     }
 
-    public function mailGetRecipients($type)
+    public function mailGetRecipients($type): array
     {
         return [
             [$this->location->location_email, $this->location->location_name],
         ];
     }
 
-    public function mailGetData()
+    public function mailGetData(): array
     {
         return [
             'stock_name' => $this->stockable->getStockableName(),

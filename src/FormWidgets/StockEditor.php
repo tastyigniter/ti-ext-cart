@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\FormWidgets;
 
 use Igniter\Admin\Classes\BaseFormWidget;
 use Igniter\Admin\Classes\FormField;
+use Igniter\Admin\FormWidgets\DataTable;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\Models\StockHistory;
 use Igniter\User\Facades\AdminAuth;
@@ -17,7 +20,7 @@ class StockEditor extends BaseFormWidget
 
     public $quantityKeyFrom = 'stock_qty';
 
-    public function initialize()
+    public function initialize(): void
     {
         $this->fillFromConfig([
             'form',
@@ -32,17 +35,17 @@ class StockEditor extends BaseFormWidget
         return $this->makePartial('stockeditor/stockeditor');
     }
 
-    public function loadAssets()
+    public function loadAssets(): void
     {
         $this->addCss('widgets/table.css', 'table-css');
         $this->addJs('widgets/table.js', 'table-js');
     }
 
-    public function prepareVars()
+    public function prepareVars(): void
     {
         $this->vars['field'] = $this->formField;
         $this->vars['value'] = $this->model->{$this->quantityKeyFrom};
-        $this->vars['previewMode'] = $this->controller->getAction() == 'create';
+        $this->vars['previewMode'] = $this->controller->getAction() === 'create';
     }
 
     public function getSaveValue(mixed $value): int
@@ -50,7 +53,7 @@ class StockEditor extends BaseFormWidget
         return FormField::NO_SAVE_DATA;
     }
 
-    public function onLoadRecord()
+    public function onLoadRecord(): string
     {
         $formWidgets = [];
         $availableLocations = $this->getAvailableLocations();
@@ -67,7 +70,7 @@ class StockEditor extends BaseFormWidget
         ]);
     }
 
-    public function onSaveRecord()
+    public function onSaveRecord(): array
     {
         foreach ($this->getAvailableLocations() as $location) {
             $formWidget = $this->makeStockFormWidget($location);
@@ -94,7 +97,7 @@ class StockEditor extends BaseFormWidget
         ];
     }
 
-    public function onLoadHistory()
+    public function onLoadHistory(): string
     {
         return $this->makePartial('stockeditor/history', [
             'formTitle' => sprintf(lang('igniter.cart::default.stocks.text_title_stock_history'), ''),
@@ -109,6 +112,7 @@ class StockEditor extends BaseFormWidget
             return $locations;
         }
 
+        // @phpstan-ignore method.notFound
         return AdminAuth::user()?->getAvailableLocations() ?? collect();
     }
 
@@ -142,7 +146,7 @@ class StockEditor extends BaseFormWidget
         $widgetConfig['alias'] = $this->alias.'FormStockHistory';
         $widgetConfig['arrayName'] = $this->formField->arrayName.'[stockHistory]';
 
-        $widget = $this->makeFormWidget(\Igniter\Admin\FormWidgets\DataTable::class, $field, $widgetConfig);
+        $widget = $this->makeFormWidget(DataTable::class, $field, $widgetConfig);
         $widget->bindToController();
         $widget->previewMode = $this->previewMode;
 

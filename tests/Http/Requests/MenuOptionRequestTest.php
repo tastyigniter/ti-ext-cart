@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\MenuOptionRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new MenuOptionRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new MenuOptionRequest;
 
     $attributes = $request->attributes();
 
@@ -19,8 +21,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('option_values', lang('igniter.cart::default.menu_options.label_option_values'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new MenuOptionRequest();
+it('returns correct validation rules', function(): void {
+    $request = new MenuOptionRequest;
 
     $rules = $request->rules();
 

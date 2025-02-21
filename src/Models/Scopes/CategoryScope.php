@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Scopes;
 
 use Igniter\Flame\Database\Scope;

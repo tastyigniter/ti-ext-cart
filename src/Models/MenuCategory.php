@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Model;
@@ -9,7 +11,7 @@ use Igniter\Flame\Database\Model;
  *
  * @property int $menu_id
  * @property int $category_id
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuCategory extends Model
 {
@@ -30,8 +32,8 @@ class MenuCategory extends Model
 
     public $relation = [
         'belongsTo' => [
-            'menu' => [\Igniter\Cart\Models\Menu::class],
-            'category' => [\Igniter\Cart\Models\Category::class],
+            'menu' => [Menu::class],
+            'category' => [Category::class],
         ],
     ];
 }

@@ -1,18 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
+use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
+use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
+use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
+use Igniter\Cart\AutomationRules\Events\OrderAssigned;
+use Igniter\Cart\AutomationRules\Events\OrderPlaced;
+use Igniter\Cart\CartConditions\PaymentFee;
+use Igniter\Cart\CartConditions\Tax;
+use Igniter\Cart\CartConditions\Tip;
+use Igniter\Cart\Classes\CartConditionManager;
+use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\CheckoutForm;
+use Igniter\Cart\Classes\OrderManager;
+use Igniter\Cart\FormWidgets\StockEditor;
+use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
+use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
+use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
+use Igniter\Cart\Http\Requests\OrderSettingsRequest;
 use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
 use Igniter\Cart\Listeners\RegistersDashboardCards;
+use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
+use Igniter\Cart\Models\Ingredient;
+use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuCategory;
+use Igniter\Cart\Models\MenuExport;
+use Igniter\Cart\Models\MenuImport;
 use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOption;
 use Igniter\Cart\Models\MenuOptionValue;
+use Igniter\Cart\Models\MenuSpecial;
 use Igniter\Cart\Models\Observers\MenuItemOptionObserver;
 use Igniter\Cart\Models\Observers\MenuObserver;
 use Igniter\Cart\Models\Observers\MenuOptionObserver;
@@ -22,12 +49,18 @@ use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Scopes\CategoryScope;
 use Igniter\Cart\Models\Scopes\MenuScope;
 use Igniter\Cart\Models\Scopes\OrderScope;
+use Igniter\Cart\Models\Stock;
+use Igniter\Cart\Models\StockHistory;
+use Igniter\Cart\Notifications\OrderCreatedNotification;
+use Igniter\Cart\OrderTypes\Collection;
+use Igniter\Cart\OrderTypes\Delivery;
 use Igniter\Flame\Support\Facades\Igniter;
 use Igniter\Local\Models\Location as LocationModel;
 use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 
@@ -48,27 +81,27 @@ class Extension extends BaseExtension
     ];
 
     protected array $morphMap = [
-        'categories' => \Igniter\Cart\Models\Category::class,
-        'ingredients' => \Igniter\Cart\Models\Ingredient::class,
-        'mealtimes' => \Igniter\Cart\Models\Mealtime::class,
-        'menu_categories' => \Igniter\Cart\Models\MenuCategory::class,
-        'menu_item_option_values' => \Igniter\Cart\Models\MenuItemOptionValue::class,
-        'menu_option_values' => \Igniter\Cart\Models\MenuOptionValue::class,
-        'menu_options' => \Igniter\Cart\Models\MenuOption::class,
-        'menus' => \Igniter\Cart\Models\Menu::class,
-        'menus_specials' => \Igniter\Cart\Models\MenuSpecial::class,
-        'orders' => \Igniter\Cart\Models\Order::class,
-        'stocks' => \Igniter\Cart\Models\Stock::class,
-        'stock_history' => \Igniter\Cart\Models\StockHistory::class,
+        'categories' => Category::class,
+        'ingredients' => Ingredient::class,
+        'mealtimes' => Mealtime::class,
+        'menu_categories' => MenuCategory::class,
+        'menu_item_option_values' => MenuItemOptionValue::class,
+        'menu_option_values' => MenuOptionValue::class,
+        'menu_options' => MenuOption::class,
+        'menus' => Menu::class,
+        'menus_specials' => MenuSpecial::class,
+        'orders' => Order::class,
+        'stocks' => Stock::class,
+        'stock_history' => StockHistory::class,
     ];
 
     public array $singletons = [
-        Classes\CartConditionManager::class,
-        Classes\CartManager::class,
-        Classes\OrderManager::class,
+        CartConditionManager::class,
+        CartManager::class,
+        OrderManager::class,
     ];
 
-    public function register()
+    public function register(): void
     {
         parent::register();
 
@@ -81,10 +114,10 @@ class Extension extends BaseExtension
         AliasLoader::getInstance()->alias('Cart', Facades\Cart::class);
     }
 
-    public function boot()
+    public function boot(): void
     {
         if (!Igniter::runningInAdmin()) {
-            $this->app['router']->pushMiddlewareToGroup('igniter', Http\Middleware\CartMiddleware::class);
+            $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
         }
 
         $this->bindCartEvents();
@@ -94,27 +127,27 @@ class Extension extends BaseExtension
 
         LocationModel::implement(LocationAction::class);
 
-        Customers::extendFormFields(new AddsCustomerOrdersTabFields());
+        Customers::extendFormFields(new AddsCustomerOrdersTabFields);
 
-        Statistics::registerCards(function() {
+        Statistics::registerCards(function(): array {
             return (new RegistersDashboardCards)();
         });
     }
 
-    public function registerCartConditions()
+    public function registerCartConditions(): array
     {
         return [
-            \Igniter\Cart\CartConditions\PaymentFee::class => [
+            PaymentFee::class => [
                 'name' => 'paymentFee',
                 'label' => 'lang:igniter.cart::default.text_payment_fee',
                 'description' => 'lang:igniter.cart::default.help_payment_fee',
             ],
-            \Igniter\Cart\CartConditions\Tax::class => [
+            Tax::class => [
                 'name' => 'tax',
                 'label' => 'lang:igniter.cart::default.text_vat',
                 'description' => 'lang:igniter.cart::default.help_tax_condition',
             ],
-            \Igniter\Cart\CartConditions\Tip::class => [
+            Tip::class => [
                 'name' => 'tip',
                 'label' => 'lang:igniter.cart::default.text_tip',
                 'description' => 'lang:igniter.cart::default.help_tip_condition',
@@ -122,18 +155,18 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerAutomationRules()
+    public function registerAutomationRules(): array
     {
         return [
             'events' => [
-                'admin.order.paymentProcessed' => \Igniter\Cart\AutomationRules\Events\OrderPlaced::class,
-                'igniter.cart.orderStatusAdded' => \Igniter\Cart\AutomationRules\Events\NewOrderStatus::class,
-                'igniter.cart.orderAssigned' => \Igniter\Cart\AutomationRules\Events\OrderAssigned::class,
+                'admin.order.paymentProcessed' => OrderPlaced::class,
+                'igniter.cart.orderStatusAdded' => NewOrderStatus::class,
+                'igniter.cart.orderAssigned' => OrderAssigned::class,
             ],
             'actions' => [],
             'conditions' => [
-                \Igniter\Cart\AutomationRules\Conditions\OrderAttribute::class,
-                \Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute::class,
+                OrderAttribute::class,
+                OrderStatusAttribute::class,
             ],
         ];
     }
@@ -183,7 +216,7 @@ class Extension extends BaseExtension
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart conditions and tipping settings.',
                 'icon' => 'fa fa-gear',
-                'model' => \Igniter\Cart\Models\CartSettings::class,
+                'model' => CartSettings::class,
                 'permissions' => ['Module.CartModule'],
             ],
         ];
@@ -199,20 +232,20 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerImportExport()
+    public function registerImportExport(): array
     {
         return [
             'import' => [
                 'menus' => [
                     'label' => 'Import Menu Items',
-                    'model' => \Igniter\Cart\Models\MenuImport::class,
+                    'model' => MenuImport::class,
                     'configFile' => 'igniter.cart::/models/menuimport',
                 ],
             ],
             'export' => [
                 'menus' => [
                     'label' => 'Export Menu Items',
-                    'model' => \Igniter\Cart\Models\MenuExport::class,
+                    'model' => MenuExport::class,
                     'configFile' => 'igniter.cart::/models/menuexport',
                 ],
             ],
@@ -254,28 +287,28 @@ class Extension extends BaseExtension
     public function registerFormWidgets(): array
     {
         return [
-            \Igniter\Cart\FormWidgets\StockEditor::class => [
+            StockEditor::class => [
                 'label' => 'Stock Editor',
                 'code' => 'stockeditor',
             ],
         ];
     }
 
-    public function registerOrderTypes()
+    public function registerOrderTypes(): array
     {
         return [
-            \Igniter\Cart\OrderTypes\Delivery::class => [
+            Delivery::class => [
                 'code' => LocationModel::DELIVERY,
                 'name' => 'lang:igniter.local::default.text_delivery',
             ],
-            \Igniter\Cart\OrderTypes\Collection::class => [
+            Collection::class => [
                 'code' => LocationModel::COLLECTION,
                 'name' => 'lang:igniter.local::default.text_collection',
             ],
         ];
     }
 
-    public function registerLocationSettings()
+    public function registerLocationSettings(): array
     {
         return [
             'checkout' => [
@@ -284,7 +317,7 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/checkoutsettings',
-                'request' => \Igniter\Cart\Http\Requests\CheckoutSettingsRequest::class,
+                'request' => CheckoutSettingsRequest::class,
             ],
             'delivery' => [
                 'label' => 'igniter.cart::default.settings.text_tab_delivery',
@@ -292,7 +325,7 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/deliverysettings',
-                'request' => \Igniter\Cart\Http\Requests\DeliverySettingsRequest::class,
+                'request' => DeliverySettingsRequest::class,
             ],
             'collection' => [
                 'label' => 'igniter.cart::default.settings.text_tab_collection',
@@ -300,23 +333,23 @@ class Extension extends BaseExtension
                 'icon' => 'fa fa-sliders',
                 'priority' => 0,
                 'form' => 'igniter.cart::/models/collectionsettings',
-                'request' => \Igniter\Cart\Http\Requests\CollectionSettingsRequest::class,
+                'request' => CollectionSettingsRequest::class,
             ],
         ];
     }
 
     protected function bindCartEvents()
     {
-        Event::listen('igniter.user.login', function() {
-            if (Models\CartSettings::get('abandoned_cart')
+        Event::listen('igniter.user.login', function(): void {
+            if (CartSettings::get('abandoned_cart')
                 && Facades\Cart::content()->isEmpty()
             ) {
                 Facades\Cart::restore(Auth::getId());
             }
         });
 
-        Event::listen('igniter.user.logout', function() {
-            if (Models\CartSettings::get('destroy_on_logout')) {
+        Event::listen('igniter.user.logout', function(): void {
+            if (CartSettings::get('destroy_on_logout')) {
                 Facades\Cart::destroy();
             }
         });
@@ -324,7 +357,7 @@ class Extension extends BaseExtension
 
     protected function bindCheckoutEvents()
     {
-        Event::listen('payregister.paypalexpress.extendFields', function($payment, &$fields, $order, $data) {
+        Event::listen('payregister.paypalexpress.extendFields', function($payment, array &$fields, $order, $data): void {
             if ($tax = $order->getOrderTotals()->firstWhere('code', 'tax')) {
                 $fields['purchase_units'][0]['amount']['breakdown']['tax_total'] = [
                     'currency_code' => $fields['purchase_units'][0]['amount']['currency_code'],
@@ -333,19 +366,19 @@ class Extension extends BaseExtension
             }
         });
 
-        Event::listen('admin.order.paymentProcessed', function(Order $model) {
-            Notifications\OrderCreatedNotification::make()->subject($model)->broadcast();
+        Event::listen('admin.order.paymentProcessed', function(Order $model): void {
+            OrderCreatedNotification::make()->subject($model)->broadcast();
 
             $model->mailSend('igniter.cart::mail.order', 'customer');
             $model->mailSend('igniter.cart::mail.order_alert', 'location');
             $model->mailSend('igniter.cart::mail.order_alert', 'admin');
         });
 
-        Event::listen('admin.order.beforePaymentProcessed', function(Order $model) {
+        Event::listen('admin.order.beforePaymentProcessed', function(Order $model): void {
             $model->subtractStock();
         });
 
-        Event::listen('igniter.cart.orderStatusAdded', function(Order $model, $statusHistory) {
+        Event::listen('igniter.cart.orderStatusAdded', function(Order $model, $statusHistory): void {
             if ($statusHistory->notify) {
                 $model->reloadRelations();
                 $model->mailSend('igniter.cart::mail.order_update', 'customer');
@@ -355,19 +388,19 @@ class Extension extends BaseExtension
 
     protected function bindOrderStatusEvent()
     {
-        Event::listen('admin.statusHistory.beforeAddStatus', function($statusHistory, $order, $statusId, $previousStatus) {
+        Event::listen('admin.statusHistory.beforeAddStatus', function($statusHistory, $order, $statusId, $previousStatus): void {
             if ($order instanceof Order) {
                 Event::dispatch('igniter.cart.beforeAddOrderStatus', [$statusHistory, $order, $statusId, $previousStatus], true);
             }
         });
 
-        Event::listen('admin.statusHistory.added', function($order, $statusHistory) {
+        Event::listen('admin.statusHistory.added', function($order, $statusHistory): void {
             if ($order instanceof Order) {
                 Event::dispatch('igniter.cart.orderStatusAdded', [$order, $statusHistory], true);
             }
         });
 
-        Event::listen('admin.assignable.assigned', function($order, $assignableLog) {
+        Event::listen('admin.assignable.assigned', function($order, $assignableLog): void {
             if ($order instanceof Order) {
                 Event::dispatch('igniter.cart.orderAssigned', [$order, $assignableLog], true);
             }
@@ -376,10 +409,10 @@ class Extension extends BaseExtension
 
     protected function registerCart(): void
     {
-        $this->app->singleton('cart', function($app) {
+        $this->app->singleton('cart', function(Application $app): Cart {
             $this->app['config']->set('igniter-cart.model', Models\Cart::class);
-            $this->app['config']->set('igniter-cart.abandonedCart', Models\CartSettings::get('abandoned_cart'));
-            $this->app['config']->set('igniter-cart.destroyOnLogout', Models\CartSettings::get('destroy_on_logout'));
+            $this->app['config']->set('igniter-cart.abandonedCart', CartSettings::get('abandoned_cart'));
+            $this->app['config']->set('igniter-cart.destroyOnLogout', CartSettings::get('destroy_on_logout'));
 
             $this->app['events']->dispatch('cart.beforeRegister', [$this]);
 
@@ -393,7 +426,7 @@ class Extension extends BaseExtension
 
     protected function registerSystemSettings()
     {
-        Settings::registerCallback(function(Settings $manager) {
+        Settings::registerCallback(function(Settings $manager): void {
             $manager->registerSettingItems('core', [
                 'order' => [
                     'label' => 'lang:igniter.cart::default.text_tab_order',
@@ -403,7 +436,7 @@ class Extension extends BaseExtension
                     'permission' => ['Site.Settings'],
                     'url' => admin_url('settings/edit/order'),
                     'form' => 'igniter.cart::/models/ordersettings',
-                    'request' => \Igniter\Cart\Http\Requests\OrderSettingsRequest::class,
+                    'request' => OrderSettingsRequest::class,
                 ],
             ]);
         });
@@ -411,8 +444,8 @@ class Extension extends BaseExtension
 
     protected function extendDashboardChartsDatasets()
     {
-        Charts::extend(function($charts) {
-            $charts->bindEvent('charts.extendDatasets', function() use ($charts) {
+        Charts::extend(function($charts): void {
+            $charts->bindEvent('charts.extendDatasets', function() use ($charts): void {
                 $charts->mergeDataset('reports', 'sets', [
                     'orders' => [
                         'label' => 'lang:igniter.cart::default.text_charts_orders',

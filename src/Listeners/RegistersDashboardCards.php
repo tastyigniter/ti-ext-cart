@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Listeners;
 
 use Igniter\Cart\Models\Order;
@@ -7,7 +9,7 @@ use Igniter\System\Models\Settings;
 
 class RegistersDashboardCards
 {
-    public function __invoke()
+    public function __invoke(): array
     {
         return [
             'sale' => [
@@ -48,7 +50,7 @@ class RegistersDashboardCards
         ];
     }
 
-    public function getValue($code, $start, $end, callable $callback)
+    public function getValue($code, $start, $end, callable $callback): string|int
     {
         return match ($code) {
             'sale' => $this->getTotalSaleSum($callback),
@@ -82,7 +84,7 @@ class RegistersDashboardCards
     protected function getTotalLostSaleSum(callable $callback): string
     {
         $query = Order::query();
-        $query->where(function($query) {
+        $query->where(function($query): void {
             $query->where('status_id', '<=', '0');
             $query->orWhere('status_id', Settings::get('canceled_order_status'));
         });
@@ -98,7 +100,7 @@ class RegistersDashboardCards
     protected function getTotalCashPaymentSum(callable $callback): string
     {
         $query = Order::query();
-        $query->where(function($query) {
+        $query->where(function($query): void {
             $query->where('status_id', '>', '0');
             $query->where('status_id', '!=', Settings::get('canceled_order_status'));
         })->where('payment', 'cod');
@@ -140,7 +142,7 @@ class RegistersDashboardCards
     {
         $query = Order::query();
         $query->whereIn('status_id', Settings::get('completed_order_status') ?? [])
-            ->where(function($query) {
+            ->where(function($query): void {
                 $query->where('order_type', '1');
                 $query->orWhere('order_type', 'delivery');
             });
@@ -157,7 +159,7 @@ class RegistersDashboardCards
     {
         $query = Order::query();
         $query->whereIn('status_id', Settings::get('completed_order_status') ?? [])
-            ->where(function($query) {
+            ->where(function($query): void {
                 $query->where('order_type', '2');
                 $query->orWhere('order_type', 'collection');
             });

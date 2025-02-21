@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
@@ -27,7 +29,7 @@ class OrderSettingsRequest extends FormRequest
         ];
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'order_email.*' => ['required', 'alpha'],

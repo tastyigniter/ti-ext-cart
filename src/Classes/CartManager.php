@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Exception;
@@ -13,6 +15,8 @@ use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Local\Classes\Location;
+use Igniter\System\Actions\SettingsModel;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -21,17 +25,17 @@ use Illuminate\Support\Facades\Event;
 class CartManager
 {
     /**
-     * @var \Igniter\Cart\Cart
+     * @var Cart
      */
     protected $cart;
 
     /**
-     * @var \Igniter\Local\Classes\Location
+     * @var Location
      */
     protected $location;
 
     /**
-     * @var \Igniter\Cart\Models\CartSettings|\Igniter\System\Actions\SettingsModel
+     * @var CartSettings|SettingsModel
      */
     protected $settings;
 
@@ -58,12 +62,12 @@ class CartManager
         return $this;
     }
 
-    public function cartInstance(int $locationId)
+    public function cartInstance(int $locationId): Cart
     {
         return $this->cart->instance('location-'.$locationId);
     }
 
-    public function getCartItem($rowId)
+    public function getCartItem(string $rowId): CartItem
     {
         try {
             return $this->cart->get($rowId);
@@ -110,7 +114,7 @@ class CartManager
         if ($quantity <= 0) {
             $this->removeCartItem($rowId);
 
-            return;
+            return null;
         }
 
         $this->validateLocation();
@@ -142,14 +146,14 @@ class CartManager
         ]);
     }
 
-    public function removeCartItem($rowId)
+    public function removeCartItem(string $rowId): void
     {
         $this->getCartItem($rowId);
 
         $this->cart->remove($rowId);
     }
 
-    public function updateCartItemQty($rowId, $quantityOrAction = 0)
+    public function updateCartItemQty(string $rowId, $quantityOrAction = 0): CartItem
     {
         $cartItem = $this->getCartItem($rowId);
         $menuItem = $this->findMenuItem($cartItem->id);
@@ -165,7 +169,7 @@ class CartManager
         return $this->cart->update($rowId, $quantity);
     }
 
-    public function removeCondition($name)
+    public function removeCondition($name): ?bool
     {
         return $this->cart->removeCondition($name);
     }
@@ -190,10 +194,8 @@ class CartManager
             return $condition;
         }
 
-        if (strlen($code)) {
-            if (!Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
-                throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
-            }
+        if (strlen($code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
+            throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
         return $this->applyCondition('coupon', ['code' => $code]);
@@ -222,7 +224,7 @@ class CartManager
     //
     //
 
-    public function validateCartMenuItem($menuItem, $quantity)
+    public function validateCartMenuItem(Menu $menuItem, $quantity): void
     {
         $this->validateMenuItem($menuItem);
 
@@ -238,7 +240,7 @@ class CartManager
         $selected = collect($selected);
         $menuOptions = $menuOptions->keyBy('menu_option_id')->sortBy('priority');
 
-        return $menuOptions->map(function(MenuItemOption $menuOption) use ($selected) {
+        return $menuOptions->map(function(MenuItemOption $menuOption) use ($selected): array|false {
             $selectedOption = $selected->get($menuOption->getKey());
             $selectedValues = array_filter((array)array_get($selectedOption, 'option_values', []));
 
@@ -269,8 +271,8 @@ class CartManager
             ->map(function(MenuItemOptionValue $optionValue) use ($selectedValues) {
                 $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
                 if (!in_array($optionValue->getKey(), $selectedIds)
-                    && !(array_get($selectedIds, $optionValue->getKey()) === true
-                        || is_array(array_get($selectedIds, $optionValue->getKey())))) {
+                    && (array_get($selectedIds, $optionValue->getKey()) !== true
+                        && !is_array(array_get($selectedIds, $optionValue->getKey())))) {
                     return;
                 }
 
@@ -292,20 +294,20 @@ class CartManager
     //
     //
 
-    public function validateContents()
+    public function validateContents(): void
     {
         if (!$this->cart->count()) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
         }
 
-        $this->cart->content()->each(function(CartItem $cartItem) {
+        $this->cart->content()->each(function(CartItem $cartItem): void {
             $menuItem = $this->findMenuItem($cartItem->id);
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
             $menuOptions = $menuItem->menu_options->keyBy('menu_option_id');
 
-            $cartItem->options->each(function($cartItemOption) use ($menuOptions) {
+            $cartItem->options->each(function($cartItemOption) use ($menuOptions): void {
                 throw_unless($menuItemOption = $menuOptions->get($cartItemOption->id), new ApplicationException(
                     lang('igniter.cart::default.alert_option_not_found'),
                 ));
@@ -318,7 +320,7 @@ class CartManager
         });
     }
 
-    public function validateLocation()
+    public function validateLocation(): void
     {
         if (!$this->location->current()) {
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
@@ -332,7 +334,7 @@ class CartManager
         }
     }
 
-    public function validateOrderTime()
+    public function validateOrderTime(): void
     {
         if (!$this->location->current()) {
             throw new ApplicationException(lang('igniter.local::default.alert_location_required'));
@@ -356,7 +358,7 @@ class CartManager
         }
     }
 
-    public function validateMenuItem(Menu $menuItem)
+    public function validateMenuItem(Menu $menuItem): void
     {
         // if menu mealtime is enabled and menu is outside mealtime
         if (!$menuItem->isAvailable($this->location->orderDateTime())) {
@@ -364,7 +366,7 @@ class CartManager
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
                     $menuItem->menu_name,
-                    $menuItem->mealtimes->map(function($mealtime) {
+                    $menuItem->mealtimes->map(function($mealtime): string {
                         return sprintf(
                             lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
                             $mealtime->mealtime_name,
@@ -385,7 +387,7 @@ class CartManager
         }
     }
 
-    public function validateMenuItemMinQty(Menu $menuItem, $quantity)
+    public function validateMenuItemMinQty(Menu $menuItem, $quantity): void
     {
         if ($quantity == 0 || $menuItem->minimum_qty == 0) {
             return;
@@ -406,7 +408,7 @@ class CartManager
         }
     }
 
-    public function validateMenuItemStockQty(Menu $menuItem, $quantity)
+    public function validateMenuItemStockQty(Menu $menuItem, $quantity): void
     {
         // checks if stock quantity is less than to zero
         if ($menuItem->outOfStock($this->location->getId())) {
@@ -425,7 +427,7 @@ class CartManager
         }
     }
 
-    public function validateMenuItemOption(MenuItemOption $menuOption, $selectedValues)
+    public function validateMenuItemOption(MenuItemOption $menuOption, $selectedValues): void
     {
         if ($menuOption->isRequired() && !$selectedValues) {
             throw new ApplicationException(sprintf(
@@ -434,33 +436,33 @@ class CartManager
         }
 
         if ($menuOption->display_type == 'quantity') {
-            $countSelected = (int)array_reduce($selectedValues, function($qty, $selectedValue) {
+            $countSelected = (int)array_reduce($selectedValues, function($qty, array $selectedValue): int {
                 return $qty + $selectedValue['qty'];
             });
         } else {
             $countSelected = count($selectedValues);
         }
 
-        if ($menuOption->min_selected > 0 || $menuOption->max_selected > 0) {
-            if (!($countSelected >= $menuOption->min_selected && $countSelected <= $menuOption->max_selected)) {
-                throw new ApplicationException(sprintf(
-                    lang('igniter.cart::default.alert_option_selected'),
-                    $menuOption->option_name,
-                    $menuOption->min_selected,
-                    $menuOption->max_selected,
-                ));
-            }
+        if (($menuOption->min_selected > 0 || $menuOption->max_selected > 0) &&
+            !($countSelected >= $menuOption->min_selected && $countSelected <= $menuOption->max_selected)
+        ) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_option_selected'),
+                $menuOption->option_name,
+                $menuOption->min_selected,
+                $menuOption->max_selected,
+            ));
         }
     }
 
-    public function validateMenuItemLocation(Menu $menuItem)
+    public function validateMenuItemLocation(Menu $menuItem): void
     {
-        if ($menuItem->locations && $menuItem->locations->isNotEmpty()) {
-            if (!$menuItem->locations->keyBy('location_id')->has($this->location->getId())) {
-                throw new ApplicationException(sprintf(
-                    lang('igniter.cart::default.alert_menu_location_restricted'), $menuItem->menu_name,
-                ));
-            }
+        if ($menuItem->locations && $menuItem->locations->isNotEmpty() &&
+            !$menuItem->locations->keyBy('location_id')->has($this->location->getId())
+        ) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_location_restricted'), $menuItem->menu_name,
+            ));
         }
     }
 
@@ -468,12 +470,12 @@ class CartManager
     //
     //
 
-    public function cartTotalIsBelowMinimumOrder()
+    public function cartTotalIsBelowMinimumOrder(): bool
     {
         return !$this->location->checkMinimumOrderTotal($this->cart->subtotal());
     }
 
-    public function deliveryChargeIsUnavailable()
+    public function deliveryChargeIsUnavailable(): bool
     {
         return $this->location->orderTypeIsDelivery()
             && $this->location->deliveryAmount($this->cart->subtotal()) < 0;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Concerns;
 
 use Carbon\Carbon;
@@ -7,13 +9,13 @@ use Igniter\System\Models\Settings;
 
 trait HasInvoice
 {
-    public static function bootHasInvoice()
+    public static function bootHasInvoice(): void
     {
-        self::extend(function(self $model) {
+        self::extend(function(self $model): void {
             $model->addCasts(['invoice_date' => 'datetime']);
         });
 
-        static::saved(function(self $model) {
+        static::saved(function(self $model): void {
             if ($model->isPaymentProcessed() && !$model->hasInvoice()) {
                 $model->generateInvoice();
             }
@@ -25,16 +27,16 @@ trait HasInvoice
         return $this->getInvoiceNoAttribute();
     }
 
-    public function getInvoiceNoAttribute()
+    public function getInvoiceNoAttribute(): ?string
     {
-        if (!strlen($this->invoice_prefix)) {
+        if ((string) $this->invoice_prefix === '') {
             return null;
         }
 
         return $this->invoice_prefix.$this->order_id;
     }
 
-    public function hasInvoice()
+    public function hasInvoice(): bool
     {
         return !empty($this->invoice_date) && !empty($this->invoice_prefix);
     }
@@ -59,7 +61,7 @@ trait HasInvoice
         return $this->invoice_number;
     }
 
-    public function generateInvoicePrefix($invoiceDate = null)
+    public function generateInvoicePrefix($invoiceDate = null): string
     {
         $invoiceDate = $invoiceDate ?? $this->invoice_date;
 

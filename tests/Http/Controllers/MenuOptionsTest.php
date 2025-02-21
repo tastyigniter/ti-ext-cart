@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Cart\Models\MenuOption;
 
-it('loads menu options page', function() {
+it('loads menu options page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.menu_options'))
         ->assertOk();
 });
 
-it('loads create menu option page', function() {
+it('loads create menu option page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.menu_options', ['slug' => 'create']))
         ->assertOk();
 });
 
-it('loads edit menu option page', function() {
+it('loads edit menu option page', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     actingAsSuperUser()
@@ -24,7 +26,7 @@ it('loads edit menu option page', function() {
         ->assertOk();
 });
 
-it('loads menu option preview page', function() {
+it('loads menu option preview page', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     actingAsSuperUser()
@@ -32,7 +34,7 @@ it('loads menu option preview page', function() {
         ->assertOk();
 });
 
-it('updates menu option', function() {
+it('updates menu option', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     actingAsSuperUser()
@@ -57,7 +59,7 @@ it('updates menu option', function() {
     expect(MenuOption::find($menuOption->getKey()))->option_name->toBe('Updated MenuOption');
 });
 
-it('deletes menu option', function() {
+it('deletes menu option', function(): void {
     $menuOption = MenuOption::factory()->create();
 
     actingAsSuperUser()

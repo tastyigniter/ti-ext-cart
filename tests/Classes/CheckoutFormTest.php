@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\CheckoutForm;
 
-it('initializes with default config', function() {
-    $checkoutForm = new CheckoutForm();
+it('initializes with default config', function(): void {
+    $checkoutForm = new CheckoutForm;
 
     expect($checkoutForm->config)->toBeArray()
         ->and($checkoutForm->config)->toBeEmpty();
 });
 
-it('fills config from provided array', function() {
+it('fills config from provided array', function(): void {
     $config = ['fields' => [], 'model' => 'TestModel'];
     $checkoutForm = new CheckoutForm($config);
 
@@ -21,7 +23,7 @@ it('fills config from provided array', function() {
         ->and($checkoutForm->config['model'])->toEqual('TestModel');
 });
 
-it('returns validation rules with prefixed keys', function() {
+it('returns validation rules with prefixed keys', function(): void {
     $config = ['rules' => ['name' => 'required']];
     $checkoutForm = new CheckoutForm($config);
 
@@ -32,7 +34,7 @@ it('returns validation rules with prefixed keys', function() {
         ->and($rules['fields.name'])->toEqual('required');
 });
 
-it('returns validation messages with prefixed keys', function() {
+it('returns validation messages with prefixed keys', function(): void {
     $config = ['messages' => ['name.required' => 'Name is required']];
     $checkoutForm = new CheckoutForm($config);
 
@@ -43,7 +45,7 @@ it('returns validation messages with prefixed keys', function() {
         ->and($messages['fields.name.required'])->toEqual('Name is required');
 });
 
-it('returns validation attributes with prefixed keys', function() {
+it('returns validation attributes with prefixed keys', function(): void {
     $config = ['fields' => ['name' => ['label' => 'Name']]];
     $checkoutForm = new CheckoutForm($config);
 
@@ -54,7 +56,7 @@ it('returns validation attributes with prefixed keys', function() {
         ->and($attributes['fields.name'])->toEqual('Name');
 });
 
-it('defines form fields correctly', function() {
+it('defines form fields correctly', function(): void {
     $config = [
         'fields' => [
             'name' => ['label' => 'Name', 'type' => 'text'],
@@ -73,7 +75,7 @@ it('defines form fields correctly', function() {
         ->and($allFields['country']->options())->toEqual(['country' => 'Country']);
 });
 
-it('does not define form fields when already defined', function() {
+it('does not define form fields when already defined', function(): void {
     $config = [
         'fields' => [
             'name' => ['label' => 'Name', 'type' => 'text'],

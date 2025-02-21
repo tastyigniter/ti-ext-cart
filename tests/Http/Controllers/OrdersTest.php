@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
 use Igniter\Local\Models\Location;
 
-it('loads orders page', function() {
+it('loads orders page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.orders'))
         ->assertOk();
 });
 
-it('loads edit order page', function() {
+it('loads edit order page', function(): void {
     $order = Order::factory()->create();
     $order->location = Location::factory()->create();
 
@@ -21,7 +23,7 @@ it('loads edit order page', function() {
         ->assertOk();
 });
 
-it('loads order preview page', function() {
+it('loads order preview page', function(): void {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
@@ -29,7 +31,7 @@ it('loads order preview page', function() {
         ->assertOk();
 });
 
-it('loads order invoice page', function() {
+it('loads order invoice page', function(): void {
     $order = Order::factory()->create();
     $order->generateInvoice();
 
@@ -38,7 +40,7 @@ it('loads order invoice page', function() {
         ->assertOk();
 });
 
-it('deletes order from list page', function() {
+it('deletes order from list page', function(): void {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
@@ -50,7 +52,7 @@ it('deletes order from list page', function() {
     expect(Order::find($order->getKey()))->toBeNull();
 });
 
-it('deletes order from edit page', function() {
+it('deletes order from edit page', function(): void {
     $order = Order::factory()->create();
 
     actingAsSuperUser()
@@ -62,7 +64,7 @@ it('deletes order from edit page', function() {
     expect(Order::find($order->getKey()))->toBeNull();
 });
 
-it('updates order status', function() {
+it('updates order status', function(): void {
     $order = Order::factory()->create();
     $status = Status::factory()->create();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Carbon\Carbon;
@@ -16,11 +18,15 @@ use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\Order;
+use Igniter\Cart\Models\OrderMenu;
+use Igniter\Cart\Models\OrderMenuOptionValue;
+use Igniter\Cart\Models\OrderTotal;
 use Igniter\Cart\Models\Scopes\OrderScope;
 use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\PayRegister\Models\Payment;
+use Igniter\PayRegister\Models\PaymentLog;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
 use Igniter\System\Models\Country;
 use Igniter\User\Models\Address;
@@ -29,7 +35,7 @@ use Igniter\User\Models\Concerns\HasCustomer;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\Event;
 
-it('returns customer addresses', function() {
+it('returns customer addresses', function(): void {
     $customer = Customer::factory()->hasAddresses(3)->create();
     $order = Order::factory()->create([
         'customer_id' => $customer->getKey(),
@@ -40,7 +46,7 @@ it('returns customer addresses', function() {
     expect($result)->toBeCollection()->toHaveCount(3);
 });
 
-it('gets customer name attribute correctly', function() {
+it('gets customer name attribute correctly', function(): void {
     $order = Order::factory()->create([
         'first_name' => 'John',
         'last_name' => 'Doe',
@@ -49,7 +55,7 @@ it('gets customer name attribute correctly', function() {
     expect($order->customer_name)->toBe('John Doe');
 });
 
-it('gets order type name attribute correctly', function() {
+it('gets order type name attribute correctly', function(): void {
     $order = Order::factory()->create([
         'order_type' => Order::DELIVERY,
     ]);
@@ -61,7 +67,7 @@ it('gets order type name attribute correctly', function() {
     expect($order->order_type_name)->toBe('delivery');
 });
 
-it('gets order datetime attribute correctly', function() {
+it('gets order datetime attribute correctly', function(): void {
     $order = Order::factory()->create([
         'order_date' => '2021-01-01',
         'order_time' => '12:00',
@@ -71,7 +77,7 @@ it('gets order datetime attribute correctly', function() {
         ->and($order->order_datetime->format('Y-m-d H:i'))->toBe('2021-01-01 12:00');
 });
 
-it('gets formatted address attribute correctly', function() {
+it('gets formatted address attribute correctly', function(): void {
     $order = Order::factory()
         ->for(Address::factory()->create([
             'address_1' => '123 Main St',
@@ -86,7 +92,7 @@ it('gets formatted address attribute correctly', function() {
     expect($order->formatted_address)->toBe('123 Main St, Apt. 035, City 12345, State, Country');
 });
 
-it('returns correct URL with default parameters', function() {
+it('returns correct URL with default parameters', function(): void {
     $order = Order::factory()->create();
 
     $result = $order->getUrl('order/view', ['foo' => 'bar']);
@@ -94,7 +100,7 @@ it('returns correct URL with default parameters', function() {
     expect($result)->toBe(page_url('order/view', ['id' => $order->getKey(), 'hash' => $order->hash, 'foo' => 'bar']));
 });
 
-it('returns correct URL when params is null', function() {
+it('returns correct URL when params is null', function(): void {
     $order = Order::factory()->create();
 
     $result = $order->getUrl('order/view', null);
@@ -102,7 +108,7 @@ it('returns correct URL when params is null', function() {
     expect($result)->toBe(page_url('order/view', ['id' => $order->getKey(), 'hash' => $order->hash]));
 });
 
-it('checks if order is completed', function() {
+it('checks if order is completed', function(): void {
     $status = Status::factory()->create();
     $order = Order::factory()->create([
         'processed' => 1,
@@ -115,7 +121,7 @@ it('checks if order is completed', function() {
     expect($order->isCompleted())->toBeTrue();
 });
 
-it('checks if order is not completed', function() {
+it('checks if order is not completed', function(): void {
     $status = Status::factory()->create();
     $order = Order::factory()->create([
         'processed' => 1,
@@ -125,7 +131,7 @@ it('checks if order is not completed', function() {
     expect($order->isCompleted())->toBeFalse();
 });
 
-it('checks if order is canceled', function() {
+it('checks if order is canceled', function(): void {
     $status = Status::factory()->create();
     $order = Order::factory()->create([
         'processed' => 1,
@@ -138,7 +144,7 @@ it('checks if order is canceled', function() {
     expect($order->isCanceled())->toBeTrue();
 });
 
-it('checks if order is not canceled', function() {
+it('checks if order is not canceled', function(): void {
     $status = Status::factory()->create();
     $order = Order::factory()->create([
         'processed' => 1,
@@ -148,7 +154,7 @@ it('checks if order is not canceled', function() {
     expect($order->isCanceled())->toBeFalse();
 });
 
-it('returns false when order cancellation timeout is not set', function() {
+it('returns false when order cancellation timeout is not set', function(): void {
     $order = Order::factory()->create();
     $order->location = $location = mock(Location::class)->makePartial();
     $location->shouldReceive('getOrderCancellationTimeout')->andReturn(null);
@@ -156,10 +162,10 @@ it('returns false when order cancellation timeout is not set', function() {
     expect($order->isCancelable())->toBeFalse();
 });
 
-it('returns false when order datetime is not in the future', function() {
+it('returns false when order datetime is not in the future', function(): void {
     $order = Order::factory()->create([
-        'order_date' => Carbon::now()->subDay(3)->toDateString(),
-        'order_time' => Carbon::now()->subDay(3)->subMinutes(20)->toTimeString(),
+        'order_date' => Carbon::now()->subDay()->toDateString(),
+        'order_time' => Carbon::now()->subDay()->subMinutes(20)->toTimeString(),
     ]);
     $order->location = $location = mock(Location::class)->makePartial();
     $location->shouldReceive('getOrderCancellationTimeout')->andReturn(60);
@@ -167,7 +173,7 @@ it('returns false when order datetime is not in the future', function() {
     expect($order->isCancelable())->toBeFalse();
 });
 
-it('returns true when remaining time is greater than cancellation timeout', function() {
+it('returns true when remaining time is greater than cancellation timeout', function(): void {
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->addMinutes(40)->toTimeString(),
@@ -178,7 +184,7 @@ it('returns true when remaining time is greater than cancellation timeout', func
     expect($order->isCancelable())->toBeTrue();
 });
 
-it('checks if order is delivery type', function() {
+it('checks if order is delivery type', function(): void {
     $order = Order::factory()->create([
         'order_type' => Order::DELIVERY,
     ]);
@@ -186,7 +192,7 @@ it('checks if order is delivery type', function() {
     expect($order->isDeliveryType())->toBeTrue();
 });
 
-it('checks if order is collection type', function() {
+it('checks if order is collection type', function(): void {
     $order = Order::factory()->create([
         'order_type' => Order::COLLECTION,
     ]);
@@ -194,17 +200,17 @@ it('checks if order is collection type', function() {
     expect($order->isCollectionType())->toBeTrue();
 });
 
-it('returns an array of order dates', function() {
+it('returns an array of order dates', function(): void {
     $order = Order::factory()->create([
         'created_at' => '2023-01-01 12:00:00',
     ]);
 
-    $result = $order->getOrderDates();
+    $result = $order->getOrderDates()->all();
 
     expect($result)->toBeArray()->and($result)->toContain('January 2023');
 });
 
-it('checks if order payment is processed', function() {
+it('checks if order payment is processed', function(): void {
     $order = Order::factory()->create([
         'processed' => 1,
         'status_id' => 1,
@@ -213,7 +219,7 @@ it('checks if order payment is processed', function() {
     expect($order->isPaymentProcessed())->toBeTrue();
 });
 
-it('checks if order payment is not processed', function() {
+it('checks if order payment is not processed', function(): void {
     $order = Order::factory()->create([
         'processed' => 0,
         'status_id' => 0,
@@ -222,7 +228,7 @@ it('checks if order payment is not processed', function() {
     expect($order->isPaymentProcessed())->toBeFalse();
 });
 
-it('marks order as canceled correctly', function() {
+it('marks order as canceled correctly', function(): void {
     Event::fake();
 
     $status = Status::factory()->create();
@@ -238,7 +244,7 @@ it('marks order as canceled correctly', function() {
     Event::assertDispatched(OrderCanceledEvent::class);
 });
 
-it('marks order payment as processed correctly', function() {
+it('marks order payment as processed correctly', function(): void {
     Event::fake();
 
     $order = Order::factory()->create();
@@ -248,7 +254,7 @@ it('marks order payment as processed correctly', function() {
     Event::assertDispatched(OrderPaymentProcessedEvent::class);
 });
 
-it('logs payment attempt correctly', function() {
+it('logs payment attempt correctly', function(): void {
     $order = Order::factory()
         ->for(Payment::factory()->create(), 'payment_method')
         ->create();
@@ -258,14 +264,14 @@ it('logs payment attempt correctly', function() {
     expect($order->payment_logs()->count())->toBe(1);
 });
 
-it('updates order status correctly', function() {
+it('updates order status correctly', function(): void {
     $order = Order::factory()->create();
 
     $status = Status::factory()->create();
     expect($order->updateOrderStatus($status->getKey()))->toBeInstanceOf(StatusHistory::class);
 });
 
-it('gets mail recipients correctly for customer type', function() {
+it('gets mail recipients correctly for customer type', function(): void {
     $order = Order::factory()->create([
         'email' => 'customer@example.com',
         'first_name' => 'John',
@@ -279,7 +285,7 @@ it('gets mail recipients correctly for customer type', function() {
     expect($recipients)->toBe([[$order->email, $order->customer_name]]);
 });
 
-it('gets mail recipients correctly for location type', function() {
+it('gets mail recipients correctly for location type', function(): void {
     $location = Location::factory()->create();
     $order = Order::factory()->for($location)->create();
 
@@ -290,7 +296,7 @@ it('gets mail recipients correctly for location type', function() {
     expect($recipients)->toBe([[$location->location_email, $location->location_name]]);
 });
 
-it('gets mail recipients correctly for admin type', function() {
+it('gets mail recipients correctly for admin type', function(): void {
     $order = Order::factory()->create();
 
     setting()->set(['order_email' => ['admin']]);
@@ -300,7 +306,7 @@ it('gets mail recipients correctly for admin type', function() {
     expect($recipients)->toBe([[setting('site_email'), setting('site_name')]]);
 });
 
-it('returns empty array when type is not in order email settings', function() {
+it('returns empty array when type is not in order email settings', function(): void {
     $order = Order::factory()->create([
         'email' => 'customer@example.com',
         'first_name' => 'John',
@@ -315,7 +321,7 @@ it('returns empty array when type is not in order email settings', function() {
         ->and($result)->toContain('John Doe');
 });
 
-it('returns order data with all fields populated', function() {
+it('returns order data with all fields populated', function(): void {
     $order = Order::factory()->create([
         'address_id' => Address::factory(),
     ]);
@@ -352,7 +358,7 @@ it('returns order data with all fields populated', function() {
         ->and($result['location_name'])->not->toBeEmpty();
 });
 
-it('applies filters on the query builder', function() {
+it('applies filters on the query builder', function(): void {
     $query = Order::query()->applyFilters([
         'customer' => 1,
         'dateTimeFilter' => 1,
@@ -371,13 +377,13 @@ it('applies filters on the query builder', function() {
         ->toContain('order by `order_date` desc');
 });
 
-it('generates order hash on create correctly', function() {
+it('generates order hash on create correctly', function(): void {
     $order = Order::factory()->create();
 
     expect($order->hash)->not->toBeEmpty();
 });
 
-it('configures order model correctly', function() {
+it('configures order model correctly', function(): void {
     $order = new Order;
 
     expect(class_uses($order))
@@ -420,13 +426,13 @@ it('configures order model correctly', function() {
             'status_id' => 'integer',
             'status_updated_at' => 'datetime',
         ])
-        ->and($order->relation['belongsTo']['customer'])->toEqual(\Igniter\User\Models\Customer::class)
-        ->and($order->relation['belongsTo']['location'])->toEqual(\Igniter\Local\Models\Location::class)
-        ->and($order->relation['belongsTo']['address'])->toEqual(\Igniter\User\Models\Address::class)
-        ->and($order->relation['belongsTo']['payment_method'])->toEqual([\Igniter\PayRegister\Models\Payment::class, 'foreignKey' => 'payment', 'otherKey' => 'code'])
-        ->and($order->relation['hasMany']['payment_logs'])->toEqual(\Igniter\PayRegister\Models\PaymentLog::class)
-        ->and($order->relation['hasMany']['menus'])->toEqual(\Igniter\Cart\Models\OrderMenu::class)
-        ->and($order->relation['hasMany']['menu_options'])->toEqual(\Igniter\Cart\Models\OrderMenuOptionValue::class)
-        ->and($order->relation['hasMany']['totals'])->toEqual(\Igniter\Cart\Models\OrderTotal::class)
+        ->and($order->relation['belongsTo']['customer'])->toEqual(Customer::class)
+        ->and($order->relation['belongsTo']['location'])->toEqual(Location::class)
+        ->and($order->relation['belongsTo']['address'])->toEqual(Address::class)
+        ->and($order->relation['belongsTo']['payment_method'])->toEqual([Payment::class, 'foreignKey' => 'payment', 'otherKey' => 'code'])
+        ->and($order->relation['hasMany']['payment_logs'])->toEqual(PaymentLog::class)
+        ->and($order->relation['hasMany']['menus'])->toEqual(OrderMenu::class)
+        ->and($order->relation['hasMany']['menu_options'])->toEqual(OrderMenuOptionValue::class)
+        ->and($order->relation['hasMany']['totals'])->toEqual(OrderTotal::class)
         ->and($order->getGlobalScopes())->toHaveKey(OrderScope::class);
 });

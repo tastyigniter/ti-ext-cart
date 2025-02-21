@@ -1,11 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Igniter\Cart\Contracts\Buyable;
+use Igniter\Cart\Models\Menu;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use InvalidArgumentException;
 
+/**
+ * CartItem class
+ * @property Menu $model
+ */
 class CartItem implements Arrayable, Jsonable
 {
     /**
@@ -73,26 +81,22 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * CartItem constructor.
-     *
-     * @param int|string $id
-     * @param string $name
-     * @param float $price
      */
-    public function __construct($id, $name, $price, array $options = [], $comment = null, array $conditions = [])
+    public function __construct(int|string $id, string $name, float $price, array $options = [], ?string $comment = null, array $conditions = [])
     {
-        if (!strlen($id)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item identifier.');
+        if ($id === 0 || strlen((string)$id) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item identifier.');
         }
-        if (!strlen($name)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item name.');
+        if (strlen($name) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item name.');
         }
-        if (!is_numeric($price) || strlen($price) < 0) {
-            throw new \InvalidArgumentException('Please supply a valid cart item price.');
+        if ($price < 0) {
+            throw new InvalidArgumentException('Please supply a valid cart item price.');
         }
 
         $this->id = $id;
         $this->name = $name;
-        $this->price = (float)$price;
+        $this->price = $price;
         $this->options = $this->makeCartItemOptions($options);
         $this->conditions = $this->makeCartItemConditions($conditions);
         $this->comment = $comment;
@@ -122,7 +126,7 @@ class CartItem implements Arrayable, Jsonable
         return optional($this->conditions)->apply($subtotal, $this) ?? $subtotal;
     }
 
-    public function subtotalWithoutConditions()
+    public function subtotalWithoutConditions(): float|int
     {
         $price = $this->price();
 
@@ -136,24 +140,24 @@ class CartItem implements Arrayable, Jsonable
         return $this->comment;
     }
 
-    public function hasOptions()
+    public function hasOptions(): int
     {
         return count($this->options);
     }
 
     public function hasOptionValue($valueIndex)
     {
-        return $this->options->filter(function($option) use ($valueIndex) {
+        return $this->options->filter(function($option) use ($valueIndex): bool {
             return in_array($valueIndex, $option->values->pluck('id')->all());
         })->isNotEmpty();
     }
 
-    public function hasConditions()
+    public function hasConditions(): int
     {
         return count($this->conditions ?? []);
     }
 
-    public function clearConditions()
+    public function clearConditions(): static
     {
         $this->conditions = new CartItemConditions;
 
@@ -162,9 +166,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function getModel()
     {
-        if (!is_null($this->associatedModel)) {
-            return with(new $this->associatedModel)->find($this->id);
-        }
+        return is_null($this->associatedModel) ? null : with(new $this->associatedModel)->find($this->id);
     }
 
     /**
@@ -172,26 +174,24 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param int|float $qty
      */
-    public function setQuantity($qty)
+    public function setQuantity($qty): void
     {
         if (!is_numeric($qty)) {
-            throw new \InvalidArgumentException('Please supply a valid quantity.');
+            throw new InvalidArgumentException('Please supply a valid quantity.');
         }
 
         $this->qty = $qty;
     }
 
-    public function setComment($comment)
+    public function setComment($comment): void
     {
         $this->comment = $comment;
     }
 
     /**
      * Update the cart item from a Buyable.
-     *
-     * @return void
      */
-    public function updateFromBuyable(Buyable $item)
+    public function updateFromBuyable(Buyable $item): void
     {
         $this->id = $item->getBuyableIdentifier();
         $this->name = $item->getBuyableName();
@@ -200,10 +200,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Update the cart item from an array.
-     *
-     * @return void
      */
-    public function updateFromArray(array $attributes)
+    public function updateFromArray(array $attributes): void
     {
         $this->id = array_get($attributes, 'id', $this->id);
         $this->name = array_get($attributes, 'name', $this->name);
@@ -220,10 +218,8 @@ class CartItem implements Arrayable, Jsonable
      * Associate the cart item with the given model.
      *
      * @param mixed $model
-     *
-     * @return \Igniter\Cart\CartItem
      */
-    public function associate($model)
+    public function associate($model): static
     {
         $this->associatedModel = is_string($model) ? $model : get_class($model);
 
@@ -252,10 +248,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Create a new instance from a Buyable.
-     *
-     * @return \Igniter\Cart\CartItem
      */
-    public static function fromBuyable(Buyable $item, array $options = [], $comment = null, array $conditions = [])
+    public static function fromBuyable(Buyable $item, array $options = [], $comment = null, array $conditions = []): self
     {
         return new self(
             $item->getBuyableIdentifier(),
@@ -269,10 +263,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @return \Igniter\Cart\CartItem
      */
-    public static function fromArray(array $attributes)
+    public static function fromArray(array $attributes): self
     {
         return new self(
             $attributes['id'],
@@ -286,12 +278,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Generate a unique id for the cart item.
-     *
-     * @param string $id
-     *
-     * @return string
      */
-    protected function generateRowId($id, array $options)
+    protected function generateRowId(string|int $id, array $options): string
     {
         ksort($options);
 
@@ -304,7 +292,7 @@ class CartItem implements Arrayable, Jsonable
             return $options;
         }
 
-        return new CartItemOptions(array_map(function($option) {
+        return new CartItemOptions(array_map(function($option): CartItemOption {
             return CartItemOption::fromArray($option);
         }, $options));
     }

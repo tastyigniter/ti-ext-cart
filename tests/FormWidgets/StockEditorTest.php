@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\FormWidgets;
 
 use Igniter\Admin\Classes\FormField;
@@ -9,7 +11,7 @@ use Igniter\Cart\Models\Menu;
 use Igniter\Local\Models\Location;
 use Igniter\User\Facades\AdminAuth;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->menuItem = Menu::factory()->create();
     $this->stockEditorWidget = new StockEditor(
         resolve(Menus::class),
@@ -20,12 +22,12 @@ beforeEach(function() {
     );
 });
 
-it('initializes with config', function() {
+it('initializes with config', function(): void {
     expect($this->stockEditorWidget->form)->toBe('stock')
         ->and($this->stockEditorWidget->quantityKeyFrom)->toBe('stock_qty');
 });
 
-it('prepares vars', function() {
+it('prepares vars', function(): void {
     $this->stockEditorWidget->prepareVars();
 
     expect($this->stockEditorWidget->vars['field'])->toBeInstanceOf(FormField::class)
@@ -33,23 +35,23 @@ it('prepares vars', function() {
         ->and($this->stockEditorWidget->vars['previewMode'])->toBeFalse();
 });
 
-it('gets save value', function() {
+it('gets save value', function(): void {
     expect($this->stockEditorWidget->getSaveValue('test'))->toBe(FormField::NO_SAVE_DATA);
 });
 
-it('loads record', function() {
+it('loads record', function(): void {
     AdminAuth::shouldReceive('user')->andReturnSelf();
     AdminAuth::shouldReceive('getAvailableLocations')->andReturn([Location::factory()->create()]);
 
     expect($this->stockEditorWidget->onLoadRecord())->toBeString();
 });
 
-it('saves record', function() {
+it('saves record', function(): void {
     $this->menuItem->locations()->save(Location::factory()->create());
 
     expect($this->stockEditorWidget->onSaveRecord())->toBeArray();
 });
 
-it('loads history', function() {
+it('loads history', function(): void {
     expect($this->stockEditorWidget->onLoadHistory())->toBeString();
 });

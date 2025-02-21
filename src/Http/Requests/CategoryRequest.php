@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
@@ -19,7 +21,7 @@ class CategoryRequest extends FormRequest
         ];
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'between:2,255'],

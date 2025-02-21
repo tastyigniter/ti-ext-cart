@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\AbstractOrderType;
@@ -7,7 +9,7 @@ use Igniter\Local\Classes\WorkingSchedule;
 use Igniter\Local\Models\Location;
 use Mockery;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->location = Mockery::mock(Location::class)->makePartial();
     $this->orderType = new class($this->location, ['code' => 'test', 'name' => 'Test']) extends AbstractOrderType
     {
@@ -43,27 +45,27 @@ beforeEach(function() {
     };
 });
 
-it('gets code', function() {
+it('gets code', function(): void {
     expect($this->orderType->getCode())->toBe('test');
 });
 
-it('gets label', function() {
+it('gets label', function(): void {
     expect($this->orderType->getLabel())->toBe('Test');
 });
 
-it('gets interval', function() {
+it('gets interval', function(): void {
     $this->location->shouldReceive('getOrderTimeInterval')->with('test')->andReturn(15);
 
     expect($this->orderType->getInterval())->toBe(15);
 });
 
-it('gets lead time', function() {
+it('gets lead time', function(): void {
     $this->location->shouldReceive('getOrderLeadTime')->with('test')->andReturn(15);
 
     expect($this->orderType->getLeadTime())->toBe(15);
 });
 
-it('gets future days', function() {
+it('gets future days', function(): void {
     $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(false, true);
 
     expect($this->orderType->getFutureDays())->toBe(0);
@@ -73,7 +75,7 @@ it('gets future days', function() {
     expect($this->orderType->getFutureDays())->toBe(15);
 });
 
-it('gets minimum future days', function() {
+it('gets minimum future days', function(): void {
     $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(false, true);
     expect($this->orderType->getMinimumFutureDays())->toBe(0);
 
@@ -82,13 +84,13 @@ it('gets minimum future days', function() {
     expect($this->orderType->getMinimumFutureDays())->toBe(15);
 });
 
-it('gets minimum order total', function() {
+it('gets minimum order total', function(): void {
     $this->location->shouldReceive('getMinimumOrderTotal')->with('test')->andReturn(15.0);
 
     expect($this->orderType->getMinimumOrderTotal())->toBe(15.0);
 });
 
-it('gets schedule', function() {
+it('gets schedule', function(): void {
     $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(true);
     $this->location->shouldReceive('minimumFutureOrderDays')->with('test')->andReturn(3);
     $this->location->shouldReceive('futureOrderDays')->with('test')->andReturn(30);
@@ -97,7 +99,7 @@ it('gets schedule', function() {
     expect($this->orderType->getSchedule())->toBeInstanceOf(WorkingSchedule::class);
 });
 
-it('gets schedule restriction', function() {
+it('gets schedule restriction', function(): void {
     $this->location->shouldReceive('getSettings')->with('checkout.limit_orders')->andReturn(true, false, false);
     expect($this->orderType->getScheduleRestriction())->toBe(AbstractOrderType::LATER_ONLY);
 

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Notifications;
 
+use Igniter\Flame\Database\Model;
 use Igniter\User\Classes\Notification;
 use Igniter\User\Models\User;
 
@@ -22,7 +25,7 @@ class OrderCreatedNotification extends Notification
     public function getUrl(): string
     {
         $url = 'orders';
-        if ($this->subject) {
+        if ($this->subject instanceof Model) {
             $url .= '/edit/'.$this->subject->getKey();
         }
 

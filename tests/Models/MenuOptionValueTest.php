@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Ingredient;
@@ -7,14 +9,14 @@ use Igniter\Cart\Models\MenuOption;
 use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Local\Models\Location;
 
-it('returns dropdown options for menu option values', function() {
+it('returns dropdown options for menu option values', function(): void {
     $result = MenuOptionValue::getDropDownOptions();
 
     expect($result)->toBeCollection()
         ->and($result)->not()->toBeEmpty();
 });
 
-it('returns allergens options from ingredients', function() {
+it('returns allergens options from ingredients', function(): void {
     Ingredient::factory()->count(3)->create();
 
     (new MenuOptionValue)->getAllergensOptions();
@@ -25,7 +27,7 @@ it('returns allergens options from ingredients', function() {
         ->and($result)->not()->toBeEmpty();
 });
 
-it('returns stockable name as value', function() {
+it('returns stockable name as value', function(): void {
     $menuOptionValue = MenuOptionValue::factory()->make([
         'name' => 'Stockable Value',
     ]);
@@ -35,7 +37,7 @@ it('returns stockable name as value', function() {
     expect($result)->toBe('Stockable Value');
 });
 
-it('returns stockable locations from option', function() {
+it('returns stockable locations from option', function(): void {
     $locations = Location::factory()->count(3)->create();
     $menuOption = MenuOption::factory()->hasAttached($locations, [], 'locations')->create();
     $menuOptionValue = MenuOptionValue::factory()->for($menuOption, 'option')->create([
@@ -48,7 +50,7 @@ it('returns stockable locations from option', function() {
         ->and($result->count())->toBe(3);
 });
 
-it('adds menu allergens successfully when allergen ids are provided', function() {
+it('adds menu allergens successfully when allergen ids are provided', function(): void {
     $ingredients = Ingredient::factory()->count(3)->create();
     $menuOptionValue = MenuOptionValue::factory()->create();
     $allergenIds = $ingredients->pluck('ingredient_id')->all();
@@ -58,7 +60,7 @@ it('adds menu allergens successfully when allergen ids are provided', function()
     expect($menuOptionValue->ingredients->pluck('ingredient_id')->all())->toBe($allergenIds);
 });
 
-it('configures menu option value model correctly', function() {
+it('configures menu option value model correctly', function(): void {
     $menuOptionValue = new MenuOptionValue;
 
     expect($menuOptionValue->getTable())->toBe('menu_option_values')

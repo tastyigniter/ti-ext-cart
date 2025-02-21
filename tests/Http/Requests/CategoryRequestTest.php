@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\CategoryRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new CategoryRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new CategoryRequest;
 
     $attributes = $request->attributes();
 
@@ -18,8 +20,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.column_location'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new CategoryRequest();
+it('returns correct validation rules', function(): void {
+    $request = new CategoryRequest;
 
     $rules = $request->rules();
 

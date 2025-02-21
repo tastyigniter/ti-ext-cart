@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Carbon\Carbon;
 use Igniter\Cart\Models\MenuSpecial;
 
-it('returns all days of the week for recurring options', function() {
+it('returns all days of the week for recurring options', function(): void {
     $result = MenuSpecial::getRecurringEveryOptions();
 
     expect($result)->toBeArray()
@@ -18,7 +20,7 @@ it('returns all days of the week for recurring options', function() {
         ->and($result)->toContain('Sat');
 });
 
-it('returns null for pretty end date when special is recurring', function() {
+it('returns null for pretty end date when special is recurring', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'recurring',
     ]);
@@ -28,7 +30,7 @@ it('returns null for pretty end date when special is recurring', function() {
     expect($result)->toBeNull();
 });
 
-it('returns null for pretty end date when end date is not set', function() {
+it('returns null for pretty end date when end date is not set', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
     ]);
@@ -38,7 +40,7 @@ it('returns null for pretty end date when end date is not set', function() {
     expect($result)->toBeNull();
 });
 
-it('returns formatted pretty end date when special is not recurring and end date is set', function() {
+it('returns formatted pretty end date when special is not recurring and end date is set', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
         'end_date' => Carbon::parse('2023-12-31 23:59:59'),
@@ -49,7 +51,7 @@ it('returns formatted pretty end date when special is not recurring and end date
     expect($result)->toBe('31 Dec 2023 23:59');
 });
 
-it('returns provided value when type attribute is not empty', function() {
+it('returns provided value when type attribute is not empty', function(): void {
     $menuSpecial1 = MenuSpecial::factory()->create([
         'type' => '',
     ]);
@@ -61,7 +63,7 @@ it('returns provided value when type attribute is not empty', function() {
         ->and($menuSpecial2->type)->toBe('P');
 });
 
-it('returns provided value when validity attribute is not empty', function() {
+it('returns provided value when validity attribute is not empty', function(): void {
     $menuSpecial1 = MenuSpecial::factory()->create([
         'validity' => '',
     ]);
@@ -73,13 +75,13 @@ it('returns provided value when validity attribute is not empty', function() {
         ->and($menuSpecial2->validity)->toBe('period');
 });
 
-it('checks if menu special is active', function() {
+it('checks if menu special is active', function(): void {
     $menuSpecial = MenuSpecial::factory()->create();
 
     expect($menuSpecial->active())->toBeTrue();
 });
 
-it('checks if menu special is not active', function() {
+it('checks if menu special is not active', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'special_status' => 0,
     ]);
@@ -87,7 +89,7 @@ it('checks if menu special is not active', function() {
     expect($menuSpecial->active())->toBeFalse();
 });
 
-it('checks if menu special is recurring', function() {
+it('checks if menu special is recurring', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'recurring',
     ]);
@@ -95,7 +97,7 @@ it('checks if menu special is recurring', function() {
     expect($menuSpecial->isRecurring())->toBeTrue();
 });
 
-it('checks if menu special is not recurring', function() {
+it('checks if menu special is not recurring', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'forever',
     ]);
@@ -103,7 +105,8 @@ it('checks if menu special is not recurring', function() {
     expect($menuSpecial->isRecurring())->toBeFalse();
 });
 
-it('checks if period menu special is expired', function() {
+it('checks if period menu special is expired', function(): void {
+    $this->travelTo(now()->setTimeFromTimeString('09:00'));
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
         'start_date' => now()->subDays(4),
@@ -112,12 +115,12 @@ it('checks if period menu special is expired', function() {
 
     expect($menuSpecial->isExpired())->toBeTrue();
 
-    $this->travelTo(now()->subDay(2));
+    $this->travelTo(now()->subDay()->setTimeFromTimeString('09:00'));
 
     expect($menuSpecial->isExpired())->toBeFalse();
 });
 
-it('checks if recurring menu special is expired', function() {
+it('checks if recurring menu special is expired', function(): void {
     $this->travelTo(now()->weekday(2)->setTimeFromTimeString('09:00'));
 
     $menuSpecial = MenuSpecial::factory()->create([
@@ -134,7 +137,7 @@ it('checks if recurring menu special is expired', function() {
     expect($menuSpecial->isExpired())->toBeTrue();
 });
 
-it('checks if menu special price is fixed amount', function() {
+it('checks if menu special price is fixed amount', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'type' => 'F',
     ]);
@@ -142,7 +145,7 @@ it('checks if menu special price is fixed amount', function() {
     expect($menuSpecial->isFixed())->toBeTrue();
 });
 
-it('checks if menu special price is percentage', function() {
+it('checks if menu special price is percentage', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'type' => 'P',
     ]);
@@ -150,7 +153,7 @@ it('checks if menu special price is percentage', function() {
     expect($menuSpecial->isFixed())->toBeFalse();
 });
 
-it('checks if menu special price is calculated correctly for fixed type', function() {
+it('checks if menu special price is calculated correctly for fixed type', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'type' => 'F',
         'special_price' => 10.00,
@@ -159,7 +162,7 @@ it('checks if menu special price is calculated correctly for fixed type', functi
     expect($menuSpecial->getMenuPrice(20.00))->toBe(10.00);
 });
 
-it('checks if menu special price is calculated correctly for percentage type', function() {
+it('checks if menu special price is calculated correctly for percentage type', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'type' => 'P',
         'special_price' => 10.00,
@@ -168,7 +171,7 @@ it('checks if menu special price is calculated correctly for percentage type', f
     expect($menuSpecial->getMenuPrice(20.00))->toBe(18.00);
 });
 
-it('checks if days remaining for menu special is calculated correctly', function() {
+it('checks if days remaining for menu special is calculated correctly', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
         'start_date' => now()->subDays(4),
@@ -178,7 +181,7 @@ it('checks if days remaining for menu special is calculated correctly', function
     expect($menuSpecial->daysRemaining())->toContain('4 days');
 });
 
-it('checks if days remaining for menu special is zero when expired', function() {
+it('checks if days remaining for menu special is zero when expired', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'period',
         'start_date' => now()->subDays(4),
@@ -188,7 +191,7 @@ it('checks if days remaining for menu special is zero when expired', function() 
     expect($menuSpecial->daysRemaining())->toBe(0);
 });
 
-it('checks if days remaining for menu special is zero when validity is not period', function() {
+it('checks if days remaining for menu special is zero when validity is not period', function(): void {
     $menuSpecial = MenuSpecial::factory()->create([
         'validity' => 'forever',
     ]);
@@ -196,7 +199,7 @@ it('checks if days remaining for menu special is zero when validity is not perio
     expect($menuSpecial->daysRemaining())->toBe(0);
 });
 
-it('configures menu special model correctly', function() {
+it('configures menu special model correctly', function(): void {
     $menuSpecial = new MenuSpecial;
 
     expect($menuSpecial->getTable())->toBe('menus_specials')

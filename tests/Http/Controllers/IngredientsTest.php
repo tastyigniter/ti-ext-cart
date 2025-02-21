@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Cart\Models\Ingredient;
 
-it('loads ingredients page', function() {
+it('loads ingredients page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.ingredients'))
         ->assertOk();
 });
 
-it('loads create ingredient page', function() {
+it('loads create ingredient page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.ingredients', ['slug' => 'create']))
         ->assertOk();
 });
 
-it('loads edit ingredient page', function() {
+it('loads edit ingredient page', function(): void {
     $ingredient = Ingredient::factory()->create();
 
     actingAsSuperUser()
@@ -24,7 +26,7 @@ it('loads edit ingredient page', function() {
         ->assertOk();
 });
 
-it('loads ingredient preview page', function() {
+it('loads ingredient preview page', function(): void {
     $ingredient = Ingredient::factory()->create();
 
     actingAsSuperUser()
@@ -32,7 +34,7 @@ it('loads ingredient preview page', function() {
         ->assertOk();
 });
 
-it('updates ingredient', function() {
+it('updates ingredient', function(): void {
     $ingredient = Ingredient::factory()->create();
 
     actingAsSuperUser()
@@ -48,7 +50,7 @@ it('updates ingredient', function() {
     expect(Ingredient::find($ingredient->getKey()))->name->toBe('Updated Ingredient');
 });
 
-it('deletes ingredient', function() {
+it('deletes ingredient', function(): void {
     $ingredient = Ingredient::factory()->create();
 
     actingAsSuperUser()

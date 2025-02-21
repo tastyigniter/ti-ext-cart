@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Concerns;
 
 use Carbon\Carbon;
 use Igniter\Cart\Models\Order;
 
-it('generates invoice correctly', function() {
+it('generates invoice correctly', function(): void {
     $order = Order::factory()->create();
 
     expect($order->hasInvoice())->toBeFalse();
@@ -16,7 +18,7 @@ it('generates invoice correctly', function() {
         ->and($order->invoice_number)->toBe($order->invoice_prefix.$order->order_id);
 });
 
-it('gets invoice number correctly', function() {
+it('gets invoice number correctly', function(): void {
     $order = Order::factory()->create([
         'invoice_prefix' => 'INV-2022-',
         'order_id' => 1,
@@ -25,7 +27,7 @@ it('gets invoice number correctly', function() {
     expect($order->invoice_number)->toBe('INV-2022-1');
 });
 
-it('returns null for invoice number when prefix is not set', function() {
+it('returns null for invoice number when prefix is not set', function(): void {
     $order = Order::factory()->create([
         'invoice_prefix' => '',
     ]);
@@ -33,7 +35,7 @@ it('returns null for invoice number when prefix is not set', function() {
     expect($order->invoice_number)->toBeNull();
 });
 
-it('generates invoice prefix correctly', function() {
+it('generates invoice prefix correctly', function(): void {
     $order = Order::factory()->create([
         'invoice_date' => Carbon::create(2022),
     ]);
@@ -43,7 +45,7 @@ it('generates invoice prefix correctly', function() {
     expect($prefix)->toBe('INV-2022-00');
 });
 
-it('generates invoice on order save', function() {
+it('generates invoice on order save', function(): void {
     $order = Order::factory()->createQuietly([
         'processed' => 1,
         'status_id' => 1,

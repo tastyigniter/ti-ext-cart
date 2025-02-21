@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
@@ -25,7 +27,7 @@ class MenuRequest extends FormRequest
         ];
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'menu_name' => ['required', 'string', 'between:2,255'],

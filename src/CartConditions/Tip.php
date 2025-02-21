@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\CartConditions;
 
 use Igniter\Cart\CartCondition;
@@ -12,20 +14,20 @@ class Tip extends CartCondition
 
     protected $tipValueType;
 
-    public $priority = 100;
+    public ?int $priority = 100;
 
-    public function onLoad()
+    public function onLoad(): void
     {
         $this->tippingEnabled = (bool)CartSettings::get('enable_tipping');
         $this->tipValueType = CartSettings::get('tip_value_type', 'F');
     }
 
-    public function getLabel()
+    public function getLabel(): string
     {
         return lang($this->label);
     }
 
-    public function beforeApply()
+    public function beforeApply(): ?bool
     {
         if (!$this->tippingEnabled) {
             return false;
@@ -37,13 +39,15 @@ class Tip extends CartCondition
         }
 
         $value = $this->getMetaData('amount');
-        if (!preg_match('/^\d+([\.\d]{2})?([%])?$/', $value) || $value <= 0) {
+        if (!preg_match('/^\d+([\.\d]{2})?(%)?$/', (string)$value) || $value <= 0) {
             $this->removeMetaData('amount');
             flash()->warning(lang('igniter.cart::default.alert_tip_not_applied'))->now();
         }
+
+        return null;
     }
 
-    public function getActions()
+    public function getActions(): array
     {
         $amount = $this->getMetaData('amount');
         if (!$this->getMetaData('isCustom') && $this->tipValueType != 'F') {

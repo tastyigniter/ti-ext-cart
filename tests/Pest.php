@@ -1,8 +1,11 @@
 <?php
 
-use Igniter\User\Models\User;
+declare(strict_types=1);
 
-uses(SamPoyigi\Testbench\TestCase::class)->in(__DIR__);
+use Igniter\User\Models\User;
+use SamPoyigi\Testbench\TestCase;
+
+uses(TestCase::class)->in(__DIR__);
 
 function actingAsSuperUser()
 {

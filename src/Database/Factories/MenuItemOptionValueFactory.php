@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Flame\Database\Factories\Factory;
 
 class MenuItemOptionValueFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\MenuItemOptionValue::class;
+    protected $model = MenuItemOptionValue::class;
 
     public function definition(): array
     {

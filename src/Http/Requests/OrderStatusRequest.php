@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Requests;
 
 use Igniter\System\Classes\FormRequest;
@@ -18,7 +20,7 @@ class OrderStatusRequest extends FormRequest
         ];
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'status_id' => ['sometimes', 'required', 'integer', 'exists:statuses'],

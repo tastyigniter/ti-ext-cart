@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Observers;
 
 use Igniter\Cart\Models\Menu;
 
 class MenuObserver
 {
-    public function saved(Menu $menu)
+    public function saved(Menu $menu): void
     {
         $menu->restorePurgedValues();
 
@@ -19,7 +21,7 @@ class MenuObserver
         }
     }
 
-    public function deleting(Menu $menu)
+    public function deleting(Menu $menu): void
     {
         $menu->menu_options()->delete();
         $menu->special()->delete();

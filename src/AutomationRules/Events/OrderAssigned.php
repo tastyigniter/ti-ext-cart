@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\AutomationRules\Events;
 
 use Igniter\Automation\Classes\BaseEvent;

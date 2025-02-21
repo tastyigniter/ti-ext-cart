@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Igniter\Admin\Classes\FormField;

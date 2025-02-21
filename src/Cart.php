@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Closure;
@@ -10,36 +12,29 @@ use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Exceptions\UnknownModelException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Session\SessionManager;
+use LogicException;
 
 class Cart
 {
-    const DEFAULT_INSTANCE = 'default';
+    public const string DEFAULT_INSTANCE = 'default';
 
     /**
      * Instance of the session manager.
-     *
-     * @var \Illuminate\Session\Store
      */
-    protected $session;
+    protected SessionManager $session;
 
     /**
      * Instance of the event dispatcher.
-     *
-     * @var \Illuminate\Contracts\Events\Dispatcher
      */
-    protected $events;
+    protected Dispatcher $events;
 
     /**
      * Holds the current cart instance.
-     *
-     * @var string
      */
-    protected $instance;
+    protected string $instance = self::DEFAULT_INSTANCE;
 
     /**
-     * Instance of the cart condition.
-     *
-     * @var \Igniter\Cart\CartConditions
+     * @var CartConditions Instance of the cart condition.
      */
     protected $conditions;
 
@@ -50,18 +45,12 @@ class Cart
     {
         $this->session = $session;
         $this->events = $events;
-
-        $this->instance = self::DEFAULT_INSTANCE;
     }
 
     /**
      * Set the current cart instance.
-     *
-     * @param string|null $instance
-     *
-     * @return \Igniter\Cart\Cart
      */
-    public function instance($instance = null)
+    public function instance(?string $instance = null): static
     {
         $instance = $instance ?: $this->instance;
 
@@ -74,25 +63,19 @@ class Cart
 
     /**
      * Get the current cart instance.
-     *
-     * @return string
      */
-    public function currentInstance()
+    public function currentInstance(): string
     {
         return str_replace('cart.', '', $this->instance);
     }
 
     /**
      * Add an item to the cart.
-     *
-     * @param int $qty
-     *
-     * @return array|\Igniter\Cart\CartItem
      */
-    public function add($buyable, $qty = 0, array $options = [], $comment = null)
+    public function add($buyable, int $qty = 0, array $options = [], $comment = null): array|CartItem
     {
         if ($this->isMulti($buyable)) {
-            return array_map(function($item) {
+            return array_map(function($item): CartItem|array {
                 return $this->add($item);
             }, $buyable);
         }
@@ -120,13 +103,8 @@ class Cart
 
     /**
      * Update the cart item with the given rowId.
-     *
-     * @param string $rowId
-     * @param mixed $qty
-     *
-     * @return \Igniter\Cart\CartItem|bool
      */
-    public function update($rowId, $qty)
+    public function update(string $rowId, mixed $qty): CartItem
     {
         $cartItem = $this->get($rowId);
 
@@ -170,12 +148,8 @@ class Cart
 
     /**
      * Remove the cart item with the given rowId from the cart.
-     *
-     * @param string $rowId
-     *
-     * @return void
      */
-    public function remove($rowId)
+    public function remove(string $rowId): void
     {
         $cartItem = $this->get($rowId);
 
@@ -192,12 +166,8 @@ class Cart
 
     /**
      * Get a cart item from the cart by its rowId.
-     *
-     * @param string $rowId
-     *
-     * @return \Igniter\Cart\CartItem
      */
-    public function get($rowId)
+    public function get(string $rowId): CartItem
     {
         $content = $this->getContent();
 
@@ -212,9 +182,8 @@ class Cart
      * Destroy the current cart instance.
      *
      * @param mixed $identifier
-     * @return void
      */
-    public function destroy($identifier = null)
+    public function destroy($identifier = null): void
     {
         $this->fireEvent('clearing');
 
@@ -227,10 +196,8 @@ class Cart
 
     /**
      * Get the content of the cart.
-     *
-     * @return \Igniter\Cart\CartContent
      */
-    public function content()
+    public function content(): CartContent
     {
         return $this->getContent();
     }
@@ -265,10 +232,8 @@ class Cart
 
     /**
      * Search the cart content for a cart item matching the given search closure.
-     *
-     * @return \Igniter\Cart\CartContent
      */
-    public function search(Closure $search)
+    public function search(Closure $search): CartContent
     {
         $content = $this->getContent();
 
@@ -277,13 +242,8 @@ class Cart
 
     /**
      * Associate the cart item with the given rowId with the given model.
-     *
-     * @param string $rowId
-     * @param mixed $model
-     *
-     * @return void
      */
-    public function associate($rowId, $model)
+    public function associate(string $rowId, mixed $model): void
     {
         if (is_string($model) && !class_exists($model)) {
             throw new UnknownModelException("The supplied model {$model} does not exist.");
@@ -316,7 +276,7 @@ class Cart
         return $conditions->applied();
     }
 
-    public function conditionsWithoutApplied()
+    public function conditionsWithoutApplied(): CartConditions
     {
         return $this->getConditions();
     }
@@ -333,10 +293,8 @@ class Cart
 
     /**
      * Clear a condition on a cart by its name,
-     *
-     * @return bool
      */
-    public function removeCondition($name)
+    public function removeCondition($name): ?bool
     {
         $cartCondition = $this->getCondition($name);
 
@@ -351,13 +309,15 @@ class Cart
         $this->removeItemCondition($cartCondition);
 
         $this->fireEvent('condition.removed', $cartCondition);
+
+        return null;
     }
 
-    public function clearConditions()
+    public function clearConditions(): void
     {
         $this->fireEvent('condition.clearing');
 
-        $this->getConditions()->each(function(CartCondition $condition) {
+        $this->getConditions()->each(function(CartCondition $condition): void {
             $condition->clearMetaData();
         });
 
@@ -366,21 +326,18 @@ class Cart
         $this->fireEvent('condition.cleared');
     }
 
-    /**
-     * @param $condition \Igniter\Cart\CartCondition
-     */
-    public function condition($condition)
+    public function condition(CartCondition $condition): void
     {
         traceLog('Deprecated. Use Cart::loadCondition($condition) instead');
         $this->loadCondition($condition);
     }
 
-    public function loadConditions()
+    public function loadConditions(): void
     {
         traceLog('Deprecated. Use resolve(CartConditionManager::class)->loadCartConditions($cart) instead');
     }
 
-    public function loadCondition(CartCondition $condition)
+    public function loadCondition(CartCondition $condition): void
     {
         // Extensibility
         $this->fireEvent('condition.loading', $condition);
@@ -389,7 +346,7 @@ class Cart
 
         if (is_null($condition->getPriority())) {
             $last = $conditions->last();
-            $condition->setPriority(!is_null($last) ? $last->getPriority() + 1 : 1);
+            $condition->setPriority(is_null($last) ? 1 : $last->getPriority() + 1);
         }
 
         $condition->onLoad();
@@ -415,7 +372,7 @@ class Cart
 
     protected function applyConditionToItem(CartCondition $condition, CartItem $cartItem)
     {
-        if ($itemCondition = $this->getApplicableItemCondition($condition, $cartItem)) {
+        if (($itemCondition = $this->getApplicableItemCondition($condition, $cartItem)) instanceof CartCondition) {
             if (!$cartItem->conditions->has($itemCondition->name)) {
                 $cartItem->conditions->put($itemCondition->name, $itemCondition);
             }
@@ -424,10 +381,7 @@ class Cart
         }
     }
 
-    /**
-     * @return null|\Igniter\Cart\CartCondition
-     */
-    protected function getApplicableItemCondition($condition, $cartItem)
+    protected function getApplicableItemCondition($condition, $cartItem): null|CartCondition
     {
         if (!in_array(ActsAsItemable::class, class_uses($condition))) {
             return null;
@@ -442,14 +396,12 @@ class Cart
 
     /**
      * Load condition on all existing cart items
-     *
-     * @param CartCondition $condition
      */
-    protected function loadItemsCondition($condition)
+    protected function loadItemsCondition(CartCondition $condition)
     {
         $content = $this->getContent();
 
-        $content->each(function(CartItem $cartItem) use ($condition) {
+        $content->each(function(CartItem $cartItem) use ($condition): void {
             $this->applyConditionToItem($condition, $cartItem);
         });
 
@@ -458,14 +410,12 @@ class Cart
 
     /**
      * Remove an applied condition from all cart items
-     *
-     * @param CartCondition $condition
      */
-    protected function removeItemCondition($condition)
+    protected function removeItemCondition(CartCondition $condition)
     {
         $content = $this->getContent();
 
-        $content->each(function(CartItem $cartItem) use ($condition) {
+        $content->each(function(CartItem $cartItem) use ($condition): void {
             $cartItem->conditions->forget($condition->name);
         });
 
@@ -479,7 +429,7 @@ class Cart
     {
         $content = $this->getContent();
 
-        $content->each(function(CartItem $cartItem) {
+        $content->each(function(CartItem $cartItem): void {
             $cartItem->clearConditions();
         });
 
@@ -490,7 +440,7 @@ class Cart
     //
     //
 
-    public function clearContent()
+    public function clearContent(): void
     {
         $this->fireEvent('content.clearing');
 
@@ -501,10 +451,8 @@ class Cart
 
     /**
      * Get the carts content, if there is no cart content set yet, return a new empty Collection
-     *
-     * @return \Igniter\Cart\CartContent
      */
-    protected function getContent()
+    protected function getContent(): CartContent
     {
         if (!$content = $this->getSession('content')) {
             $content = new CartContent;
@@ -515,10 +463,8 @@ class Cart
 
     /**
      * Get the carts conditions, if there is no cart condition set yet, return a new empty Collection
-     *
-     * @return \Igniter\Cart\CartConditions
      */
-    protected function getConditions()
+    protected function getConditions(): CartConditions
     {
         if (!$this->conditions) {
             $this->conditions = new CartConditions;
@@ -529,12 +475,8 @@ class Cart
 
     /**
      * Create a new CartItem from the supplied attributes.
-     *
-     * @param int $qty
-     *
-     * @return \Igniter\Cart\CartItem
      */
-    protected function createCartItem($buyable, $qty = 0, array $options = [], $comment = null)
+    protected function createCartItem($buyable, int $qty = 0, array $options = [], $comment = null): CartItem
     {
         if ($buyable instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($buyable, $options, $comment);
@@ -568,10 +510,8 @@ class Cart
      * Store the current instance of the cart.
      *
      * @param mixed $identifier
-     *
-     * @return void
      */
-    public function store($identifier)
+    public function store($identifier): void
     {
         $cartStore = $this->createModel()->firstOrCreate([
             'identifier' => $identifier,
@@ -592,7 +532,7 @@ class Cart
      * Restore the cart with the given identifier.
      * @param mixed $identifier
      */
-    public function restore($identifier)
+    public function restore($identifier): void
     {
         if (!$this->storedCartWithIdentifierExists($identifier)) {
             return;
@@ -621,7 +561,7 @@ class Cart
         $this->deleteStored($identifier);
     }
 
-    public function deleteStored($identifier)
+    public function deleteStored($identifier): void
     {
         $this->createModel()
             ->where('identifier', $identifier)
@@ -654,7 +594,7 @@ class Cart
     {
         $modelClass = config('igniter-cart.model');
         if (!$modelClass || !class_exists($modelClass)) {
-            throw new \LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
+            throw new LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
         }
 
         return new $modelClass;
@@ -698,7 +638,7 @@ class Cart
     /**
      * @return mixed
      */
-    protected function fireEvent($name, $payload = null)
+    protected function fireEvent(string $name, $payload = null)
     {
         if (is_null($payload)) {
             return $this->events->fire('cart.'.$name, [$this]);

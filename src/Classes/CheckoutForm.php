@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Igniter\Admin\Classes\FormTabs;
@@ -11,7 +13,7 @@ class CheckoutForm extends Form
         public ?array $config = [],
     ) {}
 
-    public function initialize()
+    public function initialize(): void
     {
         $this->fillFromConfig([
             'fields',
@@ -45,7 +47,7 @@ class CheckoutForm extends Form
 
     public function validationAttributes(): array
     {
-        $attributes = array_map(function($field) {
+        $attributes = array_map(function($field): string {
             return lang($field['label'] ?? $field['name']);
         }, $this->fields);
 

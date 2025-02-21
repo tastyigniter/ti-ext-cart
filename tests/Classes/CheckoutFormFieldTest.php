@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\CheckoutFormField;
 
-it('returns field name with array name prefix', function() {
+it('returns field name with array name prefix', function(): void {
     $field = new CheckoutFormField('testField');
     $field->arrayName = 'testArray';
 
@@ -13,7 +15,7 @@ it('returns field name with array name prefix', function() {
     expect($name)->toEqual('testArray.testField');
 });
 
-it('returns field name without array name prefix', function() {
+it('returns field name without array name prefix', function(): void {
     $field = new CheckoutFormField('testField');
 
     $name = $field->getName();
@@ -21,7 +23,7 @@ it('returns field name without array name prefix', function() {
     expect($name)->toEqual('testField');
 });
 
-it('returns field id with array name, prefix and suffix', function() {
+it('returns field id with array name, prefix and suffix', function(): void {
     $field = new CheckoutFormField('testField');
     $field->arrayName = 'testArray';
     $field->idPrefix = 'checkout';
@@ -31,7 +33,7 @@ it('returns field id with array name, prefix and suffix', function() {
     expect($id)->toEqual('checkout-testarray-testfield-suffix');
 });
 
-it('returns field id with array name and suffix', function() {
+it('returns field id with array name and suffix', function(): void {
     $field = new CheckoutFormField('testField');
     $field->arrayName = 'testArray';
 
@@ -40,7 +42,7 @@ it('returns field id with array name and suffix', function() {
     expect($id)->toEqual('-testarray-testfield-suffix');
 });
 
-it('returns field id without array name and with suffix', function() {
+it('returns field id without array name and with suffix', function(): void {
     $field = new CheckoutFormField('testField');
 
     $id = $field->getId('suffix');
@@ -48,7 +50,7 @@ it('returns field id without array name and with suffix', function() {
     expect($id)->toEqual('-testfield-suffix');
 });
 
-it('returns field id with id prefix', function() {
+it('returns field id with id prefix', function(): void {
     $field = new CheckoutFormField('testField');
     $field->idPrefix = 'prefix';
 

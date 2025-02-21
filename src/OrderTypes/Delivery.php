@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\OrderTypes;
 
 use Igniter\Cart\Classes\AbstractOrderType;
@@ -12,7 +14,7 @@ class Delivery extends AbstractOrderType
     {
         return sprintf(
             lang('igniter.cart::default.text_delivery_time_info'),
-            sprintf(lang('igniter.local::default.text_in_minutes'), $this->getLeadTime())
+            sprintf(lang('igniter.local::default.text_in_minutes'), $this->getLeadTime()),
         );
     }
 
@@ -22,7 +24,7 @@ class Delivery extends AbstractOrderType
 
         return sprintf(
             lang('igniter.cart::default.text_delivery_time_info'),
-            sprintf(lang('igniter.local::default.text_starts'), '<b>'.$starts->isoFormat($format).'</b>')
+            sprintf(lang('igniter.local::default.text_starts'), '<b>'.$starts->isoFormat($format).'</b>'),
         );
     }
 
@@ -30,7 +32,7 @@ class Delivery extends AbstractOrderType
     {
         return sprintf(
             lang('igniter.cart::default.text_delivery_time_info'),
-            lang('igniter.local::default.text_is_closed')
+            lang('igniter.local::default.text_is_closed'),
         );
     }
 
@@ -49,10 +51,10 @@ class Delivery extends AbstractOrderType
         return !$this->location->hasDelivery();
     }
 
-    public function getMinimumOrderTotal()
+    public function getMinimumOrderTotal(): float
     {
         $total = LocationFacade::coveredArea()->minimumOrderTotal(Cart::subtotal());
 
-        return max($total, parent::getMinimumOrderTotal());
+        return (float)max($total, parent::getMinimumOrderTotal());
     }
 }

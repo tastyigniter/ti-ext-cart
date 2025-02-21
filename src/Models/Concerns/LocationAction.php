@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Concerns;
 
 use Igniter\Cart\Classes\OrderTypes;
@@ -35,7 +37,7 @@ class LocationAction extends ModelAction
         return collect($result);
     }
 
-    public function availableOrderTypes()
+    public function availableOrderTypes(): Collection
     {
         return resolve(OrderTypes::class)->makeOrderTypes($this->model);
     }

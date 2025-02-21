@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\Ingredient;
 use Igniter\Flame\Database\Factories\Factory;
 
 class IngredientFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\Ingredient::class;
+    protected $model = Ingredient::class;
 
     public function definition(): array
     {

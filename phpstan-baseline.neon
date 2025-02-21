@@ -26,16 +26,6 @@ parameters:
 			path: src/Cart.php
 
 		-
-			message: "#^Method Igniter\\\\Cart\\\\Cart\\:\\:removeCondition\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Cart.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$include$#"
-			count: 1
-			path: src/CartCondition.php
-
-		-
 			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$order_fee\\.$#"
 			count: 2
 			path: src/CartConditions/PaymentFee.php
@@ -74,16 +64,6 @@ parameters:
 			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
 			count: 2
 			path: src/CartItem.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$comment$#"
-			count: 1
-			path: src/CartItemOptionValue.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
-			count: 1
-			path: src/CartItemOptionValue.php
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:futureOrderDays\\(\\)\\.$#"
@@ -256,11 +236,6 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:getAvailableLocations\\(\\)\\.$#"
-			count: 1
-			path: src/FormWidgets/StockEditor.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:whereIn\\(\\)\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
@@ -277,6 +252,11 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Http\\\\Controllers\\\\Orders\\:\\:formFindModelObject\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/Orders.php
+
+		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
 
@@ -386,31 +366,6 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuAllergens\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuCategories\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuIngredients\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuMealtimes\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:addMenuSpecial\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$id$#"
 			count: 1
 			path: src/Models/Menu.php
@@ -512,11 +467,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:dropdown\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuOptionValue.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:addMenuAllergens\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: src/Models/MenuOptionValue.php
 
@@ -626,6 +576,11 @@ parameters:
 			path: src/Models/Order.php
 
 		-
+			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Order.php
+
+		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Order.php
@@ -637,11 +592,6 @@ parameters:
 
 		-
 			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:addOrderMenuOptions\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:addOrderTotals\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
@@ -661,7 +611,7 @@ parameters:
 			path: src/Models/Scopes/MenuScope.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:whereSlug\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:whereSlug\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Scopes/MenuScope.php
 
@@ -677,11 +627,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$stockable\\.$#"
-			count: 1
-			path: src/Models/Stock.php
-
-		-
-			message: "#^Method Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:shouldAlertOnLowStock\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: src/Models/Stock.php
 

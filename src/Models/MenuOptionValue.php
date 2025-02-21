@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Cart\Models\Concerns\Stockable;
@@ -16,7 +18,7 @@ use Igniter\Flame\Database\Traits\Sortable;
  * @property float|null $price
  * @property int $priority
  * @property-read mixed $stock_qty
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuOptionValue extends Model
 {
@@ -47,10 +49,10 @@ class MenuOptionValue extends Model
 
     public $relation = [
         'belongsTo' => [
-            'option' => [\Igniter\Cart\Models\MenuOption::class],
+            'option' => [MenuOption::class],
         ],
         'morphToMany' => [
-            'ingredients' => [\Igniter\Cart\Models\Ingredient::class, 'name' => 'ingredientable'],
+            'ingredients' => [Ingredient::class, 'name' => 'ingredientable'],
         ],
     ];
 
@@ -91,15 +93,12 @@ class MenuOptionValue extends Model
     //
     // Events
     //
-
     /**
      * Create new or update existing menu allergens
      *
      * @param array $allergenIds if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuAllergens(array $allergenIds = [])
+    public function addMenuAllergens(array $allergenIds = []): void
     {
         $this->ingredients()->sync($allergenIds);
     }

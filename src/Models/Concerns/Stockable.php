@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Concerns;
+
+use Igniter\Cart\Models\Stock;
 
 trait Stockable
 {
-    public static function bootStockable()
+    public static function bootStockable(): void
     {
-        self::extend(function(self $model) {
+        self::extend(function(self $model): void {
             $model->relation['morphMany']['stocks'] = [
-                \Igniter\Cart\Models\Stock::class, 'name' => 'stockable', 'delete' => true,
+                Stock::class, 'name' => 'stockable', 'delete' => true,
             ];
 
             $model->appends[] = 'stock_qty';

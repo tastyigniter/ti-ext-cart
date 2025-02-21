@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Events;
 
 use Igniter\Cart\Models\Order;
@@ -11,7 +13,7 @@ class OrderBeforePaymentProcessedEvent
 
     public function __construct(public Order $order) {}
 
-    public static function eventName()
+    public static function eventName(): string
     {
         return 'admin.order.beforePaymentProcessed';
     }

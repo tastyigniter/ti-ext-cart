@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Cart;
 
-it('configures cart model correctly', function() {
+it('configures cart model correctly', function(): void {
     $cart = new Cart;
 
     expect($cart->getTable())->toEqual('igniter_cart_cart')

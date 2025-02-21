@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\OrderSettingsRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new OrderSettingsRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new OrderSettingsRequest;
 
     $attributes = $request->attributes();
 
@@ -25,8 +27,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('tax_delivery_charge', lang('igniter.cart::default.label_tax_delivery_charge'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new OrderSettingsRequest();
+it('returns correct validation rules', function(): void {
+    $request = new OrderSettingsRequest;
 
     $rules = $request->rules();
 

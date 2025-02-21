@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
+use Igniter\Cart\Cart;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Geolite\Facades\Geocoder;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Local\Classes\Location;
+use Igniter\PayRegister\Classes\BasePaymentGateway;
+use Igniter\PayRegister\Models\Payment;
 use Igniter\System\Traits\SessionMaker;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Models\Address;
 use Igniter\User\Models\Customer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
@@ -23,17 +29,17 @@ class OrderManager
     protected $sessionKey = 'igniter.checkout.order';
 
     /**
-     * @var \Igniter\Cart\Cart
+     * @var Cart
      */
     protected $cart;
 
     /**
-     * @var \Igniter\Local\Classes\Location
+     * @var Location
      */
     protected $location;
 
     /**
-     * @var \Igniter\User\Models\Customer
+     * @var Customer
      */
     protected $customer;
 
@@ -44,14 +50,14 @@ class OrderManager
         $this->customer = Auth::customer();
     }
 
-    public function setLocation(Location $location)
+    public function setLocation(Location $location): static
     {
         $this->location = $location;
 
         return $this;
     }
 
-    public function setCustomer(Customer $customer)
+    public function setCustomer(Customer $customer): static
     {
         $this->customer = $customer;
 
@@ -73,7 +79,7 @@ class OrderManager
     }
 
     /**
-     * @return \Igniter\Cart\Models\Order
+     * @return Order
      */
     public function loadOrder()
     {
@@ -101,8 +107,8 @@ class OrderManager
     }
 
     /**
-     * @param \Igniter\User\Models\Customer|null $customer
-     * @return \Igniter\Cart\Models\Order|\Illuminate\Database\Eloquent\Model|object|null
+     * @param Customer|null $customer
+     * @return Order|Model|object|null
      */
     public function getOrderByHash($hash, $customer = null)
     {
@@ -121,7 +127,7 @@ class OrderManager
     }
 
     /**
-     * @return \Igniter\PayRegister\Models\Payment|\Igniter\PayRegister\Classes\BasePaymentGateway
+     * @return Payment|BasePaymentGateway
      */
     public function getPayment($code)
     {
@@ -146,14 +152,14 @@ class OrderManager
     //
     //
 
-    public function validateCustomer($customer)
+    public function validateCustomer($customer): void
     {
         if (!$this->location->current()->allowGuestOrder() && (!$customer || !$customer->is_activated)) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_customer_not_logged'));
         }
     }
 
-    public function validateDeliveryAddress(array $address)
+    public function validateDeliveryAddress(array $address): void
     {
         if (!array_get($address, 'country') && isset($address['country_id'])) {
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
@@ -188,7 +194,7 @@ class OrderManager
     /**
      * @param $order \Igniter\Cart\Models\Order
      *
-     * @return \Igniter\Cart\Models\Order
+     * @return Order
      */
     public function saveOrder($order, array $data)
     {
@@ -272,7 +278,7 @@ class OrderManager
         return $result;
     }
 
-    public function applyRequiredAttributes($order)
+    public function applyRequiredAttributes($order): void
     {
         $order->customer_id = $this->customer ? $this->customer->getKey() : null;
         $order->location_id = $this->location->current()->getKey();
@@ -292,7 +298,7 @@ class OrderManager
         $order->ip_address = Request::getClientIp();
     }
 
-    protected function getCustomerAttributes()
+    protected function getCustomerAttributes(): array
     {
         $customer = $this->customer;
 
@@ -327,7 +333,7 @@ class OrderManager
             }
         }
 
-        $totals = $this->cart->conditions()->map(function(CartCondition $condition) {
+        $totals = $this->cart->conditions()->map(function(CartCondition $condition): array {
             return [
                 'code' => $condition->name,
                 'title' => $condition->getLabel(),
@@ -357,10 +363,9 @@ class OrderManager
     }
 
     /**
-     * @param \Igniter\Cart\Models\Order $order
-     * @return bool
+     * @param Order $order
      */
-    protected function processPaymentLessForm($order)
+    protected function processPaymentLessForm($order): bool
     {
         $order->updateOrderStatus(setting('default_order_status'), ['notify' => false]);
         $order->markAsPaymentProcessed();
@@ -387,7 +392,7 @@ class OrderManager
     // Session
     //
 
-    public function clearOrder()
+    public function clearOrder(): void
     {
         $this->location->updateScheduleTimeSlot(null);
         $this->cart->destroy($this->getCustomerId());
@@ -397,17 +402,15 @@ class OrderManager
     /**
      * Set the current order id.
      */
-    public function setCurrentOrderId($orderId)
+    public function setCurrentOrderId($orderId): void
     {
         $this->putSession('id', $orderId);
     }
 
     /**
      * Get the current order id.
-     *
-     * @return mixed
      */
-    public function getCurrentOrderId()
+    public function getCurrentOrderId(): mixed
     {
         return $this->getSession('id');
     }
@@ -415,22 +418,20 @@ class OrderManager
     /**
      * Clear the current order id.
      */
-    public function clearCurrentOrderId()
+    public function clearCurrentOrderId(): void
     {
         $this->forgetSession('id');
     }
 
     /**
      * Check if the given order id is the current order id.
-     *
-     * @return bool
      */
-    public function isCurrentOrderId($orderId)
+    public function isCurrentOrderId($orderId): bool
     {
         return $this->getCurrentOrderId() == $orderId;
     }
 
-    public function setCurrentPaymentCode($code)
+    public function setCurrentPaymentCode($code): void
     {
         $this->putSession('paymentCode', $code);
     }

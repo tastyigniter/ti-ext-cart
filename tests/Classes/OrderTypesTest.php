@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\OrderTypes;
@@ -7,7 +9,7 @@ use Igniter\Cart\OrderTypes\Delivery;
 use Igniter\Local\Models\Location as LocationModel;
 use Illuminate\Support\Collection;
 
-it('makes order types', function() {
+it('makes order types', function(): void {
     $orderTypes = new OrderTypes;
     $location = new LocationModel;
 
@@ -16,7 +18,7 @@ it('makes order types', function() {
     expect($result)->toBeInstanceOf(Collection::class);
 });
 
-it('gets order type', function() {
+it('gets order type', function(): void {
     $orderTypes = new OrderTypes;
 
     $result = $orderTypes->getOrderType('delivery');
@@ -27,7 +29,7 @@ it('gets order type', function() {
         ->toHaveKey('name');
 });
 
-it('lists order types', function() {
+it('lists order types', function(): void {
     $orderTypes = new OrderTypes;
 
     $result = $orderTypes->listOrderTypes();
@@ -35,7 +37,7 @@ it('lists order types', function() {
     expect($result)->toBeArray();
 });
 
-it('registers order types', function() {
+it('registers order types', function(): void {
     $orderTypes = new OrderTypes;
 
     $orderTypes->registerOrderTypes([
@@ -47,7 +49,7 @@ it('registers order types', function() {
     expect($result)->toHaveKey('delivery');
 });
 
-it('registers order type', function() {
+it('registers order type', function(): void {
     $orderTypes = new OrderTypes;
 
     $orderTypes->registerOrderType(Delivery::class, ['code' => 'delivery', 'name' => 'Delivery']);
@@ -57,10 +59,10 @@ it('registers order type', function() {
     expect($result)->toHaveKey('delivery');
 });
 
-it('registers callback', function() {
+it('registers callback', function(): void {
     $orderTypes = new OrderTypes;
 
-    $orderTypes->registerCallback(function($orderTypes) {
+    $orderTypes->registerCallback(function($orderTypes): void {
         $orderTypes->registerOrderType('TestOrderType', ['code' => 'test']);
     });
 

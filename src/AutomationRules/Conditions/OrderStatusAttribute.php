@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\AutomationRules\Conditions;
 
+use Igniter\Admin\Models\Status;
 use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 
 class OrderStatusAttribute extends BaseModelAttributesCondition
 {
-    protected $modelClass = \Igniter\Admin\Models\Status::class;
+    protected $modelClass = Status::class;
 
     protected $modelAttributes;
 
-    public function conditionDetails()
+    public function conditionDetails(): array
     {
         return [
             'name' => 'Order status attribute',

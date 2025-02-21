@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Classes;
 
 use Igniter\System\Classes\ExtensionManager;
@@ -14,7 +16,7 @@ class OrderTypes
     public function makeOrderTypes($location): Collection
     {
         return collect($this->listOrderTypes())
-            ->map(function($orderType) use ($location) {
+            ->map(function(array $orderType) use ($location) {
                 return resolve($orderType['className'], ['location' => $location, 'config' => $orderType]);
             });
     }
@@ -24,7 +26,7 @@ class OrderTypes
         return array_get($this->listOrderTypes(), $code);
     }
 
-    public function listOrderTypes()
+    public function listOrderTypes(): ?array
     {
         if (is_null($this->registeredOrderTypes)) {
             $this->loadOrderTypes();
@@ -45,14 +47,14 @@ class OrderTypes
         }
     }
 
-    public function registerOrderTypes(array $orderTypes)
+    public function registerOrderTypes(array $orderTypes): void
     {
         foreach ($orderTypes as $className => $definition) {
             $this->registerOrderType($className, $definition);
         }
     }
 
-    public function registerOrderType(string $className, array $definition)
+    public function registerOrderType(string $className, array $definition): void
     {
         $code = $definition['code'] ?? strtolower(basename($className));
 
@@ -65,7 +67,7 @@ class OrderTypes
         ]);
     }
 
-    public function registerCallback(callable $definitions)
+    public function registerCallback(callable $definitions): void
     {
         $this->registeredCallbacks[] = $definitions;
     }

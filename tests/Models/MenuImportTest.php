@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Exception;
@@ -7,7 +9,7 @@ use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuImport;
 
-it('imports data and creates new menu item', function() {
+it('imports data and creates new menu item', function(): void {
     $menuImport = mock(MenuImport::class)->makePartial()->shouldAllowMockingProtectedMethods();
     $menuImport->shouldReceive('findDuplicateMenuItem')->andReturn(null);
     $menuImport->shouldReceive('getCategoryIdsForMenuItem')->andReturn([1, 2]);
@@ -25,7 +27,7 @@ it('imports data and creates new menu item', function() {
         ->and($menuItem->categories->pluck('category_id')->toArray())->toBe([1, 2]);
 });
 
-it('imports data and updates existing menu item', function() {
+it('imports data and updates existing menu item', function(): void {
     Menu::factory()->create(['menu_name' => 'Existing Menu Item']);
     $existingMenu = Menu::factory()->create();
     $existingCategory = Category::factory()->create();
@@ -54,7 +56,7 @@ it('imports data and updates existing menu item', function() {
         ->and($menuItem->categories->pluck('category_id')->toArray())->toContain($existingCategory->getKey());
 });
 
-it('logs error when exception is thrown during import', function() {
+it('logs error when exception is thrown during import', function(): void {
     $menuImport = mock(MenuImport::class)->makePartial()->shouldAllowMockingProtectedMethods();
     $menuImport->shouldReceive('extendableGet')->with('update_existing')->andReturn(true);
     $menuImport->shouldReceive('findDuplicateMenuItem')->andThrow(new Exception('Test Exception'));

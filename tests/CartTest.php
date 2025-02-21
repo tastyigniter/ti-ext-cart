@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests;
 
 use Igniter\Cart\Cart;
@@ -18,11 +20,11 @@ use Igniter\Local\Models\Location as LocationModel;
 use InvalidArgumentException;
 use LogicException;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->cart = resolve(Cart::class);
 });
 
-it('adds item to the cart correctly', function() {
+it('adds item to the cart correctly', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -35,7 +37,7 @@ it('adds item to the cart correctly', function() {
         ->and($cartItem->comment())->toBe('Test comment');
 });
 
-it('adds multiple items to the cart correctly', function() {
+it('adds multiple items to the cart correctly', function(): void {
     $cartItems = $this->cart->add([
         [
             'id' => 1,
@@ -54,7 +56,7 @@ it('adds multiple items to the cart correctly', function() {
         ->and($cartItems[1]->id)->toBe(2);
 });
 
-it('adds item updates quantity correctly', function() {
+it('adds item updates quantity correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -70,7 +72,7 @@ it('adds item updates quantity correctly', function() {
         ->and($cartItem->qty)->toBe(4);
 });
 
-it('adds item with options to the cart correctly', function() {
+it('adds item with options to the cart correctly', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -117,23 +119,21 @@ it('adds item with options to the cart correctly', function() {
         ->and($cartItem->options->subtotal())->toBe(4.0);
 });
 
-it('adds item with conditions to the cart correctly', function() {
-    $condition = new class([
-        'name' => 'VAT',
-        'value' => '10%',
-    ]) extends CartCondition
+it('adds item with conditions to the cart correctly', function(): void {
+    $condition = new class(['name' => 'VAT', 'value' => '10%',]) extends CartCondition
     {
         use ActsAsItemable {
             ActsAsItemable::isApplicableTo as parentIsApplicableTo;
         }
 
-        public static function isApplicableTo($cartItem)
+        public static function isApplicableTo($cartItem): bool
         {
-            static::parentIsApplicableTo($cartItem);
+            self::parentIsApplicableTo($cartItem);
+
             return true;
         }
 
-        public function toArray()
+        public function toArray(): array
         {
             return ['name' => 'VATPlus', 'value' => '10%'];
         }
@@ -153,7 +153,7 @@ it('adds item with conditions to the cart correctly', function() {
         ->and($cartItem->conditions->count())->toEqual(2);
 });
 
-it('does not add item condition when not applicable', function() {
+it('does not add item condition when not applicable', function(): void {
     Location::setModel(LocationModel::factory()->create());
     $cartItem = $this->cart->add([
         'id' => 1,
@@ -180,7 +180,7 @@ it('does not add item condition when not applicable', function() {
         ->and($cartItem->conditions->count())->toEqual(0);
 });
 
-it('updates item in the cart correctly', function() {
+it('updates item in the cart correctly', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -192,7 +192,7 @@ it('updates item in the cart correctly', function() {
     expect($this->cart->get($cartItem->rowId)->qty)->toBe(2);
 });
 
-it('updates cart item from Buyable instance', function() {
+it('updates cart item from Buyable instance', function(): void {
     $menu = Menu::factory()->create([
         'menu_name' => 'Test Menu',
         'menu_price' => 40.00,
@@ -208,7 +208,7 @@ it('updates cart item from Buyable instance', function() {
     expect($updatedCartItem->price)->toBe(40.0);
 });
 
-it('updates cart item from array', function() {
+it('updates cart item from array', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -225,7 +225,7 @@ it('updates cart item from array', function() {
         ->and($updatedCartItem->toJson())->toContain('Updated Item');
 });
 
-it('throws exception when setting invalid quantity on cart item', function() {
+it('throws exception when setting invalid quantity on cart item', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -237,7 +237,7 @@ it('throws exception when setting invalid quantity on cart item', function() {
     $cartItem->setQuantity('invalid-quantity');
 })->throws(InvalidArgumentException::class);
 
-it('removes cart item when quantity is zero or less', function() {
+it('removes cart item when quantity is zero or less', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -249,7 +249,7 @@ it('removes cart item when quantity is zero or less', function() {
     expect($this->cart->content())->toBeEmpty();
 });
 
-it('updates cart item merges quantities when rowId changes', function() {
+it('updates cart item merges quantities when rowId changes', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -272,7 +272,7 @@ it('updates cart item merges quantities when rowId changes', function() {
         ->and($this->cart->content()->first()->qty)->toBe(2);
 });
 
-it('updates cart item option from array', function() {
+it('updates cart item option from array', function(): void {
     $cartItemOption = new CartItemOption(1, 'Option 1', []);
     $attributes = ['id' => 2, 'name' => 'Updated Option'];
 
@@ -283,23 +283,23 @@ it('updates cart item option from array', function() {
         ->and($cartItemOption->toJson())->toContain('Updated Option');
 });
 
-it('throws exception when creating cart item with invalid value', function() {
-    expect(fn() => new CartItemOption('', 'Option 1', []))
+it('throws exception when creating cart item with invalid value', function(): void {
+    expect(fn(): CartItemOption => new CartItemOption('', 'Option 1', []))
         ->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new CartItemOption(1, '', []))
+        ->and(fn(): CartItemOption => new CartItemOption(1, '', []))
         ->toThrow(InvalidArgumentException::class);
 });
 
-it('throws exception when creating cart item option with invalid value', function() {
-    expect(fn() => new CartItem('', 'Option 1', 10, []))
+it('throws exception when creating cart item option with invalid value', function(): void {
+    expect(fn(): CartItem => new CartItem('', 'Option 1', 10, []))
         ->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new CartItem(1, '', 10, []))
+        ->and(fn(): CartItem => new CartItem(1, '', 10, []))
         ->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new CartItem(1, 'Option 1', '', []))
+        ->and(fn(): CartItem => new CartItem(1, 'Option 1', -0.3, []))
         ->toThrow(InvalidArgumentException::class);
 });
 
-it('updates cart item option value from array', function() {
+it('updates cart item option value from array', function(): void {
     $cartItemOptionValue = new CartItemOptionValue(1, 'Option Value 1', 10);
     $attributes = ['id' => 2, 'name' => 'Updated Option Value'];
 
@@ -312,19 +312,19 @@ it('updates cart item option value from array', function() {
         ->and($cartItemOptionValue->toJson())->toContain('Updated Option Value');
 });
 
-it('throws exception when creating cart item option value with invalid value', function() {
-    expect(fn() => new CartItemOptionValue('', 'Option 1', 10))->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new CartItemOptionValue(1, '', 10))->toThrow(InvalidArgumentException::class)
-        ->and(fn() => new CartItemOptionValue(1, 'Option 1', ''))->toThrow(InvalidArgumentException::class);
+it('throws exception when creating cart item option value with invalid value', function(): void {
+    expect(fn(): CartItemOptionValue => new CartItemOptionValue('', 'Option 1', 10))->toThrow(InvalidArgumentException::class)
+        ->and(fn(): CartItemOptionValue => new CartItemOptionValue(1, '', 10))->toThrow(InvalidArgumentException::class)
+        ->and(fn(): CartItemOptionValue => new CartItemOptionValue(1, 'Option 1', -1))->toThrow(InvalidArgumentException::class);
 });
 
-it('throws exception when setting invalid quantity on cart item option value', function() {
+it('throws exception when setting invalid quantity on cart item option value', function(): void {
     $cartItemOptionValue = new CartItemOptionValue(1, 'Option Value 1', 10);
 
     $cartItemOptionValue->setQuantity('invalid-quantity');
 })->throws(InvalidArgumentException::class);
 
-it('removes item from the cart correctly', function() {
+it('removes item from the cart correctly', function(): void {
     $cartItem = $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -336,11 +336,11 @@ it('removes item from the cart correctly', function() {
     expect($this->cart->content())->toBeEmpty();
 });
 
-it('throws exception when rowId does not exist', function() {
+it('throws exception when rowId does not exist', function(): void {
     $this->cart->remove('invalid-row-id');
 })->throws(InvalidRowIDException::class);
 
-it('associates cart item with valid model', function() {
+it('associates cart item with valid model', function(): void {
     $menu = Menu::factory()->create([
         'menu_name' => 'Test Menu',
         'menu_price' => 40.00,
@@ -353,11 +353,11 @@ it('associates cart item with valid model', function() {
     expect($cartItem->getModel()->getKey())->toBe($menu->getKey());
 });
 
-it('throws exception when associating with non-existent model', function() {
+it('throws exception when associating with non-existent model', function(): void {
     $this->cart->associate('rowId123', 'InvalidModel');
 })->throws(UnknownModelException::class);
 
-it('removes cart & item conditions when it is removable', function() {
+it('removes cart & item conditions when it is removable', function(): void {
     $condition = new Tax([
         'name' => 'VAT',
         'type' => 'tax',
@@ -380,7 +380,7 @@ it('removes cart & item conditions when it is removable', function() {
     expect($this->cart->get($cartItem->rowId)->conditions->count())->toEqual(0);
 });
 
-it('does not remove cart & item condition when it is not removable', function() {
+it('does not remove cart & item condition when it is not removable', function(): void {
     $condition = new Tax([
         'name' => 'VAT',
         'type' => 'tax',
@@ -401,7 +401,7 @@ it('does not remove cart & item condition when it is not removable', function() 
     expect($this->cart->get($cartItem->rowId)->conditions->count())->toEqual(1);
 });
 
-it('clears conditions', function() {
+it('clears conditions', function(): void {
     $condition = new Tax([
         'name' => 'VAT',
         'type' => 'tax',
@@ -421,11 +421,11 @@ it('clears conditions', function() {
     expect($this->cart->get($cartItem->rowId)->conditions->count())->toEqual(0);
 });
 
-it('logs deprecation message when loadConditions is called', function() {
+it('logs deprecation message when loadConditions is called', function(): void {
     expect($this->cart->loadConditions())->toBeNull();
 });
 
-it('applies conditions to the cart correctly', function() {
+it('applies conditions to the cart correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -444,7 +444,7 @@ it('applies conditions to the cart correctly', function() {
         ->and($this->cart->content()->subtotalWithoutConditions())->toBeGreaterThan(0);
 });
 
-it('loads condition and sets priority based on last condition', function() {
+it('loads condition and sets priority based on last condition', function(): void {
     $condition1 = new Tax([
         'name' => 'VAT',
         'type' => 'tax',
@@ -468,7 +468,7 @@ it('loads condition and sets priority based on last condition', function() {
         ->and($conditions->last()->priority)->toBe(2);
 });
 
-it('clears the cart correctly', function() {
+it('clears the cart correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -480,21 +480,21 @@ it('clears the cart correctly', function() {
     expect($this->cart->content())->toBeEmpty();
 });
 
-it('searches the cart correctly', function() {
+it('searches the cart correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
         'price' => 10.00,
     ], 1);
 
-    $searchResult = $this->cart->search(function($cartItem, $rowId) {
+    $searchResult = $this->cart->search(function($cartItem, $rowId): bool {
         return $cartItem->id === 1;
     });
 
     expect($searchResult)->toHaveCount(1);
 });
 
-it('stores the cart correctly', function() {
+it('stores the cart correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -506,7 +506,7 @@ it('stores the cart correctly', function() {
     expect(CartModel::where('identifier', 'test')->exists())->toBeTrue();
 });
 
-it('restores the cart correctly', function() {
+it('restores the cart correctly', function(): void {
     $this->cart->add([
         'id' => 1,
         'name' => 'Test Item',
@@ -530,27 +530,27 @@ it('restores the cart correctly', function() {
     expect($this->cart->content())->toHaveCount(1);
 });
 
-it('keeps session when destroyOnLogout is false', function() {
+it('keeps session when destroyOnLogout is false', function(): void {
     config(['igniter-cart.destroyOnLogout' => false]);
 
-    $result = $this->cart->keepSession(function() {
+    $result = $this->cart->keepSession(function(): string {
         return 'callback result';
     });
 
     expect($result)->toBe('callback result');
 });
 
-it('does not keep session when destroyOnLogout is true', function() {
+it('does not keep session when destroyOnLogout is true', function(): void {
     config(['igniter-cart.destroyOnLogout' => true]);
 
-    $result = $this->cart->keepSession(function() {
+    $result = $this->cart->keepSession(function(): string {
         return 'callback result';
     });
 
     expect($result)->toBe('callback result');
 });
 
-it('throws exception when model class does not exists', function() {
+it('throws exception when model class does not exists', function(): void {
     config(['igniter-cart.model' => 'InvalidModel']);
 
     $this->cart->deleteStored(1);

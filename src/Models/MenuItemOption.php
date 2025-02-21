@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Flame\Database\Traits\Validation;
+use Illuminate\Support\Carbon;
 
 /**
  * MenuItemOption Model Class
@@ -17,12 +20,12 @@ use Igniter\Flame\Database\Traits\Validation;
  * @property int $priority
  * @property int $min_selected
  * @property int $max_selected
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read mixed $display_type
  * @property-read mixed $option_name
  * @property-read mixed $option_values
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuItemOption extends Model
 {
@@ -55,14 +58,14 @@ class MenuItemOption extends Model
     public $relation = [
         'hasMany' => [
             'menu_option_values' => [
-                \Igniter\Cart\Models\MenuItemOptionValue::class,
+                MenuItemOptionValue::class,
                 'foreignKey' => 'menu_option_id',
                 'delete' => true,
             ],
         ],
         'belongsTo' => [
-            'menu' => [\Igniter\Cart\Models\Menu::class],
-            'option' => [\Igniter\Cart\Models\MenuOption::class],
+            'menu' => [Menu::class],
+            'option' => [MenuOption::class],
         ],
     ];
 
@@ -122,10 +125,8 @@ class MenuItemOption extends Model
      * Create new or update existing menu option values
      *
      * @param array $optionValues if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuOptionValues(array $optionValues = [])
+    public function addMenuOptionValues(array $optionValues = []): int
     {
         $menuOptionId = $this->getKey();
         $idsToKeep = [];

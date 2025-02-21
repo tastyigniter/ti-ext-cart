@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Cart\Models\Mealtime;
 
-it('loads mealtimes page', function() {
+it('loads mealtimes page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.mealtimes'))
         ->assertOk();
 });
 
-it('loads create mealtime page', function() {
+it('loads create mealtime page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.mealtimes', ['slug' => 'create']))
         ->assertOk();
 });
 
-it('loads edit mealtime page', function() {
+it('loads edit mealtime page', function(): void {
     $mealtime = Mealtime::factory()->create();
 
     actingAsSuperUser()
@@ -24,7 +26,7 @@ it('loads edit mealtime page', function() {
         ->assertOk();
 });
 
-it('loads mealtime preview page', function() {
+it('loads mealtime preview page', function(): void {
     $mealtime = Mealtime::factory()->create();
 
     actingAsSuperUser()
@@ -32,7 +34,7 @@ it('loads mealtime preview page', function() {
         ->assertOk();
 });
 
-it('updates mealtime', function() {
+it('updates mealtime', function(): void {
     $mealtime = Mealtime::factory()->create();
 
     $url = route('igniter.cart.mealtimes', ['slug' => 'edit/'.$mealtime->getKey()]);
@@ -52,7 +54,7 @@ it('updates mealtime', function() {
     expect(Mealtime::find($mealtime->getKey()))->mealtime_name->toBe('Updated Mealtime');
 });
 
-it('deletes mealtime', function() {
+it('deletes mealtime', function(): void {
     $mealtime = Mealtime::factory()->create();
 
     $url = route('igniter.cart.mealtimes', ['slug' => 'edit/'.$mealtime->getKey()]);

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new DeliverySettingsRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new DeliverySettingsRequest;
 
     $attributes = $request->attributes();
 
@@ -22,8 +24,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('delivery_min_order_amount', lang('igniter.local::default.label_delivery_min_order_amount'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new DeliverySettingsRequest();
+it('returns correct validation rules', function(): void {
+    $request = new DeliverySettingsRequest;
 
     $rules = $request->rules();
 

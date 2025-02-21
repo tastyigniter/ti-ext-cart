@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Cart;
@@ -24,7 +26,7 @@ use Igniter\Local\Models\Location as LocationModel;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->location = LocationModel::factory()->create();
     resolve('location')->setModel($this->location);
     $conditionManager = Mockery::mock(CartConditionManager::class);
@@ -45,18 +47,18 @@ beforeEach(function() {
     $this->manager = new CartManager;
 });
 
-it('gets cart', function() {
+it('gets cart', function(): void {
     expect($this->manager->getCart()->currentInstance())
         ->toBe(resolve('cart')->currentInstance());
 });
 
-it('returns cart instance with location id', function() {
+it('returns cart instance with location id', function(): void {
     $result = $this->manager->cartInstance(1);
 
     expect($result->currentInstance())->toBe('location-1');
 });
 
-it('returns cart item when row id is valid', function() {
+it('returns cart item when row id is valid', function(): void {
     $cart = Mockery::mock(Cart::class);
     $cartItem = Mockery::mock(CartItem::class);
     $cart->shouldReceive('get')->with('validRowId')->andReturn($cartItem);
@@ -67,7 +69,7 @@ it('returns cart item when row id is valid', function() {
     expect($result)->toBe($cartItem);
 });
 
-it('get cart item throws application exception when row id is invalid', function() {
+it('get cart item throws application exception when row id is invalid', function(): void {
     $cart = Mockery::mock(Cart::class);
     $cart->shouldReceive('get')->with('invalidRowId')->andThrow(InvalidRowIDException::class);
     $this->manager->setCart($cart);
@@ -76,7 +78,7 @@ it('get cart item throws application exception when row id is invalid', function
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.alert_no_menu_item_found'));
 });
 
-it('finds menu item', function() {
+it('finds menu item', function(): void {
     $menu = Menu::factory()->create();
 
     expect($this->manager->findMenuItem($menu->getKey())?->getKey())
@@ -86,11 +88,11 @@ it('finds menu item', function() {
     $this->manager->findMenuItem($menu->getKey());
 });
 
-it('finds menu item throws exception for invalid menu id', function() {
+it('finds menu item throws exception for invalid menu id', function(): void {
     expect(fn() => $this->manager->findMenuItem('invalid'))->toThrow(ApplicationException::class);
 });
 
-it('adds cart item', function() {
+it('adds cart item', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -100,7 +102,7 @@ it('adds cart item', function() {
         ->and($item->qty)->toBe(1);
 });
 
-it('adds cart item when menu option display type is select', function() {
+it('adds cart item when menu option display type is select', function(): void {
     $menu = Menu::factory()->create();
     $option = MenuOption::factory()->create(['display_type' => 'select']);
     $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
@@ -120,7 +122,7 @@ it('adds cart item when menu option display type is select', function() {
         ->and($item->options->first()->values->first())->name->toBe($menuOptionValue->name);
 });
 
-it('does not add menu item option with zero quantity', function() {
+it('does not add menu item option with zero quantity', function(): void {
     $menu = Menu::factory()->create();
     $option = MenuOption::firstWhere('display_type', 'checkbox');
     $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
@@ -140,7 +142,7 @@ it('does not add menu item option with zero quantity', function() {
         ->and($item->options->first())->toBeNull();
 });
 
-it('does not add menu item option with invalid id', function() {
+it('does not add menu item option with invalid id', function(): void {
     $menu = Menu::factory()->create();
     $option = MenuOption::firstWhere('display_type', 'checkbox');
     $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
@@ -161,13 +163,13 @@ it('does not add menu item option with invalid id', function() {
         ->and($item->options->first())->toBeNull();
 });
 
-it('throws exception when adding menu item quantity lower that minimum quantity', function() {
+it('throws exception when adding menu item quantity lower that minimum quantity', function(): void {
     $menu = Menu::factory()->create(['minimum_qty' => 2]);
 
     expect(fn() => $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]))->toThrow(ApplicationException::class);
 });
 
-it('throws exception when adding out of stock menu item', function() {
+it('throws exception when adding out of stock menu item', function(): void {
     $menu = Menu::factory()->create();
     $menu->locations()->attach($this->location);
     $menu->stocks()->create([
@@ -178,7 +180,7 @@ it('throws exception when adding out of stock menu item', function() {
     expect(fn() => $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]))->toThrow(ApplicationException::class);
 });
 
-it('throws exception when adding menu option not between the min and max selected', function() {
+it('throws exception when adding menu option not between the min and max selected', function(): void {
     $menu = Menu::factory()->create();
     $option = $menu->menu_options()->create([
         'option_id' => 1,
@@ -194,7 +196,7 @@ it('throws exception when adding menu option not between the min and max selecte
     ]))->toThrow(ApplicationException::class);
 });
 
-it('throws exception when required menu item option is not selected', function() {
+it('throws exception when required menu item option is not selected', function(): void {
     $menu = Menu::factory()->create();
 
     $option = $menu->menu_options()->create([
@@ -210,7 +212,7 @@ it('throws exception when required menu item option is not selected', function()
     ]))->toThrow(ApplicationException::class);
 });
 
-it('throws exception when adding menu item that does not belong to current location', function() {
+it('throws exception when adding menu item that does not belong to current location', function(): void {
     $menu = Menu::factory()->create();
     $menu->locations()->attach(LocationModel::factory()->create());
 
@@ -219,7 +221,7 @@ it('throws exception when adding menu item that does not belong to current locat
     ]))->toThrow(ApplicationException::class);
 });
 
-it('updates cart item', function() {
+it('updates cart item', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -230,7 +232,7 @@ it('updates cart item', function() {
         ->and($updatedItem->qty)->toBe(2);
 });
 
-it('updates cart item removes cart item when quantity is less than 1', function() {
+it('updates cart item removes cart item when quantity is less than 1', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -240,7 +242,7 @@ it('updates cart item removes cart item when quantity is less than 1', function(
     expect($this->manager->getCart()->content())->not->toHaveKey($item->rowId);
 });
 
-it('removes cart item', function() {
+it('removes cart item', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -250,7 +252,7 @@ it('removes cart item', function() {
     expect($this->manager->getCart()->content())->not->toHaveKey($item->rowId);
 });
 
-it('updates cart item quantity', function() {
+it('updates cart item quantity', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -260,7 +262,7 @@ it('updates cart item quantity', function() {
     expect($updatedItem->qty)->toBe(2);
 });
 
-it('increases cart item quantity', function() {
+it('increases cart item quantity', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
@@ -270,7 +272,7 @@ it('increases cart item quantity', function() {
     expect($updatedItem->qty)->toBe(2);
 });
 
-it('decreases cart item quantity', function() {
+it('decreases cart item quantity', function(): void {
     $menu = Menu::factory()->create();
 
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 2]);
@@ -280,7 +282,7 @@ it('decreases cart item quantity', function() {
     expect($updatedItem->qty)->toBe(1);
 });
 
-it('applies condition', function() {
+it('applies condition', function(): void {
     CouponModel::factory()->create(['code' => 'TEST']);
 
     $this->manager->getCart()->loadCondition(
@@ -292,11 +294,11 @@ it('applies condition', function() {
     expect($condition->getMetaData())->toBe(['code' => 'TEST']);
 });
 
-it('applies condition returns false when condition does not exists', function() {
+it('applies condition returns false when condition does not exists', function(): void {
     expect($this->manager->applyCondition('no-coupon', ['code' => 'TEST']))->toBeFalse();
 });
 
-it('removes condition', function() {
+it('removes condition', function(): void {
     CouponModel::factory()->create(['code' => 'TEST']);
 
     $this->manager->getCart()->loadCondition(
@@ -310,10 +312,10 @@ it('removes condition', function() {
     expect($this->manager->getCart()->conditions())->not->toHaveKey('coupon');
 });
 
-it('applies coupon condition when event returns CartCondition', function() {
+it('applies coupon condition when event returns CartCondition', function(): void {
     CouponModel::factory()->create(['code' => 'validCode', 'status' => 1]);
     $coupon = new Coupon(['label' => 'Coupon', 'name' => 'coupon']);
-    Event::listen('igniter.cart.beforeApplyCoupon', function($code) use ($coupon) {
+    Event::listen('igniter.cart.beforeApplyCoupon', function($code) use ($coupon): Coupon {
         return $coupon;
     });
 
@@ -322,12 +324,12 @@ it('applies coupon condition when event returns CartCondition', function() {
     expect($result)->toBe($coupon);
 });
 
-it('throws exception when coupon code is invalid', function() {
+it('throws exception when coupon code is invalid', function(): void {
     expect(fn() => $this->manager->applyCouponCondition('invalidCode'))
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.alert_coupon_invalid'));
 });
 
-it('applies coupon condition when code is valid', function() {
+it('applies coupon condition when code is valid', function(): void {
     CouponModel::factory()->create(['code' => 'validCode', 'status' => 1]);
     $this->manager->getCart()->loadCondition(
         new Coupon(['label' => 'Coupon', 'name' => 'coupon']),
@@ -338,21 +340,21 @@ it('applies coupon condition when code is valid', function() {
     expect($condition->getMetaData())->toBe(['code' => 'validCode']);
 });
 
-it('validateContents throws exception when cart is empty', function() {
+it('validateContents throws exception when cart is empty', function(): void {
     expect(fn() => $this->manager->validateContents())
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
 });
 
-it('validateLocation throws exception when location is not set', function() {
+it('validateLocation throws exception when location is not set', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(null);
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateLocation())
+    expect(fn() => (new CartManager)->validateLocation())
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_location_required'));
 });
 
-it('validateLocation throws exception when location delivery coverage fails', function() {
+it('validateLocation throws exception when location delivery coverage fails', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(Mockery::mock(LocationModel::class));
     $location->shouldReceive('orderTypeIsDelivery')->andReturnTrue();
@@ -363,30 +365,30 @@ it('validateLocation throws exception when location delivery coverage fails', fu
     $location->shouldReceive('checkDeliveryCoverage')->andReturnFalse();
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateLocation())
+    expect(fn() => (new CartManager)->validateLocation())
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_no_search_query'));
 });
 
-it('validateOrderTime throws exception when location is not set', function() {
+it('validateOrderTime throws exception when location is not set', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(null);
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateOrderTime())
+    expect(fn() => (new CartManager)->validateOrderTime())
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_location_required'));
 });
 
-it('validateOrderTime throws exception when order type is unavailable', function() {
+it('validateOrderTime throws exception when order type is unavailable', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(Mockery::mock(LocationModel::class));
     $location->shouldReceive('checkNoOrderTypeAvailable')->andReturn(true);
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateOrderTime())
+    expect(fn() => (new CartManager)->validateOrderTime())
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_order_type_required'));
 });
 
-it('validateOrderTime throws exception when order type is disabled', function() {
+it('validateOrderTime throws exception when order type is disabled', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(Mockery::mock(LocationModel::class));
     $location->shouldReceive('checkNoOrderTypeAvailable')->andReturnFalse();
@@ -395,11 +397,11 @@ it('validateOrderTime throws exception when order type is disabled', function() 
     $location->shouldReceive('getLabel')->andReturn('delivery');
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateOrderTime())
+    expect(fn() => (new CartManager)->validateOrderTime())
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.local::default.alert_order_is_unavailable'), 'delivery'));
 });
 
-it('validateOrderTime throws exception when check order time fails', function() {
+it('validateOrderTime throws exception when check order time fails', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current')->andReturn(Mockery::mock(LocationModel::class));
     $location->shouldReceive('checkNoOrderTypeAvailable')->andReturnFalse();
@@ -409,11 +411,11 @@ it('validateOrderTime throws exception when check order time fails', function() 
     $location->shouldReceive('checkOrderTime')->andReturnFalse();
     app()->instance('location', $location);
 
-    expect(fn() => (new CartManager())->validateOrderTime())
+    expect(fn() => (new CartManager)->validateOrderTime())
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.checkout.alert_outside_hours'), 'delivery'));
 });
 
-it('validateMenuItem throws exception when menu item is not within mealtimes', function() {
+it('validateMenuItem throws exception when menu item is not within mealtimes', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('orderDateTime')->andReturn(now());
     app()->instance('location', $location);
@@ -424,13 +426,13 @@ it('validateMenuItem throws exception when menu item is not within mealtimes', f
         (object)['mealtime_name' => 'Lunch', 'start_time' => '12:00', 'end_time' => '14:00'],
     ]));
 
-    expect(fn() => (new CartManager())->validateMenuItem($menuItem))
+    expect(fn() => (new CartManager)->validateMenuItem($menuItem))
         ->toThrow(ApplicationException::class, sprintf(
             lang('igniter.cart::default.alert_menu_not_within_mealtimes'), 'Test Menu', 'Lunch (12:00 - 14:00)',
         ));
 });
 
-it('validateMenuItem throws exception when menu item has order type restrictions', function() {
+it('validateMenuItem throws exception when menu item has order type restrictions', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('orderDateTime')->andReturn(now());
     $location->shouldReceive('getOrderType')->andReturnSelf();
@@ -441,20 +443,20 @@ it('validateMenuItem throws exception when menu item has order type restrictions
     $menuItem->shouldReceive('isAvailable')->andReturnTrue();
     $menuItem->shouldReceive('hasOrderTypeRestriction')->andReturnTrue();
 
-    expect(fn() => (new CartManager())->validateMenuItem($menuItem))
+    expect(fn() => (new CartManager)->validateMenuItem($menuItem))
         ->toThrow(ApplicationException::class, sprintf(
             lang('igniter.cart::default.alert_menu_order_restriction'), 'delivery',
         ));
 });
 
-it('validateMenuItemMinQty returns null when quantity or minimum quantity is zero', function() {
+it('validateMenuItemMinQty returns null when quantity or minimum quantity is zero', function(): void {
     $menuItem = Mockery::mock(Menu::class)->makePartial();
     $menuItem->shouldReceive('extendableGet')->with('minimum_qty')->andReturn(0);
 
     expect($this->manager->validateMenuItemMinQty($menuItem, 0))->toBeNull();
 });
 
-it('validateMenuItemMinQty throws exception when quantity is not divisible by minimum quantity', function() {
+it('validateMenuItemMinQty throws exception when quantity is not divisible by minimum quantity', function(): void {
     $menuItem = Mockery::mock(Menu::class)->makePartial();
     $menuItem->shouldReceive('extendableGet')->with('minimum_qty')->andReturn(3);
 
@@ -462,7 +464,7 @@ it('validateMenuItemMinQty throws exception when quantity is not divisible by mi
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_qty_is_invalid'), 3));
 });
 
-it('validateMenuItemMinQty throws exception when quantity is below minimum quantity', function() {
+it('validateMenuItemMinQty throws exception when quantity is below minimum quantity', function(): void {
     $menuItem = Mockery::mock(Menu::class)->makePartial();
     $menuItem->shouldReceive('extendableGet')->with('minimum_qty')->andReturn(6);
     $menuItem->shouldReceive('checkMinQuantity')->with(3)->andReturn(false);
@@ -471,7 +473,7 @@ it('validateMenuItemMinQty throws exception when quantity is below minimum quant
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_qty_is_below_min_qty'), 6));
 });
 
-it('validateMenuItemStockQty throws exception when menu item is out of stock', function() {
+it('validateMenuItemStockQty throws exception when menu item is out of stock', function(): void {
     $locationId = $this->location->getKey();
     $menuItem = Mockery::mock(Menu::class)->makePartial();
     $menuItem->shouldReceive('outOfStock')->with($locationId)->andReturn(true);
@@ -481,7 +483,7 @@ it('validateMenuItemStockQty throws exception when menu item is out of stock', f
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_out_of_stock'), 'Test Menu'));
 });
 
-it('validateMenuItemStockQty throws exception when stock level is insufficient', function() {
+it('validateMenuItemStockQty throws exception when stock level is insufficient', function(): void {
     $locationId = $this->location->getKey();
     $menuItem = Mockery::mock(Menu::class)->makePartial();
     $menuItem->shouldReceive('outOfStock')->with($locationId)->andReturn(false);
@@ -495,7 +497,7 @@ it('validateMenuItemStockQty throws exception when stock level is insufficient',
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_low_on_stock'), 'Test Menu', 5));
 });
 
-it('validateMenuItemOption throws exception when required option is not selected', function() {
+it('validateMenuItemOption throws exception when required option is not selected', function(): void {
     $menuOption = Mockery::mock(MenuItemOption::class)->makePartial();
     $menuOption->shouldReceive('isRequired')->andReturn(true);
     $menuOption->shouldReceive('extendableGet')->with('option_name')->andReturn('Option 1');
@@ -504,7 +506,7 @@ it('validateMenuItemOption throws exception when required option is not selected
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_required'), 'Option 1'));
 });
 
-it('validateMenuItemOption throws exception when selected quantity is below minimum', function() {
+it('validateMenuItemOption throws exception when selected quantity is below minimum', function(): void {
     $menuOption = Mockery::mock(MenuItemOption::class)->makePartial();
     $menuOption->shouldReceive('extendableGet')->with('display_type')->andReturn('quantity');
     $menuOption->shouldReceive('extendableGet')->with('min_selected')->andReturn(2);
@@ -519,7 +521,7 @@ it('validateMenuItemOption throws exception when selected quantity is below mini
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_selected'), 'Option 1', 2, 3));
 });
 
-it('validateMenuItemOption throws exception when selected quantity exceeds maximum', function() {
+it('validateMenuItemOption throws exception when selected quantity exceeds maximum', function(): void {
     $menuOption = Mockery::mock(MenuItemOption::class)->makePartial();
     $menuOption->shouldReceive('extendableGet')->with('display_type')->andReturn('quantity');
     $menuOption->shouldReceive('extendableGet')->with('min_selected')->andReturn(1);
@@ -536,7 +538,7 @@ it('validateMenuItemOption throws exception when selected quantity exceeds maxim
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_selected'), 'Option 1', 1, 2));
 });
 
-it('checks cart total is below minimum order total', function() {
+it('checks cart total is below minimum order total', function(): void {
     $menu = Menu::factory()->create([
         'menu_price' => 10,
     ]);
@@ -551,7 +553,7 @@ it('checks cart total is below minimum order total', function() {
     expect($this->manager->cartTotalIsBelowMinimumOrder())->toBeTrue();
 });
 
-it('checks cart total is above minimum order total', function() {
+it('checks cart total is above minimum order total', function(): void {
     $menu = Menu::factory()->create([
         'menu_price' => 30,
     ]);
@@ -566,7 +568,7 @@ it('checks cart total is above minimum order total', function() {
     expect($this->manager->cartTotalIsBelowMinimumOrder())->toBeFalse();
 });
 
-it('checks delivery charge is unavailable', function() {
+it('checks delivery charge is unavailable', function(): void {
     $menu = Menu::factory()->create([
         'menu_price' => 30,
     ]);
@@ -576,7 +578,7 @@ it('checks delivery charge is unavailable', function() {
     expect($this->manager->deliveryChargeIsUnavailable())->toBeFalse();
 });
 
-it('restores cart with order menu items', function() {
+it('restores cart with order menu items', function(): void {
     $menu1 = Menu::factory()->create();
     $menu2 = Menu::factory()->create(['minimum_qty' => 2]);
     $order = Order::factory()->create();

@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class CartItemOption implements Arrayable, Jsonable
 {
@@ -22,26 +26,20 @@ class CartItemOption implements Arrayable, Jsonable
     public $name;
 
     /**
-     * The values for this cart item option.
-     *
-     * @var \Illuminate\Support\Collection
+     * @var Collection The values for this cart item option.
      */
     public $values;
 
     /**
      * CartItem constructor.
-     *
-     * @param int|string $id
-     * @param string $name
-     * @param array $values
      */
-    public function __construct($id, $name, $values = [])
+    public function __construct(int|string $id, string $name, array|CartItemOptionValues $values = [])
     {
-        if (!strlen($id)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item option identifier.');
+        if ($id === 0 || strlen((string)$id) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item option identifier.');
         }
-        if (!strlen($name)) {
-            throw new \InvalidArgumentException('Please supply a valid cart item option name.');
+        if (strlen($name) < 1) {
+            throw new InvalidArgumentException('Please supply a valid cart item option name.');
         }
 
         $this->id = $id;
@@ -57,17 +55,15 @@ class CartItemOption implements Arrayable, Jsonable
      */
     public function subtotal()
     {
-        return $this->values->reduce(function($subtotal, CartItemOptionValue $optionValue) {
+        return $this->values->reduce(function($subtotal, CartItemOptionValue $optionValue): float|int|array {
             return $subtotal + $optionValue->subtotal();
         }, 0);
     }
 
     /**
      * Update the cart item from an array.
-     *
-     * @return void
      */
-    public function updateFromArray(array $attributes)
+    public function updateFromArray(array $attributes): void
     {
         $this->id = array_get($attributes, 'id', $this->id);
         $this->name = array_get($attributes, 'name', $this->name);
@@ -76,15 +72,13 @@ class CartItemOption implements Arrayable, Jsonable
 
     /**
      * Create a new instance from the given array.
-     *
-     * @return \Igniter\Cart\CartItemOption
      */
-    public static function fromArray(array $attributes)
+    public static function fromArray(array $attributes): self
     {
         return new self(
             $attributes['id'],
             $attributes['name'],
-            array_get($attributes, 'values', [])
+            array_get($attributes, 'values', []),
         );
     }
 
@@ -94,7 +88,7 @@ class CartItemOption implements Arrayable, Jsonable
             return $values;
         }
 
-        return new CartItemOptionValues(array_map(function($item) {
+        return new CartItemOptionValues(array_map(function($item): CartItemOptionValue {
             return CartItemOptionValue::fromArray($item);
         }, $values));
     }

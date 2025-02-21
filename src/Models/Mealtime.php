@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Carbon\CarbonImmutable;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
+use Illuminate\Support\Carbon;
 
 /**
  * Mealtime Model Class
@@ -16,9 +20,9 @@ use Igniter\System\Models\Concerns\Switchable;
  * @property mixed $start_time
  * @property mixed $end_time
  * @property bool $mealtime_status
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @mixin \Igniter\Flame\Database\Model
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @mixin Model
  */
 class Mealtime extends Model
 {
@@ -47,7 +51,7 @@ class Mealtime extends Model
 
     public $relation = [
         'morphToMany' => [
-            'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+            'locations' => [Location::class, 'name' => 'locationable'],
         ],
     ];
 
@@ -62,7 +66,7 @@ class Mealtime extends Model
     // Scopes
     //
 
-    public function isAvailable($datetime = null)
+    public function isAvailable($datetime = null): bool
     {
         $datetime = is_null($datetime)
             ? CarbonImmutable::now()
@@ -74,7 +78,7 @@ class Mealtime extends Model
         );
     }
 
-    public function isAvailableNow()
+    public function isAvailableNow(): bool
     {
         return $this->isAvailable();
     }

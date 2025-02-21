@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Flame\Database\Model;
+use Igniter\System\Actions\SettingsModel;
 
 /**
  * @method static CartSettings instance()
  */
 class CartSettings extends Model
 {
-    public array $implement = [\Igniter\System\Actions\SettingsModel::class];
+    public array $implement = [SettingsModel::class];
 
     // A unique code
     public string $settingsCode = 'igniter_cart_settings';
@@ -35,7 +38,7 @@ class CartSettings extends Model
     //
     //
 
-    public static function tippingEnabled()
+    public static function tippingEnabled(): bool
     {
         return (bool)self::get('enable_tipping');
     }

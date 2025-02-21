@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Concerns;
 
 use Igniter\Cart\Models\Menu;
@@ -10,7 +12,7 @@ use Igniter\Cart\Models\OrderMenu;
 use Igniter\Cart\Models\OrderMenuOptionValue;
 use Igniter\Cart\Models\Stock;
 
-it('subtracts stock correctly', function() {
+it('subtracts stock correctly', function(): void {
     $order = Order::factory()->create();
 
     $menu = Menu::factory()
@@ -73,7 +75,7 @@ it('subtracts stock correctly', function() {
         ->and($menuOptionStock->quantity)->toBe(5);
 });
 
-it('gets order menus correctly', function() {
+it('gets order menus correctly', function(): void {
     $order = Order::factory()->create();
     $menu = Menu::factory()->create();
 
@@ -87,7 +89,7 @@ it('gets order menus correctly', function() {
     expect($orderMenus->first()->menu_id)->toBe($orderMenu->menu_id);
 });
 
-it('gets order menu options correctly', function() {
+it('gets order menu options correctly', function(): void {
     $order = Order::factory()->create();
     $menu = Menu::factory()->create();
     $menuItemOptionValue = MenuItemOptionValue::factory()->create();
@@ -108,7 +110,7 @@ it('gets order menu options correctly', function() {
     expect($orderMenuOption->order_menu_id)->toBe($orderMenuOptionValue->order_menu_id);
 });
 
-it('gets order totals correctly', function() {
+it('gets order totals correctly', function(): void {
     $order = Order::factory()->create();
 
     $order->totals()->create([
@@ -122,7 +124,7 @@ it('gets order totals correctly', function() {
     expect($orderTotals->first())->code->toBe('subtotal');
 });
 
-it('adds order totals correctly', function() {
+it('adds order totals correctly', function(): void {
     $order = Order::factory()->create();
     OrderMenu::create([
         'order_id' => $order->getKey(),

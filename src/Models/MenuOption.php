@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
@@ -7,6 +9,7 @@ use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Facades\Location;
 use Igniter\Local\Models\Concerns\Locationable;
+use Illuminate\Support\Carbon;
 
 /**
  * MenuOption Model Class
@@ -15,9 +18,9 @@ use Igniter\Local\Models\Concerns\Locationable;
  * @property string $option_name
  * @property string $display_type
  * @property int $priority
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @mixin \Igniter\Flame\Database\Model
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @mixin Model
  */
 class MenuOption extends Model
 {
@@ -46,13 +49,13 @@ class MenuOption extends Model
 
     public $relation = [
         'hasMany' => [
-            'menu_options' => [\Igniter\Cart\Models\MenuItemOption::class, 'foreignKey' => 'option_id', 'delete' => true],
-            'option_values' => [\Igniter\Cart\Models\MenuOptionValue::class, 'foreignKey' => 'option_id', 'delete' => true],
+            'menu_options' => [MenuItemOption::class, 'foreignKey' => 'option_id', 'delete' => true],
+            'option_values' => [MenuOptionValue::class, 'foreignKey' => 'option_id', 'delete' => true],
         ],
         'hasManyThrough' => [
             'menu_option_values' => [
-                \Igniter\Cart\Models\MenuItemOptionValue::class,
-                'through' => \Igniter\Cart\Models\MenuItemOption::class,
+                MenuItemOptionValue::class,
+                'through' => MenuItemOption::class,
                 'throughKey' => 'menu_option_id',
                 'foreignKey' => 'option_id',
             ],
@@ -77,7 +80,7 @@ class MenuOption extends Model
         return $query->orderBy('option_name')->dropdown('display_name');
     }
 
-    public static function getDisplayTypeOptions()
+    public static function getDisplayTypeOptions(): array
     {
         return [
             'radio' => 'lang:igniter.cart::default.menu_options.text_radio',
@@ -91,7 +94,7 @@ class MenuOption extends Model
     // Helpers
     //
 
-    public function isSelectDisplayType()
+    public function isSelectDisplayType(): bool
     {
         return $this->display_type === 'select';
     }
@@ -114,10 +117,8 @@ class MenuOption extends Model
      * Create a new or update existing option values
      *
      * @param array $optionValues
-     *
-     * @return bool
      */
-    public function addOptionValues($optionValues = [])
+    public function addOptionValues($optionValues = []): int
     {
         $optionId = $this->getKey();
 
@@ -145,18 +146,18 @@ class MenuOption extends Model
         return count($idsToKeep);
     }
 
-    public function attachRecordTo($menu)
+    public function attachRecordTo($menu): void
     {
         $this->attachToMenu($menu);
     }
 
-    public function attachToMenu($menu)
+    public function attachToMenu($menu): void
     {
         $menuItemOption = $menu->menu_options()->create([
             'option_id' => $this->getKey(),
         ]);
 
-        $this->option_values()->get()->each(function($optionValue) use ($menuItemOption) {
+        $this->option_values()->get()->each(function($optionValue) use ($menuItemOption): void {
             $menuItemOption->menu_option_values()->create([
                 'option_value_id' => $optionValue->option_value_id,
                 'priority' => $optionValue->priority,

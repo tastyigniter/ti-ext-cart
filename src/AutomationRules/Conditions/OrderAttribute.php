@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\AutomationRules\Conditions;
 
 use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
+use Igniter\Cart\Models\Order;
 
 class OrderAttribute extends BaseModelAttributesCondition
 {
-    protected $modelClass = \Igniter\Cart\Models\Order::class;
+    protected $modelClass = Order::class;
 
     protected $modelAttributes;
 
-    public function conditionDetails()
+    public function conditionDetails(): array
     {
         return [
             'name' => 'Order attribute',
@@ -64,7 +67,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         ];
     }
 
-    public function getHoursSinceAttribute($value, $order)
+    public function getHoursSinceAttribute($value, $order): float|int
     {
         $currentDateTime = now();
 
@@ -73,7 +76,7 @@ class OrderAttribute extends BaseModelAttributesCondition
             : 0;
     }
 
-    public function getHoursUntilAttribute($value, $order)
+    public function getHoursUntilAttribute($value, $order): float|int
     {
         $currentDateTime = now();
 
@@ -82,7 +85,7 @@ class OrderAttribute extends BaseModelAttributesCondition
             : 0;
     }
 
-    public function getDaysSinceAttribute($value, $order)
+    public function getDaysSinceAttribute($value, $order): float|int
     {
         $currentDateTime = now();
 
@@ -91,7 +94,7 @@ class OrderAttribute extends BaseModelAttributesCondition
             : 0;
     }
 
-    public function getDaysUntilAttribute($value, $order)
+    public function getDaysUntilAttribute($value, $order): float|int
     {
         $currentDateTime = now();
 

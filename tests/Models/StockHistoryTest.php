@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Order;
@@ -7,7 +9,7 @@ use Igniter\Cart\Models\Stock;
 use Igniter\Cart\Models\StockHistory;
 use Igniter\User\Models\User;
 
-it('creates stock history correctly', function() {
+it('creates stock history correctly', function(): void {
     $stock = Stock::factory()->create();
     $user = User::factory()->create();
     $order = Order::factory()->create();
@@ -24,7 +26,7 @@ it('creates stock history correctly', function() {
         ->and($stockHistory->state)->toBe(Stock::STATE_SOLD);
 });
 
-it('gets staff name attribute correctly', function() {
+it('gets staff name attribute correctly', function(): void {
     $user = User::factory()->create([
         'name' => 'John Doe',
     ]);
@@ -36,7 +38,7 @@ it('gets staff name attribute correctly', function() {
     expect($stockHistory->staff_name)->toBe('John Doe');
 });
 
-it('gets state text attribute correctly', function() {
+it('gets state text attribute correctly', function(): void {
     $stockHistory = StockHistory::factory()->create([
         'state' => Stock::STATE_SOLD,
     ]);
@@ -44,7 +46,7 @@ it('gets state text attribute correctly', function() {
     expect($stockHistory->state_text)->toBe(lang('igniter.cart::default.stocks.text_action_sold'));
 });
 
-it('gets created at since attribute correctly', function() {
+it('gets created at since attribute correctly', function(): void {
     $stockHistory = StockHistory::factory()->create([
         'created_at' => now()->subHour(),
     ]);
@@ -52,7 +54,7 @@ it('gets created at since attribute correctly', function() {
     expect($stockHistory->created_at_since)->toBe('1 hour ago');
 });
 
-it('configures stock history model correctly', function() {
+it('configures stock history model correctly', function(): void {
     $stockHistory = new StockHistory;
     expect($stockHistory->getTable())->toBe('stock_history')
         ->and($stockHistory->getKeyName())->toBe('id')

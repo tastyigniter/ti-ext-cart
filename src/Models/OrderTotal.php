@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
+
+use Igniter\Flame\Database\Model;
 
 /**
  * OrderTotal Model
@@ -12,9 +16,9 @@ namespace Igniter\Cart\Models;
  * @property float $value
  * @property int $priority
  * @property bool $is_summable
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
-class OrderTotal extends \Igniter\Flame\Database\Model
+class OrderTotal extends Model
 {
     protected $table = 'order_totals';
 
@@ -34,7 +38,7 @@ class OrderTotal extends \Igniter\Flame\Database\Model
 
     public $relation = [
         'belongsTo' => [
-            'order' => \Igniter\Cart\Models\Order::class,
+            'order' => Order::class,
         ],
     ];
 }

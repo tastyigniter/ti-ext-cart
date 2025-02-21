@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Validation;
+use Illuminate\Support\Carbon;
 
 /**
  * MenuItemOptionValue Model Class
@@ -15,11 +18,11 @@ use Igniter\Flame\Database\Traits\Validation;
  * @property float|null $override_price
  * @property int $priority
  * @property bool|null $is_default
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read mixed $name
  * @property-read mixed $price
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuItemOptionValue extends Model
 {
@@ -53,9 +56,9 @@ class MenuItemOptionValue extends Model
 
     public $relation = [
         'belongsTo' => [
-            'menu' => [\Igniter\Cart\Models\Menu::class],
-            'option_value' => [\Igniter\Cart\Models\MenuOptionValue::class],
-            'menu_option' => [\Igniter\Cart\Models\MenuItemOption::class],
+            'menu' => [Menu::class],
+            'option_value' => [MenuOptionValue::class],
+            'menu_option' => [MenuItemOption::class],
         ],
     ];
 
@@ -81,7 +84,7 @@ class MenuItemOptionValue extends Model
         return $this->option_value->price ?? null;
     }
 
-    public function isDefault()
+    public function isDefault(): bool
     {
         return $this->is_default == 1;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Concerns;
 
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -8,7 +10,7 @@ use Igniter\PayRegister\Models\Payment;
 use Igniter\PayRegister\Payments\Cod;
 use Illuminate\Support\Collection;
 
-it('allows guest order correctly', function() {
+it('allows guest order correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => 'checkout',
@@ -18,7 +20,7 @@ it('allows guest order correctly', function() {
     expect((new LocationAction($location))->allowGuestOrder())->toBeTrue();
 });
 
-it('lists available payments correctly', function() {
+it('lists available payments correctly', function(): void {
     Payment::factory()->create([
         'class_name' => Cod::class,
         'status' => 1,
@@ -41,7 +43,7 @@ it('lists available payments correctly', function() {
     expect($locationAction->listAvailablePayments()->count())->toBe(0);
 });
 
-it('gets order time interval correctly', function() {
+it('gets order time interval correctly', function(): void {
     $location = Location::factory()->create();
 
     $location->settings()->create([
@@ -54,7 +56,7 @@ it('gets order time interval correctly', function() {
     expect($locationAction->getOrderTimeInterval(Location::DELIVERY))->toBe(60);
 });
 
-it('checks if should add lead time correctly', function() {
+it('checks if should add lead time correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -65,7 +67,7 @@ it('checks if should add lead time correctly', function() {
         ->shouldAddLeadTime(Location::DELIVERY))->toBeTrue();
 });
 
-it('gets order lead time correctly', function() {
+it('gets order lead time correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -77,7 +79,7 @@ it('gets order lead time correctly', function() {
     expect($locationAction->getOrderLeadTime(Location::DELIVERY))->toBe(60);
 });
 
-it('gets order time restriction correctly', function() {
+it('gets order time restriction correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -89,7 +91,7 @@ it('gets order time restriction correctly', function() {
     expect($locationAction->getOrderTimeRestriction(Location::DELIVERY))->toBe(60);
 });
 
-it('gets order cancellation timeout correctly', function() {
+it('gets order cancellation timeout correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -101,7 +103,7 @@ it('gets order cancellation timeout correctly', function() {
     expect($locationAction->getOrderCancellationTimeout(Location::DELIVERY))->toBe(60);
 });
 
-it('gets minimum order total correctly', function() {
+it('gets minimum order total correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -113,7 +115,7 @@ it('gets minimum order total correctly', function() {
     expect($locationAction->getMinimumOrderTotal(Location::DELIVERY))->toBe(60.0);
 });
 
-it('gets delivery minutes correctly', function() {
+it('gets delivery minutes correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -122,10 +124,10 @@ it('gets delivery minutes correctly', function() {
 
     $locationAction = new LocationAction($location);
 
-    expect($locationAction->deliveryMinutes(Location::DELIVERY))->toBe(60);
+    expect($locationAction->deliveryMinutes())->toBe(60);
 });
 
-it('gets collection minutes correctly', function() {
+it('gets collection minutes correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::COLLECTION,
@@ -134,10 +136,10 @@ it('gets collection minutes correctly', function() {
 
     $locationAction = new LocationAction($location);
 
-    expect($locationAction->collectionMinutes(Location::COLLECTION))->toBe(60);
+    expect($locationAction->collectionMinutes())->toBe(60);
 });
 
-it('checks if has order type correctly', function() {
+it('checks if has order type correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -147,7 +149,7 @@ it('checks if has order type correctly', function() {
     expect((new LocationAction($location))->hasDelivery())->toBeTrue();
 });
 
-it('checks if has future order correctly', function() {
+it('checks if has future order correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -159,7 +161,7 @@ it('checks if has future order correctly', function() {
     expect($locationAction->hasFutureOrder(Location::DELIVERY))->toBeFalse();
 });
 
-it('gets future order days correctly', function() {
+it('gets future order days correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,
@@ -171,7 +173,7 @@ it('gets future order days correctly', function() {
     expect($locationAction->futureOrderDays(Location::DELIVERY))->toBe(60);
 });
 
-it('gets minimum future order days correctly', function() {
+it('gets minimum future order days correctly', function(): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => Location::DELIVERY,

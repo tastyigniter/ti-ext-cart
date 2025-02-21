@@ -1,20 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Controllers;
 
+use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
+use Igniter\Admin\Http\Actions\FormController;
+use Igniter\Admin\Http\Actions\ListController;
+use Igniter\Cart\Http\Requests\MenuOptionRequest;
+use Igniter\Cart\Models\MenuOption;
+use Igniter\Local\Http\Actions\LocationAwareController;
 
-class MenuOptions extends \Igniter\Admin\Classes\AdminController
+class MenuOptions extends AdminController
 {
     public array $implement = [
-        \Igniter\Admin\Http\Actions\ListController::class,
-        \Igniter\Admin\Http\Actions\FormController::class,
-        \Igniter\Local\Http\Actions\LocationAwareController::class,
+        ListController::class,
+        FormController::class,
+        LocationAwareController::class,
     ];
 
     public array $listConfig = [
         'list' => [
-            'model' => \Igniter\Cart\Models\MenuOption::class,
+            'model' => MenuOption::class,
             'title' => 'lang:igniter.cart::default.menu_options.text_title',
             'emptyMessage' => 'lang:igniter.cart::default.menu_options.text_empty',
             'defaultSort' => ['option_id', 'DESC'],
@@ -25,8 +33,8 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
 
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menu_options.text_form_name',
-        'model' => \Igniter\Cart\Models\MenuOption::class,
-        'request' => \Igniter\Cart\Http\Requests\MenuOptionRequest::class,
+        'model' => MenuOption::class,
+        'request' => MenuOptionRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
             'redirect' => 'menu_options/edit/{option_id}',
@@ -51,7 +59,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
 
     protected null|string|array $requiredPermissions = 'Admin.Menus';
 
-    public static function getSlug()
+    public static function getSlug(): string
     {
         return 'menu_options';
     }
@@ -63,7 +71,7 @@ class MenuOptions extends \Igniter\Admin\Classes\AdminController
         AdminMenu::setContext('menus', 'restaurant');
     }
 
-    public function edit($context = null, $recordId = null)
+    public function edit($context = null, $recordId = null): void
     {
         $this->addJs('formwidgets/recordeditor.modal.js', 'recordeditor-modal-js');
 

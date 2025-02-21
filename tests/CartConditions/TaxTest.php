@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\CartConditions;
 
 use Igniter\Cart\CartConditions\Tax;
 use Igniter\Local\Facades\Location;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->tax = new Tax(['label' => 'VAT: %s']);
 });
 
-it('gets label with inclusive tax', function() {
+it('gets label with inclusive tax', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 0,
@@ -21,7 +23,7 @@ it('gets label with inclusive tax', function() {
     expect($this->tax->getLabel())->toBe('VAT: 10% included');
 });
 
-it('gets label without inclusive tax', function() {
+it('gets label without inclusive tax', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 1,
@@ -33,7 +35,7 @@ it('gets label without inclusive tax', function() {
     expect($this->tax->getLabel())->toBe('VAT: 10%');
 });
 
-it('before apply with no tax mode', function() {
+it('before apply with no tax mode', function(): void {
     setting()->set([
         'tax_mode' => 0,
         'tax_menu_price' => 0,
@@ -45,7 +47,7 @@ it('before apply with no tax mode', function() {
     expect($this->tax->beforeApply())->toBeFalse();
 });
 
-it('before apply with no tax rate', function() {
+it('before apply with no tax rate', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 0,
@@ -57,7 +59,7 @@ it('before apply with no tax rate', function() {
     expect($this->tax->beforeApply())->toBeFalse();
 });
 
-it('gets actions with inclusive tax', function() {
+it('gets actions with inclusive tax', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 0,
@@ -73,7 +75,7 @@ it('gets actions with inclusive tax', function() {
     ]);
 });
 
-it('gets actions without inclusive tax', function() {
+it('gets actions without inclusive tax', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 1,
@@ -87,7 +89,7 @@ it('gets actions without inclusive tax', function() {
     ]);
 });
 
-it('calculates tax excluding delivery charge when order type is delivery and taxDelivery is false', function() {
+it('calculates tax excluding delivery charge when order type is delivery and taxDelivery is false', function(): void {
     setting()->set([
         'tax_mode' => 1,
         'tax_menu_price' => 1,

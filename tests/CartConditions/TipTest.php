@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\CartConditions;
 
 use Igniter\Cart\CartConditions\Tip;
 use Igniter\Cart\Models\CartSettings;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->tip = new Tip(['label' => 'Test Tip']);
 });
 
-it('gets label', function() {
+it('gets label', function(): void {
     expect($this->tip->getLabel())->toBe('Test Tip');
 });
 
-it('before apply with tipping disabled', function() {
+it('before apply with tipping disabled', function(): void {
     CartSettings::set('enable_tipping', false);
 
     $this->tip->onLoad();
@@ -21,7 +23,7 @@ it('before apply with tipping disabled', function() {
     expect($this->tip->beforeApply())->toBeFalse();
 });
 
-it('before apply with no tip amount', function() {
+it('before apply with no tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
 
     $this->tip->setMetaData(['amount' => 0]);
@@ -30,7 +32,7 @@ it('before apply with no tip amount', function() {
     expect($this->tip->beforeApply())->toBeFalse();
 });
 
-it('before apply with invalid tip amount', function() {
+it('before apply with invalid tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
 
     $this->tip->setMetaData(['amount' => 'invalid']);
@@ -41,7 +43,7 @@ it('before apply with invalid tip amount', function() {
     expect($this->tip->getMetaData('amount'))->toBeNull();
 });
 
-it('gets actions with fixed tip amount', function() {
+it('gets actions with fixed tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
     CartSettings::set('tip_value_type', 'F');
 
@@ -53,7 +55,7 @@ it('gets actions with fixed tip amount', function() {
     ]);
 });
 
-it('gets actions with percentage tip amount', function() {
+it('gets actions with percentage tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
     CartSettings::set('tip_value_type', 'P');
 
@@ -65,7 +67,7 @@ it('gets actions with percentage tip amount', function() {
     ]);
 });
 
-it('gets actions with custom tip amount', function() {
+it('gets actions with custom tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
     CartSettings::set('tip_value_type', 'F');
 

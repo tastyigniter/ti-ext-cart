@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Observers;
 
 use Igniter\Cart\Models\Scopes\CategoryScope;
 use Illuminate\Database\Eloquent\Builder;
 use Mockery;
 
-beforeEach(function() {
-    $this->scope = new CategoryScope();
+beforeEach(function(): void {
+    $this->scope = new CategoryScope;
     $this->builder = Mockery::mock(Builder::class);
 });
 
-it('applies menus filter with status 1', function() {
+it('applies menus filter with status 1', function(): void {
     $this->builder->shouldReceive('whereHas')->with('menus')->andReturnSelf();
     $this->builder->shouldReceive('where')->with('status', 1)->andReturnSelf();
 

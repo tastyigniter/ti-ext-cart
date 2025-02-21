@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Listeners;
 
 use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\Order;
 
-beforeEach(function() {
-    $this->listener = new RegistersDashboardCards();
+beforeEach(function(): void {
+    $this->listener = new RegistersDashboardCards;
     $this->startDate = now()->subMonth();
     $this->endDate = now();
-    $this->callback = function($query) {};
+    $this->callback = function($query): void {};
 });
 
-it('returns correct dashboard cards', function() {
+it('returns correct dashboard cards', function(): void {
     $cards = ($this->listener)();
 
     expect($cards)->toHaveKey('sale')
@@ -45,7 +47,7 @@ it('returns correct dashboard cards', function() {
         ->and($cards['completed_order'])->toHaveKey('valueFrom');
 });
 
-it('calculates total sale sum correctly', function() {
+it('calculates total sale sum correctly', function(): void {
     setting()->set(['canceled_order_status' => 2]);
     Order::factory()->create(['order_total' => 100, 'status_id' => 1]);
     Order::factory()->create(['order_total' => 100, 'status_id' => 2]);
@@ -55,7 +57,7 @@ it('calculates total sale sum correctly', function() {
     expect($result)->toBe(currency_format(100));
 });
 
-it('calculates total lost sale sum correctly', function() {
+it('calculates total lost sale sum correctly', function(): void {
     setting()->set(['canceled_order_status' => 2]);
     Order::factory()->create(['order_total' => 50, 'status_id' => 2]);
     Order::factory()->create(['order_total' => 150, 'status_id' => 1]);
@@ -65,7 +67,7 @@ it('calculates total lost sale sum correctly', function() {
     expect($result)->toBe(currency_format(50));
 });
 
-it('calculates total cash payment sum correctly', function() {
+it('calculates total cash payment sum correctly', function(): void {
     setting()->set(['canceled_order_status' => 2]);
     Order::factory()->create(['order_total' => 75, 'status_id' => 1, 'payment' => 'cod']);
     Order::factory()->create(['order_total' => 150, 'status_id' => 1, 'payment' => 'stripe']);
@@ -75,7 +77,7 @@ it('calculates total cash payment sum correctly', function() {
     expect($result)->toBe(currency_format(75));
 });
 
-it('calculates total order count correctly', function() {
+it('calculates total order count correctly', function(): void {
     setting()->set(['canceled_order_status' => 2]);
     Order::factory()->create(['order_total' => 10, 'status_id' => 1, 'payment' => 'cod']);
     Order::factory()->create(['order_total' => 150, 'status_id' => 2, 'payment' => 'stripe']);
@@ -85,18 +87,17 @@ it('calculates total order count correctly', function() {
     expect($result)->toBe(2);
 });
 
-it('calculates total completed order count correctly', function() {
+it('calculates total completed order count correctly', function(): void {
     setting()->set(['completed_order_status' => [5]]);
     Order::factory()->count(5)->create(['order_total' => 5, 'status_id' => 5, 'payment' => 'cod']);
     Order::factory()->create(['order_total' => 10, 'status_id' => 2, 'payment' => 'stripe']);
-
 
     $result = $this->listener->getValue('completed_order', $this->startDate, $this->endDate, $this->callback);
 
     expect($result)->toBe(5);
 });
 
-it('calculates total delivery order sum correctly', function() {
+it('calculates total delivery order sum correctly', function(): void {
     setting()->set(['completed_order_status' => [5]]);
     Order::factory()->create(['order_total' => 200, 'status_id' => 5, 'order_type' => 'delivery']);
     Order::factory()->create(['order_total' => 100, 'status_id' => 2, 'order_type' => 'collection']);
@@ -106,7 +107,7 @@ it('calculates total delivery order sum correctly', function() {
     expect($result)->toBe(currency_format(200));
 });
 
-it('calculates total collection order sum correctly', function() {
+it('calculates total collection order sum correctly', function(): void {
     setting()->set(['completed_order_status' => [5]]);
     Order::factory()->create(['order_total' => 100, 'status_id' => 2, 'order_type' => 'delivery']);
     Order::factory()->create(['order_total' => 150, 'status_id' => 5, 'order_type' => 'collection']);

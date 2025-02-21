@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Casts\Serialize;
+use Igniter\Flame\Database\Model;
 
 /**
  * OrderMenu Model
@@ -16,9 +19,9 @@ use Igniter\Flame\Database\Casts\Serialize;
  * @property float|null $subtotal
  * @property mixed|null $option_values
  * @property string|null $comment
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
-class OrderMenu extends \Igniter\Flame\Database\Model
+class OrderMenu extends Model
 {
     protected $table = 'order_menus';
 
@@ -40,11 +43,11 @@ class OrderMenu extends \Igniter\Flame\Database\Model
 
     public $relation = [
         'belongsTo' => [
-            'order' => \Igniter\Cart\Models\Order::class,
-            'menu' => \Igniter\Cart\Models\Menu::class,
+            'order' => Order::class,
+            'menu' => Menu::class,
         ],
         'hasMany' => [
-            'menu_options' => \Igniter\Cart\Models\OrderMenuOptionValue::class,
+            'menu_options' => OrderMenuOptionValue::class,
         ],
     ];
 }

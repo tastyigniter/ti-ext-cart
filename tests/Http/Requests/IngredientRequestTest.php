@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Requests;
 
 use Igniter\Cart\Http\Requests\IngredientRequest;
 
-it('returns correct attribute labels', function() {
-    $request = new IngredientRequest();
+it('returns correct attribute labels', function(): void {
+    $request = new IngredientRequest;
 
     $attributes = $request->attributes();
 
@@ -15,8 +17,8 @@ it('returns correct attribute labels', function() {
         ->and($attributes)->toHaveKey('is_allergen', lang('igniter.cart::default.ingredients.label_allergen'));
 });
 
-it('returns correct validation rules', function() {
-    $request = new IngredientRequest();
+it('returns correct validation rules', function(): void {
+    $request = new IngredientRequest;
 
     $rules = $request->rules();
 

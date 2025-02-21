@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models\Scopes;
 
 use Igniter\Cart\Models\Scopes\MenuScope;
 use Illuminate\Database\Eloquent\Builder;
 use Mockery;
 
-beforeEach(function() {
-    $this->scope = new MenuScope();
+beforeEach(function(): void {
+    $this->scope = new MenuScope;
     $this->builder = Mockery::mock(Builder::class);
 });
 
-it('applies location filter correctly', function() {
+it('applies location filter correctly', function(): void {
     $locationId = 1;
     $this->builder->shouldReceive('whereHasOrDoesntHaveLocation')->once()->with($locationId)->andReturnSelf();
-    $this->builder->shouldReceive('with')->once()->andReturnUsing(function($relations) use ($locationId) {
+    $this->builder->shouldReceive('with')->once()->andReturnUsing(function(array $relations) use ($locationId) {
         $builderMock = Mockery::mock(Builder::class)
             ->shouldReceive('whereHasOrDoesntHaveLocation')
             ->with($locationId)
@@ -23,6 +25,7 @@ it('applies location filter correctly', function() {
             ->andReturnSelf()
             ->getMock();
         $relations['categories']($builderMock);
+
         return $this->builder;
     });
 
@@ -30,12 +33,13 @@ it('applies location filter correctly', function() {
     $applyLocation($this->builder, $locationId);
 });
 
-it('applies category group filter correctly', function() {
+it('applies category group filter correctly', function(): void {
     $group = 'test-group';
-    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($group) {
+    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($group): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('groupBy')->with($group)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -43,13 +47,14 @@ it('applies category group filter correctly', function() {
     $applyCategoryGroup($this->builder, $group);
 });
 
-it('applies order type filter correctly', function() {
+it('applies order type filter correctly', function(): void {
     $orderType = 'delivery';
-    $this->builder->shouldReceive('where')->with(Mockery::on(function($callback) use ($orderType) {
+    $this->builder->shouldReceive('where')->with(Mockery::on(function($callback) use ($orderType): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('whereNull')->with('order_restriction')->once()->andReturnSelf();
         $query->shouldReceive('orWhere')->with('order_restriction', 'like', '%"'.$orderType.'"%')->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -57,13 +62,14 @@ it('applies order type filter correctly', function() {
     $applyOrderType($this->builder, $orderType);
 });
 
-it('applies allergen filter correctly', function() {
+it('applies allergen filter correctly', function(): void {
     $allergenId = 1;
-    $this->builder->shouldReceive('whereHas')->with('allergens', Mockery::on(function($callback) use ($allergenId) {
+    $this->builder->shouldReceive('whereHas')->with('allergens', Mockery::on(function($callback) use ($allergenId): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('where')->with('allergen_id', $allergenId)->once()->andReturnSelf();
         $query->shouldReceive('where')->with('is_allergen', 1)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -71,12 +77,13 @@ it('applies allergen filter correctly', function() {
     $applyAllergen($this->builder, $allergenId);
 });
 
-it('applies category filter with category id correctly', function() {
+it('applies category filter with category id correctly', function(): void {
     $categoryId = 1;
-    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categoryId) {
+    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categoryId): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('where')->with('categories.category_id', $categoryId)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -84,12 +91,13 @@ it('applies category filter with category id correctly', function() {
     $applyCategory($this->builder, $categoryId);
 });
 
-it('applies category filter with category slug correctly', function() {
+it('applies category filter with category slug correctly', function(): void {
     $categorySlug = 'permalink-slug';
-    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categorySlug) {
+    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categorySlug): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('whereSlug')->with($categorySlug)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -97,12 +105,13 @@ it('applies category filter with category slug correctly', function() {
     $applyCategory($this->builder, $categorySlug);
 });
 
-it('applies ingredient filter correctly', function() {
+it('applies ingredient filter correctly', function(): void {
     $ingredientId = 1;
-    $this->builder->shouldReceive('whereHas')->with('ingredients', Mockery::on(function($callback) use ($ingredientId) {
+    $this->builder->shouldReceive('whereHas')->with('ingredients', Mockery::on(function($callback) use ($ingredientId): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('where')->with('ingredient_id', $ingredientId)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 
@@ -110,12 +119,13 @@ it('applies ingredient filter correctly', function() {
     $applyIngredient($this->builder, $ingredientId);
 });
 
-it('applies mealtime filter correctly', function() {
+it('applies mealtime filter correctly', function(): void {
     $mealtimeId = 1;
-    $this->builder->shouldReceive('whereHas')->with('mealtimes', Mockery::on(function($callback) use ($mealtimeId) {
+    $this->builder->shouldReceive('whereHas')->with('mealtimes', Mockery::on(function($callback) use ($mealtimeId): true {
         $query = Mockery::mock(Builder::class);
         $query->shouldReceive('where')->with('mealtimes.mealtime_id', $mealtimeId)->once();
         $callback($query);
+
         return true;
     }))->once()->andReturnSelf();
 

@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
+
+use Igniter\Flame\Database\Model;
 
 /**
  * OrderMenuOptionValue Model
@@ -14,9 +18,9 @@ namespace Igniter\Cart\Models;
  * @property int $menu_option_value_id
  * @property int|null $quantity
  * @property-read mixed $order_option_category
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
-class OrderMenuOptionValue extends \Igniter\Flame\Database\Model
+class OrderMenuOptionValue extends Model
 {
     protected $table = 'order_menu_options';
 
@@ -39,10 +43,10 @@ class OrderMenuOptionValue extends \Igniter\Flame\Database\Model
 
     public $relation = [
         'belongsTo' => [
-            'order' => \Igniter\Cart\Models\Order::class,
-            'order_menu' => \Igniter\Cart\Models\OrderMenu::class,
-            'menu_option' => \Igniter\Cart\Models\MenuItemOption::class,
-            'menu_option_value' => \Igniter\Cart\Models\MenuItemOptionValue::class,
+            'order' => Order::class,
+            'order_menu' => OrderMenu::class,
+            'menu_option' => MenuItemOption::class,
+            'menu_option_value' => MenuItemOptionValue::class,
         ],
     ];
 

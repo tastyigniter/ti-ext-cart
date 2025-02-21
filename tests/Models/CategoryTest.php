@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Models;
 
 use Igniter\Cart\Models\Category;
@@ -15,7 +17,7 @@ use Igniter\Local\Models\Location;
 use Igniter\Local\Models\Scopes\LocationableScope;
 use Igniter\System\Models\Concerns\Switchable;
 
-it('returns enabled categories dropdown options', function() {
+it('returns enabled categories dropdown options', function(): void {
     $count = Category::count();
 
     Category::factory()->count(3)->create(['status' => 0]);
@@ -23,20 +25,20 @@ it('returns enabled categories dropdown options', function() {
     expect(Category::getDropdownOptions()->all())->toHaveCount($count);
 });
 
-it('returns description attribute', function() {
+it('returns description attribute', function(): void {
     $category = Category::factory()->create(['description' => '<p>Description</p>']);
 
     expect($category->description)->toBe('Description');
 });
 
-it('counts menus', function() {
+it('counts menus', function(): void {
     $category = Category::factory()->create();
     $category->menus()->saveMany(Menu::factory()->count(3)->make());
 
     expect($category->count_menus)->toBe(3);
 });
 
-it('belongs to parent category', function() {
+it('belongs to parent category', function(): void {
     $category = new Category;
     $relation = $category->parent_cat();
 
@@ -45,7 +47,7 @@ it('belongs to parent category', function() {
         ->and($relation->getOwnerKeyName())->toBe('category_id');
 });
 
-it('belongs to many menus', function() {
+it('belongs to many menus', function(): void {
     $category = new Category;
     $relation = $category->menus();
 
@@ -53,7 +55,7 @@ it('belongs to many menus', function() {
         ->and($relation->getTable())->toBe('menu_categories');
 });
 
-it('morphs to many locations', function() {
+it('morphs to many locations', function(): void {
     $category = new Category;
     $relation = $category->locations();
 
@@ -61,20 +63,20 @@ it('morphs to many locations', function() {
         ->and($relation->getRelated())->toBeInstanceOf(Location::class);
 });
 
-it('generates permalink slug', function() {
+it('generates permalink slug', function(): void {
     $category = Category::factory()->create(['name' => 'Category Name']);
 
     expect($category->permalink_slug)->toBe('category-name');
 });
 
-it('scopes to categories with menus', function() {
+it('scopes to categories with menus', function(): void {
     $menu = Menu::factory()->create();
     $menu->categories()->saveMany(Category::factory()->count(3)->make(['status' => 1]));
 
     expect(Category::whereHasMenus()->count())->toBe(3);
 });
 
-it('applies filters to query builder', function() {
+it('applies filters to query builder', function(): void {
     $query = Category::query()->applyFilters([
         'enabled' => 1,
         'location' => 1,
@@ -89,7 +91,7 @@ it('applies filters to query builder', function() {
         ->toContain('lower(name)', 'lower(description)');
 });
 
-it('configures category model correctly', function() {
+it('configures category model correctly', function(): void {
     $category = new Category;
 
     expect(class_uses_recursive($category))
@@ -106,13 +108,13 @@ it('configures category model correctly', function() {
         ->and($category->getMorphClass())->toBe('categories')
         ->and($category->relation)->toEqual([
             'belongsTo' => [
-                'parent_cat' => [\Igniter\Cart\Models\Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
+                'parent_cat' => [Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
             ],
             'belongsToMany' => [
-                'menus' => [\Igniter\Cart\Models\Menu::class, 'table' => 'menu_categories'],
+                'menus' => [Menu::class, 'table' => 'menu_categories'],
             ],
             'morphToMany' => [
-                'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+                'locations' => [Location::class, 'name' => 'locationable'],
             ],
         ])
         ->and($category->permalinkable)->toBe([

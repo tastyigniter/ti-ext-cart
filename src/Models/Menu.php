@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Carbon\Carbon;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Concerns\Stockable;
 use Igniter\Flame\Database\Attach\HasMedia;
+use Igniter\Flame\Database\Attach\Media;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Menu Model Class
@@ -20,16 +25,16 @@ use Igniter\System\Models\Concerns\Switchable;
  * @property string $menu_description
  * @property float $menu_price
  * @property int $minimum_qty
- * @property boolean $menu_status
+ * @property bool $menu_status
  * @property int $menu_priority
  * @property array|null $order_restriction
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $menu_price_from
  * @property-read mixed $stock_qty
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Igniter\Flame\Database\Attach\Media> $media
+ * @property-read Collection<int, Media> $media
  * @property-read int|null $media_count
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class Menu extends Model implements Buyable
 {
@@ -68,19 +73,19 @@ class Menu extends Model implements Buyable
 
     public $relation = [
         'hasMany' => [
-            'menu_options' => [\Igniter\Cart\Models\MenuItemOption::class],
+            'menu_options' => [MenuItemOption::class],
         ],
         'hasOne' => [
-            'special' => [\Igniter\Cart\Models\MenuSpecial::class],
+            'special' => [MenuSpecial::class],
         ],
         'belongsToMany' => [
-            'categories' => [\Igniter\Cart\Models\Category::class, 'table' => 'menu_categories'],
-            'mealtimes' => [\Igniter\Cart\Models\Mealtime::class, 'table' => 'menu_mealtimes'],
+            'categories' => [Category::class, 'table' => 'menu_categories'],
+            'mealtimes' => [Mealtime::class, 'table' => 'menu_mealtimes'],
         ],
         'morphToMany' => [
-            'allergens' => [\Igniter\Cart\Models\Ingredient::class, 'name' => 'ingredientable', 'conditions' => 'is_allergen = 1'],
-            'ingredients' => [\Igniter\Cart\Models\Ingredient::class, 'name' => 'ingredientable'],
-            'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+            'allergens' => [Ingredient::class, 'name' => 'ingredientable', 'conditions' => 'is_allergen = 1'],
+            'ingredients' => [Ingredient::class, 'name' => 'ingredientable'],
+            'locations' => [Location::class, 'name' => 'locationable'],
         ],
     ];
 
@@ -125,7 +130,7 @@ class Menu extends Model implements Buyable
     // Helpers
     //
 
-    public function hasOptions()
+    public function hasOptions(): int
     {
         return count($this->menu_options);
     }
@@ -134,10 +139,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu allergens
      *
      * @param array $allergenIds if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuAllergens(array $allergenIds = [])
+    public function addMenuAllergens(array $allergenIds = []): void
     {
         $this->addMenuIngredients($allergenIds);
     }
@@ -146,10 +149,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu categories
      *
      * @param array $categoryIds if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuCategories(array $categoryIds = [])
+    public function addMenuCategories(array $categoryIds = []): void
     {
         $this->categories()->sync($categoryIds);
     }
@@ -158,10 +159,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu ingredients
      *
      * @param array $ingredientIds if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuIngredients(array $ingredientIds = [])
+    public function addMenuIngredients(array $ingredientIds = []): void
     {
         $this->ingredients()->sync($ingredientIds);
     }
@@ -170,10 +169,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu mealtimes
      *
      * @param array $mealtimeIds if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuMealtimes(array $mealtimeIds = [])
+    public function addMenuMealtimes(array $mealtimeIds = []): void
     {
         $this->mealtimes()->sync($mealtimeIds);
     }
@@ -182,10 +179,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu options
      *
      * @param array $menuOptions if empty all existing records will be deleted
-     *
-     * @return bool
      */
-    public function addMenuOption(array $menuOptions = [])
+    public function addMenuOption(array $menuOptions = []): int
     {
         $menuId = $this->getKey();
         $idsToKeep = [];
@@ -208,10 +203,8 @@ class Menu extends Model implements Buyable
      * Create new or update existing menu special
      *
      * @param bool $id
-     *
-     * @return bool
      */
-    public function addMenuSpecial(array $menuSpecial = [])
+    public function addMenuSpecial(array $menuSpecial = []): void
     {
         $menuId = $this->getKey();
         $menuSpecial['menu_id'] = $menuId;
@@ -223,11 +216,9 @@ class Menu extends Model implements Buyable
     /**
      * Is menu item available on a given datetime
      *
-     * @param string | \Carbon\Carbon $datetime
-     *
-     * @return bool
+     * @param string|Carbon $datetime
      */
-    public function isAvailable($datetime = null)
+    public function isAvailable($datetime = null): bool
     {
         if (is_null($datetime)) {
             $datetime = Carbon::now();
@@ -237,19 +228,15 @@ class Menu extends Model implements Buyable
             $datetime = Carbon::parse($datetime);
         }
 
-        if ($this->mealtimes->contains(fn($mealtime) => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
+        if ($this->mealtimes->contains(fn($mealtime): bool => $mealtime->isEnabled() && !$mealtime->isAvailable($datetime))) {
             return false;
         }
 
-        if ($this->ingredients->contains(fn($ingredient) => !$ingredient->isEnabled())) {
+        if ($this->ingredients->contains(fn($ingredient): bool => !$ingredient->isEnabled())) {
             return false;
         }
 
-        if (($this->fireSystemEvent('admin.menu.isAvailable', [$datetime, true])) === false) {
-            return false;
-        }
-
-        return true;
+        return $this->fireSystemEvent('admin.menu.isAvailable', [$datetime, true]) !== false;
     }
 
     public static function findBy($menuId, $location = null)
@@ -267,7 +254,7 @@ class Menu extends Model implements Buyable
         return $this->special?->active() ?? false;
     }
 
-    public function checkMinQuantity($quantity = 0)
+    public function checkMinQuantity($quantity = 0): bool
     {
         return $quantity >= $this->minimum_qty;
     }

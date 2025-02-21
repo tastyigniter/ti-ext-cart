@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models\Concerns;
 
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\OrderMenu;
 use Igniter\Cart\Models\OrderMenuOptionValue;
+use Illuminate\Support\Collection;
 
 trait ManagesOrderItems
 {
     /**
      * Subtract cart item quantity from menu stock quantity
-     *
-     * @return void
      */
-    public function subtractStock()
+    public function subtractStock(): void
     {
         $this->getOrderMenus()->each(function($orderMenu) {
             if (!$menu = Menu::find($orderMenu->menu_id)) {
@@ -45,34 +46,28 @@ trait ManagesOrderItems
 
     /**
      * Return all order menu by order_id
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getOrderMenus()
+    public function getOrderMenus(): Collection
     {
         return $this->menus;
     }
 
     /**
      * Return all order menu options by order_id
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getOrderMenuOptions()
+    public function getOrderMenuOptions(): Collection
     {
         return $this->menu_options->groupBy('order_menu_id');
     }
 
     /**
      * Return all order menus merged with order menu options
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getOrderMenusWithOptions()
+    public function getOrderMenusWithOptions(): Collection
     {
         $this->load('menus.menu_options');
 
-        $this->menus->each(function(OrderMenu $orderMenu) {
+        $this->menus->each(function(OrderMenu $orderMenu): void {
             $orderMenuOptions = $orderMenu->menu_options->groupBy(function(OrderMenuOptionValue $orderMenuOptionValue) {
                 return $orderMenuOptionValue->menu_option->option_name;
             });
@@ -84,10 +79,8 @@ trait ManagesOrderItems
 
     /**
      * Return all order totals by order_id
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getOrderTotals()
+    public function getOrderTotals(): Collection
     {
         return $this->totals->sortBy('priority');
     }
@@ -95,7 +88,7 @@ trait ManagesOrderItems
     /**
      * Add cart menu items to order by order_id
      */
-    public function addOrderMenus(array $content)
+    public function addOrderMenus(array $content): void
     {
         $this->menus()->delete();
         $this->menu_options()->delete();
@@ -141,10 +134,8 @@ trait ManagesOrderItems
 
     /**
      * Add cart totals to order by order_id
-     *
-     * @return bool
      */
-    public function addOrderTotals(array $totals = [])
+    public function addOrderTotals(array $totals = []): void
     {
         foreach ($totals as $total) {
             $this->addOrUpdateOrderTotal($total);
@@ -160,7 +151,7 @@ trait ManagesOrderItems
         ], array_except($total, ['order_id', 'code']));
     }
 
-    public function calculateTotals()
+    public function calculateTotals(): void
     {
         $subtotal = $this->menus()->sum('subtotal');
         $totalItems = $this->menus()->sum('quantity');

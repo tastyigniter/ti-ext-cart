@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Carbon\Carbon;
 use Igniter\Cart\Models\Mealtime;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
 
-it('returns enabled mealtime dropdown options', function() {
+it('returns enabled mealtime dropdown options', function(): void {
     $count = Mealtime::count();
 
     Mealtime::factory()->count(3)->create(['mealtime_status' => 0]);
@@ -15,7 +18,7 @@ it('returns enabled mealtime dropdown options', function() {
     expect(Mealtime::getDropdownOptions()->all())->toHaveCount($count);
 });
 
-it('checks if mealtime is available', function() {
+it('checks if mealtime is available', function(): void {
     $mealtime = Mealtime::factory()->create([
         'start_time' => '10:00:00',
         'end_time' => '20:00:00',
@@ -26,7 +29,7 @@ it('checks if mealtime is available', function() {
     expect($mealtime->isAvailable($datetime))->toBeTrue();
 });
 
-it('checks if mealtime is not available', function() {
+it('checks if mealtime is not available', function(): void {
     $mealtime = Mealtime::factory()->create([
         'start_time' => '10:00:00',
         'end_time' => '20:00:00',
@@ -37,7 +40,7 @@ it('checks if mealtime is not available', function() {
     expect($mealtime->isAvailable($datetime))->toBeFalse();
 });
 
-it('checks if mealtime is available now', function() {
+it('checks if mealtime is available now', function(): void {
     $mealtime = Mealtime::factory()->create([
         'start_time' => '10:00:00',
         'end_time' => '20:00:00',
@@ -48,7 +51,7 @@ it('checks if mealtime is available now', function() {
     expect($mealtime->isAvailableNow())->toBeTrue();
 });
 
-it('configures mealtime model correctly', function() {
+it('configures mealtime model correctly', function(): void {
     $mealtime = new Mealtime;
 
     expect(class_uses_recursive($mealtime))
@@ -59,7 +62,7 @@ it('configures mealtime model correctly', function() {
         ->and($mealtime->getMorphClass())->toBe('mealtimes')
         ->and($mealtime->relation)->toEqual([
             'morphToMany' => [
-                'locations' => [\Igniter\Local\Models\Location::class, 'name' => 'locationable'],
+                'locations' => [Location::class, 'name' => 'locationable'],
             ],
         ]);
 });

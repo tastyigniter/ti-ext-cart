@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\CartCondition;
@@ -24,7 +26,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 
-beforeEach(function() {
+beforeEach(function(): void {
     $this->location = LocationModel::factory()->create();
     resolve('location')->setModel($this->location);
 
@@ -32,7 +34,7 @@ beforeEach(function() {
     $this->manager = new OrderManager;
 });
 
-it('sets the customer', function() {
+it('sets the customer', function(): void {
     $customer = Mockery::mock(Customer::class)->makePartial();
     $customer->shouldReceive('getKey')->andReturn(1);
 
@@ -41,13 +43,13 @@ it('sets the customer', function() {
     expect($this->manager->getCustomerId())->toBe($customer->getKey());
 });
 
-it('gets customer id', function() {
+it('gets customer id', function(): void {
     $this->actingAs($this->customer, 'igniter-customer');
 
     expect($this->manager->getCustomerId())->toBe($this->customer->id);
 });
 
-it('loads order', function() {
+it('loads order', function(): void {
     $order = $this->manager->getOrder();
 
     expect($order)->toBeInstanceOf(Order::class)
@@ -55,7 +57,7 @@ it('loads order', function() {
         ->and($order->location_id)->toBe($this->location->getKey());
 });
 
-it('gets order by hash', function() {
+it('gets order by hash', function(): void {
     $order = Order::factory()->create([
         'customer_id' => $this->customer->getKey(),
         'hash' => 'test-hash',
@@ -64,17 +66,17 @@ it('gets order by hash', function() {
     expect($this->manager->getOrderByHash($order->hash, $this->customer))->toBeInstanceOf(Order::class);
 });
 
-it('gets default payment with valid class_name', function() {
+it('gets default payment with valid class_name', function(): void {
     expect($this->manager->getDefaultPayment())->toBeInstanceOf(Payment::class);
 });
 
-it('gets payment with valid class_name', function() {
+it('gets payment with valid class_name', function(): void {
     $payment = Payment::firstWhere('code', 'cod');
 
     expect($this->manager->getPayment($payment->code))->toBeInstanceOf(Payment::class);
 });
 
-it('has location payments', function() {
+it('has location payments', function(): void {
     $this->location->settings()->create([
         'item' => 'checkout.payments',
         'data' => ['invalid-code'],
@@ -83,7 +85,7 @@ it('has location payments', function() {
     expect($this->manager->getPaymentGateways()->all())->toBeEmpty();
 });
 
-it('finds delivery address', function() {
+it('finds delivery address', function(): void {
     $address = Address::factory()->create([
         'customer_id' => $this->customer->id,
     ]);
@@ -92,11 +94,11 @@ it('finds delivery address', function() {
         ->toBeInstanceOf(Address::class);
 });
 
-it('finds delivery address returns null when address is null', function() {
+it('finds delivery address returns null when address is null', function(): void {
     expect($this->manager->findDeliveryAddress(null))->toBeNull();
 });
 
-it('validateCustomer throws exception when guest order is not allowed and customer is not logged in', function() {
+it('validateCustomer throws exception when guest order is not allowed and customer is not logged in', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current->allowGuestOrder')->andReturn(false);
     $this->manager->setLocation($location);
@@ -105,7 +107,7 @@ it('validateCustomer throws exception when guest order is not allowed and custom
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.alert_customer_not_logged'));
 });
 
-it('validateCustomer throws exception when guest order is not allowed and customer is not activated', function() {
+it('validateCustomer throws exception when guest order is not allowed and customer is not activated', function(): void {
     $customer = Mockery::mock(Customer::class);
     $location = Mockery::mock(Location::class);
     $customer->shouldReceive('extendableGet')->with('is_activated')->andReturn(false);
@@ -116,7 +118,7 @@ it('validateCustomer throws exception when guest order is not allowed and custom
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.alert_customer_not_logged'));
 });
 
-it('validateDeliveryAddress throws exception when delivery address is invalid', function() {
+it('validateDeliveryAddress throws exception when delivery address is invalid', function(): void {
     $address = [
         'address_1' => '123 Main St',
         'city' => 'Somewhere',
@@ -130,7 +132,7 @@ it('validateDeliveryAddress throws exception when delivery address is invalid', 
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_invalid_search_query'));
 });
 
-it('validateDeliveryAddress throws exception when street address is missing', function() {
+it('validateDeliveryAddress throws exception when street address is missing', function(): void {
     $address = ['address_1' => '123 Main St', 'city' => 'Somewhere', 'state' => 'CA', 'postcode' => '12345'];
     $userLocation = Mockery::mock(UserPosition::class);
     $userLocation->shouldReceive('getStreetNumber')->andReturn(null);
@@ -141,7 +143,7 @@ it('validateDeliveryAddress throws exception when street address is missing', fu
         ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_missing_street_address'));
 });
 
-it('validateDeliveryAddress throws exception when delivery area is not covered', function() {
+it('validateDeliveryAddress throws exception when delivery area is not covered', function(): void {
     $address = ['address_1' => '123 Main St', 'city' => 'Somewhere', 'state' => 'CA', 'postcode' => '12345'];
     $location = Mockery::mock(Location::class);
     $userLocation = Mockery::mock(UserPosition::class);
@@ -157,7 +159,7 @@ it('validateDeliveryAddress throws exception when delivery area is not covered',
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.error_covered_area'));
 });
 
-it('validateDeliveryAddress throws exception when delivery area changes', function() {
+it('validateDeliveryAddress throws exception when delivery area changes', function(): void {
     $address = ['address_1' => '123 Main St', 'city' => 'Somewhere', 'state' => 'CA', 'postcode' => '12345'];
     $location = Mockery::mock(Location::class);
     $userLocation = Mockery::mock(UserPosition::class);
@@ -177,7 +179,7 @@ it('validateDeliveryAddress throws exception when delivery area changes', functi
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.alert_delivery_area_changed'));
 });
 
-it('saves order', function() {
+it('saves order', function(): void {
     Event::fake();
 
     $order = Order::factory()->create();
@@ -210,7 +212,7 @@ it('saves order', function() {
     Event::assertDispatched('igniter.checkout.afterSaveOrder');
 });
 
-it('processes payment when order total is zero or less', function() {
+it('processes payment when order total is zero or less', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
         'admin.order.paymentProcessed',
@@ -228,7 +230,7 @@ it('processes payment when order total is zero or less', function() {
     Event::assertDispatched('admin.order.paymentProcessed');
 });
 
-it('processes payment throws exception when payment is invalid', function() {
+it('processes payment throws exception when payment is invalid', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
     ]);
@@ -239,7 +241,7 @@ it('processes payment throws exception when payment is invalid', function() {
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.error_invalid_payment'));
 });
 
-it('processes payment throws exception when payment is inactive', function() {
+it('processes payment throws exception when payment is inactive', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
     ]);
@@ -251,7 +253,7 @@ it('processes payment throws exception when payment is inactive', function() {
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.error_inactive_payment'));
 });
 
-it('processes payment throws exception when payment is not applicable', function() {
+it('processes payment throws exception when payment is not applicable', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
     ]);
@@ -267,11 +269,11 @@ it('processes payment throws exception when payment is not applicable', function
         ));
 });
 
-it('processes payment throws exception when payment fee cart condition is not applied', function() {
+it('processes payment throws exception when payment fee cart condition is not applied', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
     ]);
-    app('cart')->loadCondition(new PaymentFee());
+    app('cart')->loadCondition(new PaymentFee);
     $payment = Payment::firstWhere('code', 'cod');
     $payment->order_total = 100;
     $payment->order_fee = 10;
@@ -284,7 +286,7 @@ it('processes payment throws exception when payment fee cart condition is not ap
         ));
 });
 
-it('processes payment from saved profile', function() {
+it('processes payment from saved profile', function(): void {
     $order = Mockery::mock(Order::class)->makePartial();
     $order->shouldReceive('extendableGet')->with('payment')->andReturn('test_payment');
     $order->shouldReceive('extendableGet')->with('order_total')->andReturn(100);
@@ -303,7 +305,7 @@ it('processes payment from saved profile', function() {
     expect($result)->toBe('success');
 });
 
-it('processes payment', function() {
+it('processes payment', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
         'admin.order.paymentProcessed',
@@ -322,7 +324,7 @@ it('processes payment', function() {
     Event::assertDispatched('admin.order.paymentProcessed');
 });
 
-it('applies required attributes', function() {
+it('applies required attributes', function(): void {
     $order = Order::factory()->create();
 
     $this->manager->applyRequiredAttributes($order);
@@ -333,7 +335,7 @@ it('applies required attributes', function() {
         ->and($order->order_type)->toBe($locationService->orderType());
 });
 
-it('applies required attributes does not apply order date time', function() {
+it('applies required attributes does not apply order date time', function(): void {
     $order = Order::factory()->create([
         'order_time_is_asap' => '',
         'order_date' => '2021-12-01',
@@ -353,7 +355,7 @@ it('applies required attributes does not apply order date time', function() {
         ->and($order->order_time)->toBe('11:00');
 });
 
-it('gets cart totals', function() {
+it('gets cart totals', function(): void {
     CartSettings::set('enable_tipping', true);
     CartSettings::set('tip_value_type', 'F');
 
@@ -380,7 +382,7 @@ it('gets cart totals', function() {
         ->toHaveKeys(['tip', 'subtotal', 'total']);
 });
 
-it('applies payment fee cart condition', function() {
+it('applies payment fee cart condition', function(): void {
     $menu = Menu::factory()->create();
 
     $cartManager = resolve(CartManager::class);
@@ -392,13 +394,13 @@ it('applies payment fee cart condition', function() {
         ->and($this->manager->getSession('paymentCode'))->toBe('payment-cod');
 });
 
-it('returns default payment code when current payment code is not set', function() {
+it('returns default payment code when current payment code is not set', function(): void {
     $payment = Payment::firstWhere('code', 'cod');
 
     expect($this->manager->getCurrentPaymentCode())->toBe($payment->code);
 });
 
-it('returns null when default payment is not set', function() {
+it('returns null when default payment is not set', function(): void {
     $payment = Payment::firstWhere('code', 'cod');
     $payment->status = 0;
     $payment->is_default = 0;
@@ -407,7 +409,7 @@ it('returns null when default payment is not set', function() {
     expect($this->manager->getCurrentPaymentCode())->toBeNull();
 });
 
-it('clears order session', function() {
+it('clears order session', function(): void {
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('updateScheduleTimeSlot')->with(null)->once();
 
@@ -415,18 +417,18 @@ it('clears order session', function() {
     $this->manager->clearOrder();
 });
 
-it('clears current order id from session', function() {
+it('clears current order id from session', function(): void {
     expect($this->manager->clearCurrentOrderId())->toBeNull();
 });
 
-it('returns true when given order id matches current order id', function() {
+it('returns true when given order id matches current order id', function(): void {
     $this->manager->setCurrentOrderId(1);
     $result = $this->manager->isCurrentOrderId(1);
 
     expect($result)->toBeTrue();
 });
 
-it('returns false when given order id does not match current order id', function() {
+it('returns false when given order id does not match current order id', function(): void {
     $this->manager->setCurrentOrderId(2);
     $result = $this->manager->isCurrentOrderId(1);
 

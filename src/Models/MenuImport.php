@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Exception;
+use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Models\ImportModel;
 
 /**
@@ -13,12 +16,12 @@ use IgniterLabs\ImportExport\Models\ImportModel;
  * @property string $menu_description
  * @property string $menu_price
  * @property int $minimum_qty
- * @property boolean $menu_status
+ * @property bool $menu_status
  * @property int $menu_priority
  * @property string|null $order_restriction
  * @property string|null $created_at
  * @property string|null $updated_at
- * @mixin \Igniter\Flame\Database\Model
+ * @mixin Model
  */
 class MenuImport extends ImportModel
 {
@@ -28,7 +31,7 @@ class MenuImport extends ImportModel
 
     protected $categoryNameCache = [];
 
-    public function importData($results)
+    public function importData($results): void
     {
         foreach ($results as $row => $data) {
             try {
@@ -78,9 +81,8 @@ class MenuImport extends ImportModel
         $ids = [];
 
         $categoryNames = $this->decodeArrayValue(array_get($data, 'categories'));
-
         foreach ($categoryNames as $name) {
-            if (!$name = trim($name)) {
+            if (strlen($name = trim((string)$name)) < 1) {
                 continue;
             }
 

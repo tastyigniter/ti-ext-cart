@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
+use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOptionValue;
 
-it('returns option name attribute', function() {
+it('returns option name attribute', function(): void {
     $menuItemOptionValue = MenuItemOptionValue::factory()
         ->for(MenuOptionValue::factory(['name' => 'Option Value Name'])->create(), 'option_value')
         ->create();
@@ -13,7 +17,7 @@ it('returns option name attribute', function() {
     expect($menuItemOptionValue->name)->toBe('Option Value Name');
 });
 
-it('returns price attribute', function() {
+it('returns price attribute', function(): void {
     $menuItemOptionValue = MenuItemOptionValue::factory()
         ->for(MenuOptionValue::factory(['price' => 10.00])->create(), 'option_value')
         ->create();
@@ -25,19 +29,19 @@ it('returns price attribute', function() {
     expect($menuItemOptionValue->price)->toBe(15.00);
 });
 
-it('checks if menu item option value is default', function() {
+it('checks if menu item option value is default', function(): void {
     $menuItemOptionValue = MenuItemOptionValue::factory()->create(['is_default' => 1]);
 
     expect($menuItemOptionValue->isDefault())->toBeTrue();
 });
 
-it('checks if menu item option value is not default', function() {
+it('checks if menu item option value is not default', function(): void {
     $menuItemOptionValue = MenuItemOptionValue::factory()->create(['is_default' => 0]);
 
     expect($menuItemOptionValue->isDefault())->toBeFalse();
 });
 
-it('configures menu item option value model correctly', function() {
+it('configures menu item option value model correctly', function(): void {
     $menuItemOptionValue = new MenuItemOptionValue;
     expect($menuItemOptionValue->getTable())->toBe('menu_item_option_values')
         ->and($menuItemOptionValue->getKeyName())->toBe('menu_option_value_id')
@@ -51,9 +55,9 @@ it('configures menu item option value model correctly', function() {
         ->and($menuItemOptionValue->timestamps)->toBeTrue()
         ->and($menuItemOptionValue->relation)->toEqual([
             'belongsTo' => [
-                'menu' => [\Igniter\Cart\Models\Menu::class],
-                'option_value' => [\Igniter\Cart\Models\MenuOptionValue::class],
-                'menu_option' => [\Igniter\Cart\Models\MenuItemOption::class],
+                'menu' => [Menu::class],
+                'option_value' => [MenuOptionValue::class],
+                'menu_option' => [MenuItemOption::class],
             ],
         ])
         ->and($menuItemOptionValue->rules)->toEqual([

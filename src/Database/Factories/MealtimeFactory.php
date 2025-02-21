@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\Mealtime;
 use Igniter\Flame\Database\Factories\Factory;
 
 class MealtimeFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\Mealtime::class;
+    protected $model = Mealtime::class;
 
     public function definition(): array
     {

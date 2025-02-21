@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Menu;
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 
-it('applies stockable scope with correct model type and id', function() {
+it('applies stockable scope with correct model type and id', function(): void {
     $query = mock(Builder::class);
     $model = mock(Model::class)->makePartial();
     $model->shouldReceive('getMorphClass')->andReturn('TestModel');
@@ -24,7 +26,7 @@ it('applies stockable scope with correct model type and id', function() {
     expect($result)->toBe($query);
 });
 
-it('updates stock correctly', function() {
+it('updates stock correctly', function(): void {
     Event::fake();
     Mail::fake();
 
@@ -42,18 +44,18 @@ it('updates stock correctly', function() {
 
     expect($stock->quantity)->toBe(6);
 
-    Event::assertDispatched('admin.stock.updated', function($event, $args) use ($stock) {
+    Event::assertDispatched('admin.stock.updated', function($event, $args) use ($stock): bool {
         [$updatedStock, $history, $stockQty] = $args;
 
         return $updatedStock->getKey() === $stock->getKey();
     });
 
-    Mail::assertQueued(AnonymousTemplateMailable::class, function($mailable) {
+    Mail::assertQueued(AnonymousTemplateMailable::class, function($mailable): bool {
         return $mailable->getTemplateCode() === 'igniter.cart::mail.low_stock_alert';
     });
 });
 
-it('recounts stock correctly', function() {
+it('recounts stock correctly', function(): void {
     Event::fake();
 
     $menu = Menu::factory()->create();
@@ -70,7 +72,7 @@ it('recounts stock correctly', function() {
     expect($stock->quantity)->toBe(500);
 });
 
-it('does not update stock when not tracked', function() {
+it('does not update stock when not tracked', function(): void {
     Event::fake();
 
     $stock = Stock::factory()->create([
@@ -84,7 +86,7 @@ it('does not update stock when not tracked', function() {
     Event::assertNotDispatched('admin.stock.updated');
 });
 
-it('checks stock correctly', function() {
+it('checks stock correctly', function(): void {
     $stock = Stock::factory()->create([
         'quantity' => 10,
         'is_tracked' => true,
@@ -98,7 +100,7 @@ it('checks stock correctly', function() {
     expect($stock->checkStock(5))->toBeTrue();
 });
 
-it('checks if stock is out of stock correctly', function() {
+it('checks if stock is out of stock correctly', function(): void {
     $stock = Stock::factory()->create([
         'quantity' => 0,
         'is_tracked' => true,
@@ -107,7 +109,7 @@ it('checks if stock is out of stock correctly', function() {
     expect($stock->outOfStock())->toBeTrue();
 });
 
-it('checks if stock has low stock correctly', function() {
+it('checks if stock has low stock correctly', function(): void {
     $stock = Stock::factory()->create([
         'quantity' => 5,
         'low_stock_threshold' => 10,
@@ -117,7 +119,7 @@ it('checks if stock has low stock correctly', function() {
     expect($stock->hasLowStock())->toBeTrue();
 });
 
-it('gets mail recipients correctly', function() {
+it('gets mail recipients correctly', function(): void {
     $location = Location::factory()->create();
     $stock = Stock::factory()->for($location)->create();
 
@@ -126,7 +128,7 @@ it('gets mail recipients correctly', function() {
     expect($recipients)->toBe([[$location->location_email, $location->location_name]]);
 });
 
-it('gets mail data correctly', function() {
+it('gets mail data correctly', function(): void {
     $menu = Menu::factory()->create(['menu_name' => 'Test Stock']);
     $location = Location::factory()->create(['location_name' => 'Test Location']);
     $stock = Stock::factory()->for($location)->create([
@@ -140,7 +142,7 @@ it('gets mail data correctly', function() {
         ->and($mailData['location_name'])->toBe('Test Location');
 });
 
-it('configures stock model correctly', function() {
+it('configures stock model correctly', function(): void {
     $stock = new Stock;
     expect($stock->getTable())->toBe('stocks')
         ->and($stock->getKeyName())->toBe('id')

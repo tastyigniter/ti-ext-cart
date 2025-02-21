@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Cart\Models\Category;
 
-it('loads categories page', function() {
+it('loads categories page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.categories'))
         ->assertOk();
 });
 
-it('loads create category page', function() {
+it('loads create category page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.categories', ['slug' => 'create']))
         ->assertOk();
 });
 
-it('loads edit category page', function() {
+it('loads edit category page', function(): void {
     $category = Category::factory()->create();
 
     actingAsSuperUser()
@@ -24,7 +26,7 @@ it('loads edit category page', function() {
         ->assertOk();
 });
 
-it('loads category preview page', function() {
+it('loads category preview page', function(): void {
     $category = Category::factory()->create();
 
     actingAsSuperUser()
@@ -32,7 +34,7 @@ it('loads category preview page', function() {
         ->assertOk();
 });
 
-it('creates category', function() {
+it('creates category', function(): void {
     actingAsSuperUser()
         ->post(route('igniter.cart.categories', ['slug' => 'create']), [
             'Category' => [
@@ -46,7 +48,7 @@ it('creates category', function() {
     expect(Category::where('name', 'Created Category')->exists())->toBeTrue();
 });
 
-it('updates category', function() {
+it('updates category', function(): void {
     $category = Category::factory()->create();
 
     actingAsSuperUser()
@@ -62,7 +64,7 @@ it('updates category', function() {
     expect(Category::find($category->getKey()))->name->toBe('Updated Category');
 });
 
-it('updates category fixes broken tree', function() {
+it('updates category fixes broken tree', function(): void {
     $category = Category::factory()->create();
     $categoryMock = mock(Category::class)->makePartial();
     $categoryMock->shouldReceive('isBroken')->andReturnTrue();
@@ -82,7 +84,7 @@ it('updates category fixes broken tree', function() {
     expect(Category::find($category->getKey()))->name->toBe('Updated Category');
 });
 
-it('deletes category', function() {
+it('deletes category', function(): void {
     $category = Category::factory()->create();
 
     actingAsSuperUser()

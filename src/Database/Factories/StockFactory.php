@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Database\Factories;
 
+use Igniter\Cart\Models\Stock;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\Local\Models\Location;
 
 class StockFactory extends Factory
 {
-    protected $model = \Igniter\Cart\Models\Stock::class;
+    protected $model = Stock::class;
 
     public function definition()
     {

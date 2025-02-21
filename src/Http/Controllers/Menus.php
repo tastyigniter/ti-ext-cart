@@ -1,21 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Controllers;
 
 use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
+use Igniter\Admin\Http\Actions\FormController;
+use Igniter\Admin\Http\Actions\ListController;
+use Igniter\Cart\Http\Requests\MenuRequest;
+use Igniter\Cart\Models\Menu;
+use Igniter\Local\Http\Actions\LocationAwareController;
 
 class Menus extends AdminController
 {
     public array $implement = [
-        \Igniter\Admin\Http\Actions\ListController::class,
-        \Igniter\Admin\Http\Actions\FormController::class,
-        \Igniter\Local\Http\Actions\LocationAwareController::class,
+        ListController::class,
+        FormController::class,
+        LocationAwareController::class,
     ];
 
     public array $listConfig = [
         'list' => [
-            'model' => \Igniter\Cart\Models\Menu::class,
+            'model' => Menu::class,
             'title' => 'lang:igniter.cart::default.menus.text_title',
             'emptyMessage' => 'lang:igniter.cart::default.menus.text_empty',
             'defaultSort' => ['menu_id', 'DESC'],
@@ -25,8 +32,8 @@ class Menus extends AdminController
 
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menus.text_form_name',
-        'model' => \Igniter\Cart\Models\Menu::class,
-        'request' => \Igniter\Cart\Http\Requests\MenuRequest::class,
+        'model' => Menu::class,
+        'request' => MenuRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
             'redirect' => 'menus/edit/{menu_id}',
@@ -51,7 +58,7 @@ class Menus extends AdminController
 
     protected null|string|array $requiredPermissions = 'Admin.Menus';
 
-    public static function getSlug()
+    public static function getSlug(): string
     {
         return 'menus';
     }
@@ -63,7 +70,7 @@ class Menus extends AdminController
         AdminMenu::setContext('menus', 'restaurant');
     }
 
-    public function listExtendQuery($query)
+    public function listExtendQuery($query): void
     {
         $query->with('stocks');
     }

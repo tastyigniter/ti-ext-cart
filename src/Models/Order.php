@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Models;
 
 use Carbon\Carbon;
@@ -12,15 +14,20 @@ use Igniter\Cart\Events\OrderCanceledEvent;
 use Igniter\Cart\Events\OrderPaymentProcessedEvent;
 use Igniter\Cart\Models\Concerns\HasInvoice;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
+use Igniter\Flame\Database\Builder;
 use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Local\Models\Concerns\Locationable;
+use Igniter\Local\Models\Location;
 use Igniter\Main\Classes\MainController;
+use Igniter\PayRegister\Models\Payment;
 use Igniter\PayRegister\Models\PaymentLog;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
+use Igniter\User\Models\Address;
 use Igniter\User\Models\Concerns\Assignable;
 use Igniter\User\Models\Concerns\HasCustomer;
+use Igniter\User\Models\Customer;
 
 /**
  * Order Model Class
@@ -64,9 +71,9 @@ use Igniter\User\Models\Concerns\HasCustomer;
  * @property-read mixed $order_type_name
  * @property-read string|null $status_color
  * @property-read string|null $status_name
- * @method static \Igniter\Flame\Database\Builder<static>|Order whereHasAutoAssignGroup()
- * @method static \Igniter\Flame\Database\Builder<static>|Order whereHasStatusInHistory(string|int $statusId)
- * @mixin \Igniter\Flame\Database\Model
+ * @method static Builder<static>|Order whereHasAutoAssignGroup()
+ * @method static Builder<static>|Order whereHasStatusInHistory(string | int $statusId)
+ * @mixin Model
  */
 class Order extends Model
 {
@@ -120,16 +127,16 @@ class Order extends Model
 
     public $relation = [
         'belongsTo' => [
-            'customer' => \Igniter\User\Models\Customer::class,
-            'location' => \Igniter\Local\Models\Location::class,
-            'address' => \Igniter\User\Models\Address::class,
-            'payment_method' => [\Igniter\PayRegister\Models\Payment::class, 'foreignKey' => 'payment', 'otherKey' => 'code'],
+            'customer' => Customer::class,
+            'location' => Location::class,
+            'address' => Address::class,
+            'payment_method' => [Payment::class, 'foreignKey' => 'payment', 'otherKey' => 'code'],
         ],
         'hasMany' => [
-            'payment_logs' => \Igniter\PayRegister\Models\PaymentLog::class,
-            'menus' => \Igniter\Cart\Models\OrderMenu::class,
-            'menu_options' => \Igniter\Cart\Models\OrderMenuOptionValue::class,
-            'totals' => \Igniter\Cart\Models\OrderTotal::class,
+            'payment_logs' => PaymentLog::class,
+            'menus' => OrderMenu::class,
+            'menu_options' => OrderMenuOptionValue::class,
+            'totals' => OrderTotal::class,
         ],
     ];
 
@@ -160,7 +167,7 @@ class Order extends Model
     // Accessors & Mutators
     //
 
-    public function getCustomerNameAttribute($value)
+    public function getCustomerNameAttribute($value): string
     {
         return $this->first_name.' '.$this->last_name;
     }
@@ -190,26 +197,26 @@ class Order extends Model
     // Helpers
     //
 
-    public function getUrl($page, $params = [])
+    public function getUrl(?string $page, $params = []): string
     {
         $defaults = [
             'id' => $this->getKey(),
             'hash' => $this->hash,
         ];
 
-        $params = !is_null($params)
-            ? array_merge($defaults, $params)
-            : [];
+        $params = is_null($params)
+            ? []
+            : array_merge($defaults, $params);
 
         return page_url($page, $params);
     }
 
-    public function isCompleted()
+    public function isCompleted(): bool
     {
         return $this->isPaymentProcessed() && $this->hasStatus(setting('completed_order_status'));
     }
 
-    public function isCanceled()
+    public function isCanceled(): bool
     {
         return $this->hasStatus(setting('canceled_order_status'));
     }
@@ -234,17 +241,17 @@ class Order extends Model
      *
      * @return bool TRUE on success, or FALSE on failure
      */
-    public function isPaymentProcessed()
+    public function isPaymentProcessed(): bool
     {
         return $this->processed && !empty($this->status_id);
     }
 
-    public function isDeliveryType()
+    public function isDeliveryType(): bool
     {
         return $this->order_type == static::DELIVERY;
     }
 
-    public function isCollectionType()
+    public function isCollectionType(): bool
     {
         return $this->order_type == static::COLLECTION;
     }
@@ -284,18 +291,16 @@ class Order extends Model
         return $this->processed;
     }
 
-    public function logPaymentAttempt($message, $isSuccess, $request = [], $response = [], $isRefundable = false)
+    public function logPaymentAttempt($message, $isSuccess, $request = [], $response = [], $isRefundable = false): void
     {
         PaymentLog::logAttempt($this, $message, $isSuccess, $request, $response, $isRefundable);
     }
 
-    public function updateOrderStatus($id, $options = [])
+    public function updateOrderStatus($id, $options = []): StatusHistory|false
     {
         $id = $id ?: $this->status_id ?: setting('default_order_status');
 
-        return $this->addStatusHistory(
-            Status::find($id), $options,
-        );
+        return $this->addStatusHistory(Status::find($id), $options);
     }
 
     public function getMorphClass()
