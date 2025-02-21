@@ -201,11 +201,6 @@ parameters:
 			path: src/Extension.php
 
 		-
-			message: "#^Result of static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getId\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Classes\\\\BaseWidget\\:\\:\\$previewMode\\.$#"
 			count: 1
 			path: src/FormWidgets/StockEditor.php
@@ -264,11 +259,6 @@ parameters:
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:getKey\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Middleware/CartMiddleware.php
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
