@@ -28,6 +28,7 @@ it('returns validation rules with prefixed keys', function(): void {
     $checkoutForm = new CheckoutForm($config);
 
     $checkoutForm->initialize();
+
     $rules = $checkoutForm->validationRules();
 
     expect($rules)->toHaveKey('fields.name')
@@ -39,6 +40,7 @@ it('returns validation messages with prefixed keys', function(): void {
     $checkoutForm = new CheckoutForm($config);
 
     $checkoutForm->initialize();
+
     $messages = $checkoutForm->validationMessages();
 
     expect($messages)->toHaveKey('fields.name.required')
@@ -50,6 +52,7 @@ it('returns validation attributes with prefixed keys', function(): void {
     $checkoutForm = new CheckoutForm($config);
 
     $checkoutForm->initialize();
+
     $attributes = $checkoutForm->validationAttributes();
 
     expect($attributes)->toHaveKey('fields.name')
@@ -83,6 +86,7 @@ it('does not define form fields when already defined', function(): void {
     ];
     $checkoutForm = new CheckoutForm($config);
     $checkoutForm->initialize();
+
     $allFields = $checkoutForm->getFields();
 
     expect($allFields)->toHaveKey('name')

@@ -15,6 +15,9 @@ return RectorConfig::configure()
     ->withSkip([
         ReturnTypeFromStrictNewArrayRector::class,
     ])
-    ->withTypeCoverageLevel(100)
-    ->withDeadCodeLevel(100)
-    ->withCodeQualityLevel(100);
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+    );

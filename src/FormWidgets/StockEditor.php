@@ -128,6 +128,7 @@ class StockEditor extends BaseFormWidget
         $widget = $this->makeWidget(Form::class, $widgetConfig);
 
         $widget->bindToController();
+
         $widget->previewMode = $this->previewMode;
 
         return $widget;
@@ -148,6 +149,7 @@ class StockEditor extends BaseFormWidget
 
         $widget = $this->makeFormWidget(DataTable::class, $field, $widgetConfig);
         $widget->bindToController();
+
         $widget->previewMode = $this->previewMode;
 
         return $widget;

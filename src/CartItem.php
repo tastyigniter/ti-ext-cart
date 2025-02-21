@@ -87,9 +87,11 @@ class CartItem implements Arrayable, Jsonable
         if ($id === 0 || strlen((string)$id) < 1) {
             throw new InvalidArgumentException('Please supply a valid cart item identifier.');
         }
+
         if (strlen($name) < 1) {
             throw new InvalidArgumentException('Please supply a valid cart item name.');
         }
+
         if ($price < 0) {
             throw new InvalidArgumentException('Please supply a valid cart item price.');
         }

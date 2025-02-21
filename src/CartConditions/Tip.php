@@ -57,7 +57,7 @@ class Tip extends CartCondition
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
 
         return [
-            ['value' => "+{$amount}", 'valuePrecision' => (int)$precision],
+            ['value' => '+' . $amount, 'valuePrecision' => (int)$precision],
         ];
     }
 }

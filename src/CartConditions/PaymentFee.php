@@ -19,7 +19,7 @@ class PaymentFee extends CartCondition
         $paymentFee = optional($this->paymentModel)->order_fee;
 
         return $paymentFeeType === 2
-            ? lang($this->label)." [$paymentFee%]"
+            ? lang($this->label).sprintf(' [%s%%]', $paymentFee)
             : lang($this->label);
     }
 
@@ -48,7 +48,7 @@ class PaymentFee extends CartCondition
         $paymentFee = optional($this->paymentModel)->order_fee ?? 0;
 
         return [
-            ['value' => "+{$paymentFee}".($paymentFeeType === 2 ? '%' : '')],
+            ['value' => '+' . $paymentFee.($paymentFeeType === 2 ? '%' : '')],
         ];
     }
 }

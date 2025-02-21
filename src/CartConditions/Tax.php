@@ -24,7 +24,7 @@ class Tax extends CartCondition
 
     public function getLabel(): string
     {
-        $label = $this->taxInclusive ? "{$this->taxRateLabel}% ".lang('igniter.cart::default.text_vat_included') : "{$this->taxRateLabel}%";
+        $label = $this->taxInclusive ? $this->taxRateLabel . '% '.lang('igniter.cart::default.text_vat_included') : $this->taxRateLabel . '%';
 
         return sprintf(lang($this->label), $label);
     }
@@ -33,7 +33,8 @@ class Tax extends CartCondition
     {
         $this->taxMode = (bool)setting('tax_mode', 1);
         $this->taxInclusive = !((bool)setting('tax_menu_price', 1));
-        $this->taxRate = $this->taxRateLabel = (int)setting('tax_percentage', 0);
+        $this->taxRate = (int)setting('tax_percentage', 0);
+        $this->taxRateLabel = (int)setting('tax_percentage', 0);
         if ($this->taxInclusive) {
             $this->taxRate /= (100 + $this->taxRate) / 100;
         }
@@ -53,7 +54,7 @@ class Tax extends CartCondition
 
         return [
             [
-                'value' => "+{$this->taxRate}%",
+                'value' => sprintf('+%s%%', $this->taxRate),
                 'inclusive' => $this->taxInclusive,
                 'valuePrecision' => (int)$precision,
             ],

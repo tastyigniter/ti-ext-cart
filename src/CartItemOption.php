@@ -38,6 +38,7 @@ class CartItemOption implements Arrayable, Jsonable
         if ($id === 0 || strlen((string)$id) < 1) {
             throw new InvalidArgumentException('Please supply a valid cart item option identifier.');
         }
+
         if (strlen($name) < 1) {
             throw new InvalidArgumentException('Please supply a valid cart item option name.');
         }

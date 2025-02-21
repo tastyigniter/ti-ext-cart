@@ -199,7 +199,8 @@ it('destroys cart session on logout correctly', function(): void {
 });
 
 it('adds tax info to paypalexpress request parameters', function(): void {
-    $fields = $data = [];
+    $fields = [];
+    $data = [];
     $payment = Payment::firstWhere('code', 'paypalexpress');
     $order = Order::factory()->create();
     $order->totals()->create([
@@ -300,6 +301,7 @@ it('does not add orders tab to customer edit form when model is invalid', functi
     $model = mock(Model::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $model, 'context' => 'edit']);
     $form->bindToController();
+
     $fields = $form->getFields();
 
     expect($fields)->not->toHaveKey('orders');
@@ -309,6 +311,7 @@ it('adds orders tab to customer edit form', function(): void {
     $customer = mock(Customer::class)->makePartial();
     $form = new Form(resolve(Customers::class), ['model' => $customer, 'context' => 'edit']);
     $form->bindToController();
+
     $fields = $form->getFields();
 
     expect($fields['orders']->tab)->toBe('lang:igniter.cart::default.text_tab_orders');

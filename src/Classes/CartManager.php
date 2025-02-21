@@ -71,7 +71,7 @@ class CartManager
     {
         try {
             return $this->cart->get($rowId);
-        } catch (InvalidRowIDException $ex) {
+        } catch (InvalidRowIDException $invalidRowIDException) {
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_item_found'));
         }
     }

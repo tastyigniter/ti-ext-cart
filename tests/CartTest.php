@@ -462,6 +462,7 @@ it('loads condition and sets priority based on last condition', function(): void
 
     $this->cart->loadCondition($condition1);
     $this->cart->loadCondition($condition2);
+
     $conditions = $this->cart->conditionsWithoutApplied();
 
     expect($conditions->first()->priority)->toBe(2)

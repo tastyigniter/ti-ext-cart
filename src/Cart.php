@@ -172,7 +172,7 @@ class Cart
         $content = $this->getContent();
 
         if (!$content->has($rowId)) {
-            throw new InvalidRowIDException("The cart does not contain rowId {$rowId}.");
+            throw new InvalidRowIDException(sprintf('The cart does not contain rowId %s.', $rowId));
         }
 
         return $content->get($rowId);
@@ -246,7 +246,7 @@ class Cart
     public function associate(string $rowId, mixed $model): void
     {
         if (is_string($model) && !class_exists($model)) {
-            throw new UnknownModelException("The supplied model {$model} does not exist.");
+            throw new UnknownModelException(sprintf('The supplied model %s does not exist.', $model));
         }
 
         $cartItem = $this->get($rowId);
