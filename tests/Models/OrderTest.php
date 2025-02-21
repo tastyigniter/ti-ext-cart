@@ -157,7 +157,7 @@ it('checks if order is not canceled', function(): void {
 it('returns false when order cancellation timeout is not set', function(): void {
     $order = Order::factory()->create();
     $location = mock(Location::class)->makePartial();
-    $order->location = $order->location;
+    $order->location = $location;
     $location->shouldReceive('getOrderCancellationTimeout')->andReturn(null);
 
     expect($order->isCancelable())->toBeFalse();
@@ -169,7 +169,7 @@ it('returns false when order datetime is not in the future', function(): void {
         'order_time' => Carbon::now()->subDay()->subMinutes(20)->toTimeString(),
     ]);
     $location = mock(Location::class)->makePartial();
-    $order->location = $order->location;
+    $order->location = $location;
     $location->shouldReceive('getOrderCancellationTimeout')->andReturn(60);
 
     expect($order->isCancelable())->toBeFalse();
@@ -181,7 +181,7 @@ it('returns true when remaining time is greater than cancellation timeout', func
         'order_time' => Carbon::now()->addMinutes(40)->toTimeString(),
     ]);
     $location = mock(Location::class)->makePartial();
-    $order->location = $order->location;
+    $order->location = $location;
     $location->shouldReceive('getOrderCancellationTimeout')->andReturn(30);
 
     expect($order->isCancelable())->toBeTrue();
