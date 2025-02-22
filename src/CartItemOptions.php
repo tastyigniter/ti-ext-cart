@@ -10,7 +10,7 @@ class CartItemOptions extends Collection
 {
     public function subtotal()
     {
-        return $this->sum(function(CartItemOption $option) {
+        return $this->sum(function(CartItemOption $option): float|int {
             return $option->subtotal();
         });
     }

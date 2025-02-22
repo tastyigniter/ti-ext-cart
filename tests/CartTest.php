@@ -120,7 +120,7 @@ it('adds item with options to the cart correctly', function(): void {
 });
 
 it('adds item with conditions to the cart correctly', function(): void {
-    $condition = new class(['name' => 'VAT', 'value' => '10%',]) extends CartCondition
+    $condition = new class(['name' => 'VAT', 'value' => '10%']) extends CartCondition
     {
         use ActsAsItemable {
             ActsAsItemable::isApplicableTo as parentIsApplicableTo;
