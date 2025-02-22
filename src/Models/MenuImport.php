@@ -40,7 +40,7 @@ class MenuImport extends ImportModel
                     continue;
                 }
 
-                $menuItem = Menu::make();
+                $menuItem = new Menu;
                 if ($this->update_existing) {
                     $menuItem = $this->findDuplicateMenuItem($data) ?: $menuItem;
                 }
@@ -89,6 +89,7 @@ class MenuImport extends ImportModel
             if (isset($this->categoryNameCache[$name])) {
                 $ids[] = $this->categoryNameCache[$name];
             } else {
+                /** @var Category $newCategory */
                 $newCategory = Category::firstOrCreate(['name' => $name]);
                 $ids[] = $this->categoryNameCache[$name] = $newCategory->category_id;
             }

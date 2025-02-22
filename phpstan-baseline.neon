@@ -6,66 +6,6 @@ parameters:
 			path: src/AutomationRules/Conditions/OrderAttribute.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Events\\\\Dispatcher\\:\\:fire\\(\\)\\.$#"
-			count: 2
-			path: src/Cart.php
-
-		-
-			message: "#^Cannot call method forget\\(\\) on array\\.$#"
-			count: 2
-			path: src/Cart.php
-
-		-
-			message: "#^Cannot call method has\\(\\) on array\\.$#"
-			count: 1
-			path: src/Cart.php
-
-		-
-			message: "#^Cannot call method put\\(\\) on array\\.$#"
-			count: 1
-			path: src/Cart.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$order_fee\\.$#"
-			count: 2
-			path: src/CartConditions/PaymentFee.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$order_fee_type\\.$#"
-			count: 2
-			path: src/CartConditions/PaymentFee.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:whereCode\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/PaymentFee.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
-			count: 2
-			path: src/CartConditions/Tip.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Optional\\:\\:apply\\(\\)\\.$#"
-			count: 1
-			path: src/CartItem.php
-
-		-
-			message: "#^Cannot call method filter\\(\\) on array\\.$#"
-			count: 1
-			path: src/CartItem.php
-
-		-
-			message: "#^Cannot call method subtotal\\(\\) on array\\.$#"
-			count: 1
-			path: src/CartItem.php
-
-		-
-			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
-			count: 2
-			path: src/CartItem.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:futureOrderDays\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/AbstractOrderType.php
@@ -126,26 +66,6 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Optional\\:\\:getLabel\\(\\)\\.$#"
-			count: 2
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:whereIsEnabled\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Cannot call method each\\(\\) on array\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:\\$order_total\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:allowGuestOrder\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
@@ -166,39 +86,9 @@ parameters:
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\PayRegister\\\\Classes\\\\BasePaymentGateway\\|Igniter\\\\PayRegister\\\\Models\\\\Payment\\:\\:payFromPaymentProfile\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Optional\\:\\:isApplied\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:whereHash\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Models\\\\Address\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$options$#"
 			count: 3
 			path: src/Contracts/Buyable.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
-			count: 4
-			path: src/Extension.php
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Admin\\\\Classes\\\\BaseWidget\\:\\:\\$previewMode\\.$#"
@@ -231,47 +121,12 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\StockHistory\\:\\:whereIn\\(\\)\\.$#"
-			count: 1
-			path: src/FormWidgets/StockEditor.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:fixTree\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Categories.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:isBroken\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Categories.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Http\\\\Controllers\\\\Orders\\:\\:formFindModelObject\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/Orders.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Orders.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Orders.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\CartSettings\\:\\:get\\(\\)\\.$#"
-			count: 3
-			path: src/Models/CartSettings.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:menus\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Category.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:whereIsEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Category.php
 
@@ -284,11 +139,6 @@ parameters:
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Ingredient\\:\\:menus\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Ingredient.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Mealtime\\:\\:whereIsEnabled\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Mealtime.php
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$ingredients\\.$#"
@@ -351,11 +201,6 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<static\\(Igniter\\\\Cart\\\\Models\\\\Menu\\)\\>\\:\\:whereIsEnabled\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$id$#"
 			count: 1
 			path: src/Models/Menu.php
@@ -371,21 +216,6 @@ parameters:
 			path: src/Models/MenuImport.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Category\\:\\:firstOrCreate\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuImport.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuImport.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:where\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuImport.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_values\\.$#"
 			count: 1
 			path: src/Models/MenuItemOption.php
@@ -393,16 +223,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$option\\.$#"
 			count: 3
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$display_type\\.$#"
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$option_name\\.$#"
-			count: 1
 			path: src/Models/MenuItemOption.php
 
 		-
@@ -418,16 +238,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:option_values\\(\\)\\.$#"
 			count: 3
-			path: src/Models/MenuOption.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOption\\:\\:selectRaw\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuOption.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:orderBy\\(\\)\\.$#"
-			count: 1
 			path: src/Models/MenuOption.php
 
 		-
@@ -447,16 +257,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:stocks\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuOptionValue.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Ingredient\\:\\:dropdown\\(\\)\\.$#"
-			count: 1
-			path: src/Models/MenuOptionValue.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuOptionValue\\:\\:dropdown\\(\\)\\.$#"
 			count: 1
 			path: src/Models/MenuOptionValue.php
 
@@ -546,37 +346,12 @@ parameters:
 			path: src/Models/Order.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:pluckDates\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:totals\\(\\)\\.$#"
 			count: 4
 			path: src/Models/Order.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Carbon\\:\\:diffInRealMinutes\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Support\\\\Optional\\:\\:getLabel\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Models\\\\Status\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\:\\:find\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
@@ -594,21 +369,6 @@ parameters:
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\OrderMenuOptionValue\\:\\:\\$menu_option\\.$#"
 			count: 1
 			path: src/Models/OrderMenuOptionValue.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:whereHasOrDoesntHaveLocation\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Scopes/MenuScope.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:whereSlug\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Scopes/MenuScope.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:whereBetweenOrderDateTime\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Scopes/OrderScope.php
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Stock\\:\\:\\$location\\.$#"
@@ -632,11 +392,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Igniter\\\\Flame\\\\Database\\\\Model\\:\\:\\$location\\.$#"
-			count: 1
-			path: src/Notifications/OrderCreatedNotification.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Igniter\\\\User\\\\Models\\\\User\\>\\:\\:isEnabled\\(\\)\\.$#"
 			count: 1
 			path: src/Notifications/OrderCreatedNotification.php
 

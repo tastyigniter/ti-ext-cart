@@ -71,7 +71,7 @@ class CartManager
     {
         try {
             return $this->cart->get($rowId);
-        } catch (InvalidRowIDException $invalidRowIDException) {
+        } catch (InvalidRowIDException) {
             throw new ApplicationException(lang('igniter.cart::default.alert_no_menu_item_found'));
         }
     }
@@ -121,9 +121,9 @@ class CartManager
 
         $this->validateOrderTime();
 
-        $cartItem = null;
         $menuItem = $menuId ? $this->findMenuItem($menuId) : null;
-        if ($rowId && $cartItem = $this->getCartItem($rowId)) {
+        $cartItem = $rowId ? $this->getCartItem($rowId) : null;
+        if ($cartItem instanceof CartItem) {
             $menuItem = $cartItem->model;
         }
 
@@ -189,6 +189,7 @@ class CartManager
 
     public function applyCouponCondition($code)
     {
+        /** @var null|array|CartCondition $condition */
         $condition = Event::dispatch('igniter.cart.beforeApplyCoupon', [$code], true);
         if (!is_array($condition) && $condition instanceof CartCondition) {
             return $condition;

@@ -1,8 +1,9 @@
 includes:
+    - ./vendor/larastan/larastan/extension.neon
     - phpstan-baseline.neon
 
 parameters:
-    level: 2
+    level: 5
     paths:
         - src/
         - config/
@@ -13,3 +14,4 @@ parameters:
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php
 #    checkMissingIterableValueType: false
+#    treatPhpDocTypesAsCertain: false

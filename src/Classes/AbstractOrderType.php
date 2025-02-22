@@ -10,18 +10,15 @@ use Igniter\Local\Models\Location;
 
 abstract class AbstractOrderType implements OrderTypeInterface
 {
-    public const ASAP_ONLY = 1;
+    public const int ASAP_ONLY = 1;
 
-    public const LATER_ONLY = 2;
+    public const int LATER_ONLY = 2;
 
-    protected $code;
+    protected ?string $code = null;
 
-    protected $name;
+    protected ?string $name = null;
 
-    /**
-     * @var WorkingSchedule
-     */
-    protected $schedule;
+    protected ?WorkingSchedule $schedule = null;
 
     public function __construct(protected Location $location, protected array $config)
     {
@@ -75,7 +72,7 @@ abstract class AbstractOrderType implements OrderTypeInterface
         }
 
         $schedule = $this->location->newWorkingSchedule(
-            $this->code, [$this->getMinimumFutureDays(), $this->getFutureDays()]
+            $this->code, [$this->getMinimumFutureDays(), $this->getFutureDays()],
         );
 
         return $this->schedule = $schedule;

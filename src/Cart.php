@@ -34,7 +34,7 @@ class Cart
     protected string $instance = self::DEFAULT_INSTANCE;
 
     /**
-     * @var CartConditions Instance of the cart condition.
+     * @var ?CartConditions Instance of the cart condition.
      */
     protected $conditions;
 
@@ -283,10 +283,8 @@ class Cart
 
     /**
      * Get condition applied on the cart by its name
-     *
-     * @return CartCondition
      */
-    public function getCondition($name)
+    public function getCondition($name): ?CartCondition
     {
         return $this->getConditions()->get($name);
     }

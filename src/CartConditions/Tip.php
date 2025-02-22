@@ -19,7 +19,7 @@ class Tip extends CartCondition
     public function onLoad(): void
     {
         $this->tippingEnabled = (bool)CartSettings::get('enable_tipping');
-        $this->tipValueType = CartSettings::get('tip_value_type', 'F');
+        $this->tipValueType = CartSettings::get('tip_value_type', 'F'); // @phpstan-ignore-line arguments.count
     }
 
     public function getLabel(): string
@@ -57,7 +57,7 @@ class Tip extends CartCondition
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
 
         return [
-            ['value' => '+' . $amount, 'valuePrecision' => (int)$precision],
+            ['value' => '+'.$amount, 'valuePrecision' => (int)$precision],
         ];
     }
 }

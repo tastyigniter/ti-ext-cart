@@ -18,19 +18,20 @@ trait ManagesOrderItems
     public function subtractStock(): void
     {
         $this->getOrderMenus()->each(function($orderMenu) {
-            if (!$menu = Menu::find($orderMenu->menu_id)) {
+            /** @var null|Menu $menu */
+            $menu = Menu::find($orderMenu->menu_id);
+            if (!$menu) {
                 return true;
             }
 
-            $menu->getStockByLocation($this->location)
-                ?->updateStockSold($this->getKey(), $orderMenu->quantity);
+            $menu->getStockByLocation($this->location)->updateStockSold($this->getKey(), $orderMenu->quantity);
 
             $this->menu_options
                 ->where('order_menu_id', $orderMenu->order_menu_id)
                 ->each(function($orderMenuOption) {
-                    if (!$menuItemOptionValue = MenuItemOptionValue::find(
-                        $orderMenuOption->menu_option_value_id,
-                    )) {
+                    /** @var null|MenuItemOptionValue $menuItemOptionValue */
+                    $menuItemOptionValue = MenuItemOptionValue::find($orderMenuOption->menu_option_value_id);
+                    if (!$menuItemOptionValue) {
                         return true;
                     }
 
@@ -38,8 +39,9 @@ trait ManagesOrderItems
                         return true;
                     }
 
-                    $menuOptionValue->getStockByLocation($this->location)
-                        ?->updateStockSold($this->getKey(), $orderMenuOption->quantity);
+                    $menuOptionValue->getStockByLocation($this->location)->updateStockSold(
+                        $this->getKey(), $orderMenuOption->quantity,
+                    );
                 });
         });
     }

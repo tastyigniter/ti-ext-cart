@@ -75,7 +75,7 @@ class RegistersDashboardCards
 
         $callback($query);
 
-        return currency_format($query->sum('order_total') ?? 0);
+        return currency_format($query->sum('order_total'));
     }
 
     /**
@@ -91,7 +91,7 @@ class RegistersDashboardCards
 
         $callback($query);
 
-        return currency_format($query->sum('order_total') ?? 0);
+        return currency_format($query->sum('order_total'));
     }
 
     /**
@@ -107,7 +107,7 @@ class RegistersDashboardCards
 
         $callback($query);
 
-        return currency_format($query->sum('order_total') ?? 0);
+        return currency_format($query->sum('order_total'));
     }
 
     /**
@@ -149,7 +149,7 @@ class RegistersDashboardCards
 
         $callback($query);
 
-        return currency_format($query->sum('order_total') ?? 0);
+        return currency_format($query->sum('order_total'));
     }
 
     /**
@@ -166,6 +166,6 @@ class RegistersDashboardCards
 
         $callback($query);
 
-        return currency_format($query->sum('order_total') ?? 0);
+        return currency_format($query->sum('order_total'));
     }
 }

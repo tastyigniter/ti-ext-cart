@@ -51,12 +51,10 @@ class CartItemOption implements Arrayable, Jsonable
     /**
      * Returns the subtotal.
      * Subtotal is price for whole CartItem with options
-     *
-     * @return string
      */
-    public function subtotal()
+    public function subtotal(): float|int
     {
-        return $this->values->reduce(function($subtotal, CartItemOptionValue $optionValue): float|int|array {
+        return $this->values->reduce(function($subtotal, CartItemOptionValue $optionValue): float|int {
             return $subtotal + $optionValue->subtotal();
         }, 0);
     }

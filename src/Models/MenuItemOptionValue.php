@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property bool|null $is_default
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property null|MenuOptionValue $option_value
  * @property-read mixed $name
  * @property-read mixed $price
  * @mixin Model

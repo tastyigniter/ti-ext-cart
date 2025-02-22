@@ -28,6 +28,7 @@ use Igniter\User\Models\Address;
 use Igniter\User\Models\Concerns\Assignable;
 use Igniter\User\Models\Concerns\HasCustomer;
 use Igniter\User\Models\Customer;
+use Illuminate\Support\Collection;
 
 /**
  * Order Model Class
@@ -71,6 +72,7 @@ use Igniter\User\Models\Customer;
  * @property-read mixed $order_type_name
  * @property-read string|null $status_color
  * @property-read string|null $status_name
+ * @method static Builder<static>|Order whereIsEnabled()
  * @method static Builder<static>|Order whereHasAutoAssignGroup()
  * @method static Builder<static>|Order whereHasStatusInHistory(string | int $statusId)
  * @mixin Model
@@ -87,9 +89,9 @@ class Order extends Model
     use ManagesOrderItems;
     use SendsMailTemplate;
 
-    const DELIVERY = 'delivery';
+    public const string DELIVERY = 'delivery';
 
-    const COLLECTION = 'collection';
+    public const string COLLECTION = 'collection';
 
     /**
      * @var string The database table name
@@ -258,10 +260,8 @@ class Order extends Model
 
     /**
      * Return the dates of all orders
-     *
-     * @return array
      */
-    public function getOrderDates()
+    public function getOrderDates(): Collection
     {
         return $this->pluckDates('created_at');
     }
@@ -282,7 +282,7 @@ class Order extends Model
         if (!$this->processed) {
             OrderBeforePaymentProcessedEvent::dispatch($this);
 
-            $this->processed = 1;
+            $this->processed = true;
             $this->save();
 
             OrderPaymentProcessedEvent::dispatch($this);
@@ -300,7 +300,9 @@ class Order extends Model
     {
         $id = $id ?: $this->status_id ?: setting('default_order_status');
 
-        return $this->addStatusHistory(Status::find($id), $options);
+        /** @var null|Status $status */
+        $status = Status::find($id);
+        return $this->addStatusHistory($status, $options);
     }
 
     public function getMorphClass()
@@ -427,7 +429,7 @@ class Order extends Model
             $data['location_address'] = format_address($model->location->getAddress());
         }
 
-        /** @var StatusHistory $statusHistory */
+        /** @var null|StatusHistory $statusHistory */
         $statusHistory = StatusHistory::applyRelated($model)->whereStatusIsLatest($model->status_id)->first();
         $data['status_name'] = $statusHistory?->status?->status_name;
         $data['status_comment'] = $statusHistory?->comment;

@@ -10,16 +10,19 @@ use LogicException;
 class CartConditionManager
 {
     /**
-     * @var array An array of registered conditions.
+     * @var null|array<string, array> An array of registered conditions.
      */
-    protected $registeredConditions;
-
-    protected $registeredConditionHints = [];
+    protected ?array $registeredConditions = null;
 
     /**
-     * @var array Cache of cart conditions registration callbacks.
+     * @var array<string, string> An array of registered condition hints.
      */
-    protected $registeredCallbacks = [];
+    protected array $registeredConditionHints = [];
+
+    /**
+     * @var array<int, callable> Cache of cart conditions registration callbacks.
+     */
+    protected array $registeredCallbacks = [];
 
     public function makeCondition($className, array $config = [])
     {
@@ -34,7 +37,7 @@ class CartConditionManager
         return new $className(array_merge($this->registeredConditions[$className], $config));
     }
 
-    public function listRegisteredConditions()
+    public function listRegisteredConditions(): ?array
     {
         if ($this->registeredConditions === null) {
             $this->loadRegisteredConditions();

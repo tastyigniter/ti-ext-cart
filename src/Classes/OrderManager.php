@@ -11,7 +11,6 @@ use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Geolite\Facades\Geocoder;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Local\Classes\Location;
-use Igniter\PayRegister\Classes\BasePaymentGateway;
 use Igniter\PayRegister\Models\Payment;
 use Igniter\System\Traits\SessionMaker;
 use Igniter\User\Facades\Auth;
@@ -26,22 +25,13 @@ class OrderManager
 {
     use SessionMaker;
 
-    protected $sessionKey = 'igniter.checkout.order';
+    protected string $sessionKey = 'igniter.checkout.order';
 
-    /**
-     * @var Cart
-     */
-    protected $cart;
+    protected Cart $cart;
 
-    /**
-     * @var Location
-     */
-    protected $location;
+    protected Location $location;
 
-    /**
-     * @var Customer
-     */
-    protected $customer;
+    protected ?Customer $customer = null;
 
     public function __construct()
     {
@@ -66,30 +56,28 @@ class OrderManager
 
     public function getCustomerId()
     {
-        if (!$this->customer) {
+        if (!$this->customer instanceof Customer) {
             return null;
         }
 
         return $this->customer->getKey();
     }
 
-    public function getOrder()
+    public function getOrder(): Order
     {
         return $this->loadOrder();
     }
 
-    /**
-     * @return Order
-     */
-    public function loadOrder()
+    public function loadOrder(): Order
     {
         $customerId = $this->customer->customer_id ?? null;
 
+        /** @var ?Order $order */
         $order = Order::find($this->getCurrentOrderId());
 
         // Only users can view their own orders
         if (!$order || $order->customer_id != $customerId) {
-            $order = Order::make($this->getCustomerAttributes());
+            $order = new Order($this->getCustomerAttributes());
         }
 
         if (!$order->isPaymentProcessed()) {
@@ -126,10 +114,7 @@ class OrderManager
         return $this->getPaymentGateways()->where('is_default', true)->first();
     }
 
-    /**
-     * @return Payment|BasePaymentGateway
-     */
-    public function getPayment($code)
+    public function getPayment($code): null|Payment
     {
         return $this->getPaymentGateways()->where('code', $code)->first();
     }
@@ -169,7 +154,7 @@ class OrderManager
             'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
         ])));
 
-        if (!$collection || $collection->isEmpty()) {
+        if ($collection->isEmpty()) {
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
         }
 
@@ -200,7 +185,7 @@ class OrderManager
     {
         Event::dispatch('igniter.checkout.beforeSaveOrder', [$order, $data]);
 
-        if ($this->customer) {
+        if ($this->customer instanceof Customer) {
             $data['email'] = $this->customer->email;
         }
 
@@ -280,7 +265,7 @@ class OrderManager
 
     public function applyRequiredAttributes($order): void
     {
-        $order->customer_id = $this->customer ? $this->customer->getKey() : null;
+        $order->customer_id = $this->customer instanceof Customer ? $this->customer->getKey() : null;
         $order->location_id = $this->location->current()->getKey();
         $order->order_type = $this->location->orderType();
 
@@ -375,9 +360,7 @@ class OrderManager
 
     protected function applyOrderDateTime($order)
     {
-        if (!$orderDateTime = $this->location->orderDateTime()) {
-            return;
-        }
+        $orderDateTime = $this->location->orderDateTime();
 
         if ($isAsapTime = $this->location->orderTimeIsAsap()) {
             $orderDateTime->addMinutes($this->location->orderLeadTime());
@@ -441,7 +424,7 @@ class OrderManager
         return $this->getSession('paymentCode') ?: $this->getDefaultPayment()?->code;
     }
 
-    public function applyCurrentPaymentFee($code)
+    public function applyCurrentPaymentFee($code): ?CartCondition
     {
         $this->setCurrentPaymentCode($code);
 

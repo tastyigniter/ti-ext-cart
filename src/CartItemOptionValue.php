@@ -62,10 +62,8 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * Returns the formatted price of this cart item option value
-     *
-     * @return string
      */
-    public function price()
+    public function price(): float
     {
         return $this->price;
     }

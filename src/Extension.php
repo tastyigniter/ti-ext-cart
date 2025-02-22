@@ -341,15 +341,13 @@ class Extension extends BaseExtension
     protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function(): void {
-            if (CartSettings::get('abandoned_cart')
-                && Facades\Cart::content()->isEmpty()
-            ) {
+            if (CartSettings::instance()->get('abandoned_cart') && Facades\Cart::content()->isEmpty()) {
                 Facades\Cart::restore(Auth::getId());
             }
         });
 
         Event::listen('igniter.user.logout', function(): void {
-            if (CartSettings::get('destroy_on_logout')) {
+            if (CartSettings::instance()->get('destroy_on_logout')) {
                 Facades\Cart::destroy();
             }
         });

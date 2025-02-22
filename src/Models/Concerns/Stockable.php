@@ -61,7 +61,7 @@ trait Stockable
         return $this->stocks;
     }
 
-    public function getStockByLocation($location)
+    public function getStockByLocation($location): Stock
     {
         return $this->stocks()->firstOrCreate([
             'location_id' => is_numeric($location) ? $location : $location->getKey(),

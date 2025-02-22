@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property-read mixed $stock_qty
  * @property-read Collection<int, Media> $media
  * @property-read int|null $media_count
+ * @method static null|Menu find(int|string $id)
  * @mixin Model
  */
 class Menu extends Model implements Buyable

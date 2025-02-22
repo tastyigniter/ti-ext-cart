@@ -9,7 +9,9 @@ use Igniter\Flame\Database\Model;
 use Igniter\System\Actions\SettingsModel;
 
 /**
- * @method static CartSettings instance()
+ * @method static mixed get(string $key, mixed $default = null)
+ * @method static bool set(string|array $key, mixed $value)
+ * @mixin SettingsModel
  */
 class CartSettings extends Model
 {
@@ -47,8 +49,8 @@ class CartSettings extends Model
     {
         $result = [];
 
-        $tipValueType = self::get('tip_value_type', 'F');
-        $amounts = (array)self::get('tip_amounts', []);
+        $tipValueType = self::get('tip_value_type', 'F'); // @phpstan-ignore-line arguments.count
+        $amounts = (array)self::get('tip_amounts', []); // @phpstan-ignore-line arguments.count
 
         $amounts = sort_array($amounts, 'priority');
 

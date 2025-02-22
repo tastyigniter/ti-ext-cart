@@ -344,7 +344,8 @@ it('applies required attributes does not apply order date time', function(): voi
     $location = Mockery::mock(Location::class);
     $location->shouldReceive('current->getKey')->andReturn(1);
     $location->shouldReceive('current->listAvailablePayments')->andReturn(collect());
-    $location->shouldReceive('orderDateTime')->andReturnNull();
+    $location->shouldReceive('orderDateTime')->andReturn($order->order_datetime);
+    $location->shouldReceive('orderTimeIsAsap')->andReturnFalse();
     $location->shouldReceive('orderType')->andReturnNull();
 
     $this->manager->setLocation($location);

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models\Concerns;
 
-use Carbon\Carbon;
 use Igniter\System\Models\Settings;
+use Illuminate\Support\Carbon;
 
 trait HasInvoice
 {
@@ -29,7 +29,7 @@ trait HasInvoice
 
     public function getInvoiceNoAttribute(): ?string
     {
-        if ((string) $this->invoice_prefix === '') {
+        if ((string)$this->invoice_prefix === '') {
             return null;
         }
 

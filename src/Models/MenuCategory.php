@@ -20,9 +20,6 @@ class MenuCategory extends Model
      */
     protected $table = 'menu_categories';
 
-    /**
-     * @var string The database table primary key
-     */
     public $incrementing = false;
 
     protected $casts = [

@@ -90,7 +90,9 @@ class Orders extends AdminController
 
     public function index_onUpdateStatus(): RedirectResponse
     {
+        /** @var null|Order $model */
         $model = Order::find((int)post('recordId'));
+        /** @var null|Status $status */
         $status = Status::find((int)post('statusId'));
         if ($model && $status) {
             $model->addStatusHistory($status);

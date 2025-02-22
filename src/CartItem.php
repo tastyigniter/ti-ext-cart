@@ -60,30 +60,30 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * The options for this cart item.
-     *
-     * @var array
      */
-    public $options;
+    public CartItemOptions $options;
 
     /**
      * The conditions for this cart item.
-     *
-     * @var array
      */
-    public $conditions;
+    public CartItemConditions $conditions;
 
     /**
      * The FQN of the associated model.
-     *
-     * @var string|null
      */
-    protected $associatedModel;
+    protected string|null $associatedModel = null;
 
     /**
      * CartItem constructor.
      */
-    public function __construct(int|string $id, string $name, float $price, array $options = [], ?string $comment = null, array $conditions = [])
-    {
+    public function __construct(
+        int|string $id,
+        string $name,
+        float $price,
+        array $options = [],
+        ?string $comment = null,
+        array|CartItemConditions $conditions = [],
+    ) {
         if ($id === 0 || strlen((string)$id) < 1) {
             throw new InvalidArgumentException('Please supply a valid cart item identifier.');
         }
@@ -156,7 +156,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function hasConditions(): int
     {
-        return count($this->conditions ?? []);
+        return $this->conditions->count();
     }
 
     public function clearConditions(): static
@@ -168,7 +168,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function getModel()
     {
-        return is_null($this->associatedModel) ? null : with(new $this->associatedModel)->find($this->id);
+        return is_null($this->associatedModel) ? null : (new $this->associatedModel)->find($this->id);
     }
 
     /**
@@ -242,7 +242,7 @@ class CartItem implements Arrayable, Jsonable
         }
 
         if ($attribute === 'model' && !is_null($this->associatedModel)) {
-            return with(new $this->associatedModel)->find($this->id);
+            return (new $this->associatedModel)->find($this->id);
         }
 
         return null;
