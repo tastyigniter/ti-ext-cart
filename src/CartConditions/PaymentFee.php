@@ -48,7 +48,7 @@ class PaymentFee extends CartCondition
         $paymentFee = optional($this->paymentModel)->order_fee ?? 0;
 
         return [
-            ['value' => '+' . $paymentFee.($paymentFeeType === 2 ? '%' : '')],
+            ['value' => '+'.$paymentFee.($paymentFeeType === 2 ? '%' : '')],
         ];
     }
 }

@@ -71,7 +71,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * The FQN of the associated model.
      */
-    protected string|null $associatedModel = null;
+    protected ?string $associatedModel = null;
 
     /**
      * CartItem constructor.

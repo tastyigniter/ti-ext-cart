@@ -77,7 +77,7 @@ it('terminates with abandoned cart but unauthenticated user', function(): void {
 it('terminates with abandoned cart, authenticated user but empty cart', function(): void {
     CartSettings::set('abandoned_cart', true);
     Auth::shouldReceive('check')->andReturn(true);
-    Cart::shouldReceive('content')->andReturn(new CartContent());
+    Cart::shouldReceive('content')->andReturn(new CartContent);
     Cart::expects('store')->never();
 
     $middleware = new CartMiddleware;

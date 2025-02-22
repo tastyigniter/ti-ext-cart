@@ -229,8 +229,6 @@ abstract class CartCondition implements Arrayable, Jsonable
 
     /**
      * Set the order in which this condition is applied.
-     *
-     * @param int $priority
      */
     public function setPriority(?int $priority = 999): void
     {

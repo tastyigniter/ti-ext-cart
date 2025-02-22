@@ -302,6 +302,7 @@ class Order extends Model
 
         /** @var null|Status $status */
         $status = Status::find($id);
+
         return $this->addStatusHistory($status, $options);
     }
 

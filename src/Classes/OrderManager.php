@@ -114,7 +114,7 @@ class OrderManager
         return $this->getPaymentGateways()->where('is_default', true)->first();
     }
 
-    public function getPayment($code): null|Payment
+    public function getPayment($code): ?Payment
     {
         return $this->getPaymentGateways()->where('code', $code)->first();
     }

@@ -379,7 +379,7 @@ class Cart
         }
     }
 
-    protected function getApplicableItemCondition($condition, $cartItem): null|CartCondition
+    protected function getApplicableItemCondition($condition, $cartItem): ?CartCondition
     {
         if (!in_array(ActsAsItemable::class, class_uses($condition))) {
             return null;
