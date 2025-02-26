@@ -47,9 +47,7 @@ it('returns true when menu has options', function(): void {
     $menu = Menu::factory()->create();
     $menu->menu_options()->create(['option_id' => 1]);
 
-    $result = $menu->hasOptions();
-
-    expect($result)->toBe(1);
+    expect($menu->hasOptions())->toBeTrue();
 });
 
 it('adds menu allergens when allergen ids are provided', function(): void {
@@ -249,10 +247,10 @@ it('morphs to many locations', function(): void {
 it('adds menu options to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
-    $menu->menu_options = [
+    $menu->setRelation('menu_options', [
         ['option_id' => 1, 'priority' => 1],
         ['option_id' => 2, 'priority' => 2],
-    ];
+    ]);
 
     $menu->save();
 
@@ -262,11 +260,11 @@ it('adds menu options to menu on save correctly', function(): void {
 it('adds special to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
-    $menu->special = [
+    $menu->setRelation('special', [
         'special_id' => 1,
         'date_start' => '2021-01-01',
         'date_end' => '2021-01-31',
-    ];
+    ]);
 
     $menu->save();
 

@@ -9,6 +9,7 @@ use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Concerns\Stockable;
 use Igniter\Flame\Database\Attach\HasMedia;
 use Igniter\Flame\Database\Attach\Media;
+use Igniter\Flame\Database\Builder;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
@@ -34,7 +35,17 @@ use Illuminate\Database\Eloquent\Collection;
  * @property-read mixed $stock_qty
  * @property-read Collection<int, Media> $media
  * @property-read int|null $media_count
+ * @property-read Collection<int, Ingredient> $ingredients
+ * @property-read Collection<int, MenuItemOption> $menu_options
+ * @property-read null|MenuSpecial $special
+ * @property-read Collection<int, Location> $locations
+ * @method static Builder<static>|Media media()
+ * @method static Builder<static>|Ingredient ingredients()
+ * @method static Builder<static>|MenuItemOption menu_options()
+ * @method static Builder<static>|MenuSpecial special()
+ * @method static Builder<static>|Location locations()
  * @method static null|Menu find(int|string $id)
+ * @method static Builder<static>|Menu listFrontEnd(array $options = [])
  * @mixin Model
  */
 class Menu extends Model implements Buyable
@@ -131,9 +142,9 @@ class Menu extends Model implements Buyable
     // Helpers
     //
 
-    public function hasOptions(): int
+    public function hasOptions(): bool
     {
-        return count($this->menu_options);
+        return (bool)count($this->menu_options);
     }
 
     /**
@@ -271,10 +282,8 @@ class Menu extends Model implements Buyable
 
     /**
      * Get the identifier of the Buyable item.
-     *
-     * @return int|string
      */
-    public function getBuyableIdentifier()
+    public function getBuyableIdentifier(): int
     {
         return $this->getKey();
     }
