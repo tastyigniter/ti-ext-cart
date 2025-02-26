@@ -105,7 +105,7 @@ class CartManager
 
     public function addOrUpdateCartItem(array $postData)
     {
-        $rowId = array_get($postData, 'rowId');
+        $rowId = array_get($postData, 'rowId') ?: '';
         $menuId = array_get($postData, 'menuId');
         $quantity = array_get($postData, 'quantity', 1);
         $comment = array_get($postData, 'comment');
