@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Override;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use InvalidArgumentException;
+use Override;
 
 class CartItemOptionValue implements Arrayable, Jsonable
 {

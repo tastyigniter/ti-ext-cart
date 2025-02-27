@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
-use Override;
 use Igniter\Admin\Classes\FormField;
+use Override;
 
 class CheckoutFormField extends FormField
 {

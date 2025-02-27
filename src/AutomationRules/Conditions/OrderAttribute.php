@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
-use Override;
 use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 use Igniter\Cart\Models\Order;
+use Override;
 
 class OrderAttribute extends BaseModelAttributesCondition
 {

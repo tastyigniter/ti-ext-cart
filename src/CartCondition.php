@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Override;
 use Igniter\Cart\Concerns\CartConditionHelper;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
+use Override;
 
 /**
  * CartCondition class
@@ -59,7 +59,7 @@ abstract class CartCondition implements Arrayable, Jsonable
     public function __construct(/**
      * The config for this cart condition.
      */
-    protected $config = [])
+        protected $config = [])
     {
         $this->fillFromConfig($this->config);
     }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
-use Override;
 use Igniter\Admin\Classes\FormTabs;
 use Igniter\Admin\Widgets\Form;
+use Override;
 
 class CheckoutForm extends Form
 {

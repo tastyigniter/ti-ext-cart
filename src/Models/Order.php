@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
-use Override;
 use Carbon\Carbon;
 use Igniter\Admin\Models\Concerns\GeneratesHash;
 use Igniter\Admin\Models\Concerns\LogsStatusHistory;
@@ -30,6 +29,7 @@ use Igniter\User\Models\Concerns\Assignable;
 use Igniter\User\Models\Concerns\HasCustomer;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * Order Model Class

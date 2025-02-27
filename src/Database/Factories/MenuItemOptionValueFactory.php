@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
-use Override;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Flame\Database\Factories\Factory;
+use Override;
 
 class MenuItemOptionValueFactory extends Factory
 {

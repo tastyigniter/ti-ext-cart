@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Override;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Menu;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use InvalidArgumentException;
+use Override;
 
 /**
  * CartItem class

@@ -174,7 +174,7 @@ class Cart
     /**
      * Destroy the current cart instance.
      */
-    public function destroy(string $identifier = null): void
+    public function destroy(?string $identifier = null): void
     {
         $this->fireEvent('clearing');
 

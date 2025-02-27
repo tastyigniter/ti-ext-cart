@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Override;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use Override;
 
 class CartItemOption implements Arrayable, Jsonable
 {

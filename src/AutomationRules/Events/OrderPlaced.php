@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\AutomationRules\Events;
 
-use Override;
 use Igniter\Automation\Classes\BaseEvent;
 use Igniter\Cart\Models\Order;
+use Override;
 
 class OrderPlaced extends BaseEvent
 {

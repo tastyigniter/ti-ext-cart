@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Override;
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
@@ -64,6 +63,7 @@ use Igniter\User\Http\Controllers\Customers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
+use Override;
 
 class Extension extends BaseExtension
 {

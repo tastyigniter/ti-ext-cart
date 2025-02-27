@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
-use Override;
 use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Models\ExportModel;
+use Override;
 
 /**
  * MenuExport Model Class

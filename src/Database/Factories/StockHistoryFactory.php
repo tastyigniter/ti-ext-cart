@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
-use Override;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Stock;
 use Igniter\Cart\Models\StockHistory;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\User\Models\User;
+use Override;
 
 class StockHistoryFactory extends Factory
 {

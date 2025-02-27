@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\FormWidgets;
 
-use Override;
 use Igniter\Admin\Classes\BaseFormWidget;
 use Igniter\Admin\Classes\FormField;
 use Igniter\Admin\FormWidgets\DataTable;
 use Igniter\Admin\Widgets\Form;
 use Igniter\Cart\Models\StockHistory;
 use Igniter\User\Facades\AdminAuth;
+use Override;
 
 /**
  * Stock Editor

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
-use Override;
 use Carbon\Carbon;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Concerns\Stockable;
@@ -18,6 +17,7 @@ use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
 use Illuminate\Database\Eloquent\Collection;
+use Override;
 
 /**
  * Menu Model Class

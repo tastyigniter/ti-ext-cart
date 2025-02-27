@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
-use Override;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuOption;
 use Igniter\Flame\Database\Factories\Factory;
+use Override;
 
 class MenuItemOptionFactory extends Factory
 {

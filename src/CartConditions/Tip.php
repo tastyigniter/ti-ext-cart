@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
-use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\System\Models\Currency;
+use Override;
 
 class Tip extends CartCondition
 {

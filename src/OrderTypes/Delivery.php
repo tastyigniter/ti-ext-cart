@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\OrderTypes;
 
-use Override;
 use Igniter\Cart\Classes\AbstractOrderType;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Local\Facades\Location as LocationFacade;
+use Override;
 
 class Delivery extends AbstractOrderType
 {

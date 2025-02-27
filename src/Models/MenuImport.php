@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
-use Override;
 use Exception;
 use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Models\ImportModel;
+use Override;
 
 /**
  * MenuImport Model Class

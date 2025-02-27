@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
-use Override;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuSpecial;
 use Igniter\Flame\Database\Factories\Factory;
+use Override;
 
 class MenuSpecialFactory extends Factory
 {

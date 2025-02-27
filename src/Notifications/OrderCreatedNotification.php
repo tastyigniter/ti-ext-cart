@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Notifications;
 
-use Override;
 use Igniter\Flame\Database\Model;
 use Igniter\User\Classes\Notification;
 use Igniter\User\Models\User;
+use Override;
 
 class OrderCreatedNotification extends Notification
 {

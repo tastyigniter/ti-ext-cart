@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
-use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\PayRegister\Models\Payment;
+use Override;
 
 class PaymentFee extends CartCondition
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
-use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\Local\Facades\Location;
 use Igniter\System\Models\Currency;
+use Override;
 
 class Tax extends CartCondition
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
-use Override;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\Local\Models\Location;
+use Override;
 
 class OrderFactory extends Factory
 {
