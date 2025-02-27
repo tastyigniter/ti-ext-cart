@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
-use Igniter\Local\Models\LocationArea;
 use Igniter\Cart\Cart;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
@@ -12,6 +11,7 @@ use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Geolite\Facades\Geocoder;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Local\Classes\Location;
+use Igniter\Local\Models\LocationArea;
 use Igniter\PayRegister\Models\Payment;
 use Igniter\System\Traits\SessionMaker;
 use Igniter\User\Facades\Auth;
