@@ -22,7 +22,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         ];
     }
 
-    public function defineModelAttributes()
+    public function defineModelAttributes(): array
     {
         return [
             'first_name' => [

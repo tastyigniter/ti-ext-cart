@@ -8,8 +8,8 @@ use Igniter\Cart\CartContent;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Local\Contracts\LocationInterface;
 use Igniter\Local\Facades\Location;
+use Igniter\Local\Models\Location as LocationModel;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
 use Mockery;
 
 it('handles request with location', function(): void {
-    $locationMock = Mockery::mock(LocationInterface::class);
+    $locationMock = Mockery::mock(LocationModel::class);
     Location::shouldReceive('current')->andReturn($locationMock);
     Location::shouldReceive('getId')->andReturn(1);
     Cart::shouldReceive('instance')->with('location-1');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
+use Igniter\Local\Models\LocationArea;
 use Igniter\Cart\Cart;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
@@ -165,7 +166,7 @@ class OrderManager
 
         $this->location->updateUserPosition($userLocation);
 
-        if (!$area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates())) {
+        if (!($area = $this->location->current()->searchDeliveryArea($userLocation->getCoordinates())) instanceof LocationArea) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_covered_area'));
         }
 

@@ -458,7 +458,7 @@ class CartManager
 
     public function validateMenuItemLocation(Menu $menuItem): void
     {
-        if ($menuItem->locations && $menuItem->locations->isNotEmpty() &&
+        if ($menuItem->locations->isNotEmpty() &&
             !$menuItem->locations->keyBy('location_id')->has($this->location->getId())
         ) {
             throw new ApplicationException(sprintf(

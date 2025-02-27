@@ -35,10 +35,10 @@ use Illuminate\Database\Eloquent\Collection;
  * @property-read mixed $stock_qty
  * @property-read Collection<int, Media> $media
  * @property-read int|null $media_count
- * @property-read Collection<int, Ingredient> $ingredients
- * @property-read Collection<int, MenuItemOption> $menu_options
- * @property-read null|MenuSpecial $special
- * @property-read Collection<int, Location> $locations
+ * @property array|Collection<int, Ingredient> $ingredients
+ * @property array|Collection<int, MenuItemOption> $menu_options
+ * @property array|null|MenuSpecial $special
+ * @property array|Collection<int, Location> $locations
  * @method static Builder<static>|Media media()
  * @method static Builder<static>|Ingredient ingredients()
  * @method static Builder<static>|MenuItemOption menu_options()
@@ -124,7 +124,7 @@ class Menu extends Model implements Buyable
 
     public function getMenuPriceFromAttribute()
     {
-        if (!$this->menu_options || $this->menu_options->isEmpty()) {
+        if ($this->menu_options->isEmpty()) {
             return $this->menu_price;
         }
 

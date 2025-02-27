@@ -176,6 +176,7 @@ it('returns false when order datetime is not in the future', function(): void {
 });
 
 it('returns true when remaining time is greater than cancellation timeout', function(): void {
+    $this->travelTo(Carbon::now()->setHour(12)->setMinute(0));
     $order = Order::factory()->create([
         'order_date' => Carbon::now()->toDateString(),
         'order_time' => Carbon::now()->addMinutes(40)->toTimeString(),

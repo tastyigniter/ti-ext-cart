@@ -41,11 +41,6 @@ parameters:
 			path: src/Classes/AbstractOrderType.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$locations\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$mealtimes\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php
@@ -56,32 +51,22 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_values\\.$#"
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$option\\.$#"
 			count: 1
 			path: src/Classes/CartManager.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:allowGuestOrder\\(\\)\\.$#"
+			message: "#^Parameter \\#1 \\$menuOptionValues of method Igniter\\\\Cart\\\\Classes\\\\CartManager\\:\\:prepareCartItemOptionValues\\(\\) expects Illuminate\\\\Support\\\\Collection, Igniter\\\\Cart\\\\Models\\\\Collection\\<int, Igniter\\\\Cart\\\\Models\\\\MenuItemOptionValue\\> given\\.$#"
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:allowGuestOrder\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:getKey\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:listAvailablePayments\\(\\)\\.$#"
-			count: 1
-			path: src/Classes/OrderManager.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Local\\\\Contracts\\\\LocationInterface\\:\\:searchDeliveryArea\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Local\\\\Models\\\\Location\\:\\:listAvailablePayments\\(\\)\\.$#"
 			count: 1
 			path: src/Classes/OrderManager.php
 
@@ -141,28 +126,8 @@ parameters:
 			path: src/Models/Ingredient.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$ingredients\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$locations\\.$#"
-			count: 1
-			path: src/Models/Menu.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$mealtimes\\.$#"
 			count: 1
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$menu_options\\.$#"
-			count: 2
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:\\$special\\.$#"
-			count: 2
 			path: src/Models/Menu.php
 
 		-
@@ -171,12 +136,12 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:categories\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Ingredient\\|Igniter\\\\Flame\\\\Database\\\\Builder\\<static\\(Igniter\\\\Cart\\\\Models\\\\Menu\\)\\>\\:\\:sync\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:ingredients\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:categories\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Menu.php
 
@@ -186,17 +151,12 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:menu_options\\(\\)\\.$#"
-			count: 2
-			path: src/Models/Menu.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:special\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:stocks\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Menu.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:stocks\\(\\)\\.$#"
+			message: "#^Call to method keyBy\\(\\) on an unknown class Igniter\\\\Cart\\\\Models\\\\Collection\\.$#"
 			count: 1
 			path: src/Models/Menu.php
 
@@ -216,11 +176,6 @@ parameters:
 			path: src/Models/MenuImport.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$menu_option_values\\.$#"
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:\\$option\\.$#"
 			count: 3
 			path: src/Models/MenuItemOption.php
@@ -228,6 +183,11 @@ parameters:
 		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\MenuItemOption\\:\\:menu_option_values\\(\\)\\.$#"
 			count: 2
+			path: src/Models/MenuItemOption.php
+
+		-
+			message: "#^Call to method firstWhere\\(\\) on an unknown class Igniter\\\\Cart\\\\Models\\\\Collection\\.$#"
+			count: 1
 			path: src/Models/MenuItemOption.php
 
 		-
@@ -261,17 +221,12 @@ parameters:
 			path: src/Models/MenuOptionValue.php
 
 		-
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Ingredient\\|Igniter\\\\Flame\\\\Database\\\\Builder\\<Igniter\\\\Cart\\\\Models\\\\Menu\\>\\:\\:detach\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Observers/MenuObserver.php
+
+		-
 			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:categories\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Observers/MenuObserver.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:ingredients\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Observers/MenuObserver.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:locations\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Observers/MenuObserver.php
 
@@ -281,12 +236,7 @@ parameters:
 			path: src/Models/Observers/MenuObserver.php
 
 		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:menu_options\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Observers/MenuObserver.php
-
-		-
-			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:special\\(\\)\\.$#"
+			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Builder\\<Igniter\\\\Cart\\\\Models\\\\Menu\\>\\|Igniter\\\\Local\\\\Models\\\\Location\\:\\:detach\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Observers/MenuObserver.php
 

@@ -9,7 +9,7 @@ use Igniter\Cart\Models\Order;
 
 class OrderPlaced extends BaseEvent
 {
-    public function eventDetails()
+    public function eventDetails(): array
     {
         return [
             'name' => 'Order Placed Event',

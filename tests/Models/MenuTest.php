@@ -247,10 +247,10 @@ it('morphs to many locations', function(): void {
 it('adds menu options to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
-    $menu->setRelation('menu_options', [
+    $menu->menu_options = [
         ['option_id' => 1, 'priority' => 1],
         ['option_id' => 2, 'priority' => 2],
-    ]);
+    ];
 
     $menu->save();
 
@@ -260,11 +260,11 @@ it('adds menu options to menu on save correctly', function(): void {
 it('adds special to menu on save correctly', function(): void {
     $menu = Menu::factory()->create();
 
-    $menu->setRelation('special', [
+    $menu->special = [
         'special_id' => 1,
         'date_start' => '2021-01-01',
         'date_end' => '2021-01-31',
-    ]);
+    ];
 
     $menu->save();
 

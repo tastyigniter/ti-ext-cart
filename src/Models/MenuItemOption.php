@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read mixed $display_type
  * @property-read mixed $option_name
  * @property-read mixed $option_values
+ * @property-read Collection<int, MenuItemOptionValue> $menu_option_values
  * @mixin Model
  */
 class MenuItemOption extends Model

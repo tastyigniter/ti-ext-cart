@@ -22,7 +22,7 @@ class OrderStatusAttribute extends BaseModelAttributesCondition
         ];
     }
 
-    public function defineModelAttributes()
+    public function defineModelAttributes(): array
     {
         return [
             'status_id' => [

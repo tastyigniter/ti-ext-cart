@@ -28,7 +28,7 @@ class StockEditor extends BaseFormWidget
         ]);
     }
 
-    public function render()
+    public function render(): string
     {
         $this->prepareVars();
 
