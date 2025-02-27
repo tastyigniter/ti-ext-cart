@@ -16,9 +16,7 @@ trait CartConditionHelper
 
     protected function validate(array $rules): bool
     {
-        $validated = collect($rules)->filter(function($rule) {
-            return $this->ruleIsValid($rule);
-        })->count();
+        $validated = collect($rules)->filter(fn($rule) => $this->ruleIsValid($rule))->count();
 
         $passed = $validated == count($rules);
 
@@ -142,7 +140,7 @@ trait CartConditionHelper
         preg_match('/([a-zA-Z0-9\-?]+)\s*([\=\!\<\>]{1,2})\s*([\-?a-zA-Z0-9]+)/', $rule, $matches);
 
         if ($matches === []) {
-            throw new InvalidArgumentException(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, get_class($this)));
+            throw new InvalidArgumentException(sprintf('Cart condition rule [%s] format is invalid on %s.', $rule, $this::class));
         }
 
         array_shift($matches);
@@ -157,7 +155,7 @@ trait CartConditionHelper
         }
 
         if (!array_key_exists('value', $action)) {
-            throw new InvalidArgumentException(sprintf('Cart condition action [%s] format is invalid on %s.', json_encode($action), get_class($this)));
+            throw new InvalidArgumentException(sprintf('Cart condition action [%s] format is invalid on %s.', json_encode($action), $this::class));
         }
 
         return $action;

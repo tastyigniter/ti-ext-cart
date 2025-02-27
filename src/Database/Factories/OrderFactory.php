@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
+use Override;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\Local\Models\Location;
@@ -12,6 +13,7 @@ class OrderFactory extends Factory
 {
     protected $model = Order::class;
 
+    #[Override]
     public function definition(): array
     {
         return [

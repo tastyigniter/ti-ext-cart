@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
+use Override;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Menu;
 use Illuminate\Contracts\Support\Arrayable;
@@ -149,9 +150,7 @@ class CartItem implements Arrayable, Jsonable
 
     public function hasOptionValue($valueIndex)
     {
-        return $this->options->filter(function($option) use ($valueIndex): bool {
-            return in_array($valueIndex, $option->values->pluck('id')->all());
-        })->isNotEmpty();
+        return $this->options->filter(fn($option): bool => in_array($valueIndex, $option->values->pluck('id')->all()))->isNotEmpty();
     }
 
     public function hasConditions(): int
@@ -218,12 +217,10 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Associate the cart item with the given model.
-     *
-     * @param mixed $model
      */
-    public function associate($model): static
+    public function associate(mixed $model): static
     {
-        $this->associatedModel = is_string($model) ? $model : get_class($model);
+        $this->associatedModel = is_string($model) ? $model : $model::class;
 
         return $this;
     }
@@ -294,9 +291,7 @@ class CartItem implements Arrayable, Jsonable
             return $options;
         }
 
-        return new CartItemOptions(array_map(function($option): CartItemOption {
-            return CartItemOption::fromArray($option);
-        }, $options));
+        return new CartItemOptions(array_map(fn($option): CartItemOption => CartItemOption::fromArray($option), $options));
     }
 
     protected function makeCartItemConditions($conditions)
@@ -313,6 +308,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return array
      */
+    #[Override]
     public function toArray()
     {
         return [
@@ -335,6 +331,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @return string
      */
+    #[Override]
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);

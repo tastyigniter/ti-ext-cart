@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Http\Requests;
 
+use Override;
 use Igniter\System\Classes\FormRequest;
 
 class MealtimeRequest extends FormRequest
 {
+    #[Override]
     public function attributes()
     {
         return [

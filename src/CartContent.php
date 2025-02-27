@@ -15,15 +15,11 @@ class CartContent extends Collection
 
     public function subtotal()
     {
-        return $this->sum(function(CartItem $cartItem) {
-            return $cartItem->subtotal();
-        });
+        return $this->sum(fn(CartItem $cartItem) => $cartItem->subtotal());
     }
 
     public function subtotalWithoutConditions()
     {
-        return $this->sum(function(CartItem $cartItem): float|int {
-            return $cartItem->subtotalWithoutConditions();
-        });
+        return $this->sum(fn(CartItem $cartItem): float|int => $cartItem->subtotalWithoutConditions());
     }
 }

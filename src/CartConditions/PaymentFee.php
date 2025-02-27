@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
+use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\PayRegister\Models\Payment;
 
@@ -13,6 +14,7 @@ class PaymentFee extends CartCondition
 
     public ?int $priority = 600;
 
+    #[Override]
     public function getLabel(): string
     {
         $paymentFeeType = (int)optional($this->paymentModel)->order_fee_type;
@@ -23,6 +25,7 @@ class PaymentFee extends CartCondition
             : lang($this->label);
     }
 
+    #[Override]
     public function beforeApply(): ?bool
     {
         if ((string)($paymentCode = $this->getMetaData('code', '')) === '') {
@@ -42,6 +45,7 @@ class PaymentFee extends CartCondition
         return null;
     }
 
+    #[Override]
     public function getActions(): array
     {
         $paymentFeeType = (int)optional($this->paymentModel)->order_fee_type;

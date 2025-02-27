@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -9,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
  */
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $conditions = [];
         $seedConditions = $this->getConditions();
@@ -29,7 +31,7 @@ return new class extends Migration
         }
     }
 
-    public function down() {}
+    public function down(): void {}
 
     protected function getConditions()
     {
@@ -38,7 +40,7 @@ return new class extends Migration
             $existingConditions = DB::table('extensions')->select('data')->where('type', 'cart_total')->get();
         }
 
-        if (!count($existingConditions)) {
+        if (count($existingConditions) === 0) {
             return [
                 [
                     'data' => [

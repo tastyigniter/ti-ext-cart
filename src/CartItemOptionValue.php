@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
+use Override;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use InvalidArgumentException;
@@ -123,6 +124,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
      *
      * @return array
      */
+    #[Override]
     public function toArray()
     {
         return [
@@ -140,6 +142,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
      * @param int $options
      * @return string
      */
+    #[Override]
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);

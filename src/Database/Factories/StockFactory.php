@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
+use Override;
 use Igniter\Cart\Models\Stock;
 use Igniter\Flame\Database\Factories\Factory;
 use Igniter\Local\Models\Location;
@@ -12,6 +13,7 @@ class StockFactory extends Factory
 {
     protected $model = Stock::class;
 
+    #[Override]
     public function definition()
     {
         return [

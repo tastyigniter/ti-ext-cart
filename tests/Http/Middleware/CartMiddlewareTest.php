@@ -23,9 +23,7 @@ it('handles request with location', function(): void {
     Cart::shouldReceive('instance')->with('location-1');
 
     $middleware = new CartMiddleware;
-    $response = $middleware->handle(new Request, function(): true {
-        return true;
-    });
+    $response = $middleware->handle(new Request, fn(): true => true);
 
     expect($response)->toBeTrue();
 });
@@ -35,9 +33,7 @@ it('handles request without location', function(): void {
     Cart::expects('instance')->never();
 
     $middleware = new CartMiddleware;
-    $response = $middleware->handle(new Request, function(): true {
-        return true;
-    });
+    $response = $middleware->handle(new Request, fn(): true => true);
 
     expect($response)->toBeTrue();
 });

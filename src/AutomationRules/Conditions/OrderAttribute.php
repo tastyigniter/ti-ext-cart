@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\AutomationRules\Conditions;
 
+use Override;
 use Igniter\Automation\AutomationException;
 use Igniter\Automation\Classes\BaseModelAttributesCondition;
 use Igniter\Cart\Models\Order;
@@ -14,6 +15,7 @@ class OrderAttribute extends BaseModelAttributesCondition
 
     protected $modelAttributes;
 
+    #[Override]
     public function conditionDetails(): array
     {
         return [
@@ -22,6 +24,7 @@ class OrderAttribute extends BaseModelAttributesCondition
         ];
     }
 
+    #[Override]
     public function defineModelAttributes(): array
     {
         return [
@@ -113,6 +116,7 @@ class OrderAttribute extends BaseModelAttributesCondition
      * @param array $params Specifies a list of parameters as an associative array.
      * @return bool
      */
+    #[Override]
     public function isTrue(&$params)
     {
         if (!$order = array_get($params, 'order')) {

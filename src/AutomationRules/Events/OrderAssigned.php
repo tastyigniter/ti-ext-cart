@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\AutomationRules\Events;
 
+use Override;
 use Igniter\Automation\Classes\BaseEvent;
 use Igniter\Cart\Models\Order;
 
 class OrderAssigned extends BaseEvent
 {
+    #[Override]
     public function eventDetails(): array
     {
         return [
@@ -18,6 +20,7 @@ class OrderAssigned extends BaseEvent
         ];
     }
 
+    #[Override]
     public static function makeParamsFromEvent(array $args, $eventName = null)
     {
         $params = [];

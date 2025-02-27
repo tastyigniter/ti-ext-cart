@@ -315,9 +315,7 @@ it('removes condition', function(): void {
 it('applies coupon condition when event returns CartCondition', function(): void {
     CouponModel::factory()->create(['code' => 'validCode', 'status' => 1]);
     $coupon = new Coupon(['label' => 'Coupon', 'name' => 'coupon']);
-    Event::listen('igniter.cart.beforeApplyCoupon', function($code) use ($coupon): Coupon {
-        return $coupon;
-    });
+    Event::listen('igniter.cart.beforeApplyCoupon', fn($code): Coupon => $coupon);
 
     $result = $this->manager->applyCouponCondition('validCode');
 

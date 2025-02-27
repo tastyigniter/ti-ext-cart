@@ -163,7 +163,7 @@ class Stock extends Model
             return false;
         }
 
-        return strlen($state) && $state !== self::STATE_NONE;
+        return strlen((string) $state) && $state !== self::STATE_NONE;
     }
 
     protected function computeStockQuantity($state, int $quantity): int

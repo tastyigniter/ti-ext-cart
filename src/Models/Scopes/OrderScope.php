@@ -12,29 +12,23 @@ class OrderScope extends Scope
 {
     public function addApplyDateTimeFilter()
     {
-        return function(Builder $builder, $range) {
-            return $builder->whereBetweenOrderDateTime(
-                Carbon::parse(array_get($range, 'startAt'))->format('Y-m-d H:i:s'),
-                Carbon::parse(array_get($range, 'endAt'))->format('Y-m-d H:i:s'),
-            );
-        };
+        return fn(Builder $builder, $range) => $builder->whereBetweenOrderDateTime(
+            Carbon::parse(array_get($range, 'startAt'))->format('Y-m-d H:i:s'),
+            Carbon::parse(array_get($range, 'endAt'))->format('Y-m-d H:i:s'),
+        );
     }
 
     public function addWhereBetweenOrderDateTime()
     {
-        return function(Builder $builder, $start, $end) {
-            return $builder->whereRaw('ADDTIME(order_date, order_time) between ? and ?', [$start, $end]);
-        };
+        return fn(Builder $builder, $start, $end) => $builder->whereRaw('ADDTIME(order_date, order_time) between ? and ?', [$start, $end]);
     }
 
     public function addWhereBetweenDate()
     {
-        return function(Builder $builder, $dateTime) {
-            return $builder->whereRaw(
-                '? between DATE_SUB(ADDTIME(order_date, order_time), INTERVAL (duration - 2) MINUTE)'.
-                ' and DATE_ADD(ADDTIME(order_date, order_time), INTERVAL duration MINUTE)',
-                [$dateTime],
-            );
-        };
+        return fn(Builder $builder, $dateTime) => $builder->whereRaw(
+            '? between DATE_SUB(ADDTIME(order_date, order_time), INTERVAL (duration - 2) MINUTE)'.
+            ' and DATE_ADD(ADDTIME(order_date, order_time), INTERVAL duration MINUTE)',
+            [$dateTime],
+        );
     }
 }

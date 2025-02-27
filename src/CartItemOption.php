@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
+use Override;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Collection;
@@ -54,9 +55,7 @@ class CartItemOption implements Arrayable, Jsonable
      */
     public function subtotal(): float|int
     {
-        return $this->values->reduce(function($subtotal, CartItemOptionValue $optionValue): float|int {
-            return $subtotal + $optionValue->subtotal();
-        }, 0);
+        return $this->values->reduce(fn($subtotal, CartItemOptionValue $optionValue): float|int => $subtotal + $optionValue->subtotal(), 0);
     }
 
     /**
@@ -87,9 +86,7 @@ class CartItemOption implements Arrayable, Jsonable
             return $values;
         }
 
-        return new CartItemOptionValues(array_map(function($item): CartItemOptionValue {
-            return CartItemOptionValue::fromArray($item);
-        }, $values));
+        return new CartItemOptionValues(array_map(fn($item): CartItemOptionValue => CartItemOptionValue::fromArray($item), $values));
     }
 
     /**
@@ -97,6 +94,7 @@ class CartItemOption implements Arrayable, Jsonable
      *
      * @return array
      */
+    #[Override]
     public function toArray()
     {
         return [
@@ -113,6 +111,7 @@ class CartItemOption implements Arrayable, Jsonable
      * @param int $options
      * @return string
      */
+    #[Override]
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);

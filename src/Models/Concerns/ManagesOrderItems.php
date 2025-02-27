@@ -70,9 +70,8 @@ trait ManagesOrderItems
         $this->load('menus.menu_options');
 
         $this->menus->each(function(OrderMenu $orderMenu): void {
-            $orderMenuOptions = $orderMenu->menu_options->groupBy(function(OrderMenuOptionValue $orderMenuOptionValue) {
-                return $orderMenuOptionValue->menu_option->option_name;
-            });
+            $orderMenuOptions = $orderMenu->menu_options
+                ->groupBy(fn(OrderMenuOptionValue $orderMenuOptionValue) => $orderMenuOptionValue->menu_option->option_name);
             $orderMenu->setRelation('menu_options', $orderMenuOptions);
         });
 

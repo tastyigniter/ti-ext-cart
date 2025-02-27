@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
+use Override;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Stock;
 use Igniter\Cart\Models\StockHistory;
@@ -14,6 +15,7 @@ class StockHistoryFactory extends Factory
 {
     protected $model = StockHistory::class;
 
+    #[Override]
     public function definition()
     {
         return [

@@ -195,7 +195,7 @@ class CartManager
             return $condition;
         }
 
-        if (strlen($code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
+        if (strlen((string) $code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
@@ -367,14 +367,12 @@ class CartManager
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
                     $menuItem->menu_name,
-                    $menuItem->mealtimes->map(function($mealtime): string {
-                        return sprintf(
-                            lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
-                            $mealtime->mealtime_name,
-                            $mealtime->start_time,
-                            $mealtime->end_time,
-                        );
-                    })->join(', '),
+                    $menuItem->mealtimes->map(fn($mealtime): string => sprintf(
+                        lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
+                        $mealtime->mealtime_name,
+                        $mealtime->start_time,
+                        $mealtime->end_time,
+                    ))->join(', '),
                 ),
             );
         }
@@ -437,9 +435,7 @@ class CartManager
         }
 
         if ($menuOption->display_type == 'quantity') {
-            $countSelected = (int)array_reduce($selectedValues, function($qty, array $selectedValue): int {
-                return $qty + $selectedValue['qty'];
-            });
+            $countSelected = (int)array_reduce($selectedValues, fn($qty, array $selectedValue): int => $qty + $selectedValue['qty']);
         } else {
             $countSelected = count($selectedValues);
         }
@@ -529,9 +525,7 @@ class CartManager
             try {
                 $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
 
-                $cartOption['values'] = $cartOption['values']->filter(function($cartOptionValue) use ($menuOption) {
-                    return $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id);
-                })->toArray();
+                $cartOption['values'] = $cartOption['values']->filter(fn($cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id))->toArray();
 
                 $options[] = $cartOption;
             } catch (Exception $ex) {

@@ -132,9 +132,7 @@ it('checks if menu is not available when event returns false', function(): void 
         ]), 'mealtimes')
         ->create();
 
-    Event::listen('admin.menu.isAvailable', function($datetime, $menu): false {
-        return false;
-    });
+    Event::listen('admin.menu.isAvailable', fn($datetime, $menu): false => false);
 
     $datetime = Carbon::createFromTime(12);
 

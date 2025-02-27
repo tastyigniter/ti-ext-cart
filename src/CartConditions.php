@@ -12,22 +12,16 @@ class CartConditions extends Collection
     {
         return $this
             ->sorted()
-            ->reduce(function($total, CartCondition $condition) use ($content) {
-                return $condition->withTarget($content)->apply($total);
-            }, $content->subtotal());
+            ->reduce(fn($total, CartCondition $condition) => $condition->withTarget($content)->apply($total), $content->subtotal());
     }
 
     public function applied()
     {
-        return $this->filter(function(CartCondition $condition) {
-            return $condition->isValid();
-        });
+        return $this->filter(fn(CartCondition $condition) => $condition->isValid());
     }
 
     public function sorted()
     {
-        return $this->sortBy(function($condition) {
-            return $condition->priority;
-        });
+        return $this->sortBy(fn($condition) => $condition->priority);
     }
 }

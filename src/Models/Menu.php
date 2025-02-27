@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
+use Override;
 use Carbon\Carbon;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Models\Concerns\Stockable;
@@ -128,9 +129,7 @@ class Menu extends Model implements Buyable
             return $this->menu_price;
         }
 
-        return $this->menu_options->mapWithKeys(function($option) {
-            return $option->menu_option_values->keyBy('menu_option_value_id');
-        })->min('price') ?: 0;
+        return $this->menu_options->mapWithKeys(fn($option) => $option->menu_option_values->keyBy('menu_option_value_id'))->min('price') ?: 0;
     }
 
     public function getMinimumQtyAttribute($value)
@@ -256,6 +255,7 @@ class Menu extends Model implements Buyable
         return self::query()->whereIsEnabled()->whereKey($menuId)->first();
     }
 
+    #[Override]
     public function getMorphClass()
     {
         return 'menus';
@@ -283,6 +283,7 @@ class Menu extends Model implements Buyable
     /**
      * Get the identifier of the Buyable item.
      */
+    #[Override]
     public function getBuyableIdentifier(): int
     {
         return $this->getKey();
@@ -293,6 +294,7 @@ class Menu extends Model implements Buyable
      *
      * @return string
      */
+    #[Override]
     public function getBuyableName()
     {
         return $this->menu_name;
@@ -303,6 +305,7 @@ class Menu extends Model implements Buyable
      *
      * @return float
      */
+    #[Override]
     public function getBuyablePrice()
     {
         return $this->isSpecial()

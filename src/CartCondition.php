@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
+use Override;
 use Igniter\Cart\Concerns\CartConditionHelper;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -51,21 +52,16 @@ abstract class CartCondition implements Arrayable, Jsonable
     protected $calculatedValue;
 
     /**
-     * The config for this cart condition.
-     *
-     * @var array
-     */
-    protected $config = [];
-
-    /**
      * CartItem constructor.
      *
      * @param array $config
      */
-    public function __construct($config = [])
+    public function __construct(/**
+     * The config for this cart condition.
+     */
+    protected $config = [])
     {
-        $this->config = $config;
-        $this->fillFromConfig($config);
+        $this->fillFromConfig($this->config);
     }
 
     public function fillFromConfig($config): void
@@ -93,9 +89,7 @@ abstract class CartCondition implements Arrayable, Jsonable
     public function isInclusive()
     {
         return collect($this->getActions())
-            ->filter(function($action) {
-                return array_get($action, 'inclusive', false);
-            })
+            ->filter(fn($action) => array_get($action, 'inclusive', false))
             ->isNotEmpty();
     }
 
@@ -130,12 +124,8 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->calculatedValue = 0;
 
         return collect($this->getActions())
-            ->map(function($action) use ($subTotal): array {
-                return $this->processActionValue($action, $subTotal);
-            })
-            ->reduce(function($total, $action): float {
-                return $this->calculateActionValue($action, $total);
-            }, $subTotal);
+            ->map(fn($action): array => $this->processActionValue($action, $subTotal))
+            ->reduce(fn($total, $action): float => $this->calculateActionValue($action, $total), $subTotal);
     }
 
     //
@@ -287,6 +277,7 @@ abstract class CartCondition implements Arrayable, Jsonable
      *
      * @return array
      */
+    #[Override]
     public function toArray()
     {
         return [
@@ -305,6 +296,7 @@ abstract class CartCondition implements Arrayable, Jsonable
      *
      * @return string
      */
+    #[Override]
     public function toJson($options = 0)
     {
         return json_encode($this->toArray(), $options);

@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+use Igniter\Cart\Models\Cart;
+
 return [
 
     /*
@@ -12,7 +16,7 @@ return [
     |
     */
 
-    'model' => \Igniter\Cart\Models\Cart::class,
+    'model' => Cart::class,
 
     /*
     |--------------------------------------------------------------------------

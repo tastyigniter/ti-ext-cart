@@ -11,8 +11,6 @@ class CategoryScope extends Scope
 {
     public function addWhereHasMenus()
     {
-        return function(Builder $builder) {
-            return $builder->whereHas('menus')->where('status', 1);
-        };
+        return fn(Builder $builder) => $builder->whereHas('menus')->where('status', 1);
     }
 }

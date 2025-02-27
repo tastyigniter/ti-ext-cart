@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
+use Override;
 use Carbon\Carbon;
 use Igniter\Admin\Models\Concerns\GeneratesHash;
 use Igniter\Admin\Models\Concerns\LogsStatusHistory;
@@ -306,6 +307,7 @@ class Order extends Model
         return $this->addStatusHistory($status, $options);
     }
 
+    #[Override]
     public function getMorphClass()
     {
         return 'orders';

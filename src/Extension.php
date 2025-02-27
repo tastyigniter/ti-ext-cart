@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
+use Override;
 use Igniter\Admin\DashboardWidgets\Charts;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
@@ -101,6 +102,7 @@ class Extension extends BaseExtension
         OrderManager::class,
     ];
 
+    #[Override]
     public function register(): void
     {
         parent::register();
@@ -114,6 +116,7 @@ class Extension extends BaseExtension
         AliasLoader::getInstance()->alias('Cart', Facades\Cart::class);
     }
 
+    #[Override]
     public function boot(): void
     {
         if (!Igniter::runningInAdmin()) {
@@ -129,9 +132,7 @@ class Extension extends BaseExtension
 
         Customers::extendFormFields(new AddsCustomerOrdersTabFields);
 
-        Statistics::registerCards(function(): array {
-            return (new RegistersDashboardCards)();
-        });
+        Statistics::registerCards(fn(): array => (new RegistersDashboardCards)());
     }
 
     public function registerCartConditions(): array
@@ -171,6 +172,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerPermissions(): array
     {
         return [
@@ -209,6 +211,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerSettings(): array
     {
         return [
@@ -222,6 +225,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerMailTemplates(): array
     {
         return [
@@ -252,6 +256,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerNavigation(): array
     {
         return [
@@ -284,6 +289,7 @@ class Extension extends BaseExtension
         ];
     }
 
+    #[Override]
     public function registerFormWidgets(): array
     {
         return [

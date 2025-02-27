@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
+use Override;
 use Igniter\Admin\Classes\FormTabs;
 use Igniter\Admin\Widgets\Form;
 
@@ -13,6 +14,7 @@ class CheckoutForm extends Form
         public ?array $config = [],
     ) {}
 
+    #[Override]
     public function initialize(): void
     {
         $this->fillFromConfig([
@@ -27,9 +29,7 @@ class CheckoutForm extends Form
     {
         $rules = $this->getConfig('rules', []);
 
-        $prefixedKeys = array_map(function($key) {
-            return is_string($key) ? 'fields.'.$key : $key;
-        }, array_keys($rules));
+        $prefixedKeys = array_map(fn($key) => is_string($key) ? 'fields.'.$key : $key, array_keys($rules));
 
         return array_combine($prefixedKeys, $rules);
     }
@@ -38,26 +38,21 @@ class CheckoutForm extends Form
     {
         $messages = $this->getConfig('messages', []);
 
-        $prefixedKeys = array_map(function($key) {
-            return is_string($key) ? 'fields.'.$key : $key;
-        }, array_keys($messages));
+        $prefixedKeys = array_map(fn($key) => is_string($key) ? 'fields.'.$key : $key, array_keys($messages));
 
         return array_combine($prefixedKeys, $messages);
     }
 
     public function validationAttributes(): array
     {
-        $attributes = array_map(function($field): string {
-            return lang($field['label'] ?? $field['name']);
-        }, $this->fields);
+        $attributes = array_map(fn($field): string => lang($field['label'] ?? $field['name']), $this->fields);
 
-        $prefixedKeys = array_map(function($key) {
-            return is_string($key) ? 'fields.'.$key : $key;
-        }, array_keys($attributes));
+        $prefixedKeys = array_map(fn($key) => is_string($key) ? 'fields.'.$key : $key, array_keys($attributes));
 
         return array_combine($prefixedKeys, $attributes);
     }
 
+    #[Override]
     protected function defineFormFields()
     {
         if ($this->fieldsDefined) {
@@ -86,9 +81,7 @@ class CheckoutForm extends Form
             $field->value = $this->getFieldValue($field);
 
             if (in_array($field->type, ['select', 'radio', 'checkbox'])) {
-                $field->options(function() use ($field, $config) {
-                    return $this->getOptionsFromModel($field, $config['options'] ?? null);
-                });
+                $field->options(fn(): mixed => $this->getOptionsFromModel($field, $config['options'] ?? null));
             }
 
             $fieldTab = is_array($config) ? array_get($config, 'tab') : null;

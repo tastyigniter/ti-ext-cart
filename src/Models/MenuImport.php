@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
+use Override;
 use Exception;
 use Igniter\Flame\Database\Model;
 use IgniterLabs\ImportExport\Models\ImportModel;
@@ -31,6 +32,7 @@ class MenuImport extends ImportModel
 
     protected $categoryNameCache = [];
 
+    #[Override]
     public function importData($results): void
     {
         foreach ($results as $row => $data) {

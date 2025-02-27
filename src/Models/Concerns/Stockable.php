@@ -76,9 +76,7 @@ trait Stockable
             return false;
         }
 
-        return $stocks->filter(function($stock) {
-            return $stock->outOfStock();
-        })->isNotEmpty();
+        return $stocks->filter(fn($stock) => $stock->outOfStock())->isNotEmpty();
     }
 
     public function checkStockLevel($quantity, $location = null)

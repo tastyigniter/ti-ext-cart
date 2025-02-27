@@ -63,7 +63,7 @@ trait HasInvoice
 
     public function generateInvoicePrefix($invoiceDate = null): string
     {
-        $invoiceDate = $invoiceDate ?? $this->invoice_date;
+        $invoiceDate ??= $this->invoice_date;
 
         return parse_values([
             'year' => $invoiceDate->year,

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Http\Requests;
 
+use Override;
 use Igniter\System\Classes\FormRequest;
 
 class OrderSettingsRequest extends FormRequest
 {
+    #[Override]
     public function attributes()
     {
         return [

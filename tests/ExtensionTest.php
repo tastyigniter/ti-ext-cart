@@ -252,9 +252,7 @@ it('sends order update after status is updated', function(): void {
 
     event('igniter.cart.orderStatusAdded', [$order, $statusHistory]);
 
-    Mail::assertQueued(AnonymousTemplateMailable::class, function($mail): bool {
-        return $mail->getTemplateCode() === 'igniter.cart::mail.order_update';
-    });
+    Mail::assertQueued(AnonymousTemplateMailable::class, fn($mail): bool => $mail->getTemplateCode() === 'igniter.cart::mail.order_update');
 });
 
 it('adds cart middleware to frontend routes', function(): void {

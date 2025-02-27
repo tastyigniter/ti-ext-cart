@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Database\Factories;
 
+use Override;
 use Igniter\Cart\Models\Ingredient;
 use Igniter\Flame\Database\Factories\Factory;
 
@@ -11,6 +12,7 @@ class IngredientFactory extends Factory
 {
     protected $model = Ingredient::class;
 
+    #[Override]
     public function definition(): array
     {
         return [

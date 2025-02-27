@@ -50,9 +50,7 @@ it('updates stock correctly', function(): void {
         return $updatedStock->getKey() === $stock->getKey();
     });
 
-    Mail::assertQueued(AnonymousTemplateMailable::class, function($mailable): bool {
-        return $mailable->getTemplateCode() === 'igniter.cart::mail.low_stock_alert';
-    });
+    Mail::assertQueued(AnonymousTemplateMailable::class, fn($mailable): bool => $mailable->getTemplateCode() === 'igniter.cart::mail.low_stock_alert');
 });
 
 it('recounts stock correctly', function(): void {

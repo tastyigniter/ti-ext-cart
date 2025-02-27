@@ -319,15 +319,13 @@ class OrderManager
             }
         }
 
-        $totals = $this->cart->conditions()->map(function(CartCondition $condition): array {
-            return [
-                'code' => $condition->name,
-                'title' => $condition->getLabel(),
-                'value' => is_numeric($value = $condition->getValue()) ? $value : 0,
-                'priority' => $condition->getPriority() ?: 1,
-                'is_summable' => !$condition->isInclusive(),
-            ];
-        })->merge($itemConditions)->all();
+        $totals = $this->cart->conditions()->map(fn(CartCondition $condition): array => [
+            'code' => $condition->name,
+            'title' => $condition->getLabel(),
+            'value' => is_numeric($value = $condition->getValue()) ? $value : 0,
+            'priority' => $condition->getPriority() ?: 1,
+            'is_summable' => !$condition->isInclusive(),
+        ])->merge($itemConditions)->all();
 
         $totals['subtotal'] = [
             'code' => 'subtotal',

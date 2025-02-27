@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\FormWidgets;
 
+use Override;
 use Igniter\Admin\Classes\BaseFormWidget;
 use Igniter\Admin\Classes\FormField;
 use Igniter\Admin\FormWidgets\DataTable;
@@ -20,6 +21,7 @@ class StockEditor extends BaseFormWidget
 
     public $quantityKeyFrom = 'stock_qty';
 
+    #[Override]
     public function initialize(): void
     {
         $this->fillFromConfig([
@@ -28,6 +30,7 @@ class StockEditor extends BaseFormWidget
         ]);
     }
 
+    #[Override]
     public function render(): string
     {
         $this->prepareVars();
@@ -35,6 +38,7 @@ class StockEditor extends BaseFormWidget
         return $this->makePartial('stockeditor/stockeditor');
     }
 
+    #[Override]
     public function loadAssets(): void
     {
         $this->addCss('widgets/table.css', 'table-css');
@@ -48,6 +52,7 @@ class StockEditor extends BaseFormWidget
         $this->vars['previewMode'] = $this->controller->getAction() === 'create';
     }
 
+    #[Override]
     public function getSaveValue(mixed $value): int
     {
         return FormField::NO_SAVE_DATA;

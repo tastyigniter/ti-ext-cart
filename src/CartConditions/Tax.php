@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
+use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\Local\Facades\Location;
 use Igniter\System\Models\Currency;
@@ -22,6 +23,7 @@ class Tax extends CartCondition
 
     protected $taxDelivery;
 
+    #[Override]
     public function getLabel(): string
     {
         $label = $this->taxInclusive ? $this->taxRateLabel.'% '.lang('igniter.cart::default.text_vat_included') : $this->taxRateLabel.'%';
@@ -29,6 +31,7 @@ class Tax extends CartCondition
         return sprintf(lang($this->label), $label);
     }
 
+    #[Override]
     public function onLoad(): void
     {
         $this->taxMode = (bool)setting('tax_mode', 1);
@@ -42,12 +45,14 @@ class Tax extends CartCondition
         $this->taxDelivery = (bool)setting('tax_delivery_charge', 0);
     }
 
+    #[Override]
     public function beforeApply(): ?bool
     {
         // only calculate taxes if enabled
         return $this->taxMode && $this->taxRate;
     }
 
+    #[Override]
     public function getActions(): array
     {
         $precision = optional(Currency::getDefault())->decimal_position ?? 2;
@@ -61,6 +66,7 @@ class Tax extends CartCondition
         ];
     }
 
+    #[Override]
     public function calculate($subTotal)
     {
         $excludeDeliveryCharge = Location::orderTypeIsDelivery() && !$this->taxDelivery;

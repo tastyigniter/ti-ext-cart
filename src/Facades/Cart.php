@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Facades;
 
+use Override;
 use Closure;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartConditions;
@@ -48,6 +49,7 @@ class Cart extends Facade
      *
      * @return string
      */
+    #[Override]
     protected static function getFacadeAccessor()
     {
         return 'cart';

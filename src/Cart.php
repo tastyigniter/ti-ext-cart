@@ -19,16 +19,6 @@ class Cart
     public const string DEFAULT_INSTANCE = 'default';
 
     /**
-     * Instance of the session manager.
-     */
-    protected SessionManager $session;
-
-    /**
-     * Instance of the event dispatcher.
-     */
-    protected Dispatcher $events;
-
-    /**
      * Holds the current cart instance.
      */
     protected string $instance = self::DEFAULT_INSTANCE;
@@ -41,11 +31,16 @@ class Cart
     /**
      * Cart constructor.
      */
-    public function __construct(SessionManager $session, Dispatcher $events)
-    {
-        $this->session = $session;
-        $this->events = $events;
-    }
+    public function __construct(
+        /**
+         * Instance of the session manager.
+         */
+        protected SessionManager $session,
+        /**
+         * Instance of the event dispatcher.
+         */
+        protected Dispatcher $events,
+    ) {}
 
     /**
      * Set the current cart instance.
@@ -75,9 +70,7 @@ class Cart
     public function add($buyable, int $qty = 0, array $options = [], $comment = null): array|CartItem
     {
         if ($this->isMulti($buyable)) {
-            return array_map(function($item): CartItem|array {
-                return $this->add($item);
-            }, $buyable);
+            return array_map(fn($item): CartItem|array => $this->add($item), $buyable);
         }
 
         $cartItem = $this->createCartItem($buyable, $qty, $options, $comment);
@@ -180,10 +173,8 @@ class Cart
 
     /**
      * Destroy the current cart instance.
-     *
-     * @param mixed $identifier
      */
-    public function destroy($identifier = null): void
+    public function destroy(string $identifier = null): void
     {
         $this->fireEvent('clearing');
 
@@ -490,12 +481,8 @@ class Cart
 
     /**
      * Check if the item is a multidimensional array or an array of Buyables.
-     *
-     * @param mixed $item
-     *
-     * @return bool
      */
-    protected function isMulti($item)
+    protected function isMulti(mixed $item): bool
     {
         if (!is_array($item)) {
             return false;
@@ -506,10 +493,8 @@ class Cart
 
     /**
      * Store the current instance of the cart.
-     *
-     * @param mixed $identifier
      */
-    public function store($identifier): void
+    public function store(string $identifier): void
     {
         $cartStore = $this->createModel()->firstOrCreate([
             'identifier' => $identifier,
@@ -528,9 +513,8 @@ class Cart
 
     /**
      * Restore the cart with the given identifier.
-     * @param mixed $identifier
      */
-    public function restore($identifier): void
+    public function restore(string $identifier): void
     {
         if (!$this->storedCartWithIdentifierExists($identifier)) {
             return;
@@ -592,7 +576,7 @@ class Cart
     {
         $modelClass = config('igniter-cart.model');
         if (!$modelClass || !class_exists($modelClass)) {
-            throw new LogicException(sprintf('Missing model [%s] in %s', $modelClass, get_called_class()));
+            throw new LogicException(sprintf('Missing model [%s] in %s', $modelClass, static::class));
         }
 
         return new $modelClass;

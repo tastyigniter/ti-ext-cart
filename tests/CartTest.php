@@ -488,9 +488,7 @@ it('searches the cart correctly', function(): void {
         'price' => 10.00,
     ], 1);
 
-    $searchResult = $this->cart->search(function($cartItem, $rowId): bool {
-        return $cartItem->id === 1;
-    });
+    $searchResult = $this->cart->search(fn($cartItem, $rowId): bool => $cartItem->id === 1);
 
     expect($searchResult)->toHaveCount(1);
 });
@@ -534,9 +532,7 @@ it('restores the cart correctly', function(): void {
 it('keeps session when destroyOnLogout is false', function(): void {
     config(['igniter-cart.destroyOnLogout' => false]);
 
-    $result = $this->cart->keepSession(function(): string {
-        return 'callback result';
-    });
+    $result = $this->cart->keepSession(fn(): string => 'callback result');
 
     expect($result)->toBe('callback result');
 });
@@ -544,9 +540,7 @@ it('keeps session when destroyOnLogout is false', function(): void {
 it('does not keep session when destroyOnLogout is true', function(): void {
     config(['igniter-cart.destroyOnLogout' => true]);
 
-    $result = $this->cart->keepSession(function(): string {
-        return 'callback result';
-    });
+    $result = $this->cart->keepSession(fn(): string => 'callback result');
 
     expect($result)->toBe('callback result');
 });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\CartConditions;
 
+use Override;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\System\Models\Currency;
@@ -16,17 +17,20 @@ class Tip extends CartCondition
 
     public ?int $priority = 100;
 
+    #[Override]
     public function onLoad(): void
     {
         $this->tippingEnabled = (bool)CartSettings::get('enable_tipping');
         $this->tipValueType = CartSettings::get('tip_value_type', 'F'); // @phpstan-ignore-line arguments.count
     }
 
+    #[Override]
     public function getLabel(): string
     {
         return lang($this->label);
     }
 
+    #[Override]
     public function beforeApply(): ?bool
     {
         if (!$this->tippingEnabled) {
@@ -47,6 +51,7 @@ class Tip extends CartCondition
         return null;
     }
 
+    #[Override]
     public function getActions(): array
     {
         $amount = $this->getMetaData('amount');

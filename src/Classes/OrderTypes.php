@@ -16,9 +16,7 @@ class OrderTypes
     public function makeOrderTypes($location): Collection
     {
         return collect($this->listOrderTypes())
-            ->map(function(array $orderType) use ($location) {
-                return resolve($orderType['className'], ['location' => $location, 'config' => $orderType]);
-            });
+            ->map(fn(array $orderType) => resolve($orderType['className'], ['location' => $location, 'config' => $orderType]));
     }
 
     public function getOrderType($code): array

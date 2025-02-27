@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Classes;
 
+use Override;
 use Igniter\Admin\Classes\FormField;
 
 class CheckoutFormField extends FormField
 {
+    #[Override]
     public function getName(null|false|string $arrayName = null): string
     {
         if ($arrayName === null) {
@@ -21,6 +23,7 @@ class CheckoutFormField extends FormField
         return $this->fieldName;
     }
 
+    #[Override]
     public function getId(?string $suffix = null): string
     {
         $id = '';
