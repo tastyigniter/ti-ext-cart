@@ -13,6 +13,7 @@ use Igniter\Cart\Events\OrderBeforePaymentProcessedEvent;
 use Igniter\Cart\Events\OrderCanceledEvent;
 use Igniter\Cart\Events\OrderPaymentProcessedEvent;
 use Igniter\Cart\Models\Concerns\HasInvoice;
+use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
 use Igniter\Flame\Database\Builder;
 use Igniter\Flame\Database\Casts\Serialize;
@@ -75,13 +76,13 @@ use Override;
  * @property-read string|null $status_color
  * @property-read string|null $status_name
  * @property null|Customer $customer
- * @property null|Location $location
+ * @property null|Location|LocationAction $location
  * @property null|Address $address
  * @property null|Payment $payment_method
- * @property null|PaymentLog $payment_logs
- * @property null|OrderMenu $menus
- * @property null|OrderMenuOptionValue $menu_options
- * @property null|OrderTotal $totals
+ * @property \Illuminate\Database\Eloquent\Collection<int, PaymentLog> $payment_logs
+ * @property \Illuminate\Database\Eloquent\Collection<int, OrderMenu> $menus
+ * @property \Illuminate\Database\Eloquent\Collection<int, OrderMenuOptionValue> $menu_options
+ * @property \Illuminate\Database\Eloquent\Collection<int, OrderTotal> $totals
  * @method static HasMany|PaymentLog payment_logs()
  * @method static Builder<static>|Order whereIsEnabled()
  * @method static Builder<static>|Order whereHasAutoAssignGroup()
@@ -191,9 +192,7 @@ class Order extends Model
             return $this->order_type;
         }
 
-        return optional(
-            $this->location->availableOrderTypes()->get($this->order_type),
-        )->getLabel();
+        return $this->location->availableOrderTypes()->get($this->order_type)?->getLabel();
     }
 
     public function getOrderDatetimeAttribute($value)

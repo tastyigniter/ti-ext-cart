@@ -28,7 +28,7 @@ trait ManagesOrderItems
 
             $this->menu_options
                 ->where('order_menu_id', $orderMenu->order_menu_id)
-                ->each(function($orderMenuOption) {
+                ->each(function(OrderMenuOptionValue $orderMenuOption) {
                     /** @var null|MenuItemOptionValue $menuItemOptionValue */
                     $menuItemOptionValue = MenuItemOptionValue::find($orderMenuOption->menu_option_value_id);
                     if (!$menuItemOptionValue) {

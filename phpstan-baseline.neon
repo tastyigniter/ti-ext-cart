@@ -251,31 +251,6 @@ parameters:
 			path: src/Models/Observers/MenuOptionValueObserver.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$address\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$location\\.$#"
-			count: 7
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$menu_options\\.$#"
-			count: 2
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$menus\\.$#"
-			count: 3
-			path: src/Models/Order.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$totals\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\OrderMenu\\:\\:\\$menu_options\\.$#"
 			count: 1
 			path: src/Models/Order.php
