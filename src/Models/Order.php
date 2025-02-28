@@ -18,6 +18,7 @@ use Igniter\Flame\Database\Builder;
 use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Database\Relations\HasMany;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\Main\Classes\MainController;
@@ -73,6 +74,15 @@ use Override;
  * @property-read mixed $order_type_name
  * @property-read string|null $status_color
  * @property-read string|null $status_name
+ * @property null|Customer $customer
+ * @property null|Location $location
+ * @property null|Address $address
+ * @property null|Payment $payment_method
+ * @property null|PaymentLog $payment_logs
+ * @property null|OrderMenu $menus
+ * @property null|OrderMenuOptionValue $menu_options
+ * @property null|OrderTotal $totals
+ * @method static HasMany|PaymentLog payment_logs()
  * @method static Builder<static>|Order whereIsEnabled()
  * @method static Builder<static>|Order whereHasAutoAssignGroup()
  * @method static Builder<static>|Order whereHasStatusInHistory(string | int $statusId)
