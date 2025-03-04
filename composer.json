@@ -16,20 +16,23 @@
     "ordering"
   ],
   "require": {
-    "tastyigniter/core": "^v4.0@beta || ^v4.0@dev",
-    "tastyigniter/ti-ext-automation": "^v4.0@beta || ^v4.0@dev",
-    "tastyigniter/ti-ext-coupons": "^v4.0@beta || ^v4.0@dev",
-    "tastyigniter/ti-ext-local": "^v4.0@beta || ^v4.0@dev",
-    "tastyigniter/ti-ext-payregister": "^v4.0@beta || ^v4.0@dev",
-    "tastyigniter/ti-ext-user": "^v4.0@beta || ^v4.0@dev"
+    "tastyigniter/core": "^v4.0",
+    "tastyigniter/ti-ext-automation": "^v4.0",
+    "tastyigniter/ti-ext-coupons": "^v4.0",
+    "tastyigniter/ti-ext-local": "^v4.0",
+    "tastyigniter/ti-ext-payregister": "^v4.0",
+    "tastyigniter/ti-ext-user": "^v4.0v"
   },
   "require-dev": {
-    "igniterlabs/ti-ext-importexport": "v4.x-dev as 4.0",
-    "larastan/larastan": "^2.4.0",
+    "igniterlabs/ti-ext-importexport": "v4.0",
+    "larastan/larastan": "^2.4",
     "laravel/pint": "^1.2",
     "pestphp/pest-plugin-laravel": "^3.0",
     "rector/rector": "^1.2",
-    "sampoyigi/testbench": "dev-main as 1.0"
+    "sampoyigi/testbench": "^1.0"
+  },
+  "suggest": {
+    "igniterlabs/ti-ext-importexport": "For importing and exporting orders."
   },
   "autoload": {
     "psr-4": {
@@ -73,6 +76,5 @@
       "composer/installers": true
     },
     "sort-packages": true
-  },
-  "minimum-stability": "dev"
+  }
 }
