@@ -21,7 +21,7 @@
         "tastyigniter/ti-ext-coupons": "^v4.0",
         "tastyigniter/ti-ext-local": "^v4.0",
         "tastyigniter/ti-ext-payregister": "^v4.0",
-        "tastyigniter/ti-ext-user": "^v4.0v"
+        "tastyigniter/ti-ext-user": "^v4.0"
     },
     "require-dev": {
         "igniterlabs/ti-ext-importexport": "v4.0",
