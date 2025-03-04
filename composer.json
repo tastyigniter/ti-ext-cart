@@ -1,80 +1,85 @@
 {
-  "name": "tastyigniter/ti-ext-cart",
-  "type": "tastyigniter-package",
-  "description": "Easily add a shopping cart to your site. The most powerful way to sell your menu items.",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Sam Poyigi",
-      "email": "sam@sampoyigi.com"
-    }
-  ],
-  "keywords": [
-    "tastyigniter",
-    "cart",
-    "online-food-ordering",
-    "ordering"
-  ],
-  "require": {
-    "tastyigniter/core": "^v4.0",
-    "tastyigniter/ti-ext-automation": "^v4.0",
-    "tastyigniter/ti-ext-coupons": "^v4.0",
-    "tastyigniter/ti-ext-local": "^v4.0",
-    "tastyigniter/ti-ext-payregister": "^v4.0",
-    "tastyigniter/ti-ext-user": "^v4.0v"
-  },
-  "require-dev": {
-    "igniterlabs/ti-ext-importexport": "v4.0",
-    "larastan/larastan": "^2.4",
-    "laravel/pint": "^1.2",
-    "pestphp/pest-plugin-laravel": "^3.0",
-    "rector/rector": "^1.2",
-    "sampoyigi/testbench": "^1.0"
-  },
-  "suggest": {
-    "igniterlabs/ti-ext-importexport": "For importing and exporting orders."
-  },
-  "autoload": {
-    "psr-4": {
-      "Igniter\\Cart\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Igniter\\Cart\\Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "tastyigniter-extension": {
-      "code": "igniter.cart",
-      "name": "Cart",
-      "icon": {
-        "class": "fa fa-shopping-cart",
-        "color": "#FFF",
-        "backgroundColor": "#ED561A"
-      },
-      "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart"
-    }
-  },
-  "scripts": {
-    "test": "vendor/bin/pest",
-    "test-coverage": "vendor/bin/pest --coverage --min=99 --compact",
-    "type-coverage": "vendor/bin/pest --type-coverage --min=100",
-    "format": "vendor/bin/pint",
-    "refactor": "vendor/bin/rector process --dry-run",
-    "static": "vendor/bin/phpstan analyse --ansi --memory-limit 1056M",
-    "test-suite": [
-      "@refactor",
-      "@static",
-      "@test-coverage"
-    ]
-  },
-  "config": {
-    "allow-plugins": {
-      "pestphp/pest-plugin": true,
-      "php-http/discovery": true,
-      "composer/installers": true
+    "name": "tastyigniter/ti-ext-cart",
+    "type": "tastyigniter-package",
+    "description": "Easily add a shopping cart to your site. The most powerful way to sell your menu items.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Poyigi",
+            "email": "sam@sampoyigi.com"
+        }
+    ],
+    "keywords": [
+        "tastyigniter",
+        "cart",
+        "online-food-ordering",
+        "ordering"
+    ],
+    "require": {
+        "tastyigniter/core": "^v4.0",
+        "tastyigniter/ti-ext-automation": "^v4.0",
+        "tastyigniter/ti-ext-coupons": "^v4.0",
+        "tastyigniter/ti-ext-local": "^v4.0",
+        "tastyigniter/ti-ext-payregister": "^v4.0",
+        "tastyigniter/ti-ext-user": "^v4.0v"
     },
-    "sort-packages": true
-  }
+    "require-dev": {
+        "igniterlabs/ti-ext-importexport": "v4.0",
+        "larastan/larastan": "^2.4",
+        "laravel/pint": "^1.2",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "rector/rector": "^1.2",
+        "sampoyigi/testbench": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Igniter\\Cart\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Igniter\\Cart\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "tastyigniter-extension": {
+            "code": "igniter.cart",
+            "name": "Cart",
+            "icon": {
+                "class": "fa fa-shopping-cart",
+                "color": "#FFF",
+                "backgroundColor": "#ED561A"
+            },
+            "homepage": "https://tastyigniter.com/marketplace/item/igniter-cart"
+        },
+        "branch-alias": {
+            "dev-master": "4.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "composer/installers": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage --min=99 --compact",
+        "type-coverage": "vendor/bin/pest --type-coverage --min=100",
+        "format": "vendor/bin/pint",
+        "refactor": "vendor/bin/rector process --dry-run",
+        "static": "vendor/bin/phpstan analyse --ansi --memory-limit 1056M",
+        "test-suite": [
+            "@refactor",
+            "@static",
+            "@test-coverage"
+        ]
+    },
+    "suggest": {
+        "igniterlabs/ti-ext-importexport": "For importing and exporting orders."
+    }
 }
