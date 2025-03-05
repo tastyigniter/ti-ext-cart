@@ -17,9 +17,7 @@ it('initializes with default config', function(): void {
 it('fills config from provided array', function(): void {
     $config = [
         'fields' => [],
-        'model' => new class extends Model
-        {
-        },
+        'model' => new class extends Model {},
     ];
     $checkoutForm = new CheckoutForm($config);
 
