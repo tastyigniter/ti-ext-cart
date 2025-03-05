@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Igniter\Cart\Tests\Classes;
 
 use Igniter\Cart\Classes\CheckoutForm;
+use Igniter\Flame\Database\Model;
 
 it('initializes with default config', function(): void {
     $checkoutForm = new CheckoutForm;
@@ -14,13 +15,18 @@ it('initializes with default config', function(): void {
 });
 
 it('fills config from provided array', function(): void {
-    $config = ['fields' => [], 'model' => 'TestModel'];
+    $config = [
+        'fields' => [],
+        'model' => new class extends Model
+        {
+        },
+    ];
     $checkoutForm = new CheckoutForm($config);
 
     $checkoutForm->initialize();
 
     expect($checkoutForm->config['fields'])->toBeArray()
-        ->and($checkoutForm->config['model'])->toEqual('TestModel');
+        ->and($checkoutForm->config['model'])->toBeInstanceOf(Model::class);
 });
 
 it('returns validation rules with prefixed keys', function(): void {

@@ -24,7 +24,7 @@
         "tastyigniter/ti-ext-user": "^v4.0"
     },
     "require-dev": {
-        "igniterlabs/ti-ext-importexport": "v4.0",
+        "igniterlabs/ti-ext-importexport": "v4.x-dev",
         "larastan/larastan": "^2.4",
         "laravel/pint": "^1.2",
         "pestphp/pest-plugin-laravel": "^3.0",
