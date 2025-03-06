@@ -174,13 +174,15 @@ class Cart
     /**
      * Destroy the current cart instance.
      */
-    public function destroy(?string $identifier = null): void
+    public function destroy(?int $identifier = null): void
     {
         $this->fireEvent('clearing');
 
         $this->clearContent();
         $this->clearConditions();
-        $this->deleteStored($identifier);
+        if (!is_null($identifier)) {
+            $this->deleteStored($identifier);
+        }
 
         $this->fireEvent('cleared');
     }
@@ -494,7 +496,7 @@ class Cart
     /**
      * Store the current instance of the cart.
      */
-    public function store(string $identifier): void
+    public function store(int $identifier): void
     {
         $cartStore = $this->createModel()->firstOrCreate([
             'identifier' => $identifier,
@@ -514,7 +516,7 @@ class Cart
     /**
      * Restore the cart with the given identifier.
      */
-    public function restore(string $identifier): void
+    public function restore(int $identifier): void
     {
         if (!$this->storedCartWithIdentifierExists($identifier)) {
             return;
@@ -543,7 +545,7 @@ class Cart
         $this->deleteStored($identifier);
     }
 
-    public function deleteStored($identifier): void
+    public function deleteStored(int $identifier): void
     {
         $this->createModel()
             ->where('identifier', $identifier)

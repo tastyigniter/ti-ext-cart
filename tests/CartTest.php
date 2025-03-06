@@ -500,9 +500,9 @@ it('stores the cart correctly', function(): void {
         'price' => 10.00,
     ], 1);
 
-    $this->cart->store('test');
+    $this->cart->store(123);
 
-    expect(CartModel::where('identifier', 'test')->exists())->toBeTrue();
+    expect(CartModel::where('identifier', 123)->exists())->toBeTrue();
 });
 
 it('restores the cart correctly', function(): void {
@@ -519,12 +519,12 @@ it('restores the cart correctly', function(): void {
         'value' => '10%',
     ]));
 
-    expect($this->cart->restore('test'))->toBeNull();
+    expect($this->cart->restore(123))->toBeNull();
 
-    $this->cart->store('test');
+    $this->cart->store(123);
     $this->cart->destroy();
 
-    $this->cart->restore('test');
+    $this->cart->restore(123);
 
     expect($this->cart->content())->toHaveCount(1);
 });
