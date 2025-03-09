@@ -2,8 +2,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    @if ($site_logo !== 'no_photo.png')
+        <link href="{{ media_thumb($site_logo, ['width' => 64, 'height' => 64]) }}" rel="shortcut icon"
+            type="image/ico">
+    @else
+        {{html(get_favicon())}}
+    @endif
     <title>{!! $model->invoice_number.' - '.lang('igniter.cart::default.orders.text_invoice').' - '.$site_name !!}</title>
-    {!! get_style_tags() !!}
+    @themeStyles
     <style>
         body {
             background-color: #FFF;
@@ -33,7 +39,7 @@
         <div class="col-6">
             <strong>@lang('igniter.cart::default.orders.text_restaurant')</strong><br>
             <span>{{ $model->location->getName() }}</span><br>
-            <address>{{ format_address($model->location->getAddress(), true) }}</address>
+            <address>{{ html(format_address($model->location->getAddress(), true)) }}</address>
         </div>
         <div class="col-6 text-right">
             <img class="img-responsive" src="{{ media_url(setting('invoice_logo') ?: $site_logo) }}" alt=""
@@ -101,10 +107,9 @@
                         <tr>
                             <td>{{ $menuItem->quantity }}x</td>
                             <td class="text-left"><b>{{ $menuItem->name }}</b><br/>
-                                @php $menuItemOptionGroup = $menuItem->menu_options->groupBy('order_option_category') @endphp
-                                @if($menuItemOptionGroup->isNotEmpty())
+                                @if($menuItem->menu_options->isNotEmpty())
                                     <ul class="list-unstyled">
-                                        @foreach($menuItemOptionGroup as $menuItemOptionGroupName => $menuItemOptions)
+                                        @foreach($menuItem->menu_options as $menuItemOptionGroupName => $menuItemOptions)
                                             <li>
                                                 <u class="text-muted">{{ $menuItemOptionGroupName }}:</u>
                                                 <ul class="list-unstyled">
