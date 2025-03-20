@@ -1,3 +1,9 @@
+---
+title: "Cart"
+section: "extensions"
+sortOrder: 40
+---
+
 ## Installation
 
 You can install the extension via composer using the following command:
