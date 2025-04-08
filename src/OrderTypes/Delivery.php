@@ -43,7 +43,7 @@ class Delivery extends AbstractOrderType
     #[Override]
     public function getDisabledDescription(): string
     {
-        return lang('igniter.local::default.text_delivery_is_disabled');
+        return lang('igniter.cart::default.text_delivery_is_disabled');
     }
 
     #[Override]
