@@ -8,6 +8,7 @@ use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Flame\Database\Traits\Validation;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
 /**
@@ -103,9 +104,9 @@ class MenuItemOption extends Model
             $menuOptionValue = $this->menu_option_values->firstWhere('option_value_id', $optionValue->getKey());
 
             $optionValue->menu_option_value_id = $menuOptionValue?->menu_option_value_id;
-            $optionValue->menu_option_id = $menuOptionValue?->menu_option_id ?? $optionValue->option_id;
-            $optionValue->option_value_id = $menuOptionValue?->option_value_id ?? $optionValue->getKey();
-            $optionValue->price = $menuOptionValue?->price ?? $optionValue->price;
+            $optionValue->menu_option_id = $menuOptionValue->menu_option_id ?? $optionValue->option_id;
+            $optionValue->option_value_id = $menuOptionValue->option_value_id ?? $optionValue->getKey();
+            $optionValue->price = $menuOptionValue->price ?? $optionValue->price;
             $optionValue->override_price = $menuOptionValue?->override_price;
             $optionValue->is_default = $menuOptionValue?->is_default;
             $optionValue->is_enabled = !is_null($menuOptionValue);
