@@ -9,7 +9,7 @@ sortOrder: 40
 You can install the extension via composer using the following command:
 
 ```bash
-composer require tastyigniter/ti-ext-cart:"^4.0" -W
+composer require tastyigniter/ti-ext-cart -W
 ```
 
 Run the database migrations to create the required tables:
