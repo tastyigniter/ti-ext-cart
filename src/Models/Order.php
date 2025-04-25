@@ -75,10 +75,10 @@ use Override;
  * @property-read mixed $order_type_name
  * @property-read string|null $status_color
  * @property-read string|null $status_name
- * @property null|Customer $customer
- * @property null|Location|LocationAction $location
- * @property null|Address $address
- * @property null|Payment $payment_method
+ * @property Customer|null $customer
+ * @property Location|LocationAction|null $location
+ * @property Address|null $address
+ * @property Payment|null $payment_method
  * @property \Illuminate\Database\Eloquent\Collection<int, PaymentLog> $payment_logs
  * @property \Illuminate\Database\Eloquent\Collection<int, OrderMenu> $menus
  * @property \Illuminate\Database\Eloquent\Collection<int, OrderMenuOptionValue> $menu_options
@@ -174,7 +174,7 @@ class Order extends Model
 
     public function listCustomerAddresses()
     {
-        return $this->customer?->addresses ?? [];
+        return $this->customer->addresses ?? [];
     }
 
     //
@@ -306,7 +306,7 @@ class Order extends Model
         PaymentLog::logAttempt($this, $message, $isSuccess, $request, $response, $isRefundable);
     }
 
-    public function updateOrderStatus($id, $options = []): StatusHistory|false
+    public function updateOrderStatus($id, array $options = []): StatusHistory|false
     {
         $id = $id ?: $this->status_id ?: setting('default_order_status');
 
@@ -326,7 +326,7 @@ class Order extends Model
     // Mail
     //
 
-    public function mailGetRecipients($type)
+    public function mailGetRecipients($type): array
     {
         $recipients = [];
         if (in_array($type, (array)setting('order_email', []))) {
@@ -346,7 +346,7 @@ class Order extends Model
         return $recipients;
     }
 
-    public function mailGetReplyTo($type)
+    public function mailGetReplyTo($type): array
     {
         $replyTo = [];
         if (in_array($type, (array)setting('order_email', []))) {
@@ -363,10 +363,8 @@ class Order extends Model
 
     /**
      * Return the order data to build mail template
-     *
-     * @return array
      */
-    public function mailGetData()
+    public function mailGetData(): array
     {
         $model = $this->fresh();
 
@@ -422,7 +420,7 @@ class Order extends Model
         $orderTotals = $model->getOrderTotals();
         foreach ($orderTotals as $total) {
             $data['order_totals'][] = [
-                'order_total_title' => htmlspecialchars_decode($total->title),
+                'order_total_title' => htmlspecialchars_decode((string)$total->title),
                 'order_total_value' => currency_format($total->value),
                 'priority' => $total->priority,
             ];

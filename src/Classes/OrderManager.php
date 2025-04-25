@@ -227,11 +227,11 @@ class OrderManager
     {
         Event::dispatch('igniter.checkout.beforePayment', [$order, $data]);
 
-        if (!strlen($order->payment) && $order->order_total <= 0) {
+        if (!strlen((string) $order->payment) && $order->order_total <= 0) {
             return $this->processPaymentLessForm($order);
         }
 
-        if ($order->order_total > 0 && !strlen($order->payment)) {
+        if ($order->order_total > 0 && !strlen((string) $order->payment)) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_invalid_payment'));
         }
 

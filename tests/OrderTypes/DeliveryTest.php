@@ -30,12 +30,12 @@ it('returns opening description correctly', function(): void {
 it('returns closed description correctly', function(): void {
     expect($this->delivery->getClosedDescription())->toBe(sprintf(
         lang('igniter.cart::default.text_delivery_time_info'),
-        lang('igniter.local::default.text_is_closed')
+        lang('igniter.local::default.text_is_closed'),
     ));
 });
 
 it('returns disabled description correctly', function(): void {
-    expect($this->delivery->getDisabledDescription())->toBe(lang('igniter.local::default.text_delivery_is_disabled'));
+    expect($this->delivery->getDisabledDescription())->toBe(lang('igniter.cart::default.text_delivery_is_disabled'));
 });
 
 it('returns active status correctly', function(): void {

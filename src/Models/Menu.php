@@ -129,7 +129,9 @@ class Menu extends Model implements Buyable
             return $this->menu_price;
         }
 
-        return $this->menu_options->mapWithKeys(fn($option) => $option->menu_option_values->keyBy('menu_option_value_id'))->min('price') ?: 0;
+        return $this->menu_options->mapWithKeys(
+            fn($option) => $option->menu_option_values->keyBy('menu_option_value_id')->all(),
+        )->min('price') ?: 0;
     }
 
     public function getMinimumQtyAttribute($value)
