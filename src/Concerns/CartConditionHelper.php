@@ -41,11 +41,11 @@ trait CartConditionHelper
         $actionValue = array_get($action, 'value', '0');
         $actionValuePrecision = (int)array_get($action, 'valuePrecision', 2);
 
-        if ($this->valueIsPercentage($actionValue)) {
-            $cleanValue = $this->cleanValue($actionValue);
+        if ($this->valueIsPercentage((string)$actionValue)) {
+            $cleanValue = $this->cleanValue((string)$actionValue);
             $value = ($total * ($cleanValue / 100));
         } else {
-            $value = (float)$this->cleanValue($actionValue);
+            $value = (float)$this->cleanValue((string)$actionValue);
         }
 
         $value = round($value, $actionValuePrecision);
