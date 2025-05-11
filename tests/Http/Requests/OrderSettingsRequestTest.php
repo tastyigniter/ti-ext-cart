@@ -61,6 +61,6 @@ it('returns correct validation rules', function(): void {
         ->and($rules['tax_mode'])->toContain('required', 'integer')
         ->and($rules['tax_title'])->toContain('string', 'max:32')
         ->and($rules['tax_percentage'])->toContain('required_if:tax_mode,1', 'numeric')
-        ->and($rules['tax_menu_price'])->toContain('required', 'numeric')
+        ->and($rules['tax_menu_price'])->toContain('nullable', 'numeric')
         ->and($rules['tax_delivery_charge'])->toContain('numeric');
 });
