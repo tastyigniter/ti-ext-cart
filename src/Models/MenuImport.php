@@ -96,6 +96,7 @@ class MenuImport extends ImportModel
                 if ($category->wasRecentlyCreated) {
                     $this->logCreated();
                 }
+
                 $ids[] = $this->categoryNameCache[$name] = $category->category_id;
             }
         }
