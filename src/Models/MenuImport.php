@@ -93,7 +93,7 @@ class MenuImport extends ImportModel
             } else {
                 /** @var Category $category */
                 $category = Category::firstOrCreate(['name' => $name]);
-                if($category->wasRecentlyCreated) {
+                if ($category->wasRecentlyCreated) {
                     $this->logCreated();
                 }
                 $ids[] = $this->categoryNameCache[$name] = $category->category_id;
