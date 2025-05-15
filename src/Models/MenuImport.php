@@ -91,9 +91,13 @@ class MenuImport extends ImportModel
             if (isset($this->categoryNameCache[$name])) {
                 $ids[] = $this->categoryNameCache[$name];
             } else {
-                /** @var Category $newCategory */
-                $newCategory = Category::firstOrCreate(['name' => $name]);
-                $ids[] = $this->categoryNameCache[$name] = $newCategory->category_id;
+                /** @var Category $category */
+                $category = Category::firstOrCreate(['name' => $name]);
+                if ($category->wasRecentlyCreated) {
+                    $this->logCreated();
+                }
+
+                $ids[] = $this->categoryNameCache[$name] = $category->category_id;
             }
         }
 
