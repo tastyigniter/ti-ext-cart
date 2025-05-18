@@ -187,18 +187,6 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuExport\:\:\$menu_categories\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/MenuExport.php
-
-		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuImport\:\:\$update_existing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/MenuImport.php
-
-		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$option\.$#'
 			identifier: property.notFound
 			count: 3
