@@ -33,8 +33,6 @@ use Igniter\Cart\Models\Ingredient;
 use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuCategory;
-use Igniter\Cart\Models\MenuExport;
-use Igniter\Cart\Models\MenuImport;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOption;
@@ -233,26 +231,6 @@ class Extension extends BaseExtension
             'igniter.cart::mail.order_alert' => 'lang:igniter.cart::default.text_mail_order_alert',
             'igniter.cart::mail.order_update' => 'lang:igniter.cart::default.text_mail_order_update',
             'igniter.cart::mail.low_stock_alert' => 'lang:igniter.cart::default.text_mail_low_stock_alert',
-        ];
-    }
-
-    public function registerImportExport(): array
-    {
-        return [
-            'import' => [
-                'menus' => [
-                    'label' => 'Import Menu Items',
-                    'model' => MenuImport::class,
-                    'configFile' => 'igniter.cart::/models/menuimport',
-                ],
-            ],
-            'export' => [
-                'menus' => [
-                    'label' => 'Export Menu Items',
-                    'model' => MenuExport::class,
-                    'configFile' => 'igniter.cart::/models/menuexport',
-                ],
-            ],
         ];
     }
 

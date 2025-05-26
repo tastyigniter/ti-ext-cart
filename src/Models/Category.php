@@ -119,6 +119,6 @@ class Category extends Model
 
     public function getCountMenusAttribute($value)
     {
-        return $this->menus()->count();
+        return $this->menus()->whereIsEnabled()->count();
     }
 }

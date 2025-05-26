@@ -25,8 +25,6 @@ use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
 use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Models\CartSettings;
-use Igniter\Cart\Models\MenuExport;
-use Igniter\Cart\Models\MenuImport;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Notifications\OrderCreatedNotification;
 use Igniter\Flame\Database\Model;
@@ -102,19 +100,6 @@ it('registers mail templates correctly', function(): void {
         ->and($templates)->toHaveKey('igniter.cart::mail.order_alert')
         ->and($templates)->toHaveKey('igniter.cart::mail.order_update')
         ->and($templates)->toHaveKey('igniter.cart::mail.low_stock_alert');
-});
-
-it('registers import export setup for menu items', function(): void {
-    $extension = new Extension(app());
-
-    $result = $extension->registerImportExport();
-
-    expect($result['import']['menus']['label'])->toBe('Import Menu Items')
-        ->and($result['import']['menus']['model'])->toBe(MenuImport::class)
-        ->and($result['import']['menus']['configFile'])->toBe('igniter.cart::/models/menuimport')
-        ->and($result['export']['menus']['label'])->toBe('Export Menu Items')
-        ->and($result['export']['menus']['model'])->toBe(MenuExport::class)
-        ->and($result['export']['menus']['configFile'])->toBe('igniter.cart::/models/menuexport');
 });
 
 it('registers navigation correctly', function(): void {
