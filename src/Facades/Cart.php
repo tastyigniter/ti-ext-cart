@@ -28,7 +28,7 @@ use Override;
  * @method static void associate(string $rowId, mixed $model)
  * @method static CartConditions conditions()
  * @method static void conditionsWithoutApplied()
- * @method static CartCondition getCondition(void $name)
+ * @method static CartCondition|null getCondition(string $name)
  * @method static bool removeCondition(void $name)
  * @method static void clearConditions()
  * @method static void condition(void $condition)
