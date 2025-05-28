@@ -7,10 +7,12 @@
             {{ $formModel->customer_name }}
         @endif
     </div>
-    <div class="py-2">
-        <i class="fa fa-envelope fa-fw text-muted"></i>&nbsp;&nbsp;
-        {{ $formModel->email }}
-    </div>
+    @if($formModel->email)
+        <div class="py-2">
+            <i class="fa fa-envelope fa-fw text-muted"></i>&nbsp;&nbsp;
+            {{ $formModel->email }}
+        </div>
+    @endif
     @if($formModel->telephone)
         <div class="py-2">
             <i class="fa fa-phone fa-fw text-muted"></i>&nbsp;&nbsp;
