@@ -57,7 +57,7 @@ You can configure the order settings for all locations in the admin area. Naviga
 
 ## Usage
 
-This section explains how to integrate the Cart Extension API into your extension if you're building an extension that needs to interact with the cart. The Cart extension provides a simple API to update the cart — including adding, modifying, and removing items, as well as retrieving cart totals.
+This section covers how to integrate the Cart Extension API into your extension if you're building an extension that needs to interact with the cart. The Cart extension provides a simple API to update the cart — including adding, modifying, and removing items, as well as retrieving cart totals.
 
 ### Adding items to the cart
 
