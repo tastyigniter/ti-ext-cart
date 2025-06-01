@@ -7,13 +7,13 @@
             {{ $formModel->customer_name }}
         @endif
     </div>
-    @if($formModel->email)
+    @unless(array_get($field->config, 'hideEmail', false))
         <div class="py-2">
             <i class="fa fa-envelope fa-fw text-muted"></i>&nbsp;&nbsp;
             {{ $formModel->email }}
         </div>
-    @endif
-    @if($formModel->telephone)
+    @endunless
+    @if(!array_get($field->config, 'hideTelephone', false) && $formModel->telephone)
         <div class="py-2">
             <i class="fa fa-phone fa-fw text-muted"></i>&nbsp;&nbsp;
             {{ $formModel->telephone }}
