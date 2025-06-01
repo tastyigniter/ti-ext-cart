@@ -24,7 +24,7 @@
     <div class="card-body border-top">
         <h5 class="card-title">@lang('igniter.cart::default.orders.label_delivery_address')</h5>
         <div class="py-2">
-            {{ format_address($formModel->address->toArray()) }}
+            {{ html(format_address($formModel->address->toArray())) }}
         </div>
     </div>
 @endif
