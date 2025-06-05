@@ -28,7 +28,7 @@ class CategoryRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'between:2,255'],
             'description' => ['string', 'min:2'],
-            'permalink_slug' => ['alpha_dash', 'max:255'],
+            'permalink_slug' => ['nullable', 'alpha_dash', 'max:255'],
             'parent_id' => ['nullable', 'integer'],
             'priority' => ['nullable', 'integer'],
             'status' => ['boolean'],
