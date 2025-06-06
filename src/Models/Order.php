@@ -293,7 +293,7 @@ class Order extends Model
             OrderBeforePaymentProcessedEvent::dispatch($this);
 
             $this->processed = true;
-            $this->save();
+            $this->saveQuietly();
 
             OrderPaymentProcessedEvent::dispatch($this);
         }
