@@ -213,7 +213,7 @@ class OrderManager
         $order->fill($data);
         $this->applyRequiredAttributes($order);
 
-        $order->save();
+        $order->saveQuietly();
 
         $order->addOrderMenus($this->cart->content()->all());
         $order->addOrderTotals($this->getCartTotals());
