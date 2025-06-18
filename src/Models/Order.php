@@ -449,6 +449,8 @@ class Order extends Model
             'hash' => $model->hash,
         ]);
 
+        $this->fireEvent('model.mailGetData', [&$data]);
+
         return $data;
     }
 }
