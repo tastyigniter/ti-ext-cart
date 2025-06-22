@@ -30,15 +30,15 @@ class CollectionSettingsRequest extends FormRequest
     {
         return [
             'is_enabled' => ['boolean'],
+            'add_lead_time' => ['boolean'],
             'time_interval' => ['integer', 'min:5'],
             'lead_time' => ['integer', 'min:5'],
+            'time_restriction' => ['nullable', 'integer', 'max:2'],
+            'cancellation_timeout' => ['integer', 'min:0', 'max:999'],
+            'min_order_amount' => ['numeric', 'min:0'],
             'future_orders.is_enabled' => ['boolean'],
             'future_orders.min_days' => ['integer', 'min:0'],
             'future_orders.days' => ['integer', 'min:0', 'gt:future_orders.min_days'],
-            'time_restriction' => ['nullable', 'integer', 'max:2'],
-            'add_lead_time' => ['boolean'],
-            'cancellation_timeout' => ['integer', 'min:0', 'max:999'],
-            'min_order_amount' => ['numeric', 'min:0'],
         ];
     }
 }

@@ -216,7 +216,7 @@ class Extension extends BaseExtension
             'settings' => [
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart conditions and tipping settings.',
-                'icon' => 'fa fa-gear',
+                'icon' => 'fa fa-cart-shopping',
                 'model' => CartSettings::class,
                 'permissions' => ['Module.CartModule'],
             ],

@@ -20,7 +20,7 @@ php artisan igniter:up
 
 ## Getting started
 
-You can configure the Cart extension by navigating to _Manage > Settings > Cart settings_. The settings available are:
+From your TastyIgniter Admin, you can configure the Cart extension by navigating to _Manage > Settings > Cart settings_. The settings available are:
 
 - **Cart Settings**: Configure the cart settings such as the abandoned cart and destroy cart after user logout.
 - **Cart Conditions**: Rename the cart conditions labels and enable/disable them. Also customize the cart conditions sort order.
@@ -28,7 +28,7 @@ You can configure the Cart extension by navigating to _Manage > Settings > Cart 
 
 ### Checkout settings
 
-You can configure the checkout settings for each location in the admin area. Navigate to the _Restaurant > Settings > General_ admin page, and click the _Checkout settings_ button. You can set the following checkout settings for each location:
+You can configure the checkout settings for each location in the admin area. Navigate to the _Manage > Locations_ admin page, and click on the _Settings Icon_ next to the location then click the _Checkout settings_ button under the _General_ tab. You can set the following checkout settings for each location:
 
 - **Enable guest order:** Enable or disable guest order for the location.
 - **Limit orders**: Set the maximum number of orders that can be placed per time slot.
@@ -36,7 +36,7 @@ You can configure the checkout settings for each location in the admin area. Nav
 
 ### Delivery and Pickup settings
 
-You can configure the delivery and pickup order settings for each location in the admin area. Navigate to the _Restaurant > Settings > General_ admin page, and click the _Delivery settings_ or _Pick-up settings_ button. You can set the following delivery or pickup settings for each location:
+You can configure the delivery and pickup order settings for each location in the admin area. Navigate to the _Manage > Locations_ admin page, and click on the _Settings Icon_ next to the location then click the _Delivery settings_ or _Pick-up settings_ button under the _General_ tab. You can set the following delivery or pickup settings for each location:
 
 - **Enable delivery or pick-up:** Enable or disable delivery or pick-up for the location.
 - **Time interval:** Set the time interval for delivery or pick-up.
@@ -53,9 +53,11 @@ You can configure the order settings for all locations in the admin area. Naviga
 - **Allow guest orders:** Enable or disable guest orders for all locations. Can be overridden by location settings.
 - **Reject orders outside delivery areas:** Enable or disable orders outside the delivery area. Customers must enter a valid address within the delivery area to place an order.
 - **Send order confirmation email:** Whether to send order confirmation emails to customers, location email and admin email.
-- **Order status workflow:** Set the order status workflow for all locations. For example, you can set the order status to _Pending_ when an order is placed, _Processing_ when the order is being prepared, and _Complete_ when the order is ready for delivery or pick-up.
+- **Order status workflow:** Set the order status workflow for all locations. For example, you can set the order status to _Received_ when an order is placed, _Pending_ and _Preparation_ when the order is being prepared, and _Complete_ when the order is ready for delivery or pick-up.
 
 ## Usage
+
+This section covers how to integrate the Cart Extension API into your extension if you're building an extension that needs to interact with the cart. The Cart extension provides a simple API to update the cart — including adding, modifying, and removing items, as well as retrieving cart totals.
 
 ### Adding items to the cart
 
@@ -140,7 +142,7 @@ Cart::add([$menuItem1, $menuItem2]);
 
 ### Updating items in the cart
 
-You can update items in the cart using the `update` method on the `Cart` facade. The method accepts the cart item `rowId` as the first parameter.
+You can update items in the cart using the `update` method on the `Igniter\Cart\Cart` facade. The method accepts the cart item `rowId` as the first parameter.
 
 If you want to update the quantity of an item in the cart, you can pass the new quantity as the second parameter:
 
@@ -341,7 +343,7 @@ $orderType = Location::COLLECTION;
 $timeslots = Location::scheduleTimeslot($orderType);
 ```
 
-For more information on generating schedule time slots, see the [Local Extension](https://tastyigniter.com/marketplace/item/igniter-local#working-hours) documentation.
+For more information on generating schedule time slots, see the [Local Extension](https://tastyigniter.com/docs/extensions/local#working-hours) documentation.
 
 #### Payment processing
 
@@ -351,7 +353,7 @@ Once the order has been created, you can process the payment for the order using
 $orderManager->processPayment($order, $attributes);
 ```
 
-For more information on processing payments, see the [PayRegister Extension](https://tastyigniter.com/marketplace/item/igniter-payregister#processing-checkout-payment-from) documentation.
+For more information on processing payments, see the [PayRegister Extension](https://tastyigniter.com/docs/extensions/payregister#processing-checkout-payment-form) documentation.
 
 #### Completing checkout
 
@@ -407,17 +409,17 @@ The Cart extension fires the following events during the checkout process:
 
 | Event | Description | Parameters |
 | ----- | ----------- | ---------- |
-| `igniter.checkout.beforeSaveOrder` |   Before an order is saved.    |      The `Order` model instance and `$data` form request     |
-| `igniter.checkout.afterSaveOrder` |   After an order is saved.    |      The `Order` model instance     |
-| `igniter.checkout.beforePayment` |    Before processing the payment for an order.   |      The `Order` model instance and `$data` form request     |
-| `admin.order.beforePaymentProcessed` |   Before an order is marked as payment processed.    |      The `Order` model instance     |
-| `admin.order.paymentProcessed` |   After an order is marked as payment processed.    |      The `Order` model instance     |
-| `admin.order.canceled` |   When an order is canceled.    |      The `Order` model instance     |
-| `admin.order.beforeRefundProcessed` |    Before an order is marked as refunded.   |      The `Order` model instance     |
-| `admin.order.refundProcessed` |   After an order is marked as refunded.   |      The `Order` model instance     |
-| `igniter.cart.beforeAddOrderStatus` |   Before adding an order status.    |      The `StatusHistory` model instance, `Order` model instance, `$statusId` status ID and the `$previousStatus` previous status ID      |
-| `igniter.cart.orderStatusAdded` |   After an order status is added.    |      The `Order` model instance and `StatusHistory` model instance      |
-| `igniter.cart.orderAssigned` |   After an order is assigned to a staff member.    |      The `Order` model instance and `User` model instance      |
+| `igniter.checkout.beforeSaveOrder` |   Before an order is saved.    |      The `Igniter\Cart\Models\Order` model instance and `$data` form request     |
+| `igniter.checkout.afterSaveOrder` |   After an order is saved.    |      The `Igniter\Cart\Models\Order` model instance     |
+| `igniter.checkout.beforePayment` |    Before processing the payment for an order.   |      The `Igniter\Cart\Models\Order` model instance and `$data` form request     |
+| `admin.order.beforePaymentProcessed` |   Before an order is marked as payment processed.    |      The `Igniter\Cart\Models\Order` model instance     |
+| `admin.order.paymentProcessed` |   After an order is marked as payment processed.    |      The `Igniter\Cart\Models\Order` model instance     |
+| `admin.order.canceled` |   When an order is canceled.    |      The `Igniter\Cart\Models\Order` model instance     |
+| `admin.order.beforeRefundProcessed` |    Before an order is marked as refunded.   |      The `Igniter\Cart\Models\Order` model instance     |
+| `admin.order.refundProcessed` |   After an order is marked as refunded.   |      The `Igniter\Cart\Models\Order` model instance     |
+| `igniter.cart.beforeAddOrderStatus` |   Before adding an order status.    |      The `Igniter\Admin\Models\StatusHistory` model instance, `Igniter\Cart\Models\Order` model instance, `$statusId` status ID and the `$previousStatus` previous status ID      |
+| `igniter.cart.orderStatusAdded` |   After an order status is added.    |      The `Igniter\Cart\Models\Order` model instance and `StatusHistory` model instance      |
+| `igniter.cart.orderAssigned` |   After an order is assigned to a staff member.    |      The `Igniter\Cart\Models\Order` model instance and `Igniter\User\Models\User` model instance      |
 
 Here is an example of hooking an event in the `boot` method of an extension class:
 
@@ -582,8 +584,8 @@ When setting up automation rules through the Admin Panel, you can use the follow
 
 An automation event class used to capture the `admin.order.paymentProcessed` system event when an order payment is confirmed. The event class is also used to prepare the order parameters for automation rules. The following parameters are available:
 
-- `order`: The `Order` model instance.
-- `status`: The `Status` model instance.
+- `order`: The `Igniter\Cart\Models\Order` model instance.
+- `status`: The `Igniter\Admin\Models\Status` model instance.
 - `order_number`: The order number.
 - `order_id`: The order ID.
 - `first_name`: The customer's first name.
@@ -630,7 +632,7 @@ An automation event class used to capture the `admin.order.statusUpdated` system
 
 An automation event class used to capture the `admin.order.assigned` system event when an order is assigned to a staff member. Similar to the `Order Placed Event`, the event class is also used to prepare the order parameters for automation rules. The available parameters are the same as the `Order Placed Event` including the following additional parameters:
 
-- `assignee`: The assignee `Staff` model instance.
+- `assignee`: The assignee `Igniter\User\Models\User` model instance.
 
 ### Automation Conditions
 
@@ -709,7 +711,7 @@ The Cart extension registers the following staff permissions:
 - `Admin.DeleteOrders`: Control who can delete orders in the admin area.
 - `Admin.AssignOrders`: Control who can assign orders to other staff members in the admin area.
 
-For more on restricting access to the admin area, see the [TastyIgniter Permissions](https://tastyigniter.com/docs/extend/permissions) documentation.
+For more on restricting access to the admin area, see the [TastyIgniter Permissions](https://tastyigniter.com/docs/customize/permissions) documentation.
 
 ### Cart Events
 

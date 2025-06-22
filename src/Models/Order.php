@@ -293,7 +293,7 @@ class Order extends Model
             OrderBeforePaymentProcessedEvent::dispatch($this);
 
             $this->processed = true;
-            $this->save();
+            $this->saveQuietly();
 
             OrderPaymentProcessedEvent::dispatch($this);
         }
@@ -448,6 +448,8 @@ class Order extends Model
         $data['order_view_url'] = $controller->pageUrl('account/order', [
             'hash' => $model->hash,
         ]);
+
+        $this->fireEvent('model.mailGetData', [&$data]);
 
         return $data;
     }
