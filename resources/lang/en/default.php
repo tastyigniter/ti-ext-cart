@@ -124,7 +124,7 @@ return [
     'alert_unknown_error' => 'Error occurred, please check and try again.',
     'alert_menu_not_found' => '%s not found, please add from the local menus page.',
     'alert_no_menu_selected' => 'Please select a menu to add to your order.',
-    'alert_menu_order_restriction' => 'The selected menu item is not available for <b>%s</b>',
+    'alert_menu_order_type_restriction' => 'The selected menu item <b>%s</b> is not available for <b>%s</b>',
     'alert_option_not_found' => 'The selected option is not available',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
     'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',

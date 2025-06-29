@@ -195,7 +195,7 @@ class CartManager
             return $condition;
         }
 
-        if (strlen((string) $code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
+        if (strlen((string)$code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
@@ -380,7 +380,8 @@ class CartManager
         $orderType = $this->location->getOrderType();
         if ($menuItem->hasOrderTypeRestriction($orderType->getCode())) {
             throw new ApplicationException(sprintf(
-                lang('igniter.cart::default.alert_menu_order_restriction'),
+                lang('igniter.cart::default.alert_menu_order_type_restriction'),
+                $menuItem->getBuyableName(),
                 $orderType->getLabel(),
             ));
         }

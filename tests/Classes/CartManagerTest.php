@@ -443,7 +443,7 @@ it('validateMenuItem throws exception when menu item has order type restrictions
 
     expect(fn() => (new CartManager)->validateMenuItem($menuItem))
         ->toThrow(ApplicationException::class, sprintf(
-            lang('igniter.cart::default.alert_menu_order_restriction'), 'delivery',
+            lang('igniter.cart::default.alert_menu_order_type_restriction'), $menuItem->getBuyableName(), 'delivery',
         ));
 });
 
