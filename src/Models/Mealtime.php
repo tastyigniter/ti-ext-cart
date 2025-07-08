@@ -17,8 +17,14 @@ use Illuminate\Support\Carbon;
  *
  * @property int $mealtime_id
  * @property string $mealtime_name
- * @property mixed $start_time
- * @property mixed $end_time
+ * @property string|null $start_time
+ * @property string|null $end_time
+ * @property string $validity
+ * @property Carbon|null $start_at
+ * @property Carbon|null $end_at
+ * @property array|null $recurring_every
+ * @property string|null $recurring_from
+ * @property string|null $recurring_to
  * @property bool $mealtime_status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -47,6 +53,12 @@ class Mealtime extends Model
     protected $casts = [
         'start_time' => 'time',
         'end_time' => 'time',
+        'start_at' => 'datetime',
+        'end_at' => 'datetime',
+        'recurring_every' => 'array',
+        'recurring_from' => 'time',
+        'recurring_to' => 'time',
+        'mealtime_status' => 'boolean',
     ];
 
     public $relation = [
@@ -57,29 +69,80 @@ class Mealtime extends Model
 
     public $timestamps = true;
 
+    public function getRecurringEveryOptions(): array
+    {
+        return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    }
+
     public static function getDropdownOptions()
     {
         return self::whereIsEnabled()->dropdown('mealtime_name');
     }
 
-    //
-    // Scopes
-    //
-
-    public function isAvailable($datetime = null): bool
+    public function isAvailable($dateTime = null): bool
     {
-        $datetime = is_null($datetime)
+        $dateTime = is_null($dateTime)
             ? CarbonImmutable::now()
-            : CarbonImmutable::parse($datetime);
+            : CarbonImmutable::parse($dateTime);
 
-        return $datetime->between(
-            $datetime->setTimeFromTimeString($this->start_time),
-            $datetime->setTimeFromTimeString($this->end_time),
-        );
+        switch ($this->validity) {
+            case 'daily':
+                return $dateTime->between(
+                    $dateTime->setTimeFromTimeString($this->start_time),
+                    $dateTime->setTimeFromTimeString($this->end_time),
+                );
+            case 'period':
+                return $dateTime->between($this->start_at, $this->end_at);
+            case 'recurring':
+                if (!in_array($dateTime->format('w'), $this->recurring_every)) {
+                    return false;
+                }
+
+                $start = $dateTime->setTimeFromTimeString($this->recurring_from);
+                $end = $dateTime->setTimeFromTimeString($this->recurring_to);
+
+                if ($start->gt($end)) {
+                    $end->addDay();
+                }
+
+                return $dateTime->between($start, $end);
+            default:
+                return false;
+        }
     }
 
     public function isAvailableNow(): bool
     {
         return $this->isAvailable();
+    }
+
+    public function getDescriptionAttribute(): string
+    {
+        switch ($this->validity) {
+            case 'daily':
+                return sprintf(
+                    lang('igniter.cart::default.mealtimes.text_daily_mealtime'),
+                    now()->setTimeFromTimeString($this->start_time)->isoFormat(lang('system::lang.moment.time_format')),
+                    now()->setTimeFromTimeString($this->end_time)->isoFormat(lang('system::lang.moment.time_format')),
+                );
+            case 'period':
+                return sprintf(
+                    lang('igniter.cart::default.mealtimes.text_period_mealtime'),
+                    $this->start_at->isoFormat(lang('system::lang.moment.date_time_format')),
+                    $this->end_at->isoFormat(lang('system::lang.moment.date_time_format')),
+                );
+            case 'recurring':
+                $startAt = now()->setTimeFromTimeString($this->recurring_from);
+                $endAt = now()->setTimeFromTimeString($this->recurring_to);
+
+                return sprintf(
+                    lang('igniter.cart::default.mealtimes.text_recurring_mealtime'),
+                    implode(', ', array_only($this->getRecurringEveryOptions(), $this->recurring_every)),
+                    $startAt->isoFormat(lang('system::lang.moment.time_format')),
+                    $endAt->isoFormat(lang('system::lang.moment.time_format')),
+                );
+        }
+
+        return '';
     }
 }
