@@ -43,8 +43,8 @@ it('scopes to ingredients with menus', function(): void {
     $menu = Menu::factory()->create();
     $menu->ingredients()->saveMany(Ingredient::factory()->count(3)->make(['status' => 1]));
 
-    expect(Ingredient::whereHasMenus()->count())->toBe(3);
-})->skip('Fix issue with morphedByMany relation');
+    expect(Ingredient::query()->whereHasMenus()->count())->toBe(3);
+});
 
 it('scopes to allergen ingredients', function(): void {
     Ingredient::factory()->count(3)->create(['is_allergen' => 0]);

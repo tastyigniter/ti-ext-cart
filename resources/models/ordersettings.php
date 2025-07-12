@@ -42,9 +42,25 @@ return [
                     ],
                     'comment' => 'lang:igniter.cart::default.help_order_email',
                 ],
+                'invoice_prefix' => [
+                    'label' => 'lang:igniter.cart::default.label_invoice_prefix',
+                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'type' => 'text',
+                    'span' => 'left',
+                    'comment' => 'lang:igniter.cart::default.help_invoice_prefix',
+                ],
+                'invoice_logo' => [
+                    'label' => 'lang:igniter.cart::default.label_invoice_logo',
+                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'type' => 'mediafinder',
+                    'span' => 'right',
+                    'mode' => 'inline',
+                    'comment' => 'lang:igniter.cart::default.help_invoice_logo',
+                ],
+
                 'default_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_default_order_status',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'mode' => 'radio',
                     'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
@@ -52,41 +68,81 @@ return [
                 ],
                 'processing_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_processing_order_status',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_processing_order_status',
                 ],
                 'completed_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_completed_order_status',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_completed_order_status',
                 ],
                 'canceled_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_canceled_order_status',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_order',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'mode' => 'radio',
                     'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_canceled_order_status',
                 ],
-
-                'invoice_prefix' => [
-                    'label' => 'lang:igniter.cart::default.label_invoice_prefix',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_invoice',
-                    'type' => 'text',
-                    'span' => 'left',
-                    'comment' => 'lang:igniter.cart::default.help_invoice_prefix',
+                'accepted_order_status' => [
+                    'label' => 'lang:igniter.cart::default.orders.label_accepted_order_status',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
+                    'type' => 'select',
+                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'comment' => 'lang:igniter.cart::default.orders.help_accepted_order_status',
                 ],
-                'invoice_logo' => [
-                    'label' => 'lang:igniter.cart::default.label_invoice_logo',
-                    'tab' => 'lang:igniter.cart::default.text_tab_title_invoice',
-                    'type' => 'mediafinder',
-                    'span' => 'right',
-                    'mode' => 'inline',
-                    'comment' => 'lang:igniter.cart::default.help_invoice_logo',
+                'rejected_reasons' => [
+                    'label' => 'lang:igniter.cart::default.orders.label_rejected_reasons',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
+                    'type' => 'repeater',
+                    'commentAbove' => 'lang:igniter.cart::default.orders.help_reject_order_status',
+                    'form' => [
+                        'fields' => [
+                            'code' => [
+                                'label' => 'lang:igniter.cart::default.orders.label_reason_code',
+                                'type' => 'text',
+                            ],
+                            'comment' => [
+                                'label' => 'lang:igniter.cart::default.orders.label_reason_comment',
+                                'type' => 'text',
+                            ],
+                            'status_id' => [
+                                'label' => 'lang:igniter.cart::default.orders.label_reason_status',
+                                'type' => 'select',
+                                'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                            ],
+                        ],
+                    ],
+                ],
+                'delay_times' => [
+                    'label' => 'lang:igniter.cart::default.orders.label_delay_times',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
+                    'type' => 'repeater',
+                    'form' => [
+                        'fields' => [
+                            'time' => [
+                                'label' => 'lang:igniter.cart::default.orders.label_delay_amount',
+                                'type' => 'number',
+                                'default' => 5,
+                            ],
+                            'comment' => [
+                                'label' => 'lang:igniter.cart::default.orders.label_delay_comment',
+                                'type' => 'text',
+                            ],
+                        ],
+                    ],
+                ],
+                'limit_users' => [
+                    'label' => 'lang:igniter.cart::default.orders.label_limit_users',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
+                    'type' => 'selectlist',
+                    'options' => [\Igniter\User\Models\User::class, 'getDropdownOptions'],
+                    'placeholder' => 'lang:igniter::admin.text_please_select',
+                    'comment' => 'lang:igniter.cart::default.orders.help_limit_users',
                 ],
 
                 'tax_mode' => [

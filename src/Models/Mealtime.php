@@ -36,9 +36,9 @@ class Mealtime extends Model
     use Locationable;
     use Switchable;
 
-    public const LOCATIONABLE_RELATION = 'locations';
+    public const string LOCATIONABLE_RELATION = 'locations';
 
-    public const SWITCHABLE_COLUMN = 'mealtime_status';
+    public const string SWITCHABLE_COLUMN = 'mealtime_status';
 
     /**
      * @var string The database table name
@@ -85,7 +85,7 @@ class Mealtime extends Model
             ? CarbonImmutable::now()
             : CarbonImmutable::parse($dateTime);
 
-        switch ($this->validity) {
+        switch ($this->validity ?? 'daily') {
             case 'daily':
                 return $dateTime->between(
                     $dateTime->setTimeFromTimeString($this->start_time),
@@ -102,12 +102,10 @@ class Mealtime extends Model
                 $end = $dateTime->setTimeFromTimeString($this->recurring_to);
 
                 if ($start->gt($end)) {
-                    $end->addDay();
+                    $end = $end->addDay();
                 }
 
                 return $dateTime->between($start, $end);
-            default:
-                return false;
         }
     }
 
@@ -118,7 +116,7 @@ class Mealtime extends Model
 
     public function getDescriptionAttribute(): string
     {
-        switch ($this->validity) {
+        switch ($this->validity ?? 'daily') {
             case 'daily':
                 return sprintf(
                     lang('igniter.cart::default.mealtimes.text_daily_mealtime'),
@@ -142,7 +140,5 @@ class Mealtime extends Model
                     $endAt->isoFormat(lang('system::lang.moment.time_format')),
                 );
         }
-
-        return '';
     }
 }

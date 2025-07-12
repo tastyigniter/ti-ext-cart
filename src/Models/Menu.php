@@ -58,9 +58,9 @@ class Menu extends Model implements Buyable
     use Stockable;
     use Switchable;
 
-    public const LOCATIONABLE_RELATION = 'locations';
+    public const string LOCATIONABLE_RELATION = 'locations';
 
-    public const SWITCHABLE_COLUMN = 'menu_status';
+    public const string SWITCHABLE_COLUMN = 'menu_status';
 
     /**
      * @var string The database table name

@@ -6,7 +6,7 @@ return [
     'text_tab_totals' => 'Cart Totals',
     'text_tab_tax' => 'Tax',
     'text_tab_order' => 'Order',
-    'text_tab_desc_order' => 'Configure guest order, order emails and invoicing settings',
+    'text_tab_desc_order' => 'Configure guest order, order emails, order status workflow and taxation settings',
     'text_tab_desc_tax' => 'Configure tax settings',
     'text_tab_title_tax' => 'Taxation',
     'text_tab_title_invoice' => 'Invoicing',
@@ -266,6 +266,10 @@ return [
         'button_view_order' => 'View/Reorder',
         'button_back' => 'Back',
 
+        'button_print_invoice' => '<i class="fa fa-receipt"></i>&nbsp;&nbsp;View Invoice',
+        'button_accept' => '<i class="fa fa-check"></i>&nbsp;&nbsp;Accept',
+        'button_reject' => '<i class="fa fa-ban"></i>&nbsp;&nbsp;Reject',
+
         'alert_reorder_success' => 'You have successfully added the menus from order ID %s to your order.',
         'alert_reorder_failed' => 'Unable to reorder, please contact us.',
         'alert_cancel_success' => 'Order successfully canceled.',
@@ -275,6 +279,7 @@ return [
         'text_form_name' => 'Order',
         'text_invoice_heading' => 'Order Invoice: %s',
         'text_tab_general' => 'Order',
+        'text_tab_approval' => 'Status Workflow',
         'text_status_history' => 'Status History',
         'text_tab_menu' => 'Menu Items',
         'text_filter_search' => 'Search by id, location, status, user or customer name.',
@@ -297,8 +302,6 @@ return [
         'text_unassigned' => 'Yet to be Assigned',
         'text_assigned_to_self' => 'Assigned To Me',
         'text_assigned_to_others' => 'Assigned To Other User',
-
-        'button_print_invoice' => '<i class="fa fa-receipt"></i>&nbsp;&nbsp;View Invoice',
 
         'column_customer_name' => 'Customer Name',
         'column_time' => 'Order Time',
@@ -336,12 +339,38 @@ return [
         'label_total_items' => 'Total Items',
         'label_cancel_reason' => 'Reason for cancellation',
 
+        'label_accepted_order_status' => 'Accepted Order Status',
+        'label_reject_order_status' => 'Rejected Order Status',
+        'label_rejected_reasons' => 'Rejected Order Reasons',
+        'label_reason_code' => 'Reason Code',
+        'label_reason_status' => 'Reason Status',
+        'label_reason_comment' => 'Reason',
+        'label_delay_times' => 'Delay Times',
+        'label_delay_comment' => 'Delay Comment',
+        'label_delay_amount' => 'Delay Minutes',
+        'label_limit_users' => 'Limit workflow to specific users',
+
+        'help_accepted_order_status' => 'The order status to use when an order is marked as accepted. You can create a new status from the Settings > Statuses page',
+        'help_reject_order_status' => 'The order status to use when an order is marked as rejected. You can create a new status from the Settings > Statuses page',
+        'help_limit_users' => 'Selected users will see a popup in the admin area to accept, delay and reject orders. Leave blank to apply to all users.',
+
         'notify_status_updated_title' => 'Order status updated',
         'notify_assigned_title' => 'Order assigned',
         'notify_status_updated' => '%s updated order (#%d) status to <b>%s</b>',
         'notify_assigned' => '%s assigned order (#%d) to <b>%s</b>',
 
         'alert_invoice_not_generated' => 'Invoice has not yet been generated.',
+        'alert_missing_order_id' => 'Order ID is missing.',
+        'alert_order_not_found' => 'Order not found.',
+        'alert_accepted_status_missing' => 'Please select an accepted order status from the order settings page.',
+        'alert_accepted_status_not_found' => 'The accepted order status is not found, please check the order settings page.',
+        'alert_accepted_status_already_exists' => 'Order has already been marked as accepted.',
+        'alert_missing_reject_code' => 'Please provide a rejected reason code from the order settings page.',
+        'alert_missing_reject_reason_not_found' => 'Please provide a rejected reason from the order settings page.',
+        'alert_missing_reject_status_not_found' => 'The rejected order status is not found, please check the order settings page.',
+        'alert_rejected_status_already_exists' => 'Order has already been marked as rejected.',
+        'alert_order_accepted' => 'Order has been accepted successfully.',
+        'alert_order_rejected' => 'Order has been rejected successfully.',
     ],
 
     'mealtimes' => [

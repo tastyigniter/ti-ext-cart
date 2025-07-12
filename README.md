@@ -11,12 +11,14 @@ The TastyIgniter Cart extension provides a straightforward and adaptable shoppin
 
 ## Features
 
-- Order and Inventory management
-- Cart conditions such as Tips and Taxes
-- Order types including Delivery and Pick-up
-- Single-page checkout
+- Comprehensive order and inventory management tools
+- Flexible cart conditions, including support for tips and taxes
+- Multiple order types supported, such as delivery and pickup
+- Menu scheduling, allowing different menus to be available on specific days
+- Streamlined single-page checkout experience for faster order completion
 - Supports payment gateways provided by the Pay Register extension: Cash on Delivery, PayPal, Stripe, and more
 - Send order notification emails to both customers and administrators
+- Real-time popup notifications for new orders, allowing you to accept, delay, or reject orders directly based on your configured preferences.
 - Easy to extend and customize
 
 ## Documentation

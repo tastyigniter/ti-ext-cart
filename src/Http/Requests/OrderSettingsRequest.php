@@ -20,6 +20,17 @@ class OrderSettingsRequest extends FormRequest
             'guest_order' => lang('igniter.cart::default.label_guest_order'),
             'location_order' => lang('igniter.cart::default.label_location_order'),
 
+            'accepted_order_status' => lang('igniter.cart::default.orders.label_accepted_order_status'),
+            'rejected_reasons' => lang('igniter.cart::default.orders.label_rejected_reasons'),
+            'rejected_reasons.*.code' => lang('igniter.cart::default.orders.label_reject_reason_code'),
+            'rejected_reasons.*.comment' => lang('igniter.cart::default.orders.label_reject_reason_comment'),
+            'rejected_reasons.*.status_id' => lang('igniter.cart::default.orders.label_reject_reason_status'),
+            'delay_times' => lang('igniter.cart::default.orders.label_delay_times'),
+            'delay_times.*.comment' => lang('igniter.cart::default.orders.label_delay_time_comment'),
+            'delay_times.*.time' => lang('igniter.cart::default.orders.label_delay_time'),
+            'limit_users' => lang('igniter.cart::default.orders.label_limit_users'),
+            'limit_users.*' => lang('igniter.cart::default.orders.label_limit_user'),
+
             'invoice_prefix' => lang('igniter.cart::default.label_invoice_prefix'),
             'invoice_logo' => lang('igniter.cart::default.label_invoice_logo'),
 
@@ -42,6 +53,17 @@ class OrderSettingsRequest extends FormRequest
             'canceled_order_status' => ['required', 'integer'],
             'guest_order' => ['required', 'integer'],
             'location_order' => ['required', 'integer'],
+
+            'accepted_order_status' => ['nullable', 'integer'],
+            'rejected_reasons' => ['nullable', 'array'],
+            'rejected_reasons.*.code' => ['string', 'max:32'],
+            'rejected_reasons.*.comment' => ['string', 'max:255'],
+            'rejected_reasons.*.status_id' => ['integer'],
+            'delay_times' => ['nullable', 'array'],
+            'delay_times.*.comment' => ['string', 'max:255'],
+            'delay_times.*.time' => ['integer', 'min:1', 'max:9999'],
+            'limit_users' => ['nullable', 'array'],
+            'limit_users.*' => ['nullable', 'integer'],
 
             'invoice_prefix' => ['nullable', 'regex:/^[a-zA-Z0-9-_\{\}]+$/'],
             'invoice_logo' => ['nullable', 'string'],

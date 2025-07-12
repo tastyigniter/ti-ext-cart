@@ -53,7 +53,15 @@ You can configure the order settings for all locations in the admin area. Naviga
 - **Allow guest orders:** Enable or disable guest orders for all locations. Can be overridden by location settings.
 - **Reject orders outside delivery areas:** Enable or disable orders outside the delivery area. Customers must enter a valid address within the delivery area to place an order.
 - **Send order confirmation email:** Whether to send order confirmation emails to customers, location email and admin email.
-- **Order status workflow:** Set the order status workflow for all locations. For example, you can set the order status to _Received_ when an order is placed, _Pending_ and _Preparation_ when the order is being prepared, and _Complete_ when the order is ready for delivery or pick-up.
+- **Order status workflow:** Automatically set order status at different stage of the order lifecycle. You can set the following order status workflow settings:
+  - **Default Order Status:** Set the default order status for new orders.
+  - **Accepted Order Status:** Set the order status when an order is accepted or delayed. A popup will appear in the admin area to accept or reject orders.
+  - **Rejected Order Reasons:** Set the order status and comment when an order is rejected.  A popup will appear in the admin area to accept or reject orders.
+  - **Processing Order Status:** Set the order status when an order is being prepared.
+  - **Completed Order Status:** Set the order status when an order is ready for delivery or pick-up.
+  - **Cancellation Order Status:** Set the order status when an order is canceled.
+  - **Delay times:** Set the delay times for delayed orders. This is used to calculate the estimated delivery or pick-up time.
+  - **Limit workflow to specific users:** Enable or disable the order status workflow for specific staff members. If enabled, only the selected staff members will get the workflow popups to accept, reject, or delay orders.
 
 ## Usage
 

@@ -18,8 +18,10 @@ use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\CheckoutForm;
 use Igniter\Cart\Classes\OrderManager;
+use Igniter\Cart\Events\BroadcastOrderPlacedEvent;
 use Igniter\Cart\FormWidgets\StockEditor;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Http\Middleware\InjectStatusWorkflow;
 use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
 use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
@@ -117,9 +119,7 @@ class Extension extends BaseExtension
     #[Override]
     public function boot(): void
     {
-        if (!Igniter::runningInAdmin()) {
-            $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
-        }
+        $this->registerMiddlewares();
 
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
@@ -131,6 +131,10 @@ class Extension extends BaseExtension
         Customers::extendFormFields(new AddsCustomerOrdersTabFields);
 
         Statistics::registerCards(fn(): array => (new RegistersDashboardCards)());
+
+        Event::listen('admin.controller.beforeRemap', function($controller): void {
+            $controller->addJs('igniter.cart::/js/order-workflow.js', 'order-workflow');
+        });
     }
 
     public function registerCartConditions(): array
@@ -322,6 +326,13 @@ class Extension extends BaseExtension
         ];
     }
 
+    public function registerEventBroadcasts()
+    {
+        return [
+            'admin.order.paymentProcessed' => BroadcastOrderPlacedEvent::class,
+        ];
+    }
+
     protected function bindCartEvents()
     {
         Event::listen('igniter.user.login', function(): void {
@@ -444,5 +455,14 @@ class Extension extends BaseExtension
     protected function registerCheckoutForm(): void
     {
         $this->app->singleton(CheckoutForm::class);
+    }
+
+    protected function registerMiddlewares(): void
+    {
+        if (Igniter::runningInAdmin()) {
+            $this->app['router']->pushMiddlewareToGroup('igniter', InjectStatusWorkflow::class);
+        } else {
+            $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
+        }
     }
 }
