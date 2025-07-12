@@ -86,11 +86,6 @@ class Mealtime extends Model
             : CarbonImmutable::parse($dateTime);
 
         switch ($this->validity ?? 'daily') {
-            case 'daily':
-                return $dateTime->between(
-                    $dateTime->setTimeFromTimeString($this->start_time),
-                    $dateTime->setTimeFromTimeString($this->end_time),
-                );
             case 'period':
                 return $dateTime->between($this->start_at, $this->end_at);
             case 'recurring':
@@ -106,6 +101,11 @@ class Mealtime extends Model
                 }
 
                 return $dateTime->between($start, $end);
+            default: // daily
+                return $dateTime->between(
+                    $dateTime->setTimeFromTimeString($this->start_time),
+                    $dateTime->setTimeFromTimeString($this->end_time),
+                );
         }
     }
 
@@ -117,12 +117,6 @@ class Mealtime extends Model
     public function getDescriptionAttribute(): string
     {
         switch ($this->validity ?? 'daily') {
-            case 'daily':
-                return sprintf(
-                    lang('igniter.cart::default.mealtimes.text_daily_mealtime'),
-                    now()->setTimeFromTimeString($this->start_time)->isoFormat(lang('system::lang.moment.time_format')),
-                    now()->setTimeFromTimeString($this->end_time)->isoFormat(lang('system::lang.moment.time_format')),
-                );
             case 'period':
                 return sprintf(
                     lang('igniter.cart::default.mealtimes.text_period_mealtime'),
@@ -138,6 +132,12 @@ class Mealtime extends Model
                     implode(', ', array_only($this->getRecurringEveryOptions(), $this->recurring_every)),
                     $startAt->isoFormat(lang('system::lang.moment.time_format')),
                     $endAt->isoFormat(lang('system::lang.moment.time_format')),
+                );
+            default: // daily
+                return sprintf(
+                    lang('igniter.cart::default.mealtimes.text_daily_mealtime'),
+                    now()->setTimeFromTimeString($this->start_time)->isoFormat(lang('system::lang.moment.time_format')),
+                    now()->setTimeFromTimeString($this->end_time)->isoFormat(lang('system::lang.moment.time_format')),
                 );
         }
     }
