@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Events;
 
 use Igniter\Cart\Models\Order;
@@ -10,7 +12,8 @@ use Illuminate\Queue\SerializesModels;
 
 class BroadcastOrderPlacedEvent implements ShouldBroadcast
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public function __construct(public Order $order) {}
 
@@ -31,10 +34,10 @@ class BroadcastOrderPlacedEvent implements ShouldBroadcast
             'type' => $this->order->order_type_name,
             'dateTime' => day_elapsed($this->order->order_date_time),
             'locationName' => $this->order->location ? $this->order->location->location_name : '',
-            'items' => $this->order->menus->map(fn($item) => $item->quantity.' x '.$item->name)->join('<br>'),
+            'items' => $this->order->menus->map(fn($item): string => $item->quantity.' x '.$item->name)->join('<br>'),
             'total' => $this->order->getOrderTotals()
-                ->filter(fn($total) => $total->code == 'total')
-                ->map(fn($total) => currency_format($total->value))
+                ->filter(fn($total): bool => $total->code == 'total')
+                ->map(fn($total): string => currency_format($total->value))
                 ->first(),
         ];
     }

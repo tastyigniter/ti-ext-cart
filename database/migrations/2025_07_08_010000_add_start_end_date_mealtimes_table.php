@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::table('mealtimes', function(Blueprint $table) {
+        Schema::table('mealtimes', function(Blueprint $table): void {
             $table->string('validity', 15)->default('daily');
             $table->dateTime('start_at')->nullable();
             $table->dateTime('end_at')->nullable();
@@ -20,5 +20,5 @@ return new class extends Migration
         });
     }
 
-    public function down() {}
+    public function down(): void {}
 };

@@ -30,7 +30,7 @@ it('checks if mealtime is available', function(): void {
         ->and($mealtime->description)->toContain('daily');
 });
 
-it('checks if period type mealtime is available', function() {
+it('checks if period type mealtime is available', function(): void {
     $this->travelTo($datetime = Carbon::parse('2023-10-01 15:00:00'));
 
     $mealtime = Mealtime::factory()->create([
@@ -43,7 +43,7 @@ it('checks if period type mealtime is available', function() {
         ->and($mealtime->description)->toContain('between');
 });
 
-it('checks if recurring mealtime is available', function() {
+it('checks if recurring mealtime is available', function(): void {
     $this->travelTo($datetime = Carbon::parse('2023-10-01 22:00:00'));
 
     $mealtime = Mealtime::factory()->create([
@@ -68,7 +68,7 @@ it('checks if mealtime is not available', function(): void {
     expect($mealtime->isAvailable($datetime))->toBeFalse();
 });
 
-it('checks if recurring mealtime is not available', function() {
+it('checks if recurring mealtime is not available', function(): void {
     $this->travelTo($datetime = Carbon::parse('2023-10-01 21:00:00'));
 
     $mealtime = Mealtime::factory()->create([

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Middleware;
 
 use Closure;
@@ -39,6 +41,7 @@ class InjectStatusWorkflow
     protected function shouldInjectOrderWorkflow(Request $request): bool
     {
         $limitUsers = setting('limit_users', []);
+
         return $request->isMethod('GET')
             && $request->route()?->getController() instanceof AdminController
             && (!$limitUsers || in_array(AdminAuth::getUser()->getKey(), $limitUsers));

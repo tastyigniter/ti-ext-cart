@@ -7,7 +7,7 @@ namespace Igniter\Cart\Tests\Http\Controllers;
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
 
-it('accepts order and updates status', function() {
+it('accepts order and updates status', function(): void {
     $order = Order::factory()->create();
     $status = Status::factory()->create();
     setting()->set([
@@ -24,7 +24,7 @@ it('accepts order and updates status', function() {
     expect($order->fresh()->status_id)->toBe($status->getKey());
 });
 
-it('accepts order and updates status with delay', function() {
+it('accepts order and updates status with delay', function(): void {
     $order = Order::factory()->create([
         'order_time' => '12:00:00',
     ]);
@@ -51,7 +51,7 @@ it('accepts order and updates status with delay', function() {
         ->status_history->last()->comment->toBe('Delayed by 15 minutes');
 });
 
-it('rejects order and updates status with reason', function() {
+it('rejects order and updates status with reason', function(): void {
     $order = Order::factory()->create();
     $status = Status::factory()->create();
     setting()->set([

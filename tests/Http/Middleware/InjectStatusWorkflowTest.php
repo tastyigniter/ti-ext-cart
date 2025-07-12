@@ -8,7 +8,7 @@ use Igniter\Cart\Http\Controllers\Menus;
 use Igniter\Cart\Http\Middleware\InjectStatusWorkflow;
 use Illuminate\Support\Facades\Route;
 
-it('injects status workflow modal into response when conditions are met', function() {
+it('injects status workflow modal into response when conditions are met', function(): void {
     Route::middleware(['web', InjectStatusWorkflow::class])
         ->get('/admin/test', [Menus::class, 'index']);
 
@@ -19,7 +19,7 @@ it('injects status workflow modal into response when conditions are met', functi
     expect($response->getContent())->toContain('data-control="status-workflow"');
 });
 
-it('does not inject status workflow modal when conditions are not met', function() {
+it('does not inject status workflow modal when conditions are not met', function(): void {
     Route::middleware(['web', InjectStatusWorkflow::class])
         ->post('/admin/test', [Menus::class, 'index']);
 

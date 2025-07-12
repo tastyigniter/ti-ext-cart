@@ -326,7 +326,7 @@ class Extension extends BaseExtension
         ];
     }
 
-    public function registerEventBroadcasts()
+    public function registerEventBroadcasts(): array
     {
         return [
             'admin.order.paymentProcessed' => BroadcastOrderPlacedEvent::class,

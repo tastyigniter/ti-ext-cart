@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Http\Controllers;
 
 use Igniter\Admin\Classes\AdminController;
@@ -13,7 +15,7 @@ class StatusWorkflows extends AdminController
 {
     protected null|string|array $requiredPermissions = 'Admin.Orders';
 
-    public function accept(string $context, string $orderId)
+    public function accept(string $context, string $orderId): array
     {
         $order = $this->findOrder($orderId);
 
@@ -45,13 +47,14 @@ class StatusWorkflows extends AdminController
             $statusComment = collect(setting('delay_times') ?: [])->pluck('comment', 'time')->get($minutesToAdd);
         }
 
-        $order->bindEvent('model.mailGetData', function(&$data) use ($minutesToAdd, $statusComment) {
+        $order->bindEvent('model.mailGetData', function(array &$data) use ($minutesToAdd, $statusComment): void {
             $data['order_approver'] = [
                 'action' => $minutesToAdd > 0 ? 'delay' : 'approve',
                 'text' => $statusComment,
             ];
         });
 
+        /** @var Status $acceptedStatus */
         $order->addStatusHistory($acceptedStatus, array_filter(['comment' => $statusComment]));
 
         $this->fireSystemEvent('igniter.cart.orderAccepted', [$order]);
@@ -61,7 +64,7 @@ class StatusWorkflows extends AdminController
         ];
     }
 
-    public function reject(string $context, string $orderId)
+    public function reject(string $context, string $orderId): array
     {
         $order = $this->findOrder($orderId);
 
@@ -88,13 +91,14 @@ class StatusWorkflows extends AdminController
             lang('igniter.cart::default.orders.alert_rejected_status_already_exists'),
         ));
 
-        $order->bindEvent('model.mailGetData', function(&$data) use ($statusComment) {
+        $order->bindEvent('model.mailGetData', function(array &$data) use ($statusComment): void {
             $data['order_approver'] = [
                 'action' => 'decline',
                 'text' => $statusComment,
             ];
         });
 
+        /** @var Status $rejectedStatus */
         $order->addStatusHistory($rejectedStatus, array_filter(['comment' => $statusComment]));
 
         $this->fireSystemEvent('igniter.cart.orderRejected', [$order]);
@@ -112,6 +116,7 @@ class StatusWorkflows extends AdminController
             sprintf(lang('igniter.cart::default.orders.alert_order_not_found'), $orderId),
         ));
 
+        /** @var Order $order */
         return $order;
     }
 }
