@@ -20,6 +20,86 @@ php artisan igniter:up
 
 ## Getting started
 
+### Managing menu items
+
+From your TastyIgniter Admin, you can manage menu items by navigating to the _Restaurant > Menu Items_ admin page. Here you can create, edit, or delete menu items. You can also set the following options for each menu item:
+
+- **Name**: The name of the menu item.
+- **Price**: The price of the menu item.
+- **Priority**: The priority of the menu item. This determines the order in which the menu items are displayed on the menu.
+- **Description**: A description of the menu item.
+- **Image**: An image of the menu item.
+- **Status**: The status of the menu item (active or inactive).
+- **Ingredients/Allergens**: A list of ingredients or allergens in the menu item.
+- **Mealtime**: The mealtime category of the menu item (e.g., breakfast, lunch, dinner). You can leave it empty to make it available for all meal times.
+- **Location**: The location where the menu item is available. You can select multiple locations for a menu item or leave it empty to make it available at all locations.
+- **Minimum Quantity**: The minimum quantity of the menu item that can be added to the cart.
+- **Stock Quantity**: Manage the stock quantity of the menu item. If the stock quantity is set to 0 and stock tracking is enabled, the menu item will be unavailable for ordering.
+- **Order Restriction**: Set the order restriction for the menu item. You can restrict the menu item to be available only for delivery, pick-up, or both.
+- **Menu Options**: Add options to the menu item, such as toppings or sides. You can set the option type (select, radio, checkbox, quantity) and the option values (name, price, etc.).
+- **Specials**: Set the menu item as a special item. You can set the special price, start date, and end date for the special item.
+
+### Managing categories
+
+From your TastyIgniter Admin, you can manage menu categories by navigating to the _Restaurant > Menu Items > Categories_ admin page. Here you can create, edit, or delete menu categories. You can also set the following options for each menu category:
+
+- **Name**: The name of the menu category.
+- **Slug**: The slug of the menu category, which is used in the URL to access the category.
+- **Parent Category**: The parent category of the menu category. You can create a hierarchy of categories by selecting a parent category.
+- **Status**: The status of the menu category (active or inactive).
+- **Priority**: The sort order of the menu category. This determines the order in which the categories are displayed on the menu.
+- **Location**: The location where the menu category is available. You can select multiple locations for a menu category or leave it empty to make it available at all locations.
+- **Description**: A description of the menu category.
+- **Image**: An image of the menu category.
+
+### Managing menu options
+
+From your TastyIgniter Admin, you can manage menu options by navigating to the _Restaurant > Menu Items > Options_ admin page. Here you can create, edit, or delete menu options to be used with menu items. You can set the following options for each menu option:
+
+- **Name**: The name of the menu option.
+- **Display Type**: The type of the menu option. You can select from the following types:
+  - **Select**: A dropdown list of options.
+  - **Radio**: A list of radio buttons for selecting one option.
+  - **Checkbox**: A list of checkboxes for selecting multiple options.
+  - **Quantity**: A quantity input field for selecting the quantity of the option.
+- **Location**: The location where the menu option is available. You can select multiple locations for a menu option or leave it empty to make it available at all locations.
+- **Option Items**: The menu option items that can be selected for the menu option. You can add multiple option items for each menu option. For each item, you can set the following:
+  - **Name**: The name of the option item.
+  - **Price**: The price of the option item.
+  - **Stock Quantity**: The stock quantity of the option value. If the stock quantity is set to 0 and stock tracking is enabled, the option item will be unavailable for ordering.
+  - **Ingredients/Allergens**: A list of ingredients or allergens in the option item.
+
+### Managing ingredients and allergens
+
+From your TastyIgniter Admin, you can manage ingredients and allergens by navigating to the _Restaurant > Menu Items > Ingredients_ admin page. Here you can create, edit, or delete ingredients and allergens. You can set the following options for each ingredient or allergen:
+
+- **Name**: The name of the ingredient or allergen.
+- **Status**: The status of the ingredient or allergen (active or inactive).
+- **Description**: A description of the ingredient or allergen.
+- **Image**: An image of the ingredient or allergen.
+- **Is an Allergen**: Whether the ingredient is an allergen or not.
+
+### Managing mealtimes
+
+From your TastyIgniter Admin, you can manage mealtimes by navigating to the _Restaurant > Mealtimes_ admin page. Here you can create, edit, or delete mealtimes. You can set the following options for each mealtime:
+
+- **Name**: The name of the mealtime (e.g., breakfast, lunch, dinner).
+- **Location**: The location where the mealtime is available. You can select multiple locations for a mealtime or leave it empty to make it available at all locations.
+- **Validity**: The validity of the mealtime. You can set daily, period, or recurring validity for the mealtime.
+- **Start Time**: The start time of the mealtime for daily validity.
+- **End Time**: The end time of the mealtime for daily validity.
+- **Start At**: The start date time of the mealtime for period validity.
+- **End At**: The end date time of the mealtime for period validity.
+- **Recurring Days**: The days of the week when the mealtime is valid for recurring validity.
+- **Recurring From Time**: The start time of the mealtime for recurring validity.
+- **Recurring To Time**: The end time of the mealtime for recurring validity.
+
+### Managing inventory
+
+From your TastyIgniter Admin, you can manage inventory by navigating to the _Restaurant > Inventory_ admin page. Here you can mark your inventory items as out of stock. You can manage stock levels for menu items or options from the details page of each menu item or option.
+
+### Cart settings
+
 From your TastyIgniter Admin, you can configure the Cart extension by navigating to _Manage > Settings > Cart settings_. The settings available are:
 
 - **Cart Settings**: Configure the cart settings such as the abandoned cart and destroy cart after user logout.
@@ -31,7 +111,7 @@ From your TastyIgniter Admin, you can configure the Cart extension by navigating
 You can configure the checkout settings for each location in the admin area. Navigate to the _Manage > Locations_ admin page, and click on the _Settings Icon_ next to the location then click the _Checkout settings_ button under the _General_ tab. You can set the following checkout settings for each location:
 
 - **Enable guest order:** Enable or disable guest order for the location.
-- **Limit orders**: Set the maximum number of orders that can be placed per time slot.
+- **Limit orders**: Set the maximum number of orders that can be placed per time slot or time periods.
 - **Payment gateways**: Select the payment gateways available for the location.
 
 ### Delivery and Pickup settings
