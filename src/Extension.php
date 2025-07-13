@@ -11,6 +11,7 @@ use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
 use Igniter\Cart\AutomationRules\Events\OrderAssigned;
 use Igniter\Cart\AutomationRules\Events\OrderPlaced;
+use Igniter\Cart\BulkActionWidgets\UpdateStock;
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\Cart\CartConditions\Tax;
 use Igniter\Cart\CartConditions\Tip;
@@ -199,6 +200,10 @@ class Extension extends BaseExtension
                 'label' => 'igniter.cart::default.text_permission_mealtimes',
                 'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
+            'Admin.Inventory' => [
+                'label' => 'igniter.cart::default.text_permission_inventory',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
+            ],
             'Admin.Orders' => [
                 'label' => 'igniter.cart::default.text_permission_orders',
                 'group' => 'igniter.cart::default.text_permission_order_group',
@@ -271,6 +276,13 @@ class Extension extends BaseExtension
                         'title' => lang('igniter.cart::default.text_side_menu_mealtimes'),
                         'permission' => 'Admin.Mealtimes',
                     ],
+                    'inventory' => [
+                        'priority' => 45,
+                        'class' => 'inventory',
+                        'href' => admin_url('inventory'),
+                        'title' => lang('igniter.cart::default.text_side_menu_inventory'),
+                        'permission' => 'Admin.Inventory',
+                    ],
                 ],
             ],
         ];
@@ -335,6 +347,13 @@ class Extension extends BaseExtension
     {
         return [
             'admin.order.paymentProcessed' => BroadcastOrderPlacedEvent::class,
+        ];
+    }
+
+    public function registerListActionWidgets(): array
+    {
+        return [
+            UpdateStock::class => ['code' => 'out_of_stock'],
         ];
     }
 

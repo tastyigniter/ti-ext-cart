@@ -7,7 +7,7 @@
     </div>
     <div class="mr-3 flex-fill text-center">
         <label class="form-label">
-            @lang('igniter.cart::default.orders.label_order_type')
+            @lang('igniter.cart::default.checkout.label_order_type')
         </label>
         <h3>{{ $formModel->order_type_name }}</h3>
     </div>

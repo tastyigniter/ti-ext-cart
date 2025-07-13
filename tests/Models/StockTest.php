@@ -84,6 +84,17 @@ it('does not update stock when not tracked', function(): void {
     Event::assertNotDispatched('admin.stock.updated');
 });
 
+it('throws exception when marking untrackable as out of stock', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => false,
+    ]);
+
+    expect(fn() => $stock->markAsOutOfStock())->toThrow(sprintf(
+        lang('igniter.cart::default.stocks.alert_stock_not_tracked'), $stock->stockable_name,
+    ));
+});
+
 it('checks stock correctly', function(): void {
     $stock = Stock::factory()->create([
         'quantity' => 10,

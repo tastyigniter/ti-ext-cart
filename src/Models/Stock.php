@@ -6,6 +6,7 @@ namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
@@ -18,6 +19,8 @@ use Illuminate\Support\Carbon;
  * @property int $location_id
  * @property int $stockable_id
  * @property string $stockable_type
+ * @property string $stockable_type_name
+ * @property string $stockable_name
  * @property int|null $quantity
  * @property bool $low_stock_alert
  * @property int $low_stock_threshold
@@ -33,19 +36,19 @@ class Stock extends Model
     use Locationable;
     use SendsMailTemplate;
 
-    public const STATE_NONE = 'none';
+    public const string STATE_NONE = 'none';
 
-    public const STATE_IN_STOCK = 'in_stock';
+    public const string STATE_IN_STOCK = 'in_stock';
 
-    public const STATE_RECOUNT = 'recount';
+    public const string STATE_RECOUNT = 'recount';
 
-    public const STATE_RESTOCK = 'restock';
+    public const string STATE_RESTOCK = 'restock';
 
-    public const STATE_SOLD = 'sold';
+    public const string STATE_SOLD = 'sold';
 
-    public const STATE_RETURNED = 'returned';
+    public const string STATE_RETURNED = 'returned';
 
-    public const STATE_WASTE = 'waste';
+    public const string STATE_WASTE = 'waste';
 
     /**
      * @var string The database table name
@@ -78,6 +81,11 @@ class Stock extends Model
 
     public $timestamps = true;
 
+    protected array $stockableTypes = [
+        'menus' => 'igniter.cart::default.stocks.text_stockable_type_menu',
+        'menu_option_values' => 'igniter.cart::default.stocks.text_stockable_type_menu_option_value',
+    ];
+
     public function getStockActionOptions(): array
     {
         return [
@@ -88,6 +96,16 @@ class Stock extends Model
             self::STATE_RESTOCK => 'lang:igniter.cart::default.stocks.text_action_restock',
             self::STATE_RECOUNT => 'lang:igniter.cart::default.stocks.text_action_recount',
         ];
+    }
+
+    public function getStockableTypeNameAttribute(): string
+    {
+        return lang($this->stockableTypes[$this->stockable_type] ?? $this->stockable_type);
+    }
+
+    public function getStockableNameAttribute()
+    {
+        return $this->stockable ? $this->stockable->getStockableName() : '';
     }
 
     //
@@ -138,6 +156,22 @@ class Stock extends Model
         ]);
     }
 
+    public function markAsOutOfStock(): bool
+    {
+        if ($this->is_tracked) {
+            $this->quantity = 0;
+            $this->saveQuietly();
+
+            $this->fireSystemEvent('admin.stock.outOfStock', [$this]);
+
+            return true;
+        }
+
+        throw new ApplicationException(sprintf(
+            lang('igniter.cart::default.stocks.alert_stock_not_tracked'), $this->stockable_name,
+        ));
+    }
+
     public function checkStock(int $quantity)
     {
         if (!$this->is_tracked) {
@@ -163,7 +197,7 @@ class Stock extends Model
             return false;
         }
 
-        return strlen((string) $state) && $state !== self::STATE_NONE;
+        return strlen((string)$state) && $state !== self::STATE_NONE;
     }
 
     protected function computeStockQuantity($state, int $quantity): int
