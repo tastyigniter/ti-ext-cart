@@ -40,6 +40,7 @@ use Override;
  * @property array|Collection<int, MenuItemOption> $menu_options
  * @property array|null|MenuSpecial $special
  * @property array|Collection<int, Location> $locations
+ * @method static Builder<static>|Category categories()
  * @method static Builder<static>|Media media()
  * @method static Builder<static>|Ingredient ingredients()
  * @method static Builder<static>|MenuItemOption menu_options()

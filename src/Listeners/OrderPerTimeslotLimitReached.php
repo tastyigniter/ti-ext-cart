@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Igniter\Cart\Listeners;
 
 use DateTimeInterface;
@@ -17,33 +19,35 @@ use Illuminate\Support\Collection;
 class OrderPerTimeslotLimitReached
 {
     protected static $ordersCache = [];
+
     protected static $menusCache = [];
 
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
-        $events->listen('igniter.workingSchedule.timeslotValid', [$this, 'validateTimeslot']);
-        $events->listen('igniter.checkout.beforeSaveOrder', [$this, 'enforceMaxOrderLimits']);
-        $events->listen('cart.added', [$this, 'enforceMaxCartLimits']);
-        $events->listen('cart.updated', [$this, 'enforceMaxCartLimits']);
+        $events->listen('igniter.workingSchedule.timeslotValid', $this->validateTimeslot(...));
+        $events->listen('igniter.checkout.beforeSaveOrder', $this->enforceMaxOrderLimits(...));
+        $events->listen('cart.added', $this->enforceMaxCartLimits(...));
+        $events->listen('cart.updated', $this->enforceMaxCartLimits(...));
     }
 
     public function validateTimeslot(WorkingSchedule $schedule, DateTimeInterface $timeslot): ?bool
     {
         // Skip if the working schedule is not for delivery or pickup
-        if ($schedule->getType() == LocationModel::OPENING)
+        if ($schedule->getType() === LocationModel::OPENING) {
             return null;
+        }
 
         return $this->passesTimeslotLimits($schedule->getType(), $timeslot);
     }
 
-    public function enforceMaxOrderLimits(Order $order, array $data)
+    public function enforceMaxOrderLimits(Order $order, array $data): void
     {
         throw_if($this->passesTimeslotLimits($order->order_type, Location::orderDateTime()) === false,
             new ApplicationException(lang('igniter.cart::default.checkout.alert_maximum_order_reached')),
         );
     }
 
-    public function enforceMaxCartLimits(Cart $cart)
+    public function enforceMaxCartLimits(Cart $cart): null
     {
         if (!Location::current()) {
             return null;
@@ -60,9 +64,11 @@ class OrderPerTimeslotLimitReached
         throw_if($this->passesTimeslotLimits($orderType, $timeslot, $cartMenuItems) === false,
             new ApplicationException(lang('igniter.cart::default.checkout.alert_maximum_category_reached')),
         );
+
+        return null;
     }
 
-    public static function clearInternalCache()
+    public static function clearInternalCache(): void
     {
         self::$ordersCache = [];
         self::$menusCache = [];
@@ -83,7 +89,7 @@ class OrderPerTimeslotLimitReached
         [$slotStart, $slotEnd] = $this->getTimeslotBoundaries($timeslot, $orderType, $location);
         $ordersInTimeslot = $this->filterOrdersInSlot($ordersForDate, $slotStart, $slotEnd);
 
-        if (!$limitOrdersType = (int)$location->getSettings('checkout.limit_orders')) {
+        if (($limitOrdersType = (int)$location->getSettings('checkout.limit_orders')) === 0) {
             return null;
         }
 
@@ -115,7 +121,7 @@ class OrderPerTimeslotLimitReached
 
     protected function filterOrdersInSlot($orders, Carbon $start, Carbon $end)
     {
-        return $orders->filter(fn($order) => Carbon::parse($start->format('Y-m-d').' '.$order->order_time)
+        return $orders->filter(fn($order): bool => Carbon::parse($start->format('Y-m-d').' '.$order->order_time)
             ->betweenIncluded($start, $end));
     }
 
@@ -132,7 +138,7 @@ class OrderPerTimeslotLimitReached
 
         $context->orderLimits
             ->filter(fn($orderLimit) => array_get($orderLimit, 'status'))
-            ->each(function($orderLimit) use (&$exceedsLimit, $context) {
+            ->each(function($orderLimit) use (&$exceedsLimit, $context): void {
                 if (!$this->matchesLimitDayAndTime($orderLimit, $context->dayOfWeek, $context->slotStart)) {
                     return;
                 }
@@ -144,7 +150,7 @@ class OrderPerTimeslotLimitReached
 
                 if (!empty($limitOrderTypes)) {
                     $context->ordersInSlot = $context->ordersInSlot
-                        ->filter(fn($order) => in_array($order->order_type, $limitOrderTypes));
+                        ->filter(fn($order): bool => in_array($order->order_type, $limitOrderTypes));
                 }
 
                 $maxAllowed = (int)array_get($orderLimit, 'max_count');
@@ -175,6 +181,7 @@ class OrderPerTimeslotLimitReached
         if ($limitType === 'category') {
             $existingCovers = $this->sumCategoryCovers($context->ordersInSlot, $orderLimit);
             $newCovers = $this->sumCategoryCovers(collect($context->additionalMenuItems), $orderLimit);
+
             return $existingCovers + $newCovers;
         }
 
@@ -216,13 +223,11 @@ class OrderPerTimeslotLimitReached
                 setting('completed_order_status', []),
             ))
             ->get()
-            ->map(function($order) {
-                return (object)[
-                    'order_type' => $order->order_type,
-                    'order_time' => $order->order_time,
-                    'menus' => $order->getOrderMenus(),
-                ];
-            });
+            ->map(fn(Order $order) => (object)[
+                'order_type' => $order->order_type,
+                'order_time' => $order->order_time,
+                'menus' => $order->getOrderMenus(),
+            ]);
 
         return self::$ordersCache[$date] = $result;
     }
