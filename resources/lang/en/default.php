@@ -193,6 +193,10 @@ return [
         'text_comment' => 'Your comment',
         'text_no_comment' => 'You did not leave a comment',
         'text_checkout_terms' => 'checkout terms and conditions',
+        'text_per_timeslot' => 'Timeslot',
+        'text_per_period' => 'Period',
+        'text_order_count' => 'No of Orders',
+        'text_category_count' => 'Menu Categories',
 
         'label_customer_name' => 'Customer Name',
         'label_first_name' => 'First Name',
@@ -216,8 +220,22 @@ return [
         'label_delivery_comment' => 'Leave a note for the driver',
         'label_ip' => 'IP Address',
 
+        'label_limit_orders' => 'Limit Orders',
+        'label_limit_orders_count' => 'Limit Orders Per Timeslot',
+        'label_limit_orders_period' => 'Limit Orders Per Period',
+        'label_day_of_week' => 'Day of Week',
+        'label_order_type' => 'Order Type',
+        'label_start_time' => 'Start Time',
+        'label_end_time' => 'End Time',
+        'label_max_type' => 'Maximum Type',
+        'label_max_count' => 'Maximum Count',
+        'label_categories' => 'Categories',
+
         'button_agree_terms' => 'I Agree',
 
+        'help_limit_orders' => 'Enabling this disables ASAP delivery and pickup orders.',
+        'help_limit_orders_interval' => 'Set the number of orders that can be placed for a specific time slot. This is useful to prevent overloading the kitchen with too many orders at once.',
+        'help_limit_orders_period' => 'Set advanced order limits for specific days of the week, time slots, order types and menu categories.',
         'error_covered_area' => 'This restaurant currently does not deliver to your address',
         'error_delivery_less_current_time' => 'The %s Time can not be less than current time!',
         'error_invalid_payment' => 'The selected payment is invalid, please contact us',
@@ -232,6 +250,8 @@ return [
         'alert_outside_hours' => 'Your selected order time is outside our %s hours',
         'alert_customer_not_logged' => 'Almost there, Please login or register to complete checkout.',
         'alert_delivery_area_changed' => 'Your delivery area has changed, please confirm the delivery cost.',
+        'alert_maximum_order_reached' => 'We\'ve reached the maximum number of orders allowed for the selected timeslot, please choose another timeslot.',
+        'alert_maximum_category_reached' => 'You have more items in your cart than we can make at once',
 
         'notify_order_created_title' => 'New order placed',
         'notify_order_created' => '<b>%s</b> created an order.',

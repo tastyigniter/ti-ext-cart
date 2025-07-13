@@ -27,6 +27,7 @@ use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Http\Requests\OrderSettingsRequest;
 use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
+use Igniter\Cart\Listeners\OrderPerTimeslotLimitReached;
 use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Category;
@@ -100,6 +101,10 @@ class Extension extends BaseExtension
         CartConditionManager::class,
         CartManager::class,
         OrderManager::class,
+    ];
+
+    protected $subscribe = [
+        OrderPerTimeslotLimitReached::class,
     ];
 
     #[Override]
