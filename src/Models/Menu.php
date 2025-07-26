@@ -40,6 +40,7 @@ use Override;
  * @property array|Collection<int, MenuItemOption> $menu_options
  * @property array|null|MenuSpecial $special
  * @property array|Collection<int, Location> $locations
+ * @method static Builder<static>|Category categories()
  * @method static Builder<static>|Media media()
  * @method static Builder<static>|Ingredient ingredients()
  * @method static Builder<static>|MenuItemOption menu_options()
@@ -58,9 +59,9 @@ class Menu extends Model implements Buyable
     use Stockable;
     use Switchable;
 
-    public const LOCATIONABLE_RELATION = 'locations';
+    public const string LOCATIONABLE_RELATION = 'locations';
 
-    public const SWITCHABLE_COLUMN = 'menu_status';
+    public const string SWITCHABLE_COLUMN = 'menu_status';
 
     /**
      * @var string The database table name
@@ -137,6 +138,11 @@ class Menu extends Model implements Buyable
     public function getMinimumQtyAttribute($value)
     {
         return $value ?: 1;
+    }
+
+    public static function getDropdownOptions()
+    {
+        return self::whereIsEnabled()->pluck('menu_name', 'menu_id');
     }
 
     //

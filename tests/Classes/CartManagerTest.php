@@ -13,6 +13,7 @@ use Igniter\Cart\CartItemOptionValues;
 use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
+use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuOption;
@@ -421,12 +422,18 @@ it('validateMenuItem throws exception when menu item is not within mealtimes', f
     $menuItem->shouldReceive('isAvailable')->andReturnFalse();
     $menuItem->shouldReceive('extendableGet')->with('menu_name')->andReturn('Test Menu');
     $menuItem->shouldReceive('extendableGet')->with('mealtimes')->andReturn(collect([
-        (object)['mealtime_name' => 'Lunch', 'start_time' => '12:00', 'end_time' => '14:00'],
+        new Mealtime([
+            'mealtime_name' => 'Lunch',
+            'start_time' => '12:00',
+            'end_time' => '14:00',
+            'validity' => 'daily',
+            'mealtime_status' => true,
+        ]),
     ]));
 
     expect(fn() => (new CartManager)->validateMenuItem($menuItem))
         ->toThrow(ApplicationException::class, sprintf(
-            lang('igniter.cart::default.alert_menu_not_within_mealtimes'), 'Test Menu', 'Lunch (12:00 - 14:00)',
+            lang('igniter.cart::default.alert_menu_not_within_mealtimes'), 'Test Menu', 'daily 12:00 pm - 02:00 pm',
         ));
 });
 
@@ -443,7 +450,7 @@ it('validateMenuItem throws exception when menu item has order type restrictions
 
     expect(fn() => (new CartManager)->validateMenuItem($menuItem))
         ->toThrow(ApplicationException::class, sprintf(
-            lang('igniter.cart::default.alert_menu_order_restriction'), 'delivery',
+            lang('igniter.cart::default.alert_menu_order_type_restriction'), $menuItem->getBuyableName(), 'delivery',
         ));
 });
 

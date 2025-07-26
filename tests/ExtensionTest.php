@@ -17,10 +17,12 @@ use Igniter\Cart\AutomationRules\Events\OrderPlaced;
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\Cart\CartConditions\Tax;
 use Igniter\Cart\CartConditions\Tip;
+use Igniter\Cart\Events\BroadcastOrderPlacedEvent;
 use Igniter\Cart\Extension;
 use Igniter\Cart\Facades\Cart;
 use Igniter\Cart\FormWidgets\StockEditor;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Http\Middleware\InjectStatusWorkflow;
 use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
 use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
@@ -28,6 +30,7 @@ use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Notifications\OrderCreatedNotification;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Support\Facades\Igniter;
 use Igniter\PayRegister\Models\Payment;
 use Igniter\System\Mail\AnonymousTemplateMailable;
 use Igniter\System\Models\Settings;
@@ -156,6 +159,15 @@ it('registers location settings correctly', function(): void {
     ]);
 });
 
+it('registers event broadcasts correctly', function(): void {
+    $extension = new Extension(app());
+
+    $broadcasts = $extension->registerEventBroadcasts();
+
+    expect($broadcasts)->toBeArray()
+        ->and($broadcasts)->toHaveKey('admin.order.paymentProcessed', BroadcastOrderPlacedEvent::class);
+});
+
 it('returns registered core settings', function(): void {
     $items = (new Settings)->listSettingItems();
 
@@ -244,6 +256,16 @@ it('adds cart middleware to frontend routes', function(): void {
     $middlewareGroups = Route::getMiddlewareGroups();
     expect($middlewareGroups)->toHaveKey('igniter')
         ->and($middlewareGroups['igniter'])->toContain(CartMiddleware::class);
+});
+
+it('adds inject status workflow middleware to admin routes', function(): void {
+    Igniter::shouldReceive('runningInAdmin')->andReturnTrue();
+    $extension = new Extension(app());
+    $extension->boot();
+
+    $middlewareGroups = Route::getMiddlewareGroups();
+    expect($middlewareGroups)->toHaveKey('igniter')
+        ->and($middlewareGroups['igniter'])->toContain(InjectStatusWorkflow::class);
 });
 
 it('returns registered dashboard charts', function(): void {

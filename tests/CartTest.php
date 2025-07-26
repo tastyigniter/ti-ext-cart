@@ -476,7 +476,7 @@ it('clears the cart correctly', function(): void {
         'price' => 10.00,
     ], 1);
 
-    $this->cart->destroy();
+    $this->cart->destroy(1);
 
     expect($this->cart->content())->toBeEmpty();
 });

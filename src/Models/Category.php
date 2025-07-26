@@ -49,9 +49,9 @@ class Category extends Model
     use Sortable;
     use Switchable;
 
-    const SORT_ORDER = 'priority';
+    public const string SORT_ORDER = 'priority';
 
-    const LOCATIONABLE_RELATION = 'locations';
+    public const string LOCATIONABLE_RELATION = 'locations';
 
     /**
      * @var string The database table name

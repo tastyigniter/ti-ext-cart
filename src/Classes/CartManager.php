@@ -10,6 +10,7 @@ use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartItem;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Models\CartSettings;
+use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
@@ -195,7 +196,7 @@ class CartManager
             return $condition;
         }
 
-        if (strlen((string) $code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
+        if (strlen((string)$code) !== 0 && !Coupon::whereIsEnabled()->whereCodeAndLocation($code, $this->location->getId())->first()) {
             throw new ApplicationException(lang('igniter.cart::default.alert_coupon_invalid'));
         }
 
@@ -367,12 +368,9 @@ class CartManager
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
                     $menuItem->menu_name,
-                    $menuItem->mealtimes->map(fn($mealtime): string => sprintf(
-                        lang('igniter.cart::default.alert_menu_not_within_mealtimes_option'),
-                        $mealtime->mealtime_name,
-                        $mealtime->start_time,
-                        $mealtime->end_time,
-                    ))->join(', '),
+                    strtolower((string) $menuItem->mealtimes->filter(fn(Mealtime $mealtime): bool => $mealtime->isEnabled())
+                        ->pluck('description')
+                        ->join(', ')),
                 ),
             );
         }
@@ -380,7 +378,8 @@ class CartManager
         $orderType = $this->location->getOrderType();
         if ($menuItem->hasOrderTypeRestriction($orderType->getCode())) {
             throw new ApplicationException(sprintf(
-                lang('igniter.cart::default.alert_menu_order_restriction'),
+                lang('igniter.cart::default.alert_menu_order_type_restriction'),
+                $menuItem->getBuyableName(),
                 $orderType->getLabel(),
             ));
         }

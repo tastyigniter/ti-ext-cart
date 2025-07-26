@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Igniter\Admin\DashboardWidgets\Charts;
-use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
 use Igniter\Cart\AutomationRules\Events\OrderAssigned;
 use Igniter\Cart\AutomationRules\Events\OrderPlaced;
+use Igniter\Cart\BulkActionWidgets\UpdateStock;
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\Cart\CartConditions\Tax;
 use Igniter\Cart\CartConditions\Tip;
@@ -18,14 +17,18 @@ use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\CheckoutForm;
 use Igniter\Cart\Classes\OrderManager;
+use Igniter\Cart\Events\BroadcastOrderPlacedEvent;
 use Igniter\Cart\FormWidgets\StockEditor;
 use Igniter\Cart\Http\Middleware\CartMiddleware;
+use Igniter\Cart\Http\Middleware\InjectStatusWorkflow;
 use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
 use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Http\Requests\OrderSettingsRequest;
 use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
-use Igniter\Cart\Listeners\RegistersDashboardCards;
+use Igniter\Cart\Listeners\ExtendDashboardCards;
+use Igniter\Cart\Listeners\ExtendDashboardCharts;
+use Igniter\Cart\Listeners\OrderPerTimeslotLimitReached;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -100,6 +103,10 @@ class Extension extends BaseExtension
         OrderManager::class,
     ];
 
+    protected $subscribe = [
+        OrderPerTimeslotLimitReached::class,
+    ];
+
     #[Override]
     public function register(): void
     {
@@ -117,20 +124,22 @@ class Extension extends BaseExtension
     #[Override]
     public function boot(): void
     {
-        if (!Igniter::runningInAdmin()) {
-            $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
-        }
+        $this->registerMiddlewares();
 
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
-        $this->extendDashboardChartsDatasets();
 
         LocationModel::implement(LocationAction::class);
 
         Customers::extendFormFields(new AddsCustomerOrdersTabFields);
 
-        Statistics::registerCards(fn(): array => (new RegistersDashboardCards)());
+        resolve(ExtendDashboardCards::class)->registerCards();
+        resolve(ExtendDashboardCharts::class)->registerCharts();
+
+        Event::listen('admin.controller.beforeRemap', function($controller): void {
+            $controller->addJs('igniter.cart::/js/order-workflow.js', 'order-workflow');
+        });
     }
 
     public function registerCartConditions(): array
@@ -188,6 +197,10 @@ class Extension extends BaseExtension
             ],
             'Admin.Mealtimes' => [
                 'label' => 'igniter.cart::default.text_permission_mealtimes',
+                'group' => 'igniter.cart::default.text_permission_menu_group',
+            ],
+            'Admin.Inventory' => [
+                'label' => 'igniter.cart::default.text_permission_inventory',
                 'group' => 'igniter.cart::default.text_permission_menu_group',
             ],
             'Admin.Orders' => [
@@ -262,6 +275,13 @@ class Extension extends BaseExtension
                         'title' => lang('igniter.cart::default.text_side_menu_mealtimes'),
                         'permission' => 'Admin.Mealtimes',
                     ],
+                    'inventory' => [
+                        'priority' => 45,
+                        'class' => 'inventory',
+                        'href' => admin_url('inventory'),
+                        'title' => lang('igniter.cart::default.text_side_menu_inventory'),
+                        'permission' => 'Admin.Inventory',
+                    ],
                 ],
             ],
         ];
@@ -319,6 +339,20 @@ class Extension extends BaseExtension
                 'form' => 'igniter.cart::/models/collectionsettings',
                 'request' => CollectionSettingsRequest::class,
             ],
+        ];
+    }
+
+    public function registerEventBroadcasts(): array
+    {
+        return [
+            'admin.order.paymentProcessed' => BroadcastOrderPlacedEvent::class,
+        ];
+    }
+
+    public function registerListActionWidgets(): array
+    {
+        return [
+            UpdateStock::class => ['code' => 'out_of_stock'],
         ];
     }
 
@@ -424,25 +458,17 @@ class Extension extends BaseExtension
         });
     }
 
-    protected function extendDashboardChartsDatasets()
-    {
-        Charts::extend(function($charts): void {
-            $charts->bindEvent('charts.extendDatasets', function() use ($charts): void {
-                $charts->mergeDataset('reports', 'sets', [
-                    'orders' => [
-                        'label' => 'lang:igniter.cart::default.text_charts_orders',
-                        'color' => '#64B5F6',
-                        'model' => Order::class,
-                        'column' => 'order_date',
-                        'priority' => 20,
-                    ],
-                ]);
-            });
-        });
-    }
-
     protected function registerCheckoutForm(): void
     {
         $this->app->singleton(CheckoutForm::class);
+    }
+
+    protected function registerMiddlewares(): void
+    {
+        if (Igniter::runningInAdmin()) {
+            $this->app['router']->pushMiddlewareToGroup('igniter', InjectStatusWorkflow::class);
+        } else {
+            $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
+        }
     }
 }

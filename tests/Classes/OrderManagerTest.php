@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Tests\Classes;
 
+use Igniter\Broadcast\Classes\Manager;
 use Igniter\Cart\CartCondition;
 use Igniter\Cart\CartConditions\PaymentFee;
 use Igniter\Cart\CartConditions\Tip;
 use Igniter\Cart\Classes\CartManager;
 use Igniter\Cart\Classes\OrderManager;
+use Igniter\Cart\Events\BroadcastOrderPlacedEvent;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\Order;
@@ -308,7 +310,9 @@ it('processes payment from saved profile', function(): void {
 it('processes payment', function(): void {
     Event::fake([
         'igniter.checkout.beforePayment',
-        'admin.order.paymentProcessed',
+    ]);
+    resolve(Manager::class)->bindBroadcasts([
+        'admin.order.paymentProcessed' => BroadcastOrderPlacedEvent::class,
     ]);
 
     $payment = Payment::firstWhere('code', 'cod');
@@ -321,7 +325,6 @@ it('processes payment', function(): void {
         ->and($order->processed)->toBeTrue();
 
     Event::assertDispatched('igniter.checkout.beforePayment');
-    Event::assertDispatched('admin.order.paymentProcessed');
 });
 
 it('applies required attributes', function(): void {

@@ -59,6 +59,13 @@ $config['list']['columns'] = [
         'label' => 'lang:igniter::admin.label_name',
         'type' => 'text',
     ],
+    'validity' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.column_validity',
+        'type' => 'text',
+        'formatter' => function($record, $column, $value) {
+            return lang('igniter.cart::default.mealtimes.text_'.$value);
+        },
+    ],
     'start_time' => [
         'label' => 'lang:igniter.cart::default.mealtimes.column_start_time',
         'type' => 'time',
@@ -66,6 +73,14 @@ $config['list']['columns'] = [
     'end_time' => [
         'label' => 'lang:igniter.cart::default.mealtimes.column_end_time',
         'type' => 'time',
+    ],
+    'start_at' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.column_start_at',
+        'type' => 'datetime',
+    ],
+    'end_at' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.column_end_at',
+        'type' => 'datetime',
     ],
     'mealtime_status' => [
         'label' => 'lang:igniter::admin.label_status',
@@ -129,23 +144,103 @@ $config['form']['fields'] = [
         'valueFrom' => 'locations',
         'nameFrom' => 'location_name',
     ],
-    'start_time' => [
-        'label' => 'lang:igniter.cart::default.mealtimes.label_start_time',
-        'type' => 'datepicker',
-        'mode' => 'time',
+    'validity' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_validity',
+        'type' => 'radiotoggle',
+        'default' => 'daily',
         'span' => 'left',
-    ],
-    'end_time' => [
-        'label' => 'lang:igniter.cart::default.mealtimes.label_end_time',
-        'type' => 'datepicker',
-        'mode' => 'time',
-        'span' => 'right',
+        'options' => [
+            'daily' => 'lang:igniter.cart::default.mealtimes.text_daily',
+            'period' => 'lang:igniter.cart::default.mealtimes.text_period',
+            'recurring' => 'lang:igniter.cart::default.mealtimes.text_recurring',
+        ],
     ],
     'mealtime_status' => [
         'label' => 'lang:igniter::admin.label_status',
         'type' => 'switch',
         'default' => true,
+        'span' => 'right',
+    ],
+    'start_time' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_start_time',
+        'type' => 'datepicker',
+        'mode' => 'time',
         'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[daily]',
+        ],
+    ],
+    'end_time' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_end_time',
+        'type' => 'datepicker',
+        'mode' => 'time',
+        'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[daily]',
+        ],
+    ],
+    'start_at' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_start_at',
+        'type' => 'datepicker',
+        'mode' => 'datetime',
+        'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[period]',
+        ],
+    ],
+    'end_at' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_end_at',
+        'type' => 'datepicker',
+        'mode' => 'datetime',
+        'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[period]',
+        ],
+    ],
+    'recurring_every' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_recurring_every',
+        'type' => 'checkboxtoggle',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[recurring]',
+        ],
+    ],
+    'recurring_from' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_recurring_from',
+        'type' => 'datepicker',
+        'mode' => 'time',
+        'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[recurring]',
+        ],
+    ],
+    'recurring_to' => [
+        'label' => 'lang:igniter.cart::default.mealtimes.label_recurring_to',
+        'type' => 'datepicker',
+        'mode' => 'time',
+        'span' => 'left',
+        'cssClass' => 'flex-width',
+        'trigger' => [
+            'action' => 'show',
+            'field' => 'validity',
+            'condition' => 'value[recurring]',
+        ],
     ],
 ];
 
