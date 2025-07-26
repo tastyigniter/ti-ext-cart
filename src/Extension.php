@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart;
 
-use Igniter\Admin\DashboardWidgets\Charts;
-use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\AutomationRules\Conditions\OrderAttribute;
 use Igniter\Cart\AutomationRules\Conditions\OrderStatusAttribute;
 use Igniter\Cart\AutomationRules\Events\NewOrderStatus;
@@ -28,8 +26,9 @@ use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Http\Requests\OrderSettingsRequest;
 use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
+use Igniter\Cart\Listeners\ExtendDashboardCards;
+use Igniter\Cart\Listeners\ExtendDashboardCharts;
 use Igniter\Cart\Listeners\OrderPerTimeslotLimitReached;
-use Igniter\Cart\Listeners\RegistersDashboardCards;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -130,13 +129,13 @@ class Extension extends BaseExtension
         $this->bindCartEvents();
         $this->bindCheckoutEvents();
         $this->bindOrderStatusEvent();
-        $this->extendDashboardChartsDatasets();
 
         LocationModel::implement(LocationAction::class);
 
         Customers::extendFormFields(new AddsCustomerOrdersTabFields);
 
-        Statistics::registerCards(fn(): array => (new RegistersDashboardCards)());
+        resolve(ExtendDashboardCards::class)->registerCards();
+        resolve(ExtendDashboardCharts::class)->registerCharts();
 
         Event::listen('admin.controller.beforeRemap', function($controller): void {
             $controller->addJs('igniter.cart::/js/order-workflow.js', 'order-workflow');
@@ -456,23 +455,6 @@ class Extension extends BaseExtension
                     'request' => OrderSettingsRequest::class,
                 ],
             ]);
-        });
-    }
-
-    protected function extendDashboardChartsDatasets()
-    {
-        Charts::extend(function($charts): void {
-            $charts->bindEvent('charts.extendDatasets', function() use ($charts): void {
-                $charts->mergeDataset('reports', 'sets', [
-                    'orders' => [
-                        'label' => 'lang:igniter.cart::default.text_charts_orders',
-                        'color' => '#64B5F6',
-                        'model' => Order::class,
-                        'column' => 'order_date',
-                        'priority' => 20,
-                    ],
-                ]);
-            });
         });
     }
 

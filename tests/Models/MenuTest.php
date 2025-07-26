@@ -20,6 +20,12 @@ use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
 use Illuminate\Support\Facades\Event;
 
+it('returns enabled menu items in dropdown options', function(): void {
+    $options = Menu::getDropdownOptions();
+
+    expect($options->isNotEmpty())->toBeTrue();
+});
+
 it('returns menu_price_from attribute', function(): void {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
 

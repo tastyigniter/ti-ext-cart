@@ -133,6 +133,18 @@ parameters:
 			path: src/Http/Middleware/InjectStatusWorkflow.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$count\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Listeners/ExtendDashboardCharts.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$label\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Listeners/ExtendDashboardCharts.php
+
+		-
 			message: '#^Call to an undefined method Igniter\\Local\\Models\\Location\:\:getOrderTimeInterval\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -293,12 +305,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: src/Models/Observers/MenuOptionValueObserver.php
-
-		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\OrderMenu\:\:\$menu_options\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/Order.php
 
 		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\OrderMenuOptionValue\:\:\$menu_option\.$#'

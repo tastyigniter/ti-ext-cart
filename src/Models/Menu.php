@@ -140,6 +140,11 @@ class Menu extends Model implements Buyable
         return $value ?: 1;
     }
 
+    public static function getDropdownOptions()
+    {
+        return self::whereIsEnabled()->pluck('menu_name', 'menu_id');
+    }
+
     //
     // Helpers
     //

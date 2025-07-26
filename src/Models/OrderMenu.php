@@ -6,6 +6,9 @@ namespace Igniter\Cart\Models;
 
 use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Database\Relations\BelongsTo;
+use Igniter\Flame\Database\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * OrderMenu Model
@@ -19,6 +22,12 @@ use Igniter\Flame\Database\Model;
  * @property float|null $subtotal
  * @property mixed|null $option_values
  * @property string|null $comment
+ * @property-read Order $order
+ * @property-read Menu $menu
+ * @property-read Collection|OrderMenuOptionValue[] $menu_options
+ * @method static BelongsTo|Order order()
+ * @method static BelongsTo|Menu menu()
+ * @method static HasMany|OrderMenuOptionValue menu_options()
  * @mixin Model
  */
 class OrderMenu extends Model
