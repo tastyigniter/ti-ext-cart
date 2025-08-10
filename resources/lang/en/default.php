@@ -566,7 +566,7 @@ return [
         'text_title_manage_stock' => 'Manage Stock',
         'text_title_stock_history' => 'Stock History',
         'text_stock_description' => 'Managing stock for <b>%s</b> at %s location(s)',
-        'text_empty' => 'There are no stocks available.',
+        'text_empty' => 'There are no stocks available. Please add stock for your menu items or options to track their quantities.',
 
         'button_out_of_stock' => 'Out of Stock',
         'button_manage_stock' => 'Manage Stock',
