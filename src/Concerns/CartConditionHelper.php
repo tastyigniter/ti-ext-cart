@@ -210,8 +210,15 @@ trait CartConditionHelper
     // Session
     //
 
-    protected function getSessionKey(): string
+    public function getSessionKey(): string
     {
-        return sprintf($this->sessionKey, $this->name);
+        return $this->sessionKey;
+    }
+
+    public function setSessionKey(string $sessionKey): static
+    {
+        $this->sessionKey = $sessionKey;
+
+        return $this;
     }
 }
