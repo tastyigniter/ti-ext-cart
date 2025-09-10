@@ -227,6 +227,7 @@ class Extension extends BaseExtension
     {
         return [
             'settings' => [
+                'priority' => 1,
                 'label' => 'Cart Settings',
                 'description' => 'Manage cart conditions and tipping settings.',
                 'icon' => 'fa fa-cart-shopping',

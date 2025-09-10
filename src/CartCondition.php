@@ -43,7 +43,7 @@ abstract class CartCondition implements Arrayable, Jsonable
     // Object properties
     //
 
-    protected $sessionKey = 'cart.conditions.%s';
+    protected ?string $sessionKey = null;
 
     protected null|CartContent|CartItem $target = null;
 
@@ -56,11 +56,13 @@ abstract class CartCondition implements Arrayable, Jsonable
      *
      * @param array $config
      */
-    public function __construct(/**
-     * The config for this cart condition.
-     */
+    public function __construct(
+        /**
+         * The config for this cart condition.
+         */
         protected $config = [])
     {
+        $this->setSessionKey(sprintf('%s.conditions.%s', array_get($this->config, 'cartInstance', 'default'), $this->name));
         $this->fillFromConfig($this->config);
     }
 

@@ -120,6 +120,14 @@ it('validateCustomer throws exception when guest order is not allowed and custom
         ->toThrow(ApplicationException::class, lang('igniter.cart::default.checkout.alert_customer_not_logged'));
 });
 
+it('validateDeliveryAddress throws exception when delivery address is empty', function(): void {
+    $address = [];
+    Geocoder::shouldReceive('geocode')->andReturn(collect());
+
+    expect(fn() => $this->manager->validateDeliveryAddress($address))
+        ->toThrow(ApplicationException::class, lang('igniter.local::default.alert_invalid_search_query'));
+});
+
 it('validateDeliveryAddress throws exception when delivery address is invalid', function(): void {
     $address = [
         'address_1' => '123 Main St',

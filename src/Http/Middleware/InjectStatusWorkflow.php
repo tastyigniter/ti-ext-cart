@@ -22,17 +22,14 @@ class InjectStatusWorkflow
         }
 
         if ($response->isSuccessful()) {
-            $orderWorkflowModalView = $this->renderOrderWorkflowView();
-
             $content = $response->getContent();
             $insertPos = strripos((string)$content, '</body>');
             if ($insertPos !== false) {
                 $content = substr((string)$content, 0, $insertPos);
-                $content .= $orderWorkflowModalView;
+                $content .= $this->renderOrderWorkflowView();
                 $content .= substr($content, $insertPos);
+                $response->setContent($content);
             }
-
-            $response->setContent($content);
         }
 
         return $response;

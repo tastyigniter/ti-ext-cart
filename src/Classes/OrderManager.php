@@ -9,6 +9,7 @@ use Igniter\Cart\CartCondition;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Flame\Geolite\Facades\Geocoder;
+use Igniter\Flame\Geolite\Model\Location as UserLocation;
 use Igniter\Local\Classes\CoveredArea;
 use Igniter\Local\Classes\Location;
 use Igniter\Local\Models\LocationArea;
@@ -151,14 +152,17 @@ class OrderManager
             $address['country'] = app('country')->getCountryNameById($address['country_id']);
         }
 
-        $collection = Geocoder::geocode(implode(' ', array_only($address, [
-            'address_1', 'address_2', 'city', 'state', 'postcode', 'country',
-        ])));
+        $addressInfo = array_only($address, ['address_1', 'address_2', 'city', 'state', 'postcode', 'country']);
+        if (empty($addressInfo)) {
+            throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
+        }
 
+        $collection = Geocoder::geocode(implode(' ', $addressInfo));
         if ($collection->isEmpty()) {
             throw new ApplicationException(lang('igniter.local::default.alert_invalid_search_query'));
         }
 
+        /** @var UserLocation $userLocation */
         $userLocation = $collection->first();
         if (!$userLocation->getStreetNumber() || !$userLocation->getStreetName()) {
             throw new ApplicationException(lang('igniter.local::default.alert_missing_street_address'));
@@ -428,9 +432,10 @@ class OrderManager
         $this->setCurrentPaymentCode($code);
 
         $condition = $this->cart->getCondition('paymentFee');
-        $condition->setMetaData(['code' => $code]);
-
-        $this->cart->loadCondition($condition);
+        if ($condition instanceof CartCondition) {
+            $condition->setMetaData(['code' => $code]);
+            $this->cart->loadCondition($condition);
+        }
 
         return $condition;
     }
