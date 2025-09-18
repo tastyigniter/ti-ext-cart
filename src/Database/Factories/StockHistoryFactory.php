@@ -16,7 +16,7 @@ class StockHistoryFactory extends Factory
     protected $model = StockHistory::class;
 
     #[Override]
-    public function definition()
+    public function definition(): array
     {
         return [
             'stock_id' => Stock::factory(),

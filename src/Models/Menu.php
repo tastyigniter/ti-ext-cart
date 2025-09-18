@@ -264,7 +264,7 @@ class Menu extends Model implements Buyable
     }
 
     #[Override]
-    public function getMorphClass()
+    public function getMorphClass(): string
     {
         return 'menus';
     }

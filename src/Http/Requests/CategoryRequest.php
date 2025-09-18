@@ -10,7 +10,7 @@ use Override;
 class CategoryRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'name' => lang('igniter::admin.label_name'),

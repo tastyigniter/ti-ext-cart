@@ -305,11 +305,9 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
     #[Override]
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'rowId' => $this->rowId,

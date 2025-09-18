@@ -368,7 +368,7 @@ class CartManager
                 sprintf(
                     lang('igniter.cart::default.alert_menu_not_within_mealtimes'),
                     $menuItem->menu_name,
-                    strtolower((string) $menuItem->mealtimes->filter(fn(Mealtime $mealtime): bool => $mealtime->isEnabled())
+                    strtolower((string)$menuItem->mealtimes->filter(fn(Mealtime $mealtime): bool => $mealtime->isEnabled())
                         ->pluck('description')
                         ->join(', ')),
                 ),

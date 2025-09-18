@@ -10,7 +10,7 @@ use Override;
 class MenuOptionRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'option_name' => lang('igniter.cart::default.menu_options.label_option_group_name'),

@@ -10,7 +10,7 @@ use Override;
 class MenuRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'menu_name' => lang('igniter::admin.label_name'),

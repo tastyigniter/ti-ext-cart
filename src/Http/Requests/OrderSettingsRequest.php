@@ -10,7 +10,7 @@ use Override;
 class OrderSettingsRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'order_email.*' => lang('igniter.cart::default.label_order_email'),
