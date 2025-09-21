@@ -145,6 +145,11 @@ class Menu extends Model implements Buyable
         return self::whereIsEnabled()->pluck('menu_name', 'menu_id');
     }
 
+    public static function onboardingIsComplete(): bool
+    {
+        return self::whereIsEnabled()->count() > 0;
+    }
+
     //
     // Helpers
     //

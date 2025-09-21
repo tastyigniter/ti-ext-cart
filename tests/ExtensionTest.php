@@ -174,6 +174,13 @@ it('returns registered core settings', function(): void {
     expect(collect($items['core'])->firstWhere('code', 'order'))->not->toBeNull();
 });
 
+it('registers onboarding steps', function(): void {
+    $steps = $this->extension->registerOnboardingSteps();
+
+    expect($steps)->toHaveKey('igniter.cart::menus')
+        ->and($steps['igniter.cart::menus']['label'])->toBe('igniter.cart::default.dashboard.text_onboarding_payments');
+});
+
 it('restores cart session on login correctly', function(): void {
     CartSettings::set('abandoned_cart', 1);
     $customer = Customer::factory()->create();

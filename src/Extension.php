@@ -472,4 +472,18 @@ class Extension extends BaseExtension
             $this->app['router']->pushMiddlewareToGroup('igniter', CartMiddleware::class);
         }
     }
+
+    public function registerOnboardingSteps(): array
+    {
+        return [
+            'igniter.cart::menus' => [
+                'label' => 'igniter.cart::default.dashboard.text_onboarding_menus',
+                'description' => 'igniter.cart::default.dashboard.help_onboarding_menus',
+                'icon' => 'fa-cutlery',
+                'url' => admin_url('menus'),
+                'priority' => 30,
+                'complete' => Menu::onboardingIsComplete(...),
+            ],
+        ];
+    }
 }
