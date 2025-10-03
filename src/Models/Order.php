@@ -317,7 +317,7 @@ class Order extends Model
     }
 
     #[Override]
-    public function getMorphClass()
+    public function getMorphClass(): string
     {
         return 'orders';
     }

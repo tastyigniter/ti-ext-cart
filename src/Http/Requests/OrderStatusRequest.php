@@ -10,7 +10,7 @@ use Override;
 class OrderStatusRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'status_id' => lang('igniter::admin.label_status'),

@@ -95,6 +95,8 @@ class StockEditor extends BaseFormWidget
 
         flash()->success(sprintf(lang('igniter::admin.alert_success'), lang('igniter.cart::default.stocks.text_form_name').' updated'))->now();
 
+        $this->model->refresh();
+
         $this->prepareVars();
 
         return [

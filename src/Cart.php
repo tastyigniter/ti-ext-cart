@@ -16,12 +16,10 @@ use LogicException;
 
 class Cart
 {
-    public const string DEFAULT_INSTANCE = 'default';
-
     /**
      * Holds the current cart instance.
      */
-    protected string $instance = self::DEFAULT_INSTANCE;
+    protected string $instance = 'default';
 
     /**
      * @var ?CartConditions Instance of the cart condition.
@@ -61,7 +59,7 @@ class Cart
      */
     public function currentInstance(): string
     {
-        return str_replace('cart.', '', $this->instance);
+        return $this->instance;
     }
 
     /**
@@ -560,13 +558,16 @@ class Cart
     {
         return $this->createModel()
             ->where('identifier', $identifier)
-            ->where('instance', $this->currentInstance())->exists();
+            ->where('instance', $this->currentInstance())
+            ->exists();
     }
 
     protected function getStoredCartByIdentifier($identifier)
     {
         return $this->createModel()
-            ->where('identifier', $identifier)->first();
+            ->where('identifier', $identifier)
+            ->where('instance', $this->currentInstance())
+            ->first();
     }
 
     /**

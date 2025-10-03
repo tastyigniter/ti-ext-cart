@@ -26,6 +26,22 @@ it('returns enabled menu items in dropdown options', function(): void {
     expect($options->isNotEmpty())->toBeTrue();
 });
 
+it('returns true if onboarding is complete', function(): void {
+    Menu::factory()->create(['menu_status' => 1]);
+
+    $result = Menu::onboardingIsComplete();
+
+    expect($result)->toBeTrue();
+});
+
+it('returns false if onboarding is not complete', function(): void {
+    Menu::query()->update(['status' => 0]);
+
+    $result = Menu::onboardingIsComplete();
+
+    expect($result)->toBeFalse();
+});
+
 it('returns menu_price_from attribute', function(): void {
     $menu = Menu::factory()->create(['menu_price' => 10.00]);
 

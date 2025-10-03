@@ -10,7 +10,7 @@ use Override;
 class CheckoutSettingsRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'guest_order' => lang('igniter.cart::default.label_guest_order'),

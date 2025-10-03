@@ -121,11 +121,9 @@ class CartItemOptionValue implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
     #[Override]
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

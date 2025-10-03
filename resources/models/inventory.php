@@ -27,7 +27,8 @@ $config['list']['columns'] = [
     'stockable_type_name' => [
         'label' => 'lang:igniter.cart::default.stocks.column_stockable_type',
         'type' => 'text',
-        'searchable' => true,
+        'select' => 'stockable_type',
+        'searchable' => false,
     ],
     'stockable_name' => [
         'label' => 'lang:igniter.cart::default.stocks.column_stockable_name',

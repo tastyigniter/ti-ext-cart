@@ -10,7 +10,7 @@ use Override;
 class MealtimeRequest extends FormRequest
 {
     #[Override]
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'mealtime_name' => lang('igniter.cart::default.mealtimes.label_mealtime_name'),

@@ -633,5 +633,8 @@ return [
         'text_delivery_order_count' => 'Number of Delivery Orders',
         'text_canceled_order_total' => 'Total Canceled Orders',
         'text_canceled_order_count' => 'Number of Canceled Orders',
+        'text_onboarding_menus' => 'Build your menu',
+
+        'help_onboarding_menus' => 'Add your dishes, organize them into categories, and set prices. This is what your hungry customers will browse and order from.',
     ],
 ];

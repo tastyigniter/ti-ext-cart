@@ -14,7 +14,7 @@ class StockFactory extends Factory
     protected $model = Stock::class;
 
     #[Override]
-    public function definition()
+    public function definition(): array
     {
         return [
             'location_id' => Location::factory(),
