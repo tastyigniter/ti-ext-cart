@@ -35,7 +35,7 @@ it('returns true if onboarding is complete', function(): void {
 });
 
 it('returns false if onboarding is not complete', function(): void {
-    Menu::query()->update(['status' => 0]);
+    Menu::query()->update(['menu_status' => 0]);
 
     $result = Menu::onboardingIsComplete();
 

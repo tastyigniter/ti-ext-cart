@@ -175,10 +175,11 @@ it('returns registered core settings', function(): void {
 });
 
 it('registers onboarding steps', function(): void {
-    $steps = $this->extension->registerOnboardingSteps();
+    $extension = new Extension(app());
+    $steps = $extension->registerOnboardingSteps();
 
     expect($steps)->toHaveKey('igniter.cart::menus')
-        ->and($steps['igniter.cart::menus']['label'])->toBe('igniter.cart::default.dashboard.text_onboarding_payments');
+        ->and($steps['igniter.cart::menus']['label'])->toBe('igniter.cart::default.dashboard.text_onboarding_menus');
 });
 
 it('restores cart session on login correctly', function(): void {
