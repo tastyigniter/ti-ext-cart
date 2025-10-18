@@ -15,7 +15,9 @@ trait ActsAsItemable
      */
     public function toItem(): static
     {
-        return new static($this->toArray());
+        return new static(array_merge($this->toArray(), [
+            'cartInstance' => array_get($this->config, 'cartInstance', 'default'),
+        ]));
     }
 
     public static function isApplicableTo($cartItem) {}

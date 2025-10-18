@@ -24,7 +24,7 @@ class CartConditionManager
      */
     protected array $registeredCallbacks = [];
 
-    public function makeCondition($className, array $config = [])
+    public function makeCondition(string $className, array $config = [])
     {
         if (!array_key_exists($className, $this->registeredConditions ?? [])) {
             throw new LogicException(sprintf("The Cart Condition class '%s' has not been registered", $className));
@@ -74,7 +74,7 @@ class CartConditionManager
         }
     }
 
-    public function registerCondition($className, $conditionInfo = null): void
+    public function registerCondition(string $className, $conditionInfo = null): void
     {
         if ($this->registeredConditions === null) {
             $this->registeredConditions = [];

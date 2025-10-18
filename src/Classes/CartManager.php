@@ -215,7 +215,7 @@ class CartManager
 
             $definition['cartInstance'] = $this->cart->currentInstance();
 
-            $className = array_get($definition, 'className');
+            $className = array_get($definition, 'className', '');
             $condition = $conditionManager->makeCondition($className, $definition);
 
             $this->cart->loadCondition($condition);
