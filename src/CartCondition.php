@@ -292,6 +292,7 @@ abstract class CartCondition implements Arrayable, Jsonable
             'priority' => $this->priority,
             'removeable' => $this->removeable,
             'sessionKey' => $this->sessionKey,
+            'config' => $this->config,
             'metaData' => Session::get($this->getSessionKey(), []),
         ];
     }

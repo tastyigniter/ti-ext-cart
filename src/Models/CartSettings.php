@@ -23,7 +23,7 @@ class CartSettings extends Model
     // Reference to field configuration
     public string $settingsFieldsConfig = 'cartsettings';
 
-    public function getConditionsAttribute($value)
+    public function getConditionsAttribute(?array $value)
     {
         $result = [];
         $registeredConditions = resolve(CartConditionManager::class)->listRegisteredConditions();

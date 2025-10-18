@@ -76,7 +76,7 @@ class Category extends Model
 
     public $relation = [
         'belongsTo' => [
-            'parent_cat' => [\Igniter\Cart\Models\Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
+            'parent_cat' => [Category::class, 'foreignKey' => 'parent_id', 'otherKey' => 'category_id'],
         ],
         'belongsToMany' => [
             'menus' => [Menu::class, 'table' => 'menu_categories'],
