@@ -227,12 +227,8 @@ class CartItem implements Arrayable, Jsonable
 
     /**
      * Get an attribute from the cart item or get the associated model.
-     *
-     * @param string $attribute
-     *
-     * @return mixed
      */
-    public function __get($attribute)
+    public function __get(string $attribute): mixed
     {
         if ($attribute === 'subtotal') {
             return $this->subtotal();
