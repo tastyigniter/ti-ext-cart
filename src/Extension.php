@@ -138,7 +138,7 @@ class Extension extends BaseExtension
         resolve(ExtendDashboardCharts::class)->registerCharts();
 
         Event::listen('admin.controller.beforeRemap', function($controller): void {
-            $controller->addJs('igniter.cart::/js/order-workflow.js', 'order-workflow');
+            $controller->addJs('igniter.cart::/js/status-workflow.js', 'status-workflow');
         });
     }
 
