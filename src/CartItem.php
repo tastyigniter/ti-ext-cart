@@ -287,7 +287,7 @@ class CartItem implements Arrayable, Jsonable
             return $options;
         }
 
-        return new CartItemOptions(array_map(fn($option): CartItemOption => CartItemOption::fromArray($option), $options));
+        return new CartItemOptions(array_map(CartItemOption::fromArray(...), $options));
     }
 
     protected function makeCartItemConditions($conditions)

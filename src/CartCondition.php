@@ -130,8 +130,8 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->calculatedValue = 0;
 
         return collect($this->getActions())
-            ->map(fn($action): array => $this->processActionValue($action, $subTotal))
-            ->reduce(fn($total, $action): float => $this->calculateActionValue($action, $total), $subTotal);
+            ->map(fn(array $action): array => $this->processActionValue($action, $subTotal))
+            ->reduce(fn(float $total, array $action): float => $this->calculateActionValue($action, $total), $subTotal);
     }
 
     //
