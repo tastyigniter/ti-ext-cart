@@ -26,7 +26,7 @@ class OrderStatusRequest extends FormRequest
     {
         return [
             'status_id' => ['sometimes', 'required', 'integer', 'exists:statuses'],
-            'comment' => ['string', 'max:1500'],
+            'comment' => ['nullable', 'string', 'max:1500'],
             'notify' => ['sometimes', 'required', 'boolean'],
 
             'assignee_group_id' => ['sometimes', 'required', 'integer', 'exists:admin_user_groups,user_group_id'],

@@ -31,7 +31,7 @@ it('returns correct validation rules', function(): void {
         ->and($rules)->toHaveKey('assignee_group_id')
         ->and($rules)->toHaveKey('assignee_id')
         ->and($rules['status_id'])->toContain('sometimes', 'required', 'integer', 'exists:statuses')
-        ->and($rules['comment'])->toContain('string', 'max:1500')
+        ->and($rules['comment'])->toContain('nullable', 'string', 'max:1500')
         ->and($rules['notify'])->toContain('sometimes', 'required', 'boolean')
         ->and($rules['assignee_group_id'])->toContain('sometimes', 'required', 'integer', 'exists:admin_user_groups,user_group_id')
         ->and($rules['assignee_id'])->toContain('integer', 'exists:admin_users,user_id');
