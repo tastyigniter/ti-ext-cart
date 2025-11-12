@@ -88,6 +88,15 @@ return [
                     'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_canceled_order_status',
                 ],
+                'enable_status_workflow' => [
+                    'label' => 'lang:igniter.cart::default.orders.label_enable_status_workflow',
+                    'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
+                    'type' => 'switch',
+                    'default' => true,
+                    'on' => 'lang:igniter::admin.text_yes',
+                    'off' => 'lang:igniter::admin.text_no',
+                    'comment' => 'lang:igniter.cart::default.orders.help_enable_status_workflow',
+                ],
                 'accepted_order_status' => [
                     'label' => 'lang:igniter.cart::default.orders.label_accepted_order_status',
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
