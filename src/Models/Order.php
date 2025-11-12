@@ -125,6 +125,14 @@ class Order extends Model
 
     public $appends = ['customer_name', 'order_type_name', 'order_date_time', 'formatted_address'];
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'telephone',
+        'comment',
+        'delivery_comment'
+    ];
     protected $casts = [
         'customer_id' => 'integer',
         'location_id' => 'integer',
