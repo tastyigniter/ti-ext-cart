@@ -247,7 +247,7 @@ class CartManager
             $selectedValues = array_filter((array)array_get($selectedOption, 'option_values', []));
 
             if (!in_array($menuOption->option->display_type, ['quantity', 'checkbox'])) {
-                $selectedValues = array_filter($selectedValues, 'is_numeric');
+                $selectedValues = array_filter($selectedValues, is_numeric(...));
             }
 
             $this->validateMenuItemOption($menuOption, $selectedValues);

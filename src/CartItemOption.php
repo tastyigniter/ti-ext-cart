@@ -86,7 +86,7 @@ class CartItemOption implements Arrayable, Jsonable
             return $values;
         }
 
-        return new CartItemOptionValues(array_map(fn($item): CartItemOptionValue => CartItemOptionValue::fromArray($item), $values));
+        return new CartItemOptionValues(array_map(CartItemOptionValue::fromArray(...), $values));
     }
 
     /**
