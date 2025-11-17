@@ -475,6 +475,9 @@ return [
         'alert_menu_option_not_attached' => 'Please select a menu option to assign.',
         'alert_menu_option_already_attached' => 'Can not assign, the selected menu option has already been assigned.',
         'alert_menu_option_assigned' => 'Menu item option(s) assigned',
+
+        'error_min_selected_not_applicable' => 'Min Selected is not applicable for the selected display type.',
+        'error_max_selected_not_applicable' => 'Max Selected is not applicable for the selected display type.',
     ],
 
     'menus' => [

@@ -149,20 +149,24 @@ class MenuItemOption extends Model
         return count($idsToKeep);
     }
 
-    public function beforeValidate()
+    public function beforeValidate(): void
     {
         if (in_array($this->display_type, ['select', 'radio'])) {
-            $this->rules = collect($this->rules)->map(function ($rule) {
+            $this->rules = collect($this->rules)->map(function($rule) {
                 if (in_array($rule[0], ['min_selected', 'max_selected'])) {
-                    $rule[2] = 'nullable|max:0';
+                    $rule[2] = 'max:1';
                 }
+
                 return $rule;
             })->all();
-
-            $this->validationMessages = array_merge($this->validationMessages ?? [], [
-                'min_selected.max' => lang('igniter.cart::default.menu_options.error_min_selected_not_applicable'),
-                'max_selected.max' => lang('igniter.cart::default.menu_options.error_max_selected_not_applicable'),
-            ]);
         }
+    }
+
+    public function getValidationMessages(): array
+    {
+        return [
+            'min_selected.max' => lang('igniter.cart::default.menu_options.error_min_selected_not_applicable'),
+            'max_selected.max' => lang('igniter.cart::default.menu_options.error_max_selected_not_applicable'),
+        ];
     }
 }
