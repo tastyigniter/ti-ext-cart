@@ -190,7 +190,8 @@ class OrderPerTimeslotLimitReached
 
     protected function sumCategoryCovers(Collection $orders, array $limit): int
     {
-        return $orders->reduce(function($total, $order) use ($limit) {
+        /** @var int $sum */
+        $sum = $orders->reduce(function($total, $order) use ($limit) {
             if (isset($order->menus)) {
                 foreach ($order->menus as $menuItem) {
                     if ($this->menuIsInLimitCategories($menuItem->menu_id, $limit)) {
@@ -201,6 +202,8 @@ class OrderPerTimeslotLimitReached
 
             return $total;
         }, 0);
+
+        return $sum;
     }
 
     protected function menuIsInLimitCategories(string|int $menuId, array $limit): bool
@@ -215,6 +218,8 @@ class OrderPerTimeslotLimitReached
         }
 
         $result = Order::query()
+            ->with(['menus', 'menu_options'])
+            ->select('order_id', 'order_type', 'order_time')
             ->where('location_id', Location::getId())
             ->where('order_date', $date)
             ->whereIn('status_id', array_merge(
