@@ -358,6 +358,7 @@ return [
         'label_total_items' => 'Total Items',
         'label_cancel_reason' => 'Reason for cancellation',
 
+        'label_enable_status_workflow' => 'Enable Status Workflow',
         'label_accepted_order_status' => 'Accepted Order Status',
         'label_reject_order_status' => 'Rejected Order Status',
         'label_rejected_reasons' => 'Rejected Order Reasons',
@@ -369,6 +370,7 @@ return [
         'label_delay_amount' => 'Delay Minutes',
         'label_limit_users' => 'Limit workflow to specific users',
 
+        'help_enable_status_workflow' => 'Enable or disable the status workflow modal for approving new orders in the admin area',
         'help_accepted_order_status' => 'The order status to use when an order is marked as accepted. You can create a new status from the Settings > Statuses page',
         'help_reject_order_status' => 'The order status to use when an order is marked as rejected. You can create a new status from the Settings > Statuses page',
         'help_limit_users' => 'Selected users will see a popup in the admin area to accept, delay and reject orders. Leave blank to apply to all users.',
@@ -473,6 +475,9 @@ return [
         'alert_menu_option_not_attached' => 'Please select a menu option to assign.',
         'alert_menu_option_already_attached' => 'Can not assign, the selected menu option has already been assigned.',
         'alert_menu_option_assigned' => 'Menu item option(s) assigned',
+
+        'error_min_selected_not_applicable' => 'Min Selected is not applicable for the selected display type.',
+        'error_max_selected_not_applicable' => 'Max Selected is not applicable for the selected display type.',
     ],
 
     'menus' => [

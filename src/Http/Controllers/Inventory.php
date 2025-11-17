@@ -43,6 +43,6 @@ class Inventory extends AdminController
 
     public function listExtendQuery($query): void
     {
-        $query->where('is_tracked', true);
+        $query->with('stockable')->where('is_tracked', true);
     }
 }

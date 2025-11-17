@@ -68,6 +68,7 @@ it('return minimum_qty attribute', function(): void {
 it('returns true when menu has options', function(): void {
     $menu = Menu::factory()->create();
     $menu->menu_options()->create(['option_id' => 1]);
+    $menu->loadCount(['menu_options']);
 
     expect($menu->hasOptions())->toBeTrue();
 });
