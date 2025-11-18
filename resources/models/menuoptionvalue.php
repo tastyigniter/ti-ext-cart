@@ -35,13 +35,6 @@ $config['form'] = [
             'type' => 'hidden',
         ],
     ],
-    'rules' => [
-        ['option_id', 'lang:igniter.cart::default.menu_options.label_option_id', 'required|integer'],
-        ['value', 'lang:igniter.cart::default.menu_options.label_option_value', 'required|min:2|max:255'],
-        ['price', 'lang:igniter.cart::default.menu_options.label_option_price', 'required|numeric|min:0'],
-        ['priority', 'lang:igniter.cart::default.menu_options.label_option_price', 'integer'],
-        ['ingredients.*', 'lang:igniter.cart::default.menus.label_ingredients', 'integer'],
-    ],
 ];
 
 return $config;

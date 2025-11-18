@@ -20,6 +20,9 @@ class MenuOptionRequest extends FormRequest
             'max_selected' => lang('igniter.cart::default.menu_options.label_max_selected'),
             'locations.*' => lang('igniter::admin.label_location'),
             'option_values' => lang('igniter.cart::default.menu_options.label_option_values'),
+            'values.*.name' => lang('igniter.cart::default.menu_options.label_option_name'),
+            'values.*.price' => lang('igniter.cart::default.menu_options.label_option_price'),
+            'values.*.ingredients' => lang('igniter.cart::default.menus.label_ingredients'),
         ];
     }
 
@@ -34,6 +37,10 @@ class MenuOptionRequest extends FormRequest
             'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
             'values' => ['required', 'array'],
+            'values.*.name' => ['required', 'string', 'min:2', 'max:255'],
+            'values.*.price' => ['required', 'numeric', 'min:0'],
+            'values.*.ingredients' => ['nullable', 'array'],
+            'values.*.ingredients.*' => ['integer'],
         ];
     }
 }

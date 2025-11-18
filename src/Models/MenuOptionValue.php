@@ -8,6 +8,7 @@ use Igniter\Cart\Models\Concerns\Stockable;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Sortable;
+use Igniter\Flame\Database\Traits\Validation;
 
 /**
  * MenuOptionValue Model Class
@@ -25,6 +26,7 @@ class MenuOptionValue extends Model
     use HasFactory;
     use Sortable;
     use Stockable;
+    use Validation;
 
     protected static $ingredientOptionsCache;
 
@@ -59,6 +61,13 @@ class MenuOptionValue extends Model
     public $sortable = [
         'sortOrderColumn' => 'priority',
         'sortWhenCreating' => true,
+    ];
+
+    public $rules = [
+        ['option_id', 'igniter.cart::default.menu_options.label_option_id', 'required|integer'],
+        ['name', 'igniter.cart::default.menu_options.label_option_name', 'required|string|min:2|max:255'],
+        ['price', 'igniter.cart::default.menu_options.label_option_price', 'required|numeric|min:0'],
+        ['ingredients.*', 'igniter.cart::default.menus.label_ingredients', 'integer'],
     ];
 
     public static function getDropDownOptions()

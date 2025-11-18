@@ -8,6 +8,11 @@ use Igniter\Cart\Models\MenuOptionValue;
 
 class MenuOptionValueObserver
 {
+    public function saving(MenuOptionValue $menuOptionValue): void
+    {
+        $menuOptionValue->validate();
+    }
+
     public function deleting(MenuOptionValue $menuOptionValue): void
     {
         $menuOptionValue->ingredients()->detach();
