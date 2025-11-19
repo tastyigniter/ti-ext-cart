@@ -8,7 +8,9 @@ use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\OrderMenu;
 use Igniter\Cart\Models\OrderMenuOptionValue;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use stdClass;
 
 trait ManagesOrderItems
 {
@@ -67,15 +69,30 @@ trait ManagesOrderItems
      */
     public function getOrderMenusWithOptions(): Collection
     {
-        $this->load('menus.menu_options');
+        $this->load('menus.menu_options.menu_option');
 
-        $this->menus->each(function(OrderMenu $orderMenu): void {
-            $orderMenuOptions = $orderMenu->menu_options
-                ->groupBy(fn(OrderMenuOptionValue $orderMenuOptionValue) => $orderMenuOptionValue->menu_option->option_name);
-            $orderMenu->setRelation('menu_options', $orderMenuOptions);
-        });
+        return collect($this->menus)->map(fn(OrderMenu $orderMenu): Arrayable =>
+            // Using an anonymous class to avoid setting grouped collection as a relation,
+            // which would interfere with Eloquent's lazy loading
+            new class($orderMenu->toArray()) implements Arrayable
+            {
+                public function __construct(protected array $attributes)
+                {
+                    $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
+                        ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
+                        ->groupBy(fn(object $orderMenuOptionValue) => array_get($orderMenuOptionValue->menu_option, 'option_name'));
+                }
 
-        return $this->menus;
+                public function toArray(): array
+                {
+                    return $this->attributes;
+                }
+
+                public function __get(string $name): mixed
+                {
+                    return $this->attributes[$name] ?? null;
+                }
+            });
     }
 
     /**

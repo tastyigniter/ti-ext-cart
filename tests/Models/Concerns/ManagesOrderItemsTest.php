@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Igniter\Cart\Tests\Models\Concerns;
 
 use Igniter\Cart\Models\Menu;
+use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Cart\Models\Order;
@@ -92,6 +93,7 @@ it('gets order menus correctly', function(): void {
 it('gets order menu options correctly', function(): void {
     $order = Order::factory()->create();
     $menu = Menu::factory()->create();
+    $menuItemOption = MenuItemOption::factory()->create();
     $menuItemOptionValue = MenuItemOptionValue::factory()->create();
 
     $orderMenu = OrderMenu::create([
@@ -102,12 +104,14 @@ it('gets order menu options correctly', function(): void {
     $orderMenuOptionValue = OrderMenuOptionValue::create([
         'order_id' => $order->getKey(),
         'order_menu_id' => $orderMenu->getKey(),
+        'menu_option_id' => $menuItemOption->getKey(),
         'menu_option_value_id' => $menuItemOptionValue->getKey(),
     ]);
 
     $orderMenuOption = $order->getOrderMenuOptions()->first()->first();
 
-    expect($orderMenuOption->order_menu_id)->toBe($orderMenuOptionValue->order_menu_id);
+    expect($orderMenuOption->order_menu_id)->toBe($orderMenuOptionValue->order_menu_id)
+        ->and($order->getOrderMenusWithOptions()->toArray())->toBeArray();
 });
 
 it('gets order totals correctly', function(): void {
