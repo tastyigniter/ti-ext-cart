@@ -17,7 +17,7 @@ it('returns correct attribute labels', function(): void {
         ->and($attributes)->toHaveKey('is_required', lang('igniter.cart::default.menu_options.label_option_required'))
         ->and($attributes)->toHaveKey('min_selected', lang('igniter.cart::default.menu_options.label_min_selected'))
         ->and($attributes)->toHaveKey('max_selected', lang('igniter.cart::default.menu_options.label_max_selected'))
-        ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'))
+        ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'));
 });
 
 it('returns correct validation rules', function(): void {
@@ -39,5 +39,5 @@ it('returns correct validation rules', function(): void {
         ->and($rules['min_selected'])->toContain('integer', 'lte:max_selected')
         ->and($rules['max_selected'])->toContain('integer', 'gte:min_selected')
         ->and($rules['locations'])->toContain('nullable', 'array')
-        ->and($rules['locations.*'])->toContain('integer')
+        ->and($rules['locations.*'])->toContain('integer');
 });
