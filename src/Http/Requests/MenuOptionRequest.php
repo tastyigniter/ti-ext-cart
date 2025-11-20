@@ -19,6 +19,7 @@ class MenuOptionRequest extends FormRequest
             'min_selected' => lang('igniter.cart::default.menu_options.label_min_selected'),
             'max_selected' => lang('igniter.cart::default.menu_options.label_max_selected'),
             'locations.*' => lang('igniter::admin.label_location'),
+            'values' => lang('igniter.cart::default.menu_options.label_option_values'),
         ];
     }
 
@@ -32,6 +33,7 @@ class MenuOptionRequest extends FormRequest
             'max_selected' => ['integer', 'gte:min_selected'],
             'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
+            'values' => ['required', 'array'],
         ];
     }
 }
