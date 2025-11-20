@@ -16,6 +16,7 @@ $config['form'] = [
         'price' => [
             'label' => 'lang:igniter.cart::default.menu_options.label_option_price',
             'type' => 'currency',
+            'default' => 0,
         ],
         'stock_qty' => [
             'label' => 'lang:igniter.cart::default.menus.label_stock_qty',
