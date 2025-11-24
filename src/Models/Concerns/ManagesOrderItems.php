@@ -80,7 +80,7 @@ trait ManagesOrderItems
                 {
                     $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
                         ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
-                        ->groupBy(fn(object $orderMenuOptionValue) => array_get($orderMenuOptionValue->menu_option, 'option_name'));
+                        ->groupBy(fn(object $orderMenuOptionValue) => array_get($orderMenuOptionValue->menu_option ?? [], 'option_name'));
                 }
 
                 public function toArray(): array
