@@ -22,9 +22,9 @@ use Illuminate\Database\Eloquent\Collection;
  * @property float|null $subtotal
  * @property mixed|null $option_values
  * @property string|null $comment
- * @property-read Order $order
- * @property-read Menu $menu
- * @property-read Collection|OrderMenuOptionValue[] $menu_options
+ * @property Order $order
+ * @property Menu $menu
+ * @property Collection|OrderMenuOptionValue[] $menu_options
  * @method static BelongsTo|Order order()
  * @method static BelongsTo|Menu menu()
  * @method static HasMany|OrderMenuOptionValue menu_options()
