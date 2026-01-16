@@ -14,6 +14,8 @@ class CheckoutSettingsRequest extends FormRequest
     {
         return [
             'guest_order' => lang('igniter.cart::default.label_guest_order'),
+            'limit_orders' => lang('igniter.cart::default.checkout.label_limit_orders'),
+            'limit_orders_count' => lang('igniter.cart::default.checkout.label_limit_orders_count'),
             'limit_orders_period.*.day_of_week.*' => lang('igniter.local::default.checkout.label_day_of_week'),
             'limit_orders_period.*.start_time' => lang('igniter.local::default.checkout.label_start_time'),
             'limit_orders_period.*.end_time' => lang('igniter.local::default.checkout.label_end_time'),
@@ -30,6 +32,8 @@ class CheckoutSettingsRequest extends FormRequest
     {
         return [
             'guest_order' => ['integer'],
+            'limit_orders' => ['integer'],
+            'limit_orders_count' => ['integer'],
             'limit_orders_period.*.day_of_week.*' => ['required', 'integer'],
             'limit_orders_period.*.start_time' => ['required', 'date_format:H:i'],
             'limit_orders_period.*.end_time' => ['required', 'date_format:H:i'],
