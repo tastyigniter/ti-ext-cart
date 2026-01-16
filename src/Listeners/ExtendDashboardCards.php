@@ -7,6 +7,7 @@ namespace Igniter\Cart\Listeners;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\Models\Order;
 use Igniter\System\Models\Settings;
+use Illuminate\Support\Facades\DB;
 
 class ExtendDashboardCards
 {
@@ -211,8 +212,9 @@ class ExtendDashboardCards
      */
     protected function getOrderMenuItemsCount(callable $callback): int
     {
+        $prefix = DB::getTablePrefix();
         $query = Order::query()
-            ->selectRaw('SUM(order_menus.quantity) as total_quantity')
+            ->selectRaw('SUM('.$prefix.'order_menus.quantity) as total_quantity')
             ->join('order_menus', 'orders.order_id', '=', 'order_menus.order_id')
             ->where('orders.status_id', '>', '0')
             ->where('orders.status_id', '!=', Settings::get('canceled_order_status'));
