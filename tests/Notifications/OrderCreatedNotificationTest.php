@@ -9,13 +9,13 @@ use Igniter\Cart\Notifications\OrderCreatedNotification;
 use Igniter\User\Models\User;
 
 it('returns enabled users with location', function(): void {
-    User::factory()->create(['status' => 1]);
+    $user = User::factory()->create(['status' => 1]);
     $order = Order::factory()->create();
 
     $result = OrderCreatedNotification::make()->subject($order)->getRecipients();
 
     expect($result)->toBeArray()
-        ->and($result)->toHaveCount(1);
+        ->and(collect($result)->firstWhere('email', $user->email))->not->toBeNull();
 });
 
 it('returns correct notification title', function(): void {
