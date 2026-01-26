@@ -7,6 +7,7 @@ namespace Igniter\Cart\Listeners;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\Models\Order;
 use Igniter\System\Models\Settings;
+use Illuminate\Support\Facades\DB;
 
 class ExtendDashboardCards
 {
@@ -35,7 +36,7 @@ class ExtendDashboardCards
             ],
             'order_menu_items_count' => [
                 'label' => 'lang:igniter.cart::default.dashboard.text_order_menu_items_count',
-                'icon' => ' text-success fa fa-hashtag',
+                'icon' => ' text-success fa fa-4x fa-hashtag',
                 'valueFrom' => $this->getValue(...),
             ],
             'delivery_order' => [
@@ -55,7 +56,7 @@ class ExtendDashboardCards
             ],
             'collection_order_count' => [
                 'label' => 'lang:igniter.cart::default.dashboard.text_collection_order_count',
-                'icon' => ' text-success fa fa-shopping-bag',
+                'icon' => ' text-success fa fa-4x fa-shopping-bag',
                 'valueFrom' => $this->getValue(...),
             ],
             'completed_order' => [
@@ -70,12 +71,12 @@ class ExtendDashboardCards
             ],
             'canceled_order_total' => [
                 'label' => 'lang:igniter.cart::default.dashboard.text_canceled_order_total',
-                'icon' => ' text-danger fa fa-exclamation-circle',
+                'icon' => ' text-danger fa fa-4x fa-exclamation-circle',
                 'valueFrom' => $this->getValue(...),
             ],
             'canceled_order_count' => [
                 'label' => 'lang:igniter.cart::default.dashboard.text_canceled_order_count',
-                'icon' => ' text-danger fa fa-exclamation-circle',
+                'icon' => ' text-danger fa fa-4x fa-exclamation-circle',
                 'valueFrom' => $this->getValue(...),
             ],
         ]);
@@ -211,8 +212,9 @@ class ExtendDashboardCards
      */
     protected function getOrderMenuItemsCount(callable $callback): int
     {
+        $prefix = DB::getTablePrefix();
         $query = Order::query()
-            ->selectRaw('SUM(order_menus.quantity) as total_quantity')
+            ->selectRaw('SUM('.$prefix.'order_menus.quantity) as total_quantity')
             ->join('order_menus', 'orders.order_id', '=', 'order_menus.order_id')
             ->where('orders.status_id', '>', '0')
             ->where('orders.status_id', '!=', Settings::get('canceled_order_status'));
