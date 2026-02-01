@@ -449,6 +449,17 @@ class CartManager
                 $menuOption->max_selected,
             ));
         }
+
+        $availableOptionValueIds = $menuOption->menu_option_values->pluck('menu_option_value_id')->all();
+        collect($selectedValues)->each(function($selectedValue) use ($availableOptionValueIds) {
+            $selectedId = is_array($selectedValue) ? array_get($selectedValue, 'id') : $selectedValue;
+            if (!in_array($selectedId, $availableOptionValueIds)) {
+                throw new ApplicationException(sprintf(
+                    lang('igniter.cart::default.alert_option_value_not_found'),
+                    array_get($selectedValue, 'name'),
+                ));
+            }
+        });
     }
 
     public function validateMenuItemLocation(Menu $menuItem): void

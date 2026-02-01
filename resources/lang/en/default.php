@@ -129,6 +129,7 @@ return [
     'alert_option_not_found' => 'The selected option is not available',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
     'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',
+    'alert_option_value_not_found' => 'The selected option <b>%s</b> is not available',
     'alert_qty_is_invalid' => 'Selected quantity is not divisive by the minimum quantity of %s.',
     'alert_qty_is_below_min_qty' => 'Selected quantity is below the menu\'s minimum quantity of %s.',
     'alert_location_closed' => 'Sorry, you can\'t place an order now, we are currently closed,<br /> please come back later during our opening times.',
