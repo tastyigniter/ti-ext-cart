@@ -42,6 +42,7 @@ class CheckoutSettingsRequest extends FormRequest
             'limit_orders_period.*.order_type.*' => ['nullable', 'string'],
             'limit_orders_period.*.categories.*' => ['nullable', 'string'],
             'limit_orders_period.*.status' => ['nullable', 'boolean'],
+            'payments' => ['nullable'],
             'payments.*' => ['string'],
         ];
     }

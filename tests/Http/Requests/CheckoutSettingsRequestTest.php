@@ -47,5 +47,6 @@ it('returns correct validation rules', function(): void {
         ->and($rules['limit_orders_period.*.order_type.*'])->toContain('nullable', 'string')
         ->and($rules['limit_orders_period.*.categories.*'])->toContain('nullable', 'string')
         ->and($rules['limit_orders_period.*.status'])->toContain('nullable', 'boolean')
+        ->and($rules['payments'])->toContain('nullable')
         ->and($rules['payments.*'])->toContain('string');
 });
