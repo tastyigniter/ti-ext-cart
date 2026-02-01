@@ -83,7 +83,7 @@ return [
 
     'label_menu_quantity' => 'Menu Quantity',
     'label_add_comment' => 'Add Comment',
-    'label_abandoned_cart' => 'Abandoned checkouts',
+    'label_abandoned_cart' => 'Restore abandoned cart for registered users',
     'label_destroy_on_logout' => 'Destroy cart session on user logout',
     'label_show_cart_images' => 'Display Cart Images',
     'label_fixed_cart' => 'Fixed Cart Box',
