@@ -451,9 +451,9 @@ class CartManager
         }
 
         $availableOptionValueIds = $menuOption->menu_option_values->pluck('menu_option_value_id')->all();
-        collect($selectedValues)->each(function($selectedValue) use ($availableOptionValueIds) {
-            $selectedId = is_array($selectedValue) ? array_get($selectedValue, 'id') : $selectedValue;
-            if (!in_array($selectedId, $availableOptionValueIds)) {
+        collect($selectedValues)->each(function($selectedValue) use ($availableOptionValueIds): void {
+            $selectedId = array_get($selectedValue, 'id');
+            if (is_numeric($selectedId) && !in_array($selectedId, $availableOptionValueIds)) {
                 throw new ApplicationException(sprintf(
                     lang('igniter.cart::default.alert_option_value_not_found'),
                     array_get($selectedValue, 'name'),

@@ -133,7 +133,7 @@ it('does not add menu item option with zero quantity', function(): void {
         'menu_options' => [
             $menuOption->getKey() => [
                 'option_values' => [
-                    $menuOptionValue->getKey() => ['qty' => 0],
+                    $menuOptionValue->getKey() => ['id' => $menuOptionValue->getKey(), 'qty' => 0],
                 ],
             ],
         ],
@@ -541,6 +541,20 @@ it('validateMenuItemOption throws exception when selected quantity exceeds maxim
 
     expect(fn() => $this->manager->validateMenuItemOption($menuOption, $selectedValues))
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_selected'), 'Option 1', 1, 2));
+});
+
+it('validateMenuItemOption throws exception when selected option is not available', function(): void {
+    $menuOption = Mockery::mock(MenuItemOption::class)->makePartial();
+    $menuOption->shouldReceive('extendableGet')->with('display_type')->andReturn('checkbox');
+    $menuOption->shouldReceive('extendableGet')->with('option_name')->andReturn('Option 1');
+    $menuOption->shouldReceive('extendableGet')->with('menu_option_values')->andReturn(collect());
+
+    $selectedValues = [
+        ['id' => 999, 'name' => 'Non-existing option'],
+    ];
+
+    expect(fn() => $this->manager->validateMenuItemOption($menuOption, $selectedValues))
+        ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_value_not_found'), 'Non-existing option'));
 });
 
 it('checks cart total is below minimum order total', function(): void {
