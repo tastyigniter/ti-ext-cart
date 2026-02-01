@@ -460,6 +460,21 @@ class CartManager
                 ));
             }
         });
+
+        // Validate stock for each selected option value
+        collect($selectedValues)->each(function($selectedValue) use ($menuOption): void {
+            if (!is_numeric($selectedId = array_get($selectedValue, 'id'))) {
+                return;
+            }
+
+            $menuItemOptionValue = $menuOption->menu_option_values->firstWhere('menu_option_value_id', $selectedId);
+            if ($menuItemOptionValue && $menuItemOptionValue->option_value->outOfStock($this->location->getId())) {
+                throw new ApplicationException(sprintf(
+                    lang('igniter.cart::default.alert_out_of_stock'),
+                    $menuItemOptionValue->name,
+                ));
+            }
+        });
     }
 
     public function validateMenuItemLocation(Menu $menuItem): void

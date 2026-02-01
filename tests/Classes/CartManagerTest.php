@@ -16,7 +16,9 @@ use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Models\Mealtime;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOption;
+use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Cart\Models\Order;
 use Igniter\Coupons\CartConditions\Coupon;
 use Igniter\Coupons\Models\Coupon as CouponModel;
@@ -555,6 +557,31 @@ it('validateMenuItemOption throws exception when selected option is not availabl
 
     expect(fn() => $this->manager->validateMenuItemOption($menuOption, $selectedValues))
         ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_option_value_not_found'), 'Non-existing option'));
+});
+
+it('validateMenuItemOption throws exception when selected option is out of stock', function(): void {
+    $menuOptionValue = Mockery::mock(MenuItemOptionValue::class)->makePartial();
+    $menuOptionValue->setAttribute('menu_option_value_id', 1);
+    $menuOptionValue->shouldReceive('extendableGet')->with('name')->andReturn('Option Value 1');
+    $menuOptionValue->shouldReceive('extendableGet')->with('option_value')->andReturn(
+        Mockery::mock(MenuOptionValue::class, function($mock): void {
+            $mock->shouldReceive('outOfStock')->andReturn(true);
+        })->makePartial()
+    );
+
+    $menuOption = Mockery::mock(MenuItemOption::class)->makePartial();
+    $menuOption->shouldReceive('extendableGet')->with('display_type')->andReturn('checkbox');
+    $menuOption->shouldReceive('extendableGet')->with('option_name')->andReturn('Option 1');
+    $menuOption->shouldReceive('extendableGet')->with('menu_option_values')->andReturn(collect([
+        $menuOptionValue,
+    ]));
+
+    $selectedValues = [
+        ['id' => 1, 'name' => 'Option Value 1'],
+    ];
+
+    expect(fn() => $this->manager->validateMenuItemOption($menuOption, $selectedValues))
+        ->toThrow(ApplicationException::class, sprintf(lang('igniter.cart::default.alert_out_of_stock'), 'Option Value 1'));
 });
 
 it('checks cart total is below minimum order total', function(): void {
