@@ -71,10 +71,11 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->name = array_get($config, 'name', $this->name);
         $this->priority = array_get($config, 'priority', $this->priority);
         $this->removeable = array_get($config, 'removeable', $this->removeable);
-        $this->sessionKey = array_get($config, 'sessionKey', $this->sessionKey ?? sprintf('cart-conditions.%s.%s',
+
+        $this->setSessionKey(array_get($config, 'sessionKey', $this->sessionKey ?? sprintf('cart-conditions.%s.%s',
             array_get($config, 'cartInstance', 'default'),
             $this->name,
-        ));
+        )));
 
         if ($metaData = array_get($config, 'metaData')) {
             Session::put($this->getSessionKey(), $metaData);
