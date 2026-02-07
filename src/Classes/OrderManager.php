@@ -362,7 +362,7 @@ class OrderManager
         return true;
     }
 
-    public function applyOrderDateTime($order)
+    public function applyOrderDateTime($order): void
     {
         $orderDateTime = $this->location->orderDateTime();
 

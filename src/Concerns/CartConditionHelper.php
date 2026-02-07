@@ -39,7 +39,7 @@ trait CartConditionHelper
     {
         $action = $this->parseAction($action);
         $actionValue = array_get($action, 'value', '0');
-        $actionValuePrecision = (int)array_get($action, 'valuePrecision', strlen(explode('.', (string)$total)[1] ?? ''));
+        $actionValuePrecision = (int)array_get($action, 'valuePrecision', 2);
 
         if ($this->valueIsPercentage((string)$actionValue)) {
             $cleanValue = $this->cleanValue((string)$actionValue);
