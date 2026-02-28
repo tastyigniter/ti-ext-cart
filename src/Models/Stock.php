@@ -230,6 +230,10 @@ class Stock extends Model
             throw new InvalidArgumentException('Invalid out of stock type: '.$type);
         }
 
+        if ($type === self::OOS_CUSTOM && is_null($until)) {
+            $type = self::OOS_INDEFINITELY;
+        }
+
         if (!$this->is_tracked) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.stocks.alert_stock_not_tracked'), $this->stockable_name,
