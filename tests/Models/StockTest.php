@@ -7,6 +7,7 @@ namespace Igniter\Cart\Tests\Models;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\Stock;
 use Igniter\Flame\Database\Model;
+use Igniter\Flame\Exception\ApplicationException;
 use Igniter\Local\Models\Location;
 use Igniter\System\Mail\AnonymousTemplateMailable;
 use Illuminate\Database\Eloquent\Builder;
@@ -158,4 +159,164 @@ it('configures stock model correctly', function(): void {
         ->and($stock->getGuarded())->toBe(['quantity'])
         ->and($stock->timestamps)->toBeTrue()
         ->and($stock->getMorphClass())->toBe('stocks');
+});
+
+it('detects out of stock override when set to indefinitely', function(): void {
+    $stock = Stock::factory()->outOfStockIndefinitely()->create([
+        'quantity' => 10,
+    ]);
+
+    expect($stock->hasOutOfStockOverride())->toBeTrue()
+        ->and($stock->outOfStock())->toBeTrue()
+        ->and($stock->checkStock(1))->toBeFalse();
+});
+
+it('detects out of stock override when set to future date', function(): void {
+    $stock = Stock::factory()->outOfStockUntil(now()->addHours(2))->create([
+        'quantity' => 10,
+    ]);
+
+    expect($stock->hasOutOfStockOverride())->toBeTrue()
+        ->and($stock->outOfStock())->toBeTrue()
+        ->and($stock->checkStock(1))->toBeFalse();
+});
+
+it('does not detect out of stock override when date has passed', function(): void {
+    $stock = Stock::factory()->outOfStockUntil(now()->subHour())->create([
+        'quantity' => 10,
+    ]);
+
+    expect($stock->hasOutOfStockOverride())->toBeFalse()
+        ->and($stock->outOfStock())->toBeFalse()
+        ->and($stock->checkStock(1))->toBeTrue();
+});
+
+it('does not detect out of stock override when type is null', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => true,
+        'out_of_stock_type' => null,
+        'out_of_stock_until' => null,
+    ]);
+
+    expect($stock->hasOutOfStockOverride())->toBeFalse();
+});
+
+it('marks out of stock override correctly', function(): void {
+    Event::fake();
+
+    $menu = Menu::factory()->create();
+    $stock = Stock::factory()->create([
+        'stockable_id' => $menu->getKey(),
+        'stockable_type' => $menu->getMorphClass(),
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    $stock->applyOutOfStockOverride(Stock::OOS_INDEFINITELY);
+
+    expect($stock->fresh()->out_of_stock_type)->toBe(Stock::OOS_INDEFINITELY)
+        ->and($stock->fresh()->out_of_stock_until)->toBeNull();
+
+    Event::assertDispatched('admin.stock.outOfStock');
+});
+
+it('marks out of stock override with custom date correctly', function(): void {
+    Event::fake();
+
+    $until = now()->addHours(3);
+    $menu = Menu::factory()->create();
+    $stock = Stock::factory()->create([
+        'stockable_id' => $menu->getKey(),
+        'stockable_type' => $menu->getMorphClass(),
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    $stock->applyOutOfStockOverride(Stock::OOS_CUSTOM, $until);
+
+    $fresh = $stock->fresh();
+    expect($fresh->out_of_stock_type)->toBe(Stock::OOS_CUSTOM)
+        ->and($fresh->out_of_stock_until->toDateTimeString())->toBe($until->toDateTimeString());
+});
+
+it('throws exception when marking override with invalid type', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    expect(fn() => $stock->applyOutOfStockOverride('invalid_type'))->toThrow(\InvalidArgumentException::class);
+});
+
+it('throws exception when marking override on untracked stock', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => false,
+    ]);
+
+    expect(fn() => $stock->applyOutOfStockOverride(Stock::OOS_INDEFINITELY))->toThrow(ApplicationException::class);
+});
+
+it('clears out of stock override correctly', function(): void {
+    $stock = Stock::factory()->outOfStockIndefinitely()->create([
+        'quantity' => 10,
+    ]);
+
+    expect($stock->hasOutOfStockOverride())->toBeTrue();
+
+    $stock->clearOutOfStockOverride();
+
+    $fresh = $stock->fresh();
+    expect($fresh->out_of_stock_type)->toBeNull()
+        ->and($fresh->out_of_stock_until)->toBeNull()
+        ->and($fresh->hasOutOfStockOverride())->toBeFalse();
+});
+
+it('returns correct out of stock label for indefinitely', function(): void {
+    $stock = Stock::factory()->outOfStockIndefinitely()->create();
+
+    expect($stock->getOutOfStockLabel())->toBe(lang('igniter.cart::default.stocks.text_oos_indefinitely'));
+});
+
+it('returns correct out of stock label for custom date', function(): void {
+    $until = now()->addHours(3);
+    $stock = Stock::factory()->outOfStockUntil($until)->create();
+
+    expect($stock->getOutOfStockLabel())->toBe(sprintf(
+        lang('igniter.cart::default.stocks.text_oos_until'),
+        $until->format('M j, g:i A'),
+    ));
+});
+
+it('returns null out of stock label when no override', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    expect($stock->getOutOfStockLabel())->toBeNull();
+});
+
+it('scopes expired overrides correctly', function(): void {
+    $expired = Stock::factory()->outOfStockUntil(now()->subHour())->create();
+    $active = Stock::factory()->outOfStockUntil(now()->addHour())->create();
+    $indefinite = Stock::factory()->outOfStockIndefinitely()->create();
+
+    $expiredIds = Stock::whereExpiredOverrides()->pluck('id')->all();
+
+    expect($expiredIds)->toContain($expired->getKey())
+        ->and($expiredIds)->not->toContain($active->getKey())
+        ->and($expiredIds)->not->toContain($indefinite->getKey());
+});
+
+it('does not alter quantity when marking out of stock override', function(): void {
+    $stock = Stock::factory()->create([
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    $stock->applyOutOfStockOverride(Stock::OOS_INDEFINITELY);
+
+    expect($stock->fresh()->quantity)->toBe(10);
 });

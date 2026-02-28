@@ -61,6 +61,7 @@ use Igniter\System\Classes\BaseExtension;
 use Igniter\System\Models\Settings;
 use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
@@ -355,6 +356,19 @@ class Extension extends BaseExtension
         return [
             UpdateStock::class => ['code' => 'out_of_stock'],
         ];
+    }
+
+    #[Override]
+    public function registerSchedule(Schedule $schedule): void
+    {
+        $schedule->call(function(): void {
+            Stock::whereExpiredOverrides()->update([
+                'out_of_stock_type' => null,
+                'out_of_stock_until' => null,
+            ]);
+        })->name('cart-clear-expired-stock-overrides')
+          ->withoutOverlapping(5)
+          ->everyFiveMinutes();
     }
 
     protected function bindCartEvents()
