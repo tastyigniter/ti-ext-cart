@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Http\Controllers;
 
+use Exception;
 use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\Facades\AdminMenu;
 use Igniter\Admin\Http\Actions\ListController;
@@ -125,7 +126,7 @@ class Inventory extends AdminController
     {
         try {
             $closeAt = $stock->location->newWorkingSchedule('opening')->nextCloseAt(now());
-        } catch (\Exception) {
+        } catch (Exception) {
             $closeAt = null;
         }
 
@@ -148,7 +149,7 @@ class Inventory extends AdminController
 
         try {
             $untilDate = Carbon::parse($until);
-        } catch (\Exception) {
+        } catch (Exception) {
             throw new ApplicationException(lang('igniter.cart::default.stocks.alert_invalid_oos_date'));
         }
 

@@ -11,6 +11,7 @@ use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 
 /**
  * Stocks Model Class
@@ -226,7 +227,7 @@ class Stock extends Model
     public function applyOutOfStockOverride(string $type, ?Carbon $until = null): bool
     {
         if (!in_array($type, [self::OOS_INDEFINITELY, self::OOS_CUSTOM])) {
-            throw new \InvalidArgumentException("Invalid out of stock type: {$type}");
+            throw new InvalidArgumentException('Invalid out of stock type: '.$type);
         }
 
         if (!$this->is_tracked) {

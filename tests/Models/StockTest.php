@@ -13,6 +13,7 @@ use Igniter\System\Mail\AnonymousTemplateMailable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use InvalidArgumentException;
 
 it('applies stockable scope with correct model type and id', function(): void {
     $query = mock(Builder::class);
@@ -246,7 +247,7 @@ it('throws exception when marking override with invalid type', function(): void 
         'is_tracked' => true,
     ]);
 
-    expect(fn() => $stock->applyOutOfStockOverride('invalid_type'))->toThrow(\InvalidArgumentException::class);
+    expect(fn() => $stock->applyOutOfStockOverride('invalid_type'))->toThrow(InvalidArgumentException::class);
 });
 
 it('throws exception when marking override on untracked stock', function(): void {
