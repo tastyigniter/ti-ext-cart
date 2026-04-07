@@ -87,6 +87,8 @@ use Override;
  * @method static Builder<static>|Order whereIsEnabled()
  * @method static Builder<static>|Order whereHasAutoAssignGroup()
  * @method static Builder<static>|Order whereHasStatusInHistory(string | int $statusId)
+ * @method static Builder<static>|Menu menus()
+ * @method static Builder<static>|OrderMenuOptionValue menu_options()
  * @mixin Model
  */
 class Order extends Model

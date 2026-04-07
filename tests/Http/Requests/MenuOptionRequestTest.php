@@ -18,7 +18,7 @@ it('returns correct attribute labels', function(): void {
         ->and($attributes)->toHaveKey('min_selected', lang('igniter.cart::default.menu_options.label_min_selected'))
         ->and($attributes)->toHaveKey('max_selected', lang('igniter.cart::default.menu_options.label_max_selected'))
         ->and($attributes)->toHaveKey('locations.*', lang('igniter::admin.label_location'))
-        ->and($attributes)->toHaveKey('option_values', lang('igniter.cart::default.menu_options.label_option_values'));
+        ->and($attributes)->toHaveKey('values', lang('igniter.cart::default.menu_options.label_option_values'));
 });
 
 it('returns correct validation rules', function(): void {

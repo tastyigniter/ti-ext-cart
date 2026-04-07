@@ -20,6 +20,8 @@ class MenuItemOptionFactory extends Factory
             'option_id' => MenuOption::factory(),
             'menu_id' => $this->faker->randomNumber(8),
             'is_required' => $this->faker->boolean,
+            'min_selected' => 0,
+            'max_selected' => 0,
         ];
     }
 }

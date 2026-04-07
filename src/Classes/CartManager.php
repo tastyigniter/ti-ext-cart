@@ -247,7 +247,7 @@ class CartManager
             $selectedValues = array_filter((array)array_get($selectedOption, 'option_values', []));
 
             if (!in_array($menuOption->option->display_type, ['quantity', 'checkbox'])) {
-                $selectedValues = array_filter($selectedValues, 'is_numeric');
+                $selectedValues = array_filter($selectedValues, is_numeric(...));
             }
 
             $this->validateMenuItemOption($menuOption, $selectedValues);
@@ -449,6 +449,32 @@ class CartManager
                 $menuOption->max_selected,
             ));
         }
+
+        $availableOptionValueIds = $menuOption->menu_option_values->pluck('menu_option_value_id')->all();
+        collect($selectedValues)->each(function($selectedValue) use ($availableOptionValueIds): void {
+            $selectedId = array_get($selectedValue, 'id');
+            if (is_numeric($selectedId) && !in_array($selectedId, $availableOptionValueIds)) {
+                throw new ApplicationException(sprintf(
+                    lang('igniter.cart::default.alert_option_value_not_found'),
+                    array_get($selectedValue, 'name'),
+                ));
+            }
+        });
+
+        // Validate stock for each selected option value
+        collect($selectedValues)->each(function($selectedValue) use ($menuOption): void {
+            if (!is_numeric($selectedId = array_get($selectedValue, 'id'))) {
+                return;
+            }
+
+            $menuItemOptionValue = $menuOption->menu_option_values->firstWhere('menu_option_value_id', $selectedId);
+            if ($menuItemOptionValue && $menuItemOptionValue->option_value->outOfStock($this->location->getId())) {
+                throw new ApplicationException(sprintf(
+                    lang('igniter.cart::default.alert_out_of_stock'),
+                    $menuItemOptionValue->name,
+                ));
+            }
+        });
     }
 
     public function validateMenuItemLocation(Menu $menuItem): void

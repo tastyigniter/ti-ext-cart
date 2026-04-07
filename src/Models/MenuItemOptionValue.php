@@ -63,6 +63,8 @@ class MenuItemOptionValue extends Model
         ],
     ];
 
+    protected $with = ['option_value'];
+
     public $rules = [
         ['menu_option_id', 'igniter.cart::default.menu_options.label_option_value_id', 'required|integer'],
         ['option_value_id', 'igniter.cart::default.menu_options.label_option_value', 'required|integer'],

@@ -36,6 +36,7 @@ use Override;
  * @property-read mixed $stock_qty
  * @property-read Collection<int, Media> $media
  * @property-read int|null $media_count
+ * @property-read int|null $menu_options_count
  * @property array|Collection<int, Ingredient> $ingredients
  * @property array|Collection<int, MenuItemOption> $menu_options
  * @property array|null|MenuSpecial $special
@@ -156,7 +157,7 @@ class Menu extends Model implements Buyable
 
     public function hasOptions(): bool
     {
-        return (bool)count($this->menu_options);
+        return (bool)$this->menu_options_count;
     }
 
     /**
@@ -265,7 +266,11 @@ class Menu extends Model implements Buyable
 
     public static function findBy($menuId, $location = null)
     {
-        return self::query()->whereIsEnabled()->whereKey($menuId)->first();
+        return self::query()
+            ->with([
+                'menu_options.menu_option_values.option_value',
+            ])
+            ->whereIsEnabled()->whereKey($menuId)->first();
     }
 
     #[Override]

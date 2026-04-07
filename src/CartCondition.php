@@ -62,10 +62,6 @@ abstract class CartCondition implements Arrayable, Jsonable
          */
         protected $config = [])
     {
-        $this->setSessionKey(sprintf('cart-conditions.%s.%s',
-            array_get($this->config, 'cartInstance', 'default'),
-            array_get($this->config, 'name', $this->name),
-        ));
         $this->fillFromConfig($this->config);
     }
 
@@ -75,7 +71,11 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->name = array_get($config, 'name', $this->name);
         $this->priority = array_get($config, 'priority', $this->priority);
         $this->removeable = array_get($config, 'removeable', $this->removeable);
-        $this->sessionKey = array_get($config, 'sessionKey', $this->sessionKey);
+
+        $this->setSessionKey(array_get($config, 'sessionKey', $this->sessionKey ?? sprintf('cart-conditions.%s.%s',
+            array_get($config, 'cartInstance', 'default'),
+            $this->name,
+        )));
 
         if ($metaData = array_get($config, 'metaData')) {
             Session::put($this->getSessionKey(), $metaData);
@@ -130,8 +130,8 @@ abstract class CartCondition implements Arrayable, Jsonable
         $this->calculatedValue = 0;
 
         return collect($this->getActions())
-            ->map(fn($action): array => $this->processActionValue($action, $subTotal))
-            ->reduce(fn($total, $action): float => $this->calculateActionValue($action, $total), $subTotal);
+            ->map(fn(array $action): array => $this->processActionValue($action, $subTotal))
+            ->reduce(fn(float $total, array $action): float => $this->calculateActionValue($action, $total), $subTotal);
     }
 
     //

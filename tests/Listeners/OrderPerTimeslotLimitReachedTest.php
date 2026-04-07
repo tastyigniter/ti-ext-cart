@@ -115,7 +115,7 @@ it('throws exception when exceeds timeslot order limits ', function(): void {
         ->toThrow(new ApplicationException(lang('igniter.cart::default.checkout.alert_maximum_order_reached')));
 });
 
-it('exceeds period order limits for order type', function($orderType): void {
+it('exceeds period order limits for order type', function(string $orderType): void {
     $location = Location::factory()->create();
     $location->settings()->create([
         'item' => $orderType,

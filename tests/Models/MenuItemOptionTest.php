@@ -115,6 +115,21 @@ it('adds values to menu item options on save correctly', function(): void {
     expect($menuItemOption->menu_option_values()->count())->toBe(3);
 });
 
+it('validates min_selected and max_selected rules for select display type', function(): void {
+    $menuItemOption = new MenuItemOption([
+        'min_selected' => 0,
+        'max_selected' => 0,
+    ]);
+    $menuItemOption->option = new MenuOption(['display_type' => 'select']);
+    $menuItemOption->beforeValidate();
+
+    $rules = collect($menuItemOption->rules);
+
+    expect($rules->firstWhere('0', 'min_selected')[2])->toBe('max:1')
+        ->and($rules->firstWhere('0', 'max_selected')[2])->toBe('max:1')
+        ->and($menuItemOption->getValidationMessages())->toHaveKeys(['min_selected.max', 'max_selected.max']);
+});
+
 it('configures menu item option model correctly', function(): void {
     $menuItemOption = new MenuItemOption;
 

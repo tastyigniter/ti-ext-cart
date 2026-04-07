@@ -60,6 +60,13 @@ it('adds menu allergens successfully when allergen ids are provided', function()
     expect($menuOptionValue->ingredients->pluck('ingredient_id')->all())->toBe($allergenIds);
 });
 
+it('has validation rules defined', function(): void {
+    $menuOptionValue = new MenuOptionValue;
+
+    expect($menuOptionValue->rules)->toBeArray()
+        ->and($menuOptionValue->rules)->toHaveCount(4);
+});
+
 it('configures menu option value model correctly', function(): void {
     $menuOptionValue = new MenuOptionValue;
 

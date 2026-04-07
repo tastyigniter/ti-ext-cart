@@ -32,6 +32,7 @@ use Kalnoy\Nestedset\Collection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Category> $children
+ * @property-read Collection<int, Menu> $menus
  * @property-read int|null $children_count
  * @property-read mixed $count_menus
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Media> $media
@@ -117,8 +118,8 @@ class Category extends Model
         return strip_tags(html_entity_decode((string)$value, ENT_QUOTES, 'UTF-8'));
     }
 
-    public function getCountMenusAttribute($value)
+    public function getCountMenusAttribute($value): int
     {
-        return $this->menus()->whereIsEnabled()->count();
+        return $this->menus->where('menu_status', 1)->count();
     }
 }

@@ -74,4 +74,11 @@ class Menus extends AdminController
     {
         $query->with('stocks');
     }
+
+    public function formExtendQuery($query): void
+    {
+        $query->with([
+            'menu_options',
+        ]);
+    }
 }

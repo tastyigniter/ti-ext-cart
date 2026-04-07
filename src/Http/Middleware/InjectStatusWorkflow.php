@@ -37,9 +37,11 @@ class InjectStatusWorkflow
 
     protected function shouldInjectOrderWorkflow(Request $request): bool
     {
+        $enableWorkflow = setting('enable_status_workflow', true);
         $limitUsers = setting('limit_users', []);
 
-        return $request->isMethod('GET')
+        return $enableWorkflow
+            && $request->isMethod('GET')
             && $request->route()?->getController() instanceof AdminController
             && (!$limitUsers || in_array(AdminAuth::getUser()->getKey(), $limitUsers));
     }

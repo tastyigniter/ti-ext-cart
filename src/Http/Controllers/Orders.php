@@ -124,12 +124,18 @@ class Orders extends AdminController
         $this->layout = '';
     }
 
+    public function listExtendQuery($query): void
+    {
+        $query->with('address');
+    }
+
     public function formExtendQuery($query): void
     {
         $query->with([
             'status_history' => function($q): void {
                 $q->orderBy('created_at', 'desc');
             },
+            'status_history.status',
         ]);
     }
 }
