@@ -240,6 +240,9 @@ class Stock extends Model
             ));
         }
 
+        if ($type === self::OOS_CUSTOM && is_null($until)) {
+            $type = self::OOS_INDEFINITELY;
+        }
         $this->out_of_stock_type = $type;
         $this->out_of_stock_until = $until;
         $this->saveQuietly();
