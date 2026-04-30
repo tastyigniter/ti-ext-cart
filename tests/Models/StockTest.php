@@ -241,6 +241,26 @@ it('marks out of stock override with custom date correctly', function(): void {
         ->and($fresh->out_of_stock_until->toDateTimeString())->toBe($until->toDateTimeString());
 });
 
+it('treats custom out of stock override without until as indefinitely', function(): void {
+    Event::fake();
+
+    $menu = Menu::factory()->create();
+    $stock = Stock::factory()->create([
+        'stockable_id' => $menu->getKey(),
+        'stockable_type' => $menu->getMorphClass(),
+        'quantity' => 10,
+        'is_tracked' => true,
+    ]);
+
+    $stock->applyOutOfStockOverride(Stock::OOS_CUSTOM, null);
+
+    $fresh = $stock->fresh();
+    expect($fresh->out_of_stock_type)->toBe(Stock::OOS_INDEFINITELY)
+        ->and($fresh->out_of_stock_until)->toBeNull();
+
+    Event::assertDispatched('admin.stock.outOfStock');
+});
+
 it('throws exception when marking override with invalid type', function(): void {
     $stock = Stock::factory()->create([
         'quantity' => 10,

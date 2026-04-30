@@ -226,7 +226,7 @@ class Stock extends Model
 
     public function applyOutOfStockOverride(string $type, ?Carbon $until = null): bool
     {
-        if (!in_array($type, [self::OOS_INDEFINITELY, self::OOS_CUSTOM])) {
+        if (!in_array($type, [self::OOS_INDEFINITELY, self::OOS_CUSTOM], true)) {
             throw new InvalidArgumentException('Invalid out of stock type: '.$type);
         }
 
@@ -240,9 +240,6 @@ class Stock extends Model
             ));
         }
 
-        if ($type === self::OOS_CUSTOM && is_null($until)) {
-            $type = self::OOS_INDEFINITELY;
-        }
         $this->out_of_stock_type = $type;
         $this->out_of_stock_until = $until;
         $this->saveQuietly();

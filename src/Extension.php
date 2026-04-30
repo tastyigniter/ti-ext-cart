@@ -367,8 +367,8 @@ class Extension extends BaseExtension
                 'out_of_stock_until' => null,
             ]);
         })->name('cart-clear-expired-stock-overrides')
-          ->withoutOverlapping(5)
-          ->everyFiveMinutes();
+            ->withoutOverlapping(5)
+            ->everyFiveMinutes();
     }
 
     protected function bindCartEvents()

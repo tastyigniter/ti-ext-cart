@@ -1,5 +1,10 @@
 <?php
 
+use Igniter\Cart\Models\Category;
+use Igniter\Cart\Models\MenuOption;
+use Igniter\Cart\Models\MenuSpecial;
+use Igniter\Local\Models\Location;
+
 $config['list']['filter'] = [
     'search' => [
         'prompt' => 'lang:igniter.cart::default.menus.text_filter_search',
@@ -10,7 +15,7 @@ $config['list']['filter'] = [
             'label' => 'lang:igniter.cart::default.menus.text_filter_category',
             'type' => 'selectlist',
             'scope' => 'whereHasCategory',
-            'modelClass' => \Igniter\Cart\Models\Category::class,
+            'modelClass' => Category::class,
             'nameFrom' => 'name',
         ],
         'menu_status' => [
@@ -234,7 +239,7 @@ $config['form']['tabs'] = [
             'type' => 'checkboxtoggle',
             'span' => 'left',
             'comment' => 'lang:igniter.cart::default.menus.help_order_restriction',
-            'options' => [\Igniter\Local\Models\Location::class, 'getOrderTypeOptions'],
+            'options' => [Location::class, 'getOrderTypeOptions'],
         ],
         'menu_status' => [
             'label' => 'lang:igniter::admin.label_status',
@@ -266,7 +271,7 @@ $config['form']['tabs'] = [
             'span' => 'flex',
             'cssClass' => 'col-md-4',
             'form' => 'menuoption',
-            'modelClass' => \Igniter\Cart\Models\MenuOption::class,
+            'modelClass' => MenuOption::class,
             'placeholder' => 'igniter.cart::default.menu_options.help_menu_option',
             'context' => ['edit', 'preview'],
             'popupSize' => 'modal-xl',
@@ -355,7 +360,7 @@ $config['form']['tabs'] = [
             'label' => 'lang:igniter.cart::default.menus.label_recurring_every',
             'tab' => 'lang:igniter.cart::default.menus.text_tab_special',
             'type' => 'checkboxtoggle',
-            'options' => [\Igniter\Cart\Models\MenuSpecial::class, 'getRecurringEveryOptions'],
+            'options' => [MenuSpecial::class, 'getRecurringEveryOptions'],
             'trigger' => [
                 'action' => 'show',
                 'field' => 'special[validity]',

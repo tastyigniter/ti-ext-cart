@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Tests\Http\Controllers;
 
+use Exception;
+use Igniter\Cart\Http\Controllers\Inventory;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\Stock;
+use Igniter\Flame\Exception\ApplicationException;
+use Igniter\Local\Facades\Location as LocationFacade;
+use Igniter\Local\Models\Location;
+use Mockery;
+use ReflectionMethod;
 
 it('loads inventory page', function(): void {
     Stock::factory()
@@ -226,3 +233,64 @@ it('clears out of stock override', function(): void {
     expect($fresh->out_of_stock_type)->toBeNull()
         ->and($fresh->out_of_stock_until)->toBeNull();
 });
+
+it('rejects out of stock custom override with invalid date string', function(): void {
+    $stock = Stock::factory()
+        ->for(Menu::factory(), 'stockable')
+        ->create([
+            'quantity' => 10,
+            'is_tracked' => true,
+        ]);
+
+    actingAsSuperUser()
+        ->post(route('igniter.cart.inventory'), [
+            'recordId' => $stock->getKey(),
+            'outOfStockType' => 'custom',
+            'outOfStockUntil' => 'not-a-valid-date-string',
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onMarkOutOfStock',
+        ])
+        ->assertInternalServerError();
+});
+
+it('fails closing out of stock when schedule resolution throws', function(): void {
+    $reflection = new ReflectionMethod(Inventory::class, 'resolveClosingTime');
+
+    $inventory = new Inventory;
+    $type = 'closing';
+    $stock = new Stock;
+    $location = Mockery::mock(Location::class);
+    $location->shouldReceive('newWorkingSchedule')->with('opening')->andThrow(new Exception('schedule failed'));
+    $stock->setRelation('location', $location);
+
+    expect(fn(): mixed => $reflection->invokeArgs($inventory, [&$type, $stock]))
+        ->toThrow(ApplicationException::class);
+});
+
+it('scopes stock by assigned locations when finding stock for actions', function(): void {
+    $location = Location::factory()->create();
+    $stock = Stock::factory()
+        ->for($location)
+        ->for(Menu::factory(), 'stockable')
+        ->create([
+            'quantity' => 10,
+            'is_tracked' => true,
+        ]);
+
+    LocationFacade::shouldReceive('current')->andReturn($location);
+    LocationFacade::shouldReceive('currentOrAssigned')->andReturn([$location->getKey()]);
+    LocationFacade::shouldReceive('getId')->andReturn($location->getKey());
+
+    actingAsSuperUser()
+        ->post(route('igniter.cart.inventory'), [
+            'recordId' => $stock->getKey(),
+            'outOfStockType' => 'indefinitely',
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-IGNITER-REQUEST-HANDLER' => 'onMarkOutOfStock',
+        ])
+        ->assertOk();
+
+    expect($stock->fresh()->out_of_stock_type)->toBe(Stock::OOS_INDEFINITELY);
+})->only();

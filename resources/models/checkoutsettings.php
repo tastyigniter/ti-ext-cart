@@ -1,5 +1,7 @@
 <?php
 
+use Igniter\Cart\Models\Category;
+use Igniter\Local\Models\Location;
 use Igniter\Local\Models\WorkingHour;
 use Igniter\PayRegister\Models\Payment;
 
@@ -89,12 +91,12 @@ return [
                             'label' => 'lang:igniter.cart::default.checkout.label_order_type',
                             'type' => 'selectlist',
                             'span' => 'right',
-                            'options' => [\Igniter\Local\Models\Location::class, 'getOrderTypeOptions'],
+                            'options' => [Location::class, 'getOrderTypeOptions'],
                         ],
                         'categories' => [
                             'label' => 'lang:igniter.cart::default.checkout.label_categories',
                             'type' => 'selectlist',
-                            'options' => [\Igniter\Cart\Models\Category::class, 'getDropdownOptions'],
+                            'options' => [Category::class, 'getDropdownOptions'],
                             'trigger' => [
                                 'action' => 'show',
                                 'field' => 'limit_orders_period[*][max_type]',

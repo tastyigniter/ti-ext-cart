@@ -121,6 +121,24 @@ parameters:
 			path: src/FormWidgets/StockEditor.php
 
 		-
+			message: '#^Access to an undefined property Igniter\\Cart\\Models\\Stock\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Controllers/Inventory.php
+
+		-
+			message: '#^Call to an undefined method Igniter\\Cart\\Http\\Controllers\\Inventory\:\:refreshList\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Http/Controllers/Inventory.php
+
+		-
+			message: '#^Method Igniter\\Cart\\Http\\Controllers\\Inventory\:\:findStockOrFail\(\) should return Igniter\\Cart\\Models\\Stock but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Controllers/Inventory.php
+
+		-
 			message: '#^Call to an undefined method Igniter\\Cart\\Http\\Controllers\\Orders\:\:formFindModelObject\(\)\.$#'
 			identifier: method.notFound
 			count: 1

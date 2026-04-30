@@ -34,7 +34,7 @@ return new class extends Migration
                 $columns[] = 'out_of_stock_until';
             }
 
-            if (!empty($columns)) {
+            if ($columns !== []) {
                 $table->dropColumn($columns);
             }
         });

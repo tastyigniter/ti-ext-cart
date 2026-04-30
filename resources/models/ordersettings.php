@@ -1,5 +1,8 @@
 <?php
 
+use Igniter\Admin\Models\Status;
+use Igniter\User\Models\User;
+
 return [
     'form' => [
         'toolbar' => [
@@ -63,21 +66,21 @@ return [
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'mode' => 'radio',
-                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'options' => [Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_default_order_status',
                 ],
                 'processing_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_processing_order_status',
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
-                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'options' => [Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_processing_order_status',
                 ],
                 'completed_order_status' => [
                     'label' => 'lang:igniter.cart::default.label_completed_order_status',
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
-                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'options' => [Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_completed_order_status',
                 ],
                 'canceled_order_status' => [
@@ -85,7 +88,7 @@ return [
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
                     'mode' => 'radio',
-                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'options' => [Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.help_canceled_order_status',
                 ],
                 'enable_status_workflow' => [
@@ -101,7 +104,7 @@ return [
                     'label' => 'lang:igniter.cart::default.orders.label_accepted_order_status',
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'select',
-                    'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                    'options' => [Status::class, 'getDropdownOptionsForOrder'],
                     'comment' => 'lang:igniter.cart::default.orders.help_accepted_order_status',
                 ],
                 'rejected_reasons' => [
@@ -122,7 +125,7 @@ return [
                             'status_id' => [
                                 'label' => 'lang:igniter.cart::default.orders.label_reason_status',
                                 'type' => 'select',
-                                'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                                'options' => [Status::class, 'getDropdownOptionsForOrder'],
                             ],
                         ],
                     ],
@@ -149,7 +152,7 @@ return [
                     'label' => 'lang:igniter.cart::default.orders.label_limit_users',
                     'tab' => 'lang:igniter.cart::default.orders.text_tab_approval',
                     'type' => 'selectlist',
-                    'options' => [\Igniter\User\Models\User::class, 'getDropdownOptions'],
+                    'options' => [User::class, 'getDropdownOptions'],
                     'placeholder' => 'lang:igniter::admin.text_please_select',
                     'comment' => 'lang:igniter.cart::default.orders.help_limit_users',
                 ],

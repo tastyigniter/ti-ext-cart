@@ -1,5 +1,7 @@
 <?php
 
+use Igniter\Admin\Models\Status;
+
 return [
     'form' => [
         'fields' => [
@@ -7,7 +9,7 @@ return [
                 'context' => 'status',
                 'label' => 'lang:igniter::admin.label_status',
                 'type' => 'select',
-                'options' => [\Igniter\Admin\Models\Status::class, 'getDropdownOptionsForOrder'],
+                'options' => [Status::class, 'getDropdownOptionsForOrder'],
                 'placeholder' => 'lang:igniter::admin.text_please_select',
                 'attributes' => [
                     'data-status-value' => '',
