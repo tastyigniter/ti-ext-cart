@@ -278,9 +278,7 @@ it('scopes stock by assigned locations when finding stock for actions', function
             'is_tracked' => true,
         ]);
 
-    LocationFacade::shouldReceive('current')->andReturn($location);
-    LocationFacade::shouldReceive('currentOrAssigned')->andReturn([$location->getKey()]);
-    LocationFacade::shouldReceive('getId')->andReturn($location->getKey());
+    LocationFacade::setCurrent($location);
 
     actingAsSuperUser()
         ->post(route('igniter.cart.inventory'), [
@@ -293,4 +291,4 @@ it('scopes stock by assigned locations when finding stock for actions', function
         ->assertOk();
 
     expect($stock->fresh()->out_of_stock_type)->toBe(Stock::OOS_INDEFINITELY);
-})->only();
+});
