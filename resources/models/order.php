@@ -1,5 +1,10 @@
 <?php
 
+use Igniter\Admin\Models\Status;
+use Igniter\Cart\Http\Requests\OrderStatusRequest;
+use Igniter\Local\Models\Location;
+use Igniter\PayRegister\Models\Payment;
+
 $config['list']['filter'] = [
     'search' => [
         'prompt' => 'lang:igniter.cart::default.orders.text_filter_search',
@@ -21,21 +26,21 @@ $config['list']['filter'] = [
             'type' => 'selectlist',
             'mode' => 'radio',
             'conditions' => 'status_id IN(:filtered)',
-            'modelClass' => \Igniter\Admin\Models\Status::class,
+            'modelClass' => Status::class,
             'options' => 'getDropdownOptionsForOrder',
         ],
         'type' => [
             'label' => 'lang:igniter.cart::default.orders.text_filter_order_type',
             'type' => 'select',
             'conditions' => 'order_type = :filtered',
-            'modelClass' => \Igniter\Local\Models\Location::class,
+            'modelClass' => Location::class,
             'options' => 'getOrderTypeOptions',
         ],
         'payment' => [
             'label' => 'lang:igniter.cart::default.orders.text_filter_payment',
             'type' => 'selectlist',
             'conditions' => 'payment IN(:filtered)',
-            'modelClass' => \Igniter\PayRegister\Models\Payment::class,
+            'modelClass' => Payment::class,
             'options' => 'getDropdownOptions',
         ],
         'date' => [
@@ -199,7 +204,7 @@ $config['form']['fields'] = [
         'type' => 'statuseditor',
         'span' => 'right',
         'form' => 'orderstatus',
-        'request' => \Igniter\Cart\Http\Requests\OrderStatusRequest::class,
+        'request' => OrderStatusRequest::class,
     ],
 ];
 

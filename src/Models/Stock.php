@@ -11,6 +11,7 @@ use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\SendsMailTemplate;
 use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 
 /**
  * Stocks Model Class
@@ -28,6 +29,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $low_stock_alert_sent
+ * @property string|null $out_of_stock_type
+ * @property Carbon|null $out_of_stock_until
  * @mixin Model
  */
 class Stock extends Model
@@ -50,6 +53,10 @@ class Stock extends Model
 
     public const string STATE_WASTE = 'waste';
 
+    public const string OOS_INDEFINITELY = 'indefinitely';
+
+    public const string OOS_CUSTOM = 'custom';
+
     /**
      * @var string The database table name
      */
@@ -65,6 +72,8 @@ class Stock extends Model
         'low_stock_alert_sent' => 'boolean',
         'low_stock_threshold' => 'integer',
         'is_tracked' => 'boolean',
+        'out_of_stock_type' => 'string',
+        'out_of_stock_until' => 'datetime',
     ];
 
     public $relation = [
@@ -116,6 +125,14 @@ class Stock extends Model
     {
         return $query->where('stockable_type', $model->getMorphClass())
             ->where('stockable_id', $model->getKey());
+    }
+
+    public function scopeWhereExpiredOverrides($query)
+    {
+        return $query->whereNotNull('out_of_stock_type')
+            ->where('out_of_stock_type', '!=', self::OOS_INDEFINITELY)
+            ->whereNotNull('out_of_stock_until')
+            ->where('out_of_stock_until', '<=', now());
     }
 
     //
@@ -178,12 +195,83 @@ class Stock extends Model
             return true;
         }
 
+        if ($this->hasOutOfStockOverride()) {
+            return false;
+        }
+
         return $this->quantity >= $quantity;
     }
 
     public function outOfStock(): bool
     {
+        if ($this->hasOutOfStockOverride()) {
+            return true;
+        }
+
         return $this->is_tracked && $this->quantity <= 0;
+    }
+
+    public function hasOutOfStockOverride(): bool
+    {
+        if (is_null($this->out_of_stock_type)) {
+            return false;
+        }
+
+        if ($this->out_of_stock_type === self::OOS_INDEFINITELY) {
+            return true;
+        }
+
+        return $this->out_of_stock_until && $this->out_of_stock_until->isFuture();
+    }
+
+    public function applyOutOfStockOverride(string $type, ?Carbon $until = null): bool
+    {
+        if (!in_array($type, [self::OOS_INDEFINITELY, self::OOS_CUSTOM], true)) {
+            throw new InvalidArgumentException('Invalid out of stock type: '.$type);
+        }
+
+        if ($type === self::OOS_CUSTOM && is_null($until)) {
+            $type = self::OOS_INDEFINITELY;
+        }
+
+        if (!$this->is_tracked) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.stocks.alert_stock_not_tracked'), $this->stockable_name,
+            ));
+        }
+
+        $this->out_of_stock_type = $type;
+        $this->out_of_stock_until = $until;
+        $this->saveQuietly();
+
+        $this->fireSystemEvent('admin.stock.outOfStock', [$this]);
+
+        return true;
+    }
+
+    public function clearOutOfStockOverride(): bool
+    {
+        $this->out_of_stock_type = null;
+        $this->out_of_stock_until = null;
+        $this->saveQuietly();
+
+        return true;
+    }
+
+    public function getOutOfStockLabel(): ?string
+    {
+        if (!$this->hasOutOfStockOverride()) {
+            return null;
+        }
+
+        if ($this->out_of_stock_type === self::OOS_INDEFINITELY || is_null($this->out_of_stock_until)) {
+            return lang('igniter.cart::default.stocks.text_oos_indefinitely');
+        }
+
+        return sprintf(
+            lang('igniter.cart::default.stocks.text_oos_until'),
+            $this->out_of_stock_until->format('M j, g:i A')
+        );
     }
 
     public function hasLowStock(): bool

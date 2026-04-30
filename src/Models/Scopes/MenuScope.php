@@ -36,7 +36,7 @@ class MenuScope extends Scope
 
     public function addWhereHasAllergen()
     {
-        return fn(Builder $builder, $allergenId) => $builder->whereHas('allergens', function(builder $q) use ($allergenId): void {
+        return fn(Builder $builder, $allergenId) => $builder->whereHas('allergens', function(Builder $q) use ($allergenId): void {
             $q->where('allergen_id', $allergenId);
             $q->where('is_allergen', 1);
         });
@@ -44,7 +44,7 @@ class MenuScope extends Scope
 
     public function addWhereHasCategory()
     {
-        return fn(Builder $builder, $categoryId) => $builder->whereHas('categories', function(builder $q) use ($categoryId): void {
+        return fn(Builder $builder, $categoryId) => $builder->whereHas('categories', function(Builder $q) use ($categoryId): void {
             if (is_numeric($categoryId)) {
                 $q->where('categories.category_id', $categoryId);
             } else {
@@ -55,14 +55,14 @@ class MenuScope extends Scope
 
     public function addWhereHasIngredient()
     {
-        return fn(Builder $builder, $ingredientId) => $builder->whereHas('ingredients', function(builder $q) use ($ingredientId): void {
+        return fn(Builder $builder, $ingredientId) => $builder->whereHas('ingredients', function(Builder $q) use ($ingredientId): void {
             $q->where('ingredient_id', $ingredientId);
         });
     }
 
     public function addWhereHasMealtime()
     {
-        return fn(Builder $builder, $mealtimeId) => $builder->whereHas('mealtimes', function(builder $q) use ($mealtimeId): void {
+        return fn(Builder $builder, $mealtimeId) => $builder->whereHas('mealtimes', function(Builder $q) use ($mealtimeId): void {
             $q->where('mealtimes.mealtime_id', $mealtimeId);
         });
     }

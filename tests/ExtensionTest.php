@@ -28,6 +28,7 @@ use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Order;
+use Igniter\Cart\Models\Stock;
 use Igniter\Cart\Notifications\OrderCreatedNotification;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Support\Facades\Igniter;
@@ -38,6 +39,8 @@ use Igniter\User\Facades\Auth;
 use Igniter\User\Http\Controllers\Customers;
 use Igniter\User\Models\AssignableLog;
 use Igniter\User\Models\Customer;
+use Illuminate\Console\Scheduling\CallbackEvent;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Mockery;
@@ -166,6 +169,22 @@ it('registers event broadcasts correctly', function(): void {
 
     expect($broadcasts)->toBeArray()
         ->and($broadcasts)->toHaveKey('admin.order.paymentProcessed', BroadcastOrderPlacedEvent::class);
+});
+
+it('registers schedule that clears expired stock overrides', function(): void {
+    $expired = Stock::factory()->outOfStockUntil(now()->subHour())->create();
+
+    $schedule = new Schedule;
+    (new Extension(app()))->registerSchedule($schedule);
+
+    $event = collect($schedule->events())->first(fn($e): bool => $e instanceof CallbackEvent);
+    expect($event)->not->toBeNull();
+
+    $event->run(app());
+
+    $expired->refresh();
+    expect($expired->out_of_stock_type)->toBeNull()
+        ->and($expired->out_of_stock_until)->toBeNull();
 });
 
 it('returns registered core settings', function(): void {

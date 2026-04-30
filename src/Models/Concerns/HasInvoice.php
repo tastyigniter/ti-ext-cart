@@ -47,12 +47,9 @@ trait HasInvoice
             return $this->invoice_number;
         }
 
-        $invoiceDate = is_null($this->invoice_date)
-            ? Carbon::now() : $this->invoice_date;
+        $invoiceDate = $this->invoice_date ?? Carbon::now();
 
-        $invoicePrefix = is_null($this->invoice_prefix)
-            ? $this->generateInvoicePrefix($invoiceDate)
-            : $this->invoice_prefix;
+        $invoicePrefix = $this->invoice_prefix ?? $this->generateInvoicePrefix($invoiceDate);
 
         $this->invoice_date = $invoiceDate;
         $this->invoice_prefix = $invoicePrefix;

@@ -49,6 +49,14 @@ $config['list']['columns'] = [
         'label' => 'lang:igniter.cart::default.stocks.column_quantity',
         'type' => 'number',
     ],
+    'out_of_stock_status' => [
+        'label' => 'lang:igniter.cart::default.stocks.column_stock_status',
+        'type' => 'partial',
+        'path' => 'inventory/stock_status_column',
+        'sortable' => false,
+        'searchable' => false,
+        'cssClass' => 'overflow-visible',
+    ],
 ];
 
 return $config;
