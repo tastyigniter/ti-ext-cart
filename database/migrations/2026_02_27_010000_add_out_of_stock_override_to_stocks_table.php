@@ -24,10 +24,19 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('stocks', function(Blueprint $table): void {
-            $table->dropColumn(array_filter([
-                Schema::hasColumn('stocks', 'out_of_stock_type') ? 'out_of_stock_type' : null,
-                Schema::hasColumn('stocks', 'out_of_stock_until') ? 'out_of_stock_until' : null,
-            ]));
+            $columns = [];
+
+            if (Schema::hasColumn('stocks', 'out_of_stock_type')) {
+                $columns[] = 'out_of_stock_type';
+            }
+
+            if (Schema::hasColumn('stocks', 'out_of_stock_until')) {
+                $columns[] = 'out_of_stock_until';
+            }
+
+            if (!empty($columns)) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };
