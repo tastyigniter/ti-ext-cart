@@ -25,13 +25,9 @@ The TastyIgniter Cart extension provides a straightforward and adaptable shoppin
 
 Documentation can be found on the [TastyIgniter documentation website](https://tastyigniter.com/docs/extensions/cart).
 
-## Changelog
-
-Please see [CHANGELOG](https://github.com/tastyigniter/ti-ext-cart/blob/master/CHANGELOG.md) for more information on what has changed recently.
-
 ## Reporting issues
 
-If you encounter a bug in this extension, please report it using the [Issue Tracker](https://github.com/tastyigniter/ti-ext-cart/issues) on GitHub.
+If you encounter a bug in this extension, please report it using the [Issue Tracker](https://github.com/tastyigniter/TastyIgniter/issues) on GitHub.
 
 ## Contributing
 

@@ -44,7 +44,7 @@ return [
             ],
             'stock_action[state]' => [
                 'label' => 'lang:igniter.cart::default.stocks.label_stock_action',
-                'type' => 'select',
+                'type' => 'radiolist',
                 'options' => 'getStockActionOptions',
                 'trigger' => [
                     'action' => 'show',

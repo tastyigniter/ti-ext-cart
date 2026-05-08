@@ -113,7 +113,8 @@ class OrderManager
 
     public function getDefaultPayment()
     {
-        return $this->getPaymentGateways()->where('is_default', true)->first();
+        return $this->getPaymentGateways()->firstWhere('is_default', true)
+            ?? $this->getPaymentGateways()->first();
     }
 
     public function getPayment($code): ?Payment
@@ -361,7 +362,7 @@ class OrderManager
         return true;
     }
 
-    protected function applyOrderDateTime($order)
+    public function applyOrderDateTime($order): void
     {
         $orderDateTime = $this->location->orderDateTime();
 

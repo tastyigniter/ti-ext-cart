@@ -46,7 +46,7 @@ class ExtendDashboardCards
             ],
             'delivery_order_count' => [
                 'label' => 'lang:igniter.cart::default.dashboard.text_delivery_order_count',
-                'icon' => ' text-success fa fa-truck-fast',
+                'icon' => ' text-success fa fa-4x fa-truck-fast',
                 'valueFrom' => $this->getValue(...),
             ],
             'collection_order' => [

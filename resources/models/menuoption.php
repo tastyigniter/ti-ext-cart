@@ -1,5 +1,7 @@
 <?php
 
+use Igniter\Cart\Models\MenuOption;
+
 $config['list']['filter'] = [
     'search' => [
         'prompt' => 'lang:igniter.cart::default.menu_options.text_filter_search',
@@ -10,7 +12,7 @@ $config['list']['filter'] = [
             'label' => 'lang:igniter.cart::default.menu_options.text_filter_display_type',
             'type' => 'select',
             'conditions' => 'display_type = :filtered',
-            'options' => [\Igniter\Cart\Models\MenuOption::class, 'getDisplayTypeOptions'],
+            'options' => [MenuOption::class, 'getDisplayTypeOptions'],
         ],
     ],
 ];

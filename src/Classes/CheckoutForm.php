@@ -80,7 +80,7 @@ class CheckoutForm extends Form
             $field->displayAs($fieldType, $config);
             $field->value = $this->getFieldValue($field);
 
-            if (in_array($field->type, ['select', 'radio', 'checkbox'])) {
+            if (in_array($field->type, ['select', 'radio', 'checkbox'], true)) {
                 $field->options(fn(): mixed => $this->getOptionsFromModel($field, $config['options'] ?? null));
             }
 
