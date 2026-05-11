@@ -6,6 +6,7 @@ namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
+use Igniter\Local\Facades\Location;
 
 it('accepts order and updates status', function(): void {
     $order = Order::factory()->create();
@@ -13,6 +14,7 @@ it('accepts order and updates status', function(): void {
     setting()->set([
         'accepted_order_status' => $status->getKey(),
     ]);
+    Location::setCurrent($order->location);
 
     actingAsSuperUser()
         ->post(route('igniter.cart.status_workflows', ['slug' => 'accept/'.$order->getKey()]))
