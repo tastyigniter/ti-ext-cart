@@ -136,9 +136,9 @@ class Menu extends Model implements Buyable
         )->min('price') ?: 0;
     }
 
-    public function getMinimumQtyAttribute($value)
+    public function getMinimumQtyAttribute($value): int
     {
-        return $value ?: 1;
+        return (int)($value ?: 1);
     }
 
     public static function getDropdownOptions()

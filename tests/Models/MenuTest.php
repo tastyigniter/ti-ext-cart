@@ -65,6 +65,20 @@ it('return minimum_qty attribute', function(): void {
     expect($menu->minimum_qty)->toBe(2);
 });
 
+it('returns minimum_qty as an integer regardless of the stored value type', function(): void {
+    $menu = new Menu;
+
+    // Simulate a PDO driver that returns column values as strings (emulated prepares).
+    $menu->setRawAttributes(['minimum_qty' => '3']);
+    expect($menu->minimum_qty)->toBe(3);
+
+    $menu->setRawAttributes(['minimum_qty' => '0']);
+    expect($menu->minimum_qty)->toBe(1);
+
+    $menu->setRawAttributes(['minimum_qty' => null]);
+    expect($menu->minimum_qty)->toBe(1);
+});
+
 it('returns true when menu has options', function(): void {
     $menu = Menu::factory()->create();
     $menu->menu_options()->create(['option_id' => 1]);
