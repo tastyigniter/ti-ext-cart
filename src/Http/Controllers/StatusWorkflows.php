@@ -9,6 +9,7 @@ use Igniter\Admin\Models\Status;
 use Igniter\Admin\Models\StatusHistory;
 use Igniter\Cart\Models\Order;
 use Igniter\Flame\Exception\FlashException;
+use Igniter\Local\Facades\Location as LocationFacade;
 use Illuminate\Support\Carbon;
 
 class StatusWorkflows extends AdminController
@@ -112,7 +113,13 @@ class StatusWorkflows extends AdminController
     {
         throw_unless($orderId, new FlashException(lang('igniter.cart::default.orders.alert_missing_order_id')));
 
-        throw_unless($order = Order::query()->find($orderId), new FlashException(
+        $locationIds = LocationFacade::currentOrAssigned();
+        $query = Order::query();
+        if (!empty($locationIds)) {
+            $query->whereHasOrDoesntHaveLocation($locationIds);
+        }
+
+        throw_unless($order = $query->find($orderId), new FlashException(
             sprintf(lang('igniter.cart::default.orders.alert_order_not_found'), $orderId),
         ));
 
