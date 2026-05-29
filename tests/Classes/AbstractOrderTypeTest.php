@@ -109,3 +109,35 @@ it('gets schedule restriction', function(): void {
     $this->location->shouldReceive('getOrderTimeRestriction')->with('test')->andReturn(60);
     expect($this->orderType->getScheduleRestriction())->toBe(60);
 });
+
+it('allows booking when isAsap is null', function(): void {
+    expect($this->orderType->allowsBookingAt())->toBeTrue();
+    expect($this->orderType->allowsBookingAt(null))->toBeTrue();
+});
+
+it('rejects later booking when restriction is ASAP_ONLY', function(): void {
+    $this->location->shouldReceive('getSettings')->with('checkout.limit_orders')->andReturn(false);
+    $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(false);
+    $this->location->shouldReceive('getOrderTimeRestriction')->with('test')->andReturn(AbstractOrderType::ASAP_ONLY);
+
+    expect($this->orderType->allowsBookingAt(false))->toBeFalse();
+    expect($this->orderType->allowsBookingAt(true))->toBeTrue();
+});
+
+it('rejects asap booking when restriction is LATER_ONLY', function(): void {
+    $this->location->shouldReceive('getSettings')->with('checkout.limit_orders')->andReturn(false);
+    $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(false);
+    $this->location->shouldReceive('getOrderTimeRestriction')->with('test')->andReturn(AbstractOrderType::LATER_ONLY);
+
+    expect($this->orderType->allowsBookingAt(true))->toBeFalse();
+    expect($this->orderType->allowsBookingAt(false))->toBeTrue();
+});
+
+it('allows both choices when there is no restriction', function(): void {
+    $this->location->shouldReceive('getSettings')->with('checkout.limit_orders')->andReturn(false);
+    $this->location->shouldReceive('hasFutureOrder')->with('test')->andReturn(false);
+    $this->location->shouldReceive('getOrderTimeRestriction')->with('test')->andReturn(0);
+
+    expect($this->orderType->allowsBookingAt(true))->toBeTrue();
+    expect($this->orderType->allowsBookingAt(false))->toBeTrue();
+});

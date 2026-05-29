@@ -90,4 +90,23 @@ abstract class AbstractOrderType implements OrderTypeInterface
 
         return $this->location->getOrderTimeRestriction($this->code);
     }
+
+    public function allowsBookingAt(?bool $isAsap = null): bool
+    {
+        if ($isAsap === null) {
+            return true;
+        }
+
+        $restriction = $this->getScheduleRestriction();
+
+        if ($isAsap === false && $restriction === static::ASAP_ONLY) {
+            return false;
+        }
+
+        if ($isAsap === true && $restriction === static::LATER_ONLY) {
+            return false;
+        }
+
+        return true;
+    }
 }
