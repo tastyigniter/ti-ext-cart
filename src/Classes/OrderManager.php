@@ -88,7 +88,7 @@ class OrderManager
         }
 
         if (!$order->exists) {
-            DB::transaction(function() use ($order) {
+            DB::transaction(function() use ($order): void {
                 $order->save();
                 $order->addOrderMenus($this->cart->content()->all());
                 $order->addOrderTotals($this->getCartTotals());
@@ -221,10 +221,11 @@ class OrderManager
         $order->fill($data);
         $this->applyRequiredAttributes($order);
 
-        DB::transaction(function() use ($order) {
+        DB::transaction(function() use ($order): void {
             if ($order->exists) {
                 Order::whereKey($order->getKey())->lockForUpdate()->first();
             }
+
             $order->saveQuietly();
             $order->addOrderMenus($this->cart->content()->all());
             $order->addOrderTotals($this->getCartTotals());
