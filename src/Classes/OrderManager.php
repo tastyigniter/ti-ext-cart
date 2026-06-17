@@ -90,10 +90,11 @@ class OrderManager
         if (!$order->exists) {
             DB::transaction(function() use ($order) {
                 $order->save();
-                $this->setCurrentOrderId($order->order_id);
                 $order->addOrderMenus($this->cart->content()->all());
                 $order->addOrderTotals($this->getCartTotals());
             }, 3);
+
+            $this->setCurrentOrderId($order->order_id);
         }
 
         return $order;
@@ -221,7 +222,9 @@ class OrderManager
         $this->applyRequiredAttributes($order);
 
         DB::transaction(function() use ($order) {
-            Order::whereKey($order->getKey())->lockForUpdate()->first();
+            if ($order->exists) {
+                Order::whereKey($order->getKey())->lockForUpdate()->first();
+            }
             $order->saveQuietly();
             $order->addOrderMenus($this->cart->content()->all());
             $order->addOrderTotals($this->getCartTotals());
