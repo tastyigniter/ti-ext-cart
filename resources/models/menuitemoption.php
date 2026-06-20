@@ -29,6 +29,14 @@ $config['form']['fields'] = [
         'span' => 'right',
         'comment' => 'lang:igniter.cart::default.menu_options.help_max_selected',
     ],
+    'linked_option_value_ids' => [
+        'label' => 'lang:igniter.cart::default.menu_options.label_linked_option_values',
+        'type' => 'selectlist',
+        'mode' => 'checkbox',
+        'options' => 'getLinkedMenuOptionValueOptions',
+        'valueFrom' => 'linked_option_value_ids',
+        'comment' => 'lang:igniter.cart::default.menu_options.help_linked_option_values',
+    ],
     'menu_option_values' => [
         'type' => 'repeater',
         'form' => 'menuitemoptionvalue',

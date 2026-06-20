@@ -141,7 +141,7 @@ it('configures menu item option model correctly', function(): void {
         ->and($menuItemOption->getFillable())->toEqual([
             'option_id', 'menu_id', 'is_required', 'priority', 'min_selected', 'max_selected',
         ])
-        ->and($menuItemOption->getAppends())->toEqual(['option_name', 'display_type'])
+        ->and($menuItemOption->getAppends())->toEqual(['option_name', 'display_type', 'linked_option_value_ids'])
         ->and($menuItemOption->timestamps)->toBeTrue()
         ->and($menuItemOption->relation)->toEqual([
             'hasMany' => [
@@ -154,6 +154,14 @@ it('configures menu item option model correctly', function(): void {
             'belongsTo' => [
                 'menu' => [Menu::class],
                 'option' => [MenuOption::class],
+            ],
+            'belongsToMany' => [
+                'linkedOptionValues' => [
+                    MenuItemOptionValue::class,
+                    'table' => 'menu_item_option_linked_values',
+                    'foreignKey' => 'menu_option_id',
+                    'otherKey' => 'menu_item_option_value_id',
+                ],
             ],
         ])
         ->and($menuItemOption->rules)->toEqual([
