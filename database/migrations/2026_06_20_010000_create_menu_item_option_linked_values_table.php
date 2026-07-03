@@ -9,9 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menu_item_option_linked_values', function (Blueprint $table): void {
-            $table->unsignedInteger('menu_item_option_value_id');
             $table->unsignedInteger('menu_option_id');
-            $table->primary(['menu_item_option_value_id', 'menu_option_id']);
+            $table->unsignedInteger('menu_item_option_value_id');
+            $table->primary(['menu_option_id', 'menu_item_option_value_id']);
+            $table->index('menu_item_option_value_id');
         });
     }
 
