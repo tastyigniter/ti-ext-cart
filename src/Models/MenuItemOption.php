@@ -178,14 +178,14 @@ class MenuItemOption extends Model
         ];
     }
 
-public function getLinkedOptionValueIdsAttribute(): array
-{
-    if ($this->relationLoaded('linkedOptionValues')) {
-        return $this->linkedOptionValues->pluck('menu_option_value_id')->all();
-    }
+    public function getLinkedOptionValueIdsAttribute(): array
+    {
+        if ($this->relationLoaded('linkedOptionValues')) {
+            return $this->linkedOptionValues->pluck('menu_option_value_id')->all();
+        }
 
-    return $this->linkedOptionValues()->pluck('menu_option_value_id')->all();
-}
+        return $this->linkedOptionValues()->pluck('menu_option_value_id')->all();
+    }
 
     public function getLinkedMenuOptionValueOptions(): array
     {

@@ -130,6 +130,76 @@ it('validates min_selected and max_selected rules for select display type', func
         ->and($menuItemOption->getValidationMessages())->toHaveKeys(['min_selected.max', 'max_selected.max']);
 });
 
+it('returns linked option value ids from loaded relation', function(): void {
+    $menu = Menu::factory()->create();
+    $menuItemOption = MenuItemOption::factory()->for($menu, 'menu')->create();
+    $linkedValue = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menu, 'menu'), 'menu_option')
+        ->create();
+
+    $menuItemOption->linkedOptionValues()->attach($linkedValue->getKey());
+    $menuItemOption->load('linkedOptionValues');
+
+    expect($menuItemOption->linked_option_value_ids)->toBe([$linkedValue->getKey()]);
+});
+
+it('returns linked option value ids from database when relation is not loaded', function(): void {
+    $menu = Menu::factory()->create();
+    $menuItemOption = MenuItemOption::factory()->for($menu, 'menu')->create();
+    $linkedValue = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menu, 'menu'), 'menu_option')
+        ->create();
+
+    $menuItemOption->linkedOptionValues()->attach($linkedValue->getKey());
+    $menuItemOption->unsetRelation('linkedOptionValues');
+
+    expect($menuItemOption->linked_option_value_ids)->toBe([$linkedValue->getKey()]);
+});
+
+it('returns linked menu option value options from sibling options on the same menu', function(): void {
+    $menu = Menu::factory()->create();
+    $siblingOption = MenuOption::factory()->create(['option_name' => 'Size']);
+    $siblingMenuItemOption = MenuItemOption::factory()
+        ->for($menu, 'menu')
+        ->for($siblingOption, 'option')
+        ->create();
+    $optionValue = MenuOptionValue::factory()->for($siblingOption, 'option')->create(['name' => 'Large']);
+    $menuItemOptionValue = MenuItemOptionValue::factory()
+        ->for($siblingMenuItemOption, 'menu_option')
+        ->for($optionValue, 'option_value')
+        ->create();
+    $currentMenuItemOption = MenuItemOption::factory()
+        ->for($menu, 'menu')
+        ->for(MenuOption::factory()->create(['option_name' => 'Topping']), 'option')
+        ->create();
+
+    $options = $currentMenuItemOption->getLinkedMenuOptionValueOptions();
+
+    expect($options)->toBe([
+        $menuItemOptionValue->getKey() => 'Size: Large',
+    ]);
+});
+
+it('includes all menu options when getting linked menu option value options for unsaved model', function(): void {
+    $menu = Menu::factory()->create();
+    $menuOption = MenuOption::factory()->create(['option_name' => 'Size']);
+    $menuItemOption = MenuItemOption::factory()
+        ->for($menu, 'menu')
+        ->for($menuOption, 'option')
+        ->create();
+    $optionValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['name' => 'Large']);
+    $menuItemOptionValue = MenuItemOptionValue::factory()
+        ->for($menuItemOption, 'menu_option')
+        ->for($optionValue, 'option_value')
+        ->create();
+
+    $options = (new MenuItemOption(['menu_id' => $menu->getKey()]))->getLinkedMenuOptionValueOptions();
+
+    expect($options)->toBe([
+        $menuItemOptionValue->getKey() => 'Size: Large',
+    ]);
+});
+
 it('configures menu item option model correctly', function(): void {
     $menuItemOption = new MenuItemOption;
 

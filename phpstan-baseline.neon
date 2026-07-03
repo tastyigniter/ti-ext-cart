@@ -253,15 +253,45 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
+			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$linkedOptionValues\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/MenuItemOption.php
+
+		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$option\.$#'
 			identifier: property.notFound
 			count: 3
 			path: src/Models/MenuItemOption.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$menu_option_values\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/MenuItemOption.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$option_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/MenuItemOption.php
+
+		-
+			message: '#^Call to an undefined method Igniter\\Cart\\Models\\MenuItemOption\:\:linkedOptionValues\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Models/MenuItemOption.php
+
+		-
 			message: '#^Call to an undefined method Igniter\\Cart\\Models\\MenuItemOption\:\:menu_option_values\(\)\.$#'
 			identifier: method.notFound
 			count: 2
+			path: src/Models/MenuItemOption.php
+
+		-
+			message: '#^Relation ''menu_option_values'' is not found in Igniter\\Cart\\Models\\MenuItemOption model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
 			path: src/Models/MenuItemOption.php
 
 		-
@@ -299,6 +329,12 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: src/Models/MenuOptionValue.php
+
+		-
+			message: '#^Call to an undefined method Igniter\\Cart\\Models\\MenuItemOption\:\:linkedOptionValues\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/Models/Observers/MenuItemOptionObserver.php
 
 		-
 			message: '#^Call to an undefined method Igniter\\Cart\\Models\\Category\|Igniter\\Flame\\Database\\Builder\<Igniter\\Cart\\Models\\Menu\>\:\:detach\(\)\.$#'
