@@ -190,11 +190,13 @@ public function getLinkedOptionValueIdsAttribute(): array
     public function getLinkedMenuOptionValueOptions(): array
     {
         $options = [];
-        $siblings = static::where('menu_id', $this->menu_id)
-            ->where('menu_option_id', '!=', $this->getKey())
-            ->with(['option', 'menu_option_values.option_value'])
-            ->get();
+        $query = static::where('menu_id', $this->menu_id);
 
+        if ($this->exists) {
+            $query->where($this->getKeyName(), '!=', $this->getKey());
+        }
+
+        $siblings = $query->with(['option', 'menu_option_values.option_value'])->get();
         foreach ($siblings as $sibling) {
             foreach ($sibling->menu_option_values as $value) {
                 $options[$value->menu_option_value_id] = $sibling->option_name.': '.$value->name;
