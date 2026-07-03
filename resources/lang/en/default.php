@@ -471,6 +471,8 @@ return [
 
         'help_min_selected' => 'Minimum items to select from these options, set to 0 to ignore.',
         'help_max_selected' => 'Maximum items to select from these options, set to 0 to ignore.',
+        'label_linked_option_values' => 'Conditional On (Show When)',
+        'help_linked_option_values' => 'This option will only appear when one of the selected values above is chosen.',
         'help_menu_option' => 'Choose from the dropdown to assign a menu option to this menu item.',
 
         'alert_menu_option_not_attached' => 'Please select a menu option to assign.',

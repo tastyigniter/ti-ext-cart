@@ -62,3 +62,33 @@ it('handles empty menu_option_values gracefully', function(): void {
 
     $this->observer->saved($this->menuItemOption);
 });
+
+it('syncs linked option values when linked_option_value_ids is present', function(): void {
+    $pivotBuilder = Mockery::mock();
+    $pivotBuilder->shouldReceive('sync')->with([101, 202])->once();
+
+    $attributes = [
+        'linked_option_value_ids' => [101, 202],
+    ];
+
+    $this->menuItemOption->shouldReceive('getAttributes')->andReturn($attributes);
+    $this->menuItemOption->shouldReceive('linkedOptionValues')->andReturn($pivotBuilder);
+
+    $this->observer->saved($this->menuItemOption);
+});
+
+it('skips syncing linked option values when linked_option_value_ids is absent', function(): void {
+    $this->menuItemOption->shouldReceive('getAttributes')->andReturn([]);
+    $this->menuItemOption->shouldNotReceive('linkedOptionValues');
+
+    $this->observer->saved($this->menuItemOption);
+});
+
+it('detaches linked option values when deleting', function(): void {
+    $pivotBuilder = Mockery::mock();
+    $pivotBuilder->shouldReceive('detach')->once();
+
+    $this->menuItemOption->shouldReceive('linkedOptionValues')->andReturn($pivotBuilder);
+
+    $this->observer->deleting($this->menuItemOption);
+});
