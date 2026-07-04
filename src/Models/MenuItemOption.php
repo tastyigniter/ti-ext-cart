@@ -69,9 +69,17 @@ class MenuItemOption extends Model
             'menu' => [Menu::class],
             'option' => [MenuOption::class],
         ],
+        'belongsToMany' => [
+            'linkedOptionValues' => [
+                MenuItemOptionValue::class,
+                'table' => 'menu_item_option_linked_values',
+                'foreignKey' => 'menu_option_id',
+                'otherKey' => 'menu_item_option_value_id',
+            ],
+        ],
     ];
 
-    public $appends = ['option_name', 'display_type'];
+    public $appends = ['option_name', 'display_type', 'linked_option_value_ids'];
 
     public $rules = [
         ['menu_id', 'igniter.cart::default.menus.label_menu_id', 'required|integer'],
@@ -82,7 +90,7 @@ class MenuItemOption extends Model
         ['max_selected', 'igniter.cart::default.menu_options.label_max_selected', 'integer|gte:min_selected'],
     ];
 
-    protected $purgeable = ['menu_option_values'];
+    protected $purgeable = ['menu_option_values', 'linked_option_value_ids'];
 
     public $with = ['option'];
 
@@ -168,5 +176,33 @@ class MenuItemOption extends Model
             'min_selected.max' => lang('igniter.cart::default.menu_options.error_min_selected_not_applicable'),
             'max_selected.max' => lang('igniter.cart::default.menu_options.error_max_selected_not_applicable'),
         ];
+    }
+
+    public function getLinkedOptionValueIdsAttribute(): array
+    {
+        if ($this->relationLoaded('linkedOptionValues')) {
+            return $this->linkedOptionValues->pluck('menu_option_value_id')->all();
+        }
+
+        return $this->linkedOptionValues()->pluck('menu_option_value_id')->all();
+    }
+
+    public function getLinkedMenuOptionValueOptions(): array
+    {
+        $options = [];
+        $query = static::where('menu_id', $this->menu_id);
+
+        if ($this->exists) {
+            $query->where($this->getKeyName(), '!=', $this->getKey());
+        }
+
+        $siblings = $query->with(['option', 'menu_option_values.option_value'])->get();
+        foreach ($siblings as $sibling) {
+            foreach ($sibling->menu_option_values as $value) {
+                $options[$value->menu_option_value_id] = $sibling->option_name.': '.$value->name;
+            }
+        }
+
+        return $options;
     }
 }

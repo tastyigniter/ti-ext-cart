@@ -20,6 +20,7 @@ use Igniter\User\Models\Address;
 use Igniter\User\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
 
@@ -87,10 +88,13 @@ class OrderManager
         }
 
         if (!$order->exists) {
-            $order->save();
+            DB::transaction(function() use ($order): void {
+                $order->save();
+                $order->addOrderMenus($this->cart->content()->all());
+                $order->addOrderTotals($this->getCartTotals());
+            }, 3);
+
             $this->setCurrentOrderId($order->order_id);
-            $order->addOrderMenus($this->cart->content()->all());
-            $order->addOrderTotals($this->getCartTotals());
         }
 
         return $order;
@@ -218,10 +222,15 @@ class OrderManager
         $order->fill($data);
         $this->applyRequiredAttributes($order);
 
-        $order->saveQuietly();
+        DB::transaction(function() use ($order): void {
+            if ($order->exists) {
+                Order::whereKey($order->getKey())->lockForUpdate()->first();
+            }
 
-        $order->addOrderMenus($this->cart->content()->all());
-        $order->addOrderTotals($this->getCartTotals());
+            $order->saveQuietly();
+            $order->addOrderMenus($this->cart->content()->all());
+            $order->addOrderTotals($this->getCartTotals());
+        }, 3);
 
         Event::dispatch('igniter.checkout.afterSaveOrder', [$order]);
 
