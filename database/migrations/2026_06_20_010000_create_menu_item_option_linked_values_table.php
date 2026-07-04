@@ -12,7 +12,7 @@ return new class extends Migration
             $table->unsignedInteger('menu_option_id');
             $table->unsignedInteger('menu_item_option_value_id');
             $table->primary(['menu_option_id', 'menu_item_option_value_id']);
-            $table->index('menu_item_option_value_id');
+            $table->index('menu_item_option_value_id', 'menu_item_option_linked_values_value_id_index');
         });
     }
 
