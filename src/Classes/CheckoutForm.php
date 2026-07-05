@@ -29,7 +29,7 @@ class CheckoutForm extends Form
     {
         $rules = $this->getConfig('rules', []);
 
-        $prefixedKeys = array_map(fn(int|string $key) => is_string($key) ? 'fields.'.$key : $key, array_keys($rules));
+        $prefixedKeys = array_map(fn(int|string $key): string|int => is_string($key) ? 'fields.'.$key : $key, array_keys($rules));
 
         return array_combine($prefixedKeys, $rules);
     }
@@ -38,7 +38,7 @@ class CheckoutForm extends Form
     {
         $messages = $this->getConfig('messages', []);
 
-        $prefixedKeys = array_map(fn(int|string $key) => is_string($key) ? 'fields.'.$key : $key, array_keys($messages));
+        $prefixedKeys = array_map(fn(int|string $key): string|int => is_string($key) ? 'fields.'.$key : $key, array_keys($messages));
 
         return array_combine($prefixedKeys, $messages);
     }
@@ -47,7 +47,7 @@ class CheckoutForm extends Form
     {
         $attributes = array_map(fn(array $field): string => lang($field['label'] ?? $field['name']), $this->fields);
 
-        $prefixedKeys = array_map(fn(int|string $key) => is_string($key) ? 'fields.'.$key : $key, array_keys($attributes));
+        $prefixedKeys = array_map(fn(int|string $key): string|int => is_string($key) ? 'fields.'.$key : $key, array_keys($attributes));
 
         return array_combine($prefixedKeys, $attributes);
     }

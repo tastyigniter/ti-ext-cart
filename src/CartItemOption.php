@@ -110,7 +110,7 @@ class CartItemOption implements Arrayable, Jsonable
      * @return string
      */
     #[Override]
-    public function toJson($options = 0)
+    public function toJson($options = 0): string|false
     {
         return json_encode($this->toArray(), $options);
     }
