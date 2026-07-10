@@ -33,7 +33,8 @@ it('does not render list auto-refresh attributes when auto-refresh is disabled',
     actingAsSuperUser()
         ->get(route('igniter.cart.orders'))
         ->assertOk()
-        ->assertDontSee('data-list-refresh-interval', false);
+        ->assertDontSee('data-list-refresh-interval', false)
+        ->assertDontSee('data-list-refresh-handler', false);
 });
 
 it('loads edit order page', function(): void {
