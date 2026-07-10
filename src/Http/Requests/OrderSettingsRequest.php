@@ -19,6 +19,8 @@ class OrderSettingsRequest extends FormRequest
             'canceled_order_status' => lang('igniter.cart::default.label_canceled_order_status'),
             'guest_order' => lang('igniter.cart::default.label_guest_order'),
             'location_order' => lang('igniter.cart::default.label_location_order'),
+            'orders_auto_refresh' => lang('igniter.cart::default.label_orders_auto_refresh'),
+            'orders_auto_refresh_interval' => lang('igniter.cart::default.label_orders_auto_refresh_interval'),
 
             'accepted_order_status' => lang('igniter.cart::default.orders.label_accepted_order_status'),
             'rejected_reasons' => lang('igniter.cart::default.orders.label_rejected_reasons'),
@@ -53,6 +55,8 @@ class OrderSettingsRequest extends FormRequest
             'canceled_order_status' => ['required', 'integer'],
             'guest_order' => ['required', 'integer'],
             'location_order' => ['required', 'integer'],
+            'orders_auto_refresh' => ['nullable', 'integer'],
+            'orders_auto_refresh_interval' => ['nullable', 'integer', 'min:1', 'max:3600'],
 
             'accepted_order_status' => ['nullable', 'integer'],
             'rejected_reasons' => ['nullable', 'array'],

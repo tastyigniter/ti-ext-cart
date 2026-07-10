@@ -7,11 +7,33 @@ namespace Igniter\Cart\Tests\Http\Controllers;
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
 use Igniter\Local\Models\Location;
+use Igniter\System\Models\Settings;
 
 it('loads orders page', function(): void {
     actingAsSuperUser()
         ->get(route('igniter.cart.orders'))
         ->assertOk();
+});
+
+it('renders list auto-refresh attributes when auto-refresh is enabled', function(): void {
+    Settings::set('orders_auto_refresh', true);
+    Settings::set('orders_auto_refresh_interval', 20);
+
+    actingAsSuperUser()
+        ->get(route('igniter.cart.orders'))
+        ->assertOk()
+        ->assertSee('data-list-refresh-interval="20"', false)
+        ->assertSee('data-list-refresh-handler="list::onRefresh"', false);
+});
+
+it('does not render list auto-refresh attributes when auto-refresh is disabled', function(): void {
+    Settings::set('orders_auto_refresh', false);
+    Settings::set('orders_auto_refresh_interval', 20);
+
+    actingAsSuperUser()
+        ->get(route('igniter.cart.orders'))
+        ->assertOk()
+        ->assertDontSee('data-list-refresh-interval', false);
 });
 
 it('loads edit order page', function(): void {
