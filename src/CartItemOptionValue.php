@@ -40,6 +40,13 @@ class CartItemOptionValue implements Arrayable, Jsonable
     public $price;
 
     /**
+     * The number of free units within qty for this cart item option value.
+     *
+     * @var int
+     */
+    public $free_qty = 0;
+
+    /**
      * CartItem constructor.
      */
     public function __construct(int|string $id, string $name, float $price)
@@ -75,7 +82,15 @@ class CartItemOptionValue implements Arrayable, Jsonable
      */
     public function subtotal(): int|float
     {
-        return $this->qty * $this->price;
+        return max(0, $this->qty - $this->free_qty) * $this->price;
+    }
+
+    /**
+     * Set the number of free units within qty for this cart item option value.
+     */
+    public function setFreeQty(int $freeQty): void
+    {
+        $this->free_qty = max(0, $freeQty);
     }
 
     /**
@@ -101,6 +116,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
         $this->name = array_get($attributes, 'name', $this->name);
         $this->price = array_get($attributes, 'price', $this->price);
         $this->qty = array_get($attributes, 'qty', $this->qty);
+        $this->free_qty = array_get($attributes, 'free_qty', $this->free_qty);
     }
 
     /**
@@ -115,6 +131,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
         );
 
         $instance->qty = array_get($attributes, 'qty', $instance->qty);
+        $instance->free_qty = array_get($attributes, 'free_qty', $instance->free_qty);
 
         return $instance;
     }
@@ -130,6 +147,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
             'name' => $this->name,
             'qty' => $this->qty,
             'price' => $this->price,
+            'free_qty' => $this->free_qty,
             'subtotal' => $this->subtotal(),
         ];
     }

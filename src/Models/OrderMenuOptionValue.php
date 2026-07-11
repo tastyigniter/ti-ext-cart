@@ -17,6 +17,7 @@ use Igniter\Flame\Database\Model;
  * @property int $menu_option_id
  * @property int $menu_option_value_id
  * @property int|null $quantity
+ * @property int $free_qty
  * @property-read mixed $order_option_category
  * @mixin Model
  */
@@ -39,6 +40,7 @@ class OrderMenuOptionValue extends Model
         'menu_option_value_id' => 'integer',
         'quantity' => 'integer',
         'order_option_price' => 'float',
+        'free_qty' => 'integer',
     ];
 
     public $relation = [

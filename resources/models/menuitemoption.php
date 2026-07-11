@@ -29,6 +29,11 @@ $config['form']['fields'] = [
         'span' => 'right',
         'comment' => 'lang:igniter.cart::default.menu_options.help_max_selected',
     ],
+    'free_quantity' => [
+        'label' => 'lang:igniter.cart::default.menu_options.label_free_quantity',
+        'type' => 'number',
+        'comment' => 'lang:igniter.cart::default.menu_options.help_free_quantity',
+    ],
     'linked_option_value_ids' => [
         'label' => 'lang:igniter.cart::default.menu_options.label_linked_option_values',
         'type' => 'selectlist',

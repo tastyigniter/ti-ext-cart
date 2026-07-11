@@ -145,6 +145,7 @@ trait ManagesOrderItems
                     'order_option_name' => $menuOptionValue->name,
                     'order_option_price' => $menuOptionValue->price,
                     'quantity' => $menuOptionValue->qty,
+                    'free_qty' => $menuOptionValue->free_qty ?? 0,
                 ]);
             }
         }
