@@ -11,13 +11,15 @@ it('returns correct attribute labels', function(): void {
 
     $attributes = $request->attributes();
 
-    expect($attributes)->toHaveCount(23)
+    expect($attributes)->toHaveCount(25)
         ->and($attributes)->toHaveKey('order_email.*', lang('igniter.cart::default.label_order_email'))
         ->and($attributes)->toHaveKey('processing_order_status', lang('igniter.cart::default.label_processing_order_status'))
         ->and($attributes)->toHaveKey('completed_order_status', lang('igniter.cart::default.label_completed_order_status'))
         ->and($attributes)->toHaveKey('canceled_order_status', lang('igniter.cart::default.label_canceled_order_status'))
         ->and($attributes)->toHaveKey('guest_order', lang('igniter.cart::default.label_guest_order'))
         ->and($attributes)->toHaveKey('location_order', lang('igniter.cart::default.label_location_order'))
+        ->and($attributes)->toHaveKey('orders_auto_refresh', lang('igniter.cart::default.label_orders_auto_refresh'))
+        ->and($attributes)->toHaveKey('orders_auto_refresh_interval', lang('igniter.cart::default.label_orders_auto_refresh_interval'))
         ->and($attributes)->toHaveKey('accepted_order_status', lang('igniter.cart::default.orders.label_accepted_order_status'))
         ->and($attributes)->toHaveKey('rejected_reasons', lang('igniter.cart::default.orders.label_rejected_reasons'))
         ->and($attributes)->toHaveKey('rejected_reasons.*.code', lang('igniter.cart::default.orders.label_reject_reason_code'))
@@ -42,7 +44,7 @@ it('returns correct validation rules', function(): void {
 
     $rules = $request->rules();
 
-    expect($rules)->toHaveCount(25)
+    expect($rules)->toHaveCount(27)
         ->and($rules)->toHaveKey('order_email.*')
         ->and($rules)->toHaveKey('processing_order_status')
         ->and($rules)->toHaveKey('completed_order_status')
@@ -51,6 +53,8 @@ it('returns correct validation rules', function(): void {
         ->and($rules)->toHaveKey('canceled_order_status')
         ->and($rules)->toHaveKey('guest_order')
         ->and($rules)->toHaveKey('location_order')
+        ->and($rules)->toHaveKey('orders_auto_refresh')
+        ->and($rules)->toHaveKey('orders_auto_refresh_interval')
         ->and($rules)->toHaveKey('accepted_order_status')
         ->and($rules)->toHaveKey('rejected_reasons')
         ->and($rules)->toHaveKey('rejected_reasons.*.code')
@@ -76,6 +80,8 @@ it('returns correct validation rules', function(): void {
         ->and($rules['canceled_order_status'])->toContain('required', 'integer')
         ->and($rules['guest_order'])->toContain('required', 'integer')
         ->and($rules['location_order'])->toContain('required', 'integer')
+        ->and($rules['orders_auto_refresh'])->toContain('nullable', 'integer')
+        ->and($rules['orders_auto_refresh_interval'])->toContain('nullable', 'integer', 'min:5', 'max:3600')
         ->and($rules['accepted_order_status'])->toContain('nullable', 'integer')
         ->and($rules['rejected_reasons'])->toContain('nullable', 'array')
         ->and($rules['rejected_reasons.*.code'])->toContain('string', 'max:32')

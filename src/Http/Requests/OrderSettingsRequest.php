@@ -56,7 +56,7 @@ class OrderSettingsRequest extends FormRequest
             'guest_order' => ['required', 'integer'],
             'location_order' => ['required', 'integer'],
             'orders_auto_refresh' => ['nullable', 'integer'],
-'orders_auto_refresh_interval' => ['nullable', 'integer', 'min:5', 'max:3600'],
+            'orders_auto_refresh_interval' => ['nullable', 'integer', 'min:5', 'max:3600'],
 
             'accepted_order_status' => ['nullable', 'integer'],
             'rejected_reasons' => ['nullable', 'array'],
