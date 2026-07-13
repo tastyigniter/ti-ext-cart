@@ -130,6 +130,26 @@ it('validates min_selected and max_selected rules for select display type', func
         ->and($menuItemOption->getValidationMessages())->toHaveKeys(['min_selected.max', 'max_selected.max']);
 });
 
+it('exempts free_quantity for select and radio display types regardless of stored value', function(): void {
+    foreach (['select', 'radio'] as $displayType) {
+        $menuOption = MenuOption::factory()->create(['display_type' => $displayType]);
+        $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create(['free_quantity' => 5]);
+
+        expect($menuItemOption->free_quantity)->toBe(0)
+            ->and($menuItemOption->fresh()->free_quantity)->toBe(0)
+            ->and($menuItemOption->validate())->toBeTrue();
+    }
+});
+
+it('does not exempt free_quantity for checkbox or quantity display types', function(): void {
+    foreach (['checkbox', 'quantity'] as $displayType) {
+        $menuOption = MenuOption::factory()->create(['display_type' => $displayType]);
+        $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create(['free_quantity' => 5]);
+
+        expect($menuItemOption->free_quantity)->toBe(5);
+    }
+});
+
 it('returns linked option value ids from loaded relation', function(): void {
     $menu = Menu::factory()->create();
     $menuItemOption = MenuItemOption::factory()->for($menu, 'menu')->create();

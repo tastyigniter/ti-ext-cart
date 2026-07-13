@@ -71,7 +71,7 @@ class MenuItemOptionValue extends Model
         ['menu_option_id', 'igniter.cart::default.menu_options.label_option_value_id', 'required|integer'],
         ['option_value_id', 'igniter.cart::default.menu_options.label_option_value', 'required|integer'],
         ['override_price', 'igniter.cart::default.menu_options.label_option_price', 'nullable|numeric|min:0'],
-['free_quantity', 'igniter.cart::default.menu_options.label_value_free_quantity', 'integer|min:0'],
+        ['free_quantity', 'igniter.cart::default.menu_options.label_value_free_quantity', 'integer|min:0'],
     ];
 
     public $timestamps = true;
@@ -93,5 +93,21 @@ class MenuItemOptionValue extends Model
     public function isDefault(): bool
     {
         return $this->is_default == 1;
+    }
+
+    /**
+     * Free quantities are not applicable to single-select (radio/select)
+     * option values, and limited to 1 for checkbox option values, regardless
+     * of what is stored.
+     */
+    public function getFreeQuantityAttribute($value): int
+    {
+        $displayType = $this->menu_option?->option?->display_type;
+
+        return match (true) {
+            in_array($displayType, ['select', 'radio']) => 0,
+            $displayType === 'checkbox' => min((int) $value, 1),
+            default => (int) $value,
+        };
     }
 }

@@ -269,6 +269,8 @@ class CartManager
     {
         $menuOptionValues = $menuOption->menu_option_values->keyBy('menu_option_value_id')->sortBy('priority');
 
+        $menuOptionValues->each(fn(MenuItemOptionValue $value) => $value->setRelation('menu_option', $menuOption));
+
         $freeQtyMap = $this->allocateFreeQuantities($menuOption, $menuOptionValues, $selectedValues);
 
         return $menuOptionValues

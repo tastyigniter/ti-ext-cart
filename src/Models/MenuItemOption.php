@@ -111,6 +111,8 @@ class MenuItemOption extends Model
 
     public function getOptionValuesAttribute()
     {
+        $this->menu_option_values->each(fn(MenuItemOptionValue $value) => $value->setRelation('menu_option', $this));
+
         return $this->option->option_values->map(function($optionValue) {
             $menuOptionValue = $this->menu_option_values->firstWhere('option_value_id', $optionValue->getKey());
 
@@ -122,6 +124,7 @@ class MenuItemOption extends Model
             $optionValue->is_default = $menuOptionValue?->is_default;
             $optionValue->is_enabled = !is_null($menuOptionValue);
             $optionValue->free_quantity = $menuOptionValue->free_quantity ?? 0;
+            $optionValue->display_type = $this->display_type;
 
             return $optionValue;
         });
@@ -180,6 +183,19 @@ class MenuItemOption extends Model
             'min_selected.max' => lang('igniter.cart::default.menu_options.error_min_selected_not_applicable'),
             'max_selected.max' => lang('igniter.cart::default.menu_options.error_max_selected_not_applicable'),
         ];
+    }
+
+    /**
+     * Free quantities are not applicable to single-select (radio/select)
+     * option groups, regardless of what is stored.
+     */
+    public function getFreeQuantityAttribute($value): int
+    {
+        if (in_array($this->display_type, ['select', 'radio'])) {
+            return 0;
+        }
+
+        return (int) $value;
     }
 
     public function getLinkedOptionValueIdsAttribute(): array
