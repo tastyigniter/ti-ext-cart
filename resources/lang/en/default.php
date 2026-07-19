@@ -111,6 +111,8 @@ return [
     'label_canceled_order_status' => 'Cancellation Order Status',
     'label_guest_order' => 'Allow Guest Orders',
     'label_location_order' => 'Reject Orders Outside Delivery Area',
+    'label_orders_auto_refresh' => 'Enable Orders Auto-refresh',
+    'label_orders_auto_refresh_interval' => 'Orders Auto-refresh Interval (seconds)',
     'label_invoice_prefix' => 'Invoice Prefix',
     'label_invoice_logo' => 'Logo',
     'help_invoice_logo' => 'Upload a logo to display on invoices',
@@ -173,6 +175,8 @@ return [
     'help_canceled_order_status' => 'Select the order status when an order is marked as canceled or suspected of fraudulent activity',
     'help_guest_order' => 'Allow customer to place an order without creating an account.',
     'help_location_order' => 'If disabled, the customer will be allowed to order without entering their postcode/adddress.',
+    'help_orders_auto_refresh' => 'Automatically refresh the admin orders list at the interval below.',
+    'help_orders_auto_refresh_interval' => 'How often, in seconds, the admin orders list refreshes to show new orders.',
     'help_invoice_prefix' => 'Set the invoice prefix (e.g. <b>INV-2015-00</b>1123). Leave blank to use no prefix. The following macros are available: {year} {month} {day} {hour} {minute} {second}',
     'help_order_email' => 'Send a confirmation mail to the customer, admin and/or location email after a new order has been created',
 

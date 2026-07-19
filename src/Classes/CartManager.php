@@ -440,7 +440,7 @@ class CartManager
         }
 
         if (($menuOption->min_selected > 0 || $menuOption->max_selected > 0) &&
-            !($countSelected >= $menuOption->min_selected && $countSelected <= $menuOption->max_selected)
+            ($countSelected < $menuOption->min_selected || $countSelected > $menuOption->max_selected)
         ) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_option_selected'),

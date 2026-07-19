@@ -67,6 +67,10 @@ class Orders extends AdminController
 
     public function __construct()
     {
+        if (setting('orders_auto_refresh', false)) {
+            $this->listConfig['list']['refreshInterval'] = (int)setting('orders_auto_refresh_interval', 15);
+        }
+
         parent::__construct();
 
         AdminMenu::setContext('orders', 'sales');
