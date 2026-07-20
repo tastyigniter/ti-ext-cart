@@ -253,7 +253,7 @@ class CartManager
             $this->validateMenuItemOption($menuOption, $selectedValues);
 
             $menuOptionValues = $this->prepareCartItemOptionValues(
-                $menuOption->menu_option_values, $selectedValues,
+                $menuOption, $selectedValues,
             );
 
             return $menuOptionValues->isNotEmpty() ? [
@@ -265,12 +265,16 @@ class CartManager
         })->filter()->all();
     }
 
-    protected function prepareCartItemOptionValues(Collection $menuOptionValues, array $selectedValues)
+    protected function prepareCartItemOptionValues(MenuItemOption $menuOption, array $selectedValues)
     {
-        $menuOptionValues = $menuOptionValues->keyBy('menu_option_value_id')->sortBy('priority');
+        $menuOptionValues = $menuOption->menu_option_values->keyBy('menu_option_value_id')->sortBy('priority');
+
+        $menuOptionValues->each(fn(MenuItemOptionValue $value) => $value->setRelation('menu_option', $menuOption));
+
+        $freeQtyMap = $this->allocateFreeQuantities($menuOption, $menuOptionValues, $selectedValues);
 
         return $menuOptionValues
-            ->map(function(MenuItemOptionValue $optionValue) use ($selectedValues) {
+            ->map(function(MenuItemOptionValue $optionValue) use ($selectedValues, $freeQtyMap) {
                 $selectedIds = array_column($selectedValues, 'id') ?: $selectedValues;
                 if (!in_array($optionValue->getKey(), $selectedIds)
                     && (array_get($selectedIds, $optionValue->getKey()) !== true
@@ -288,8 +292,63 @@ class CartManager
                     'qty' => $qty,
                     'name' => $optionValue->name,
                     'price' => $optionValue->price,
+                    'free_qty' => $freeQtyMap[$optionValue->getKey()] ?? 0,
                 ];
             })->filter();
+    }
+
+    /**
+     * Allocate free units to selected option values, in the order they were
+     * selected, bounded by each value's own free_quantity budget and the
+     * option group's optional shared free_quantity cap.
+     *
+     * @return array<int, int> menu_option_value_id => free units granted
+     */
+    protected function allocateFreeQuantities(MenuItemOption $menuOption, Collection $menuOptionValues, array $selectedValues): array
+    {
+        $remainingGroupCap = $menuOption->free_quantity > 0 ? $menuOption->free_quantity : null;
+
+        $freeQtyMap = [];
+        foreach ($this->selectedValueIdsInOrder($selectedValues) as $valueId) {
+            $optionValue = $menuOptionValues->get($valueId);
+            if (!$optionValue || $optionValue->free_quantity < 1) {
+                continue;
+            }
+
+            $qty = (int)array_get($selectedValues, $valueId.'.qty', 1);
+
+            $grantable = min($qty, $optionValue->free_quantity, $remainingGroupCap ?? PHP_INT_MAX);
+            if ($grantable < 1) {
+                continue;
+            }
+
+            $freeQtyMap[$valueId] = $grantable;
+
+            if (!is_null($remainingGroupCap)) {
+                $remainingGroupCap -= $grantable;
+            }
+        }
+
+        return $freeQtyMap;
+    }
+
+    /**
+     * Extract the selected option value IDs in the order the customer picked
+     * them, regardless of whether $selectedValues is a flat list of IDs, a
+     * list of {id, qty} entries, or a dict keyed by ID (booleans or {qty}).
+     *
+     * @return array<int, int>
+     */
+    protected function selectedValueIdsInOrder(array $selectedValues): array
+    {
+        $ids = array_column($selectedValues, 'id');
+        if ($ids) {
+            return array_map(intval(...), $ids);
+        }
+
+        $isKeyedById = collect($selectedValues)->contains(fn($value): bool => $value === true || is_array($value));
+
+        return array_map(intval(...), $isKeyedById ? array_keys($selectedValues) : array_values($selectedValues));
     }
 
     //

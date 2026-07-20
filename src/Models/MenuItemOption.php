@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property int $priority
  * @property int $min_selected
  * @property int $max_selected
+ * @property int $free_quantity
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read mixed $display_type
@@ -45,7 +46,7 @@ class MenuItemOption extends Model
      */
     protected $primaryKey = 'menu_option_id';
 
-    protected $fillable = ['option_id', 'menu_id', 'is_required', 'priority', 'min_selected', 'max_selected'];
+    protected $fillable = ['option_id', 'menu_id', 'is_required', 'priority', 'min_selected', 'max_selected', 'free_quantity'];
 
     protected $casts = [
         'menu_option_id' => 'integer',
@@ -55,6 +56,7 @@ class MenuItemOption extends Model
         'priority' => 'integer',
         'min_selected' => 'integer',
         'max_selected' => 'integer',
+        'free_quantity' => 'integer',
     ];
 
     public $relation = [
@@ -88,6 +90,7 @@ class MenuItemOption extends Model
         ['is_required', 'igniter.cart::default.menu_options.label_option_required', 'boolean'],
         ['min_selected', 'igniter.cart::default.menu_options.label_min_selected', 'integer|lte:max_selected'],
         ['max_selected', 'igniter.cart::default.menu_options.label_max_selected', 'integer|gte:min_selected'],
+        ['free_quantity', 'igniter.cart::default.menu_options.label_free_quantity', 'nullable|integer|min:0'],
     ];
 
     protected $purgeable = ['menu_option_values', 'linked_option_value_ids'];
@@ -108,6 +111,8 @@ class MenuItemOption extends Model
 
     public function getOptionValuesAttribute()
     {
+        $this->menu_option_values->each(fn(MenuItemOptionValue $value) => $value->setRelation('menu_option', $this));
+
         return $this->option->option_values->map(function($optionValue) {
             $menuOptionValue = $this->menu_option_values->firstWhere('option_value_id', $optionValue->getKey());
 
@@ -118,6 +123,8 @@ class MenuItemOption extends Model
             $optionValue->override_price = $menuOptionValue?->override_price;
             $optionValue->is_default = $menuOptionValue?->is_default;
             $optionValue->is_enabled = !is_null($menuOptionValue);
+            $optionValue->free_quantity = $menuOptionValue->free_quantity ?? 0;
+            $optionValue->display_type = $this->display_type;
 
             return $optionValue;
         });
@@ -176,6 +183,19 @@ class MenuItemOption extends Model
             'min_selected.max' => lang('igniter.cart::default.menu_options.error_min_selected_not_applicable'),
             'max_selected.max' => lang('igniter.cart::default.menu_options.error_max_selected_not_applicable'),
         ];
+    }
+
+    /**
+     * Free quantities are not applicable to single-select (radio/select)
+     * option groups, regardless of what is stored.
+     */
+    public function getFreeQuantityAttribute($value): int
+    {
+        if (in_array($this->display_type, ['select', 'radio'])) {
+            return 0;
+        }
+
+        return (int) $value;
     }
 
     public function getLinkedOptionValueIdsAttribute(): array

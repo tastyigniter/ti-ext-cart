@@ -13,6 +13,9 @@ $config['form']['fields'] = [
     'priority' => [
         'type' => 'hidden',
     ],
+    'display_type' => [
+        'type' => 'hidden',
+    ],
     'name' => [
         'label' => 'lang:igniter.cart::default.menu_options.label_option_name',
         'type' => 'text',
@@ -31,6 +34,16 @@ $config['form']['fields'] = [
         'label' => 'lang:igniter.cart::default.menu_options.label_option_default_value',
         'type' => 'checkbox',
         'options' => [],
+    ],
+    'free_quantity' => [
+        'label' => 'lang:igniter.cart::default.menu_options.label_value_free_quantity',
+        'type' => 'number',
+        'comment' => 'lang:igniter.cart::default.menu_options.help_value_free_quantity',
+        'trigger' => [
+            'action' => 'disable|empty',
+            'field' => 'display_type',
+            'condition' => 'value[radio][select]',
+        ],
     ],
     'is_enabled' => [
         'label' => 'lang:igniter.cart::default.menu_options.label_option_enabled',

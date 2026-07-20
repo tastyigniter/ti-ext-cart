@@ -404,7 +404,7 @@ class Order extends Model
                         .'&nbsp;'.lang('igniter::admin.text_times').'&nbsp;'
                         .$menuItemOption->order_option_name
                         .lang('igniter::admin.text_equals')
-                        .currency_format($menuItemOption->quantity * $menuItemOption->order_option_price);
+                        .currency_format(max(0, $menuItemOption->quantity - $menuItemOption->free_qty) * $menuItemOption->order_option_price);
                 }
             }
 
