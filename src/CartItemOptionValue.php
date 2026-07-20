@@ -116,7 +116,7 @@ class CartItemOptionValue implements Arrayable, Jsonable
         $this->name = array_get($attributes, 'name', $this->name);
         $this->price = array_get($attributes, 'price', $this->price);
         $this->qty = array_get($attributes, 'qty', $this->qty);
-$this->setFreeQty((int)array_get($attributes, 'free_qty', $this->free_qty));
+        $this->setFreeQty((int)array_get($attributes, 'free_qty', $this->free_qty));
     }
 
     /**
@@ -131,7 +131,7 @@ $this->setFreeQty((int)array_get($attributes, 'free_qty', $this->free_qty));
         );
 
         $instance->qty = array_get($attributes, 'qty', $instance->qty);
-$instance->setFreeQty((int)array_get($attributes, 'free_qty', $instance->free_qty));
+        $instance->setFreeQty((int)array_get($attributes, 'free_qty', $instance->free_qty));
 
         return $instance;
     }

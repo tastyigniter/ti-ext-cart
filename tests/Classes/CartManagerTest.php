@@ -151,7 +151,9 @@ it('allocates free quantity to checkbox option values honoring group cap and sel
 
     expect($values->get($exemptOption->getKey())->free_qty)->toBe(0)
         ->and($values->get($optionA->getKey())->free_qty)->toBe(1)
-        ->and($values->get($optionB->getKey())->free_qty)->toBe(0);
+        ->and($values->get($optionB->getKey())->free_qty)->toBe(0)
+        ->and($values->get($optionA->getKey())->price)->toBe(0.0)
+        ->and($values->get($optionB->getKey())->price)->toBe(12.0);
 });
 
 it('never grants free units to an option value with a zero free_quantity budget', function(): void {
@@ -199,6 +201,7 @@ it('splits a quantity-type value between free and paid units when qty exceeds it
 
     expect($cartOptionValue->qty)->toBe(2)
         ->and($cartOptionValue->free_qty)->toBe(1)
+        ->and($cartOptionValue->price)->toBe(10.0)
         ->and($cartOptionValue->subtotal())->toBe(10.0);
 });
 

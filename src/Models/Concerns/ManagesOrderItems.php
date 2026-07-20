@@ -138,14 +138,17 @@ trait ManagesOrderItems
     {
         foreach ($menuOptions as $menuOption) {
             foreach ($menuOption->values as $menuOptionValue) {
+                $freeQty = $menuOptionValue->free_qty ?? 0;
+                $chargeableQty = max(0, $menuOptionValue->qty - $freeQty);
+
                 $this->menu_options()->create([
                     'order_menu_id' => $orderMenuId,
                     'menu_option_id' => $menuOption->id,
                     'menu_option_value_id' => $menuOptionValue->id,
                     'order_option_name' => $menuOptionValue->name,
-                    'order_option_price' => $menuOptionValue->price,
+                    'order_option_price' => $chargeableQty > 0 ? $menuOptionValue->price : 0,
                     'quantity' => $menuOptionValue->qty,
-                    'free_qty' => $menuOptionValue->free_qty ?? 0,
+                    'free_qty' => $freeQty,
                 ]);
             }
         }

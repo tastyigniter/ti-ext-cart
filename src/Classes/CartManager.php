@@ -287,12 +287,14 @@ class CartManager
                     return;
                 }
 
+                $freeQty = $freeQtyMap[$optionValue->getKey()] ?? 0;
+
                 return [
                     'id' => $optionValue->menu_option_value_id,
                     'qty' => $qty,
                     'name' => $optionValue->name,
-                    'price' => $optionValue->price,
-                    'free_qty' => $freeQtyMap[$optionValue->getKey()] ?? 0,
+                    'price' => $freeQty >= $qty ? 0 : $optionValue->price,
+                    'free_qty' => $freeQty,
                 ];
             })->filter();
     }
@@ -342,7 +344,7 @@ class CartManager
     protected function selectedValueIdsInOrder(array $selectedValues): array
     {
         $ids = array_column($selectedValues, 'id');
-        if ($ids) {
+        if ($ids !== []) {
             return array_map(intval(...), $ids);
         }
 

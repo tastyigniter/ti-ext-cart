@@ -18,6 +18,13 @@ use Igniter\Flame\Database\Traits\Validation;
  * @property string $name
  * @property float|null $price
  * @property int $priority
+ * @property int|null $menu_option_value_id
+ * @property int|null $menu_option_id
+ * @property float|null $override_price
+ * @property bool|null $is_default
+ * @property bool|null $is_enabled
+ * @property int $free_quantity
+ * @property string|null $display_type
  * @property-read mixed $stock_qty
  * @mixin Model
  */
