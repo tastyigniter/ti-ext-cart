@@ -61,12 +61,6 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$option\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
 			message: '#^Call to an undefined method Igniter\\Local\\Models\\Location\:\:allowGuestOrder\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -256,12 +250,6 @@ parameters:
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$linkedOptionValues\.$#'
 			identifier: property.notFound
 			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$option\.$#'
-			identifier: property.notFound
-			count: 3
 			path: src/Models/MenuItemOption.php
 
 		-

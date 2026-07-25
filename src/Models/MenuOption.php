@@ -9,6 +9,7 @@ use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Purgeable;
 use Igniter\Local\Facades\Location;
 use Igniter\Local\Models\Concerns\Locationable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property int $priority
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, MenuOptionValue> $option_values
  * @mixin Model
  */
 class MenuOption extends Model

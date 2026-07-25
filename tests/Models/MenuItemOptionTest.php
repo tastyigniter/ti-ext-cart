@@ -130,6 +130,26 @@ it('validates min_selected and max_selected rules for select display type', func
         ->and($menuItemOption->getValidationMessages())->toHaveKeys(['min_selected.max', 'max_selected.max']);
 });
 
+it('exempts free_quantity for select and radio display types regardless of stored value', function(): void {
+    foreach (['select', 'radio'] as $displayType) {
+        $menuOption = MenuOption::factory()->create(['display_type' => $displayType]);
+        $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create(['free_quantity' => 5]);
+
+        expect($menuItemOption->free_quantity)->toBe(0)
+            ->and($menuItemOption->fresh()->free_quantity)->toBe(0)
+            ->and($menuItemOption->validate())->toBeTrue();
+    }
+});
+
+it('does not exempt free_quantity for checkbox or quantity display types', function(): void {
+    foreach (['checkbox', 'quantity'] as $displayType) {
+        $menuOption = MenuOption::factory()->create(['display_type' => $displayType]);
+        $menuItemOption = MenuItemOption::factory()->for($menuOption, 'option')->create(['free_quantity' => 5]);
+
+        expect($menuItemOption->free_quantity)->toBe(5);
+    }
+});
+
 it('returns linked option value ids from loaded relation', function(): void {
     $menu = Menu::factory()->create();
     $menuItemOption = MenuItemOption::factory()->for($menu, 'menu')->create();
@@ -209,7 +229,7 @@ it('configures menu item option model correctly', function(): void {
         ->and($menuItemOption->getTable())->toBe('menu_item_options')
         ->and($menuItemOption->getKeyName())->toBe('menu_option_id')
         ->and($menuItemOption->getFillable())->toEqual([
-            'option_id', 'menu_id', 'is_required', 'priority', 'min_selected', 'max_selected',
+            'option_id', 'menu_id', 'is_required', 'priority', 'min_selected', 'max_selected', 'free_quantity',
         ])
         ->and($menuItemOption->getAppends())->toEqual(['option_name', 'display_type', 'linked_option_value_ids'])
         ->and($menuItemOption->timestamps)->toBeTrue()
@@ -241,5 +261,6 @@ it('configures menu item option model correctly', function(): void {
             ['is_required', 'igniter.cart::default.menu_options.label_option_required', 'boolean'],
             ['min_selected', 'igniter.cart::default.menu_options.label_min_selected', 'integer|lte:max_selected'],
             ['max_selected', 'igniter.cart::default.menu_options.label_max_selected', 'integer|gte:min_selected'],
+            ['free_quantity', 'igniter.cart::default.menu_options.label_free_quantity', 'nullable|integer|min:0'],
         ]);
 });

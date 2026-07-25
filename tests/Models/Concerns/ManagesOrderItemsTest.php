@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Tests\Models\Concerns;
 
+use Igniter\Cart\CartItemOption;
+use Igniter\Cart\CartItemOptions;
+use Igniter\Cart\CartItemOptionValue;
+use Igniter\Cart\CartItemOptionValues;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
@@ -146,4 +150,76 @@ it('adds order totals correctly', function(): void {
     $order = $order->fresh();
     expect($order->totals()->count())->toBe(3)
         ->and($order->order_total)->toBe(11.00);
+});
+
+it('stores zero price for fully free order menu options', function(): void {
+    $order = Order::factory()->create();
+    $menu = Menu::factory()->create();
+
+    $order->addOrderMenus([
+        (object)[
+            'id' => $menu->getKey(),
+            'name' => $menu->menu_name,
+            'qty' => 1,
+            'price' => $menu->menu_price,
+            'subtotal' => $menu->menu_price,
+            'comment' => '',
+            'options' => CartItemOptions::make([
+                CartItemOption::fromArray([
+                    'id' => 1,
+                    'name' => 'Toppings',
+                    'values' => CartItemOptionValues::make([
+                        CartItemOptionValue::fromArray([
+                            'id' => 1,
+                            'name' => 'Cheese',
+                            'price' => 10,
+                            'qty' => 1,
+                            'free_qty' => 1,
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ],
+    ]);
+
+    $storedOption = $order->fresh()->menu_options->first();
+
+    expect($storedOption->order_option_price)->toBe(0.0)
+        ->and($storedOption->free_qty)->toBe(1);
+});
+
+it('stores unit price for partially free order menu options', function(): void {
+    $order = Order::factory()->create();
+    $menu = Menu::factory()->create();
+
+    $order->addOrderMenus([
+        (object)[
+            'id' => $menu->getKey(),
+            'name' => $menu->menu_name,
+            'qty' => 1,
+            'price' => $menu->menu_price,
+            'subtotal' => $menu->menu_price,
+            'comment' => '',
+            'options' => CartItemOptions::make([
+                CartItemOption::fromArray([
+                    'id' => 1,
+                    'name' => 'Toppings',
+                    'values' => CartItemOptionValues::make([
+                        CartItemOptionValue::fromArray([
+                            'id' => 1,
+                            'name' => 'Cheese',
+                            'price' => 10,
+                            'qty' => 2,
+                            'free_qty' => 1,
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ],
+    ]);
+
+    $storedOption = $order->fresh()->menu_options->first();
+
+    expect($storedOption->order_option_price)->toBe(10.0)
+        ->and($storedOption->free_qty)->toBe(1);
 });

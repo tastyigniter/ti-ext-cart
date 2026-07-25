@@ -125,6 +125,86 @@ it('adds cart item when menu option display type is select', function(): void {
         ->and($item->options->first()->values->first())->name->toBe($menuOptionValue->name);
 });
 
+it('allocates free quantity to checkbox option values honoring group cap and selection order', function(): void {
+    $menu = Menu::factory()->create();
+    $option = MenuOption::factory()->create(['display_type' => 'checkbox']);
+    $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey(), 'free_quantity' => 1]);
+
+    $exemptValue = MenuOptionValue::factory()->create(['price' => 5]);
+    $valueA = MenuOptionValue::factory()->create(['price' => 8]);
+    $valueB = MenuOptionValue::factory()->create(['price' => 12]);
+
+    $exemptOption = $menuOption->menu_option_values()->create(['option_value_id' => $exemptValue->getKey()]);
+    $optionA = $menuOption->menu_option_values()->create(['option_value_id' => $valueA->getKey(), 'free_quantity' => 1]);
+    $optionB = $menuOption->menu_option_values()->create(['option_value_id' => $valueB->getKey(), 'free_quantity' => 1]);
+
+    $item = $this->manager->addCartItem($menu->getKey(), [
+        'quantity' => 1,
+        'menu_options' => [
+            $menuOption->getKey() => [
+                'option_values' => [$exemptOption->getKey(), $optionA->getKey(), $optionB->getKey()],
+            ],
+        ],
+    ]);
+
+    $values = $item->options->first()->values->keyBy('id');
+
+    expect($values->get($exemptOption->getKey())->free_qty)->toBe(0)
+        ->and($values->get($optionA->getKey())->free_qty)->toBe(1)
+        ->and($values->get($optionB->getKey())->free_qty)->toBe(0)
+        ->and($values->get($optionA->getKey())->price)->toBe(0.0)
+        ->and($values->get($optionB->getKey())->price)->toBe(12.0);
+});
+
+it('never grants free units to an option value with a zero free_quantity budget', function(): void {
+    $menu = Menu::factory()->create();
+    $option = MenuOption::factory()->create(['display_type' => 'checkbox']);
+    $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
+    $optionValue = MenuOptionValue::factory()->create(['price' => 5]);
+    $menuOptionValue = $menuOption->menu_option_values()->create(['option_value_id' => $optionValue->getKey()]);
+
+    $item = $this->manager->addCartItem($menu->getKey(), [
+        'quantity' => 1,
+        'menu_options' => [
+            $menuOption->getKey() => ['option_values' => [$menuOptionValue->getKey()]],
+        ],
+    ]);
+
+    $cartOptionValue = $item->options->first()->values->first();
+
+    expect($cartOptionValue->free_qty)->toBe(0)
+        ->and($cartOptionValue->subtotal())->toBe(5.0);
+});
+
+it('splits a quantity-type value between free and paid units when qty exceeds its free_quantity budget', function(): void {
+    $menu = Menu::factory()->create();
+    $option = MenuOption::factory()->create(['display_type' => 'quantity']);
+    $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
+    $optionValue = MenuOptionValue::factory()->create(['price' => 10]);
+    $menuOptionValue = $menuOption->menu_option_values()->create([
+        'option_value_id' => $optionValue->getKey(),
+        'free_quantity' => 1,
+    ]);
+
+    $item = $this->manager->addCartItem($menu->getKey(), [
+        'quantity' => 1,
+        'menu_options' => [
+            $menuOption->getKey() => [
+                'option_values' => [
+                    $menuOptionValue->getKey() => ['qty' => 2],
+                ],
+            ],
+        ],
+    ]);
+
+    $cartOptionValue = $item->options->first()->values->first();
+
+    expect($cartOptionValue->qty)->toBe(2)
+        ->and($cartOptionValue->free_qty)->toBe(1)
+        ->and($cartOptionValue->price)->toBe(10.0)
+        ->and($cartOptionValue->subtotal())->toBe(10.0);
+});
+
 it('does not add menu item option with zero quantity', function(): void {
     $menu = Menu::factory()->create();
     $option = MenuOption::firstWhere('display_type', 'checkbox');
