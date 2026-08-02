@@ -107,6 +107,13 @@ abstract class CartCondition implements Arrayable, Jsonable
     public function apply($subTotal)
     {
         if ($this->beforeApply() === false) {
+            // Reset state a previous apply pass may have left behind, so
+            // isValid()/getValue() no longer report this condition as applied
+            // once it stops applying — e.g. the delivery condition after the
+            // customer switches the order type from delivery to pickup.
+            $this->passed = false;
+            $this->calculatedValue = 0;
+
             return $subTotal;
         }
 

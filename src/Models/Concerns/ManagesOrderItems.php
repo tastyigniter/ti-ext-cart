@@ -166,6 +166,21 @@ trait ManagesOrderItems
         $this->calculateTotals();
     }
 
+    /**
+     * Replace the order's totals with the given set: upserts every given
+     * total and deletes rows whose code the set no longer contains.
+     * addOrderTotals() alone never deletes, so a row persisted by an earlier
+     * checkout pass — e.g. a `delivery` row written while the session order
+     * type was still delivery, before the customer switched to pickup —
+     * would survive and be re-summed into order_total by calculateTotals().
+     */
+    public function syncOrderTotals(array $totals = []): void
+    {
+        $this->totals()->whereNotIn('code', array_column($totals, 'code'))->delete();
+
+        $this->addOrderTotals($totals);
+    }
+
     public function addOrUpdateOrderTotal(array $total)
     {
         return $this->totals()->updateOrCreate([
