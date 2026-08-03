@@ -107,6 +107,9 @@ abstract class CartCondition implements Arrayable, Jsonable
     public function apply($subTotal)
     {
         if ($this->beforeApply() === false) {
+            $this->passed = false;
+            $this->calculatedValue = 0;
+
             return $subTotal;
         }
 
