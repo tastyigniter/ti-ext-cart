@@ -34,7 +34,7 @@ class MenuRequest extends FormRequest
         return [
             'menu_name' => ['required', 'string', 'between:2,255'],
             'menu_description' => ['nullable', 'string', 'between:2,1028'],
-            'menu_price' => ['required', 'numeric', 'min:0'],
+            'menu_price' => ['required', 'currency', 'min:0'],
             'categories' => ['nullable', 'array'],
             'categories.*' => ['sometimes', 'required', 'integer'],
             'ingredients' => ['nullable', 'array'],
@@ -53,7 +53,7 @@ class MenuRequest extends FormRequest
             'menu_options.*.priority' => ['integer'],
             'special.special_id' => ['nullable', 'integer'],
             'special.type' => ['string', 'in:F,P'],
-            'special.special_price' => ['nullable', 'numeric', 'min:0'],
+            'special.special_price' => ['nullable', 'currency', 'min:0'],
             'special.validity' => ['string', 'in:forever,period,recurring'],
             'special.start_date' => ['required_if:special.validity,period', 'nullable', 'date'],
             'special.end_date' => ['required_if:special.validity,period', 'nullable', 'date'],

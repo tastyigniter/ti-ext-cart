@@ -73,7 +73,7 @@ class MenuOptionValue extends Model
     public $rules = [
         ['option_id', 'igniter.cart::default.menu_options.label_option_id', 'required|integer'],
         ['name', 'igniter.cart::default.menu_options.label_option_name', 'required|string|min:2|max:255'],
-        ['price', 'igniter.cart::default.menu_options.label_option_price', 'required|numeric|min:0'],
+        ['price', 'igniter.cart::default.menu_options.label_option_price', 'required|currency|min:0'],
         ['ingredients.*', 'igniter.cart::default.menus.label_ingredients', 'integer'],
     ];
 
