@@ -91,7 +91,7 @@ class OrderManager
             DB::transaction(function() use ($order): void {
                 $order->save();
                 $order->addOrderMenus($this->cart->content()->all());
-                $order->addOrderTotals($this->getCartTotals());
+                $order->syncOrderTotals($this->getCartTotals());
             }, 3);
 
             $this->setCurrentOrderId($order->order_id);
@@ -229,7 +229,7 @@ class OrderManager
 
             $order->saveQuietly();
             $order->addOrderMenus($this->cart->content()->all());
-            $order->addOrderTotals($this->getCartTotals());
+            $order->syncOrderTotals($this->getCartTotals());
         }, 3);
 
         Event::dispatch('igniter.checkout.afterSaveOrder', [$order]);
