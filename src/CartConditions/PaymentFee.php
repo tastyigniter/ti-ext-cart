@@ -32,7 +32,7 @@ class PaymentFee extends CartCondition
             return false;
         }
 
-        if (is_null($this->paymentModel)) {
+        if (is_null($this->paymentModel) || $this->paymentModel->code !== $paymentCode) {
             $this->paymentModel = Payment::whereCode($paymentCode)->first();
         }
 

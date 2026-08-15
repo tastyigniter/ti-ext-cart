@@ -286,12 +286,13 @@ class OrderManager
 
         $order->total_items = $this->cart->count();
         $order->cart = $this->cart->content();
-        $order->order_total = $this->cart->total();
 
         $paymentCode = $this->getCurrentPaymentCode();
-        $order->payment = $order->order_total > 0 ? $paymentCode : '';
+        $order->payment = $this->cart->total() > 0 ? $paymentCode : '';
 
         $this->applyCurrentPaymentFee($order->payment);
+
+        $order->order_total = $this->cart->total();
 
         $order->ip_address = Request::getClientIp();
     }
