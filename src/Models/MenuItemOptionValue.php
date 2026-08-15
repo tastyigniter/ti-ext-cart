@@ -71,7 +71,7 @@ class MenuItemOptionValue extends Model
     public $rules = [
         ['menu_option_id', 'igniter.cart::default.menu_options.label_option_value_id', 'required|integer'],
         ['option_value_id', 'igniter.cart::default.menu_options.label_option_value', 'required|integer'],
-        ['override_price', 'igniter.cart::default.menu_options.label_option_price', 'nullable|numeric|min:0'],
+        ['override_price', 'igniter.cart::default.menu_options.label_option_price', 'nullable|currency|min:0'],
         ['free_quantity', 'igniter.cart::default.menu_options.label_value_free_quantity', 'integer|min:0'],
     ];
 

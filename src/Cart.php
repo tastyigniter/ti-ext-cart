@@ -444,7 +444,7 @@ class Cart
     protected function getContent(): CartContent
     {
         if (!$content = $this->getSession('content')) {
-            $content = new CartContent;
+            return new CartContent;
         }
 
         return $content;

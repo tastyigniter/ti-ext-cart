@@ -270,12 +270,10 @@ class OrderManager
         }
 
         if (array_get($data, 'pay_from_profile') == 1) {
-            $result = $paymentMethod->payFromPaymentProfile($order, $data);
-        } else {
-            $result = $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
+            return $paymentMethod->payFromPaymentProfile($order, $data);
         }
 
-        return $result;
+        return $paymentMethod->processPaymentForm($data, $paymentMethod, $order);
     }
 
     public function applyRequiredAttributes($order): void
