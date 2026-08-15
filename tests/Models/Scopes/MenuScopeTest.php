@@ -91,6 +91,20 @@ it('applies category filter with category id correctly', function(): void {
     $applyCategory($this->builder, $categoryId);
 });
 
+it('applies category filter with category ids correctly', function(): void {
+    $categoryIds = [1, 2];
+    $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categoryIds): true {
+        $query = Mockery::mock(Builder::class);
+        $query->shouldReceive('whereIn')->with('categories.category_id', $categoryIds)->once();
+        $callback($query);
+
+        return true;
+    }))->once()->andReturnSelf();
+
+    $applyCategory = $this->scope->addWhereHasCategory();
+    $applyCategory($this->builder, $categoryIds);
+});
+
 it('applies category filter with category slug correctly', function(): void {
     $categorySlug = 'permalink-slug';
     $this->builder->shouldReceive('whereHas')->with('categories', Mockery::on(function($callback) use ($categorySlug): true {
