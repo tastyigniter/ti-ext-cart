@@ -47,6 +47,8 @@ class MenuScope extends Scope
         return fn(Builder $builder, $categoryId) => $builder->whereHas('categories', function(Builder $q) use ($categoryId): void {
             if (is_numeric($categoryId)) {
                 $q->where('categories.category_id', $categoryId);
+            } elseif (is_array($categoryId)) {
+                $q->whereIn('categories.category_id', $categoryId);
             } else {
                 $q->whereSlug($categoryId);
             }
