@@ -35,7 +35,7 @@ class CollectionSettingsRequest extends FormRequest
             'lead_time' => ['integer', 'min:5'],
             'time_restriction' => ['nullable', 'integer', 'max:2'],
             'cancellation_timeout' => ['integer', 'min:0', 'max:999'],
-            'min_order_amount' => ['numeric', 'min:0'],
+            'min_order_amount' => ['currency', 'min:0'],
             'future_orders.is_enabled' => ['boolean'],
             'future_orders.min_days' => ['integer', 'min:0'],
             'future_orders.days' => ['integer', 'min:0', 'gt:future_orders.min_days'],

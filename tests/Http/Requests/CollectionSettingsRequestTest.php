@@ -47,5 +47,5 @@ it('returns correct validation rules', function(): void {
         ->and($rules['time_restriction'])->toContain('nullable', 'integer', 'max:2')
         ->and($rules['add_lead_time'])->toContain('boolean')
         ->and($rules['cancellation_timeout'])->toContain('integer', 'min:0', 'max:999')
-        ->and($rules['min_order_amount'])->toContain('numeric', 'min:0');
+        ->and($rules['min_order_amount'])->toContain('currency', 'min:0');
 });

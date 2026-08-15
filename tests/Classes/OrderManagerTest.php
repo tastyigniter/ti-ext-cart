@@ -394,6 +394,50 @@ it('gets cart totals', function(): void {
         ->toHaveKeys(['tip', 'subtotal', 'total']);
 });
 
+it('removes stale totals rows when the order is saved after a condition stops applying', function(): void {
+    $menu = Menu::factory()->create(['menu_price' => 10]);
+
+    $cartManager = resolve(CartManager::class);
+    $cartManager->addCartItem($menu->getKey());
+
+    $condition = new class(['name' => 'test-delivery', 'label' => 'Test Delivery']) extends CartCondition
+    {
+        public static bool $applies = true;
+
+        public function beforeApply(): ?bool
+        {
+            return self::$applies ? null : false;
+        }
+
+        public function getActions(): array
+        {
+            return [['value' => '+2.50']];
+        }
+    };
+    $cartManager->getCart()->loadCondition($condition);
+
+    // First checkout pass (rendering the checkout page) creates the order
+    // and persists the condition's totals row.
+    $order = $this->manager->loadOrder();
+
+    expect($order->totals()->where('code', 'test-delivery')->exists())->toBeTrue()
+        ->and($order->fresh()->order_total)->toBe(12.50);
+
+    // The condition stops applying (e.g. the customer switches the order
+    // type from delivery to pickup), then the order is placed: the stale
+    // row must not survive, nor be summed into the order total.
+    $condition::$applies = false;
+
+    $this->manager->saveOrder($order, [
+        'first_name' => 'Test',
+        'last_name' => 'User',
+        'email' => 'test@example.com',
+    ]);
+
+    expect($order->totals()->where('code', 'test-delivery')->exists())->toBeFalse()
+        ->and($order->fresh()->order_total)->toBe(10.00);
+});
+
 it('applies payment fee cart condition', function(): void {
     $menu = Menu::factory()->create();
 

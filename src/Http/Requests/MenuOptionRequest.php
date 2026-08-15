@@ -34,6 +34,7 @@ class MenuOptionRequest extends FormRequest
             'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
             'values' => ['required', 'array'],
+            'values.*.price' => ['nullable', 'currency'],
         ];
     }
 }

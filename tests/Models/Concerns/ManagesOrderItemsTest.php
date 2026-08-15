@@ -152,6 +152,34 @@ it('adds order totals correctly', function(): void {
         ->and($order->order_total)->toBe(11.00);
 });
 
+it('syncs order totals removing rows absent from the given set', function(): void {
+    $order = Order::factory()->create();
+    OrderMenu::create([
+        'order_id' => $order->getKey(),
+        'quantity' => 1,
+        'price' => 10,
+        'subtotal' => 10,
+    ]);
+
+    $order->addOrUpdateOrderTotal([
+        'code' => 'tip',
+        'title' => 'Tip',
+        'value' => 2.50,
+        'is_summable' => true,
+    ]);
+
+    $order->addOrderTotals([
+        ['code' => 'delivery', 'title' => 'Delivery', 'value' => 2.50, 'is_summable' => true],
+        ['code' => 'subtotal', 'title' => 'Subtotal', 'value' => 10.00],
+        ['code' => 'total', 'title' => 'Total', 'value' => 12.50],
+    ]);
+
+    $order = $order->fresh();
+    expect($order->totals()->where('code', 'tip')->exists())->toBeFalse()
+        ->and($order->totals()->count())->toBe(3)
+        ->and($order->order_total)->toBe(12.50);
+});
+
 it('stores zero price for fully free order menu options', function(): void {
     $order = Order::factory()->create();
     $menu = Menu::factory()->create();

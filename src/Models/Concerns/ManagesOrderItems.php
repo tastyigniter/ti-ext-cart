@@ -159,9 +159,13 @@ trait ManagesOrderItems
      */
     public function addOrderTotals(array $totals = []): void
     {
+        $idsToKeep = [];
         foreach ($totals as $total) {
-            $this->addOrUpdateOrderTotal($total);
+            $orderTotal = $this->addOrUpdateOrderTotal($total);
+            $idsToKeep[] = $orderTotal->getKey();
         }
+
+        $this->totals()->whereNotIn('order_total_id', $idsToKeep)->delete();
 
         $this->calculateTotals();
     }

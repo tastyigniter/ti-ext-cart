@@ -26,7 +26,7 @@ it('returns correct validation rules', function(): void {
 
     $rules = $request->rules();
 
-    expect($rules)->toHaveCount(8)
+    expect($rules)->toHaveCount(9)
         ->and($rules)->toHaveKey('option_name')
         ->and($rules)->toHaveKey('display_type')
         ->and($rules)->toHaveKey('is_required')
@@ -35,6 +35,7 @@ it('returns correct validation rules', function(): void {
         ->and($rules)->toHaveKey('locations')
         ->and($rules)->toHaveKey('locations.*')
         ->and($rules)->toHaveKey('values')
+        ->and($rules)->toHaveKey('values.*.price')
         ->and($rules['option_name'])->toContain('required', 'string', 'min:2', 'max:32')
         ->and($rules['display_type'])->toContain('required', 'alpha')
         ->and($rules['is_required'])->toContain('boolean')
@@ -42,5 +43,6 @@ it('returns correct validation rules', function(): void {
         ->and($rules['max_selected'])->toContain('integer', 'gte:min_selected')
         ->and($rules['locations'])->toContain('nullable', 'array')
         ->and($rules['locations.*'])->toContain('integer')
-        ->and($rules['values'])->toContain('required', 'array');
+        ->and($rules['values'])->toContain('required', 'array')
+        ->and($rules['values.*.price'])->toContain('nullable', 'currency');
 });

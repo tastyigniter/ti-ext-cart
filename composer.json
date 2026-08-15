@@ -16,7 +16,7 @@
         "ordering"
     ],
     "require": {
-        "tastyigniter/core": "^v4.0",
+        "tastyigniter/core": "^v4.4",
         "tastyigniter/ti-ext-automation": "^v4.0",
         "tastyigniter/ti-ext-coupons": "^v4.0",
         "tastyigniter/ti-ext-local": "^v4.0",

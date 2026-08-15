@@ -109,3 +109,32 @@ it('throws exception when parse action fails', function(): void {
 
     expect(fn(): int|float => $traitObject->testProcessValue(20))->toThrow(InvalidArgumentException::class);
 });
+
+it('resets applied state when beforeApply fails on a later pass', function(): void {
+    $condition = new class extends CartCondition
+    {
+        public static bool $applies = true;
+
+        public function beforeApply(): ?bool
+        {
+            return self::$applies ? null : false;
+        }
+
+        public function getActions(): array
+        {
+            return [['value' => '+2.50']];
+        }
+    };
+
+    expect($condition->apply(10))->toBe(12.5)
+        ->and($condition->isValid())->toBeTrue()
+        ->and($condition->getValue())->toBe(2.5);
+
+    // The condition stops applying, e.g. the delivery condition after the
+    // customer switches the order type from delivery to pickup.
+    $condition::$applies = false;
+
+    expect($condition->apply(10))->toBe(10)
+        ->and($condition->isValid())->toBeFalse()
+        ->and($condition->getValue())->toBe(0);
+});
