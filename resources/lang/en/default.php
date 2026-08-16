@@ -326,6 +326,7 @@ return [
         'text_deliver_to' => 'Deliver to',
         'text_asap' => 'ASAP',
         'text_invoice_thank_you' => 'Thank you for your order',
+        'text_deleted_option' => 'Deleted option',
         'text_collection_order_type' => 'This is a pick-up order',
         'text_unassigned' => 'Yet to be Assigned',
         'text_assigned_to_self' => 'Assigned To Me',
