@@ -128,7 +128,14 @@ class CartManager
             $menuItem = $cartItem->model;
         }
 
-        throw_unless($menuItem, new ApplicationException(lang('igniter.cart::default.alert_menu_not_found')));
+        if (!$menuItem) {
+            $menuName = $cartItem?->name ?? (is_numeric($menuId) ? Menu::find($menuId)?->getBuyableName() : null);
+
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                $menuName ?? (string)$menuId,
+            ));
+        }
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
