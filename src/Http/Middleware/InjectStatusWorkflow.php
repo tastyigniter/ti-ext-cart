@@ -43,7 +43,7 @@ class InjectStatusWorkflow
         return $enableWorkflow
             && $request->isMethod('GET')
             && $request->route()?->getController() instanceof AdminController
-            && (!$limitUsers || in_array(AdminAuth::getUser()->getKey(), $limitUsers));
+            && (!$limitUsers || in_array(AdminAuth::getUser()?->getKey(), $limitUsers));
     }
 
     protected function renderOrderWorkflowView(): string
