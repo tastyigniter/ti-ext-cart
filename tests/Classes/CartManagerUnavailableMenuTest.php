@@ -37,6 +37,20 @@ beforeEach(function(): void {
     $this->manager = new CartManager;
 });
 
+it('includes the menu name when adding an item that has become unavailable', function(): void {
+    $menu = Menu::factory()->create();
+    $menuName = $menu->getBuyableName();
+
+    $menu->update(['menu_status' => 0]);
+    $this->manager = new CartManager;
+
+    expect(fn() => $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]))
+        ->toThrow(ApplicationException::class, sprintf(
+            lang('igniter.cart::default.alert_menu_not_found'),
+            $menuName,
+        ));
+});
+
 it('removes an unavailable menu item when its quantity is updated', function(): void {
     $menu = Menu::factory()->create();
     $item = $this->manager->addCartItem($menu->getKey(), ['quantity' => 1]);
