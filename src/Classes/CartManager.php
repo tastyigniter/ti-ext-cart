@@ -607,8 +607,9 @@ class CartManager
         foreach ($optionValues as $optionKey => $cartOption) {
             $cartOption = (array)$cartOption;
             $cartOptionId = $cartOption['id'] ?? (is_numeric($optionKey) ? (int)$optionKey : null);
+            $menuOption = $cartOptionId ? $menuOptions->get($cartOptionId) : null;
 
-            if (!$cartOptionId || !$menuOption = $menuOptions->get($cartOptionId)) {
+            if (!$menuOption) {
                 $notes[] = sprintf(
                     lang('igniter.cart::default.alert_option_value_not_found'),
                     $cartOption['name'] ?? lang('igniter.cart::default.orders.text_deleted_option'),
@@ -626,8 +627,6 @@ class CartManager
                     ->map(function($cartOptionValue, $optionValueKey): array {
                         if ($cartOptionValue instanceof Arrayable) {
                             $cartOptionValue = $cartOptionValue->toArray();
-                        } elseif (is_object($cartOptionValue)) {
-                            $cartOptionValue = (array)$cartOptionValue;
                         } else {
                             $cartOptionValue = (array)$cartOptionValue;
                         }
