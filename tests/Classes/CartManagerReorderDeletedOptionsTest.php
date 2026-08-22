@@ -164,3 +164,43 @@ it('reports a deleted option value while restoring values that are still availab
         ->and($restoredValues)->toHaveCount(1)
         ->and($restoredValues->first()->id)->toBe($availableMenuOptionValue->getKey());
 });
+
+it('restores legacy keyed option data without explicit ids', function(): void {
+    $menu = Menu::factory()->create();
+    $option = MenuOption::factory()->create(['display_type' => 'checkbox']);
+    $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
+    $optionValue = MenuOptionValue::factory()->create();
+    $menuOptionValue = $menuOption->menu_option_values()->create([
+        'option_value_id' => $optionValue->getKey(),
+    ]);
+
+    $order = Order::factory()->create();
+    $order->menus()->create([
+        'menu_id' => $menu->getKey(),
+        'name' => $menu->menu_name,
+        'quantity' => 1,
+        'price' => $menu->menu_price,
+        'subtotal' => $menu->menu_price,
+        'comment' => '',
+        'option_values' => [
+            $menuOption->getKey() => [
+                'name' => $menuOption->option_name,
+                'values' => [
+                    $menuOptionValue->getKey() => [
+                        'name' => $menuOptionValue->name,
+                        'price' => 0,
+                        'qty' => 1,
+                    ],
+                ],
+            ],
+        ],
+    ]);
+
+    $notes = $this->manager->restoreWithOrderMenus($order->getOrderMenus());
+    $restoredItem = $this->manager->getCart()->content()->first();
+
+    expect($notes)->toBe([])
+        ->and($restoredItem->options)->toHaveCount(1)
+        ->and($restoredItem->options->first()->id)->toBe($menuOption->getKey())
+        ->and($restoredItem->options->first()->values->first()->id)->toBe($menuOptionValue->getKey());
+});
