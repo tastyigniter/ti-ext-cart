@@ -56,3 +56,46 @@ it('uses the stored historical option group name when the current option relatio
         ->toHaveKey('Historical sauce choice')
         ->not->toHaveKey('');
 });
+
+it('uses a legacy keyed historical option group name when the current relation is deleted', function(): void {
+    $order = Order::factory()->create();
+    $menu = Menu::factory()->create();
+    $option = MenuOption::factory()->create(['display_type' => 'checkbox']);
+    $menuOption = $menu->menu_options()->create(['option_id' => $option->getKey()]);
+    $optionValue = MenuOptionValue::factory()->create();
+    $menuOptionValue = $menuOption->menu_option_values()->create([
+        'option_value_id' => $optionValue->getKey(),
+    ]);
+
+    $orderMenu = $order->menus()->create([
+        'menu_id' => $menu->getKey(),
+        'name' => $menu->menu_name,
+        'quantity' => 1,
+        'price' => $menu->menu_price,
+        'subtotal' => $menu->menu_price,
+        'option_values' => [
+            $menuOption->getKey() => [
+                'name' => 'Legacy sauce choice',
+                'values' => [],
+            ],
+        ],
+    ]);
+
+    $order->menu_options()->create([
+        'order_menu_id' => $orderMenu->getKey(),
+        'menu_option_id' => $menuOption->getKey(),
+        'menu_option_value_id' => $menuOptionValue->getKey(),
+        'order_option_name' => 'Soy sauce',
+        'order_option_price' => 0,
+        'quantity' => 1,
+    ]);
+
+    $menuOption->delete();
+
+    $groupedOptions = $order->fresh()->getOrderMenusWithOptions()->first()->menu_options;
+
+    expect($groupedOptions)
+        ->toHaveKey('Legacy sauce choice')
+        ->not->toHaveKey('Deleted option')
+        ->not->toHaveKey('');
+});
