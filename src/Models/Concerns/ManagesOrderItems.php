@@ -71,16 +71,31 @@ trait ManagesOrderItems
     {
         $this->load('menus.menu_options.menu_option');
 
-        return collect($this->menus)->map(fn(OrderMenu $orderMenu): Arrayable =>
+        return collect($this->menus)->map(function(OrderMenu $orderMenu): Arrayable {
+            $historicalOptionNames = collect($orderMenu->option_values ?? [])
+                ->mapWithKeys(function($menuOption, $optionKey): array {
+                    $menuOptionId = data_get($menuOption, 'id')
+                        ?? (is_numeric($optionKey) ? (int)$optionKey : null);
+                    $menuOptionName = data_get($menuOption, 'name');
+
+                    return $menuOptionId && $menuOptionName
+                        ? [(string)$menuOptionId => $menuOptionName]
+                        : [];
+                });
+
             // Using an anonymous class to avoid setting grouped collection as a relation,
             // which would interfere with Eloquent's lazy loading
-            new class($orderMenu->toArray()) implements Arrayable
+            return new class($orderMenu->toArray(), $historicalOptionNames) implements Arrayable
             {
-                public function __construct(protected array $attributes)
+                public function __construct(protected array $attributes, Collection $historicalOptionNames)
                 {
                     $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
                         ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
-                        ->groupBy(fn(object $orderMenuOptionValue) => array_get($orderMenuOptionValue->menu_option ?? [], 'option_name'));
+                        ->groupBy(function(object $orderMenuOptionValue) use ($historicalOptionNames): string {
+                            return array_get($orderMenuOptionValue->menu_option ?? [], 'option_name')
+                                ?? $historicalOptionNames->get((string)($orderMenuOptionValue->menu_option_id ?? ''))
+                                ?? lang('igniter.cart::default.orders.text_deleted_option');
+                        });
                 }
 
                 public function toArray(): array
@@ -92,7 +107,8 @@ trait ManagesOrderItems
                 {
                     return $this->attributes[$name] ?? null;
                 }
-            });
+            };
+        });
     }
 
     /**
