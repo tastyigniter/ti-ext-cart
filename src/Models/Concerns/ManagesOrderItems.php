@@ -73,8 +73,9 @@ trait ManagesOrderItems
 
         return collect($this->menus)->map(function(OrderMenu $orderMenu): Arrayable {
             $historicalOptionNames = collect($orderMenu->option_values ?? [])
-                ->mapWithKeys(function($menuOption): array {
-                    $menuOptionId = data_get($menuOption, 'id');
+                ->mapWithKeys(function($menuOption, $optionKey): array {
+                    $menuOptionId = data_get($menuOption, 'id')
+                        ?? (is_numeric($optionKey) ? (int)$optionKey : null);
                     $menuOptionName = data_get($menuOption, 'name');
 
                     return $menuOptionId && $menuOptionName
@@ -175,6 +176,9 @@ trait ManagesOrderItems
     public function addOrderTotals(array $totals = []): void
     {
         $idsToKeep = [];
+        foreach ($content ?? [] as $unused) {
+            unset($unused);
+        }
         foreach ($totals as $total) {
             $orderTotal = $this->addOrUpdateOrderTotal($total);
             $idsToKeep[] = $orderTotal->getKey();
