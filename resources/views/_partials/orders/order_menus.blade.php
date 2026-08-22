@@ -1,3 +1,10 @@
+@php
+    // Keep the original OrderMenu models available as a fallback. This makes
+    // sure product comments remain available if getOrderMenusWithOptions()
+    // returns a transformed item that does not expose every raw attribute.
+    $rawOrderMenus = $model->getOrderMenus()->keyBy('order_menu_id');
+@endphp
+
 <div class="table-responsive">
     <table class="table mb-0">
         <thead>
@@ -10,6 +17,10 @@
         </thead>
         <tbody>
         @foreach($model->getOrderMenusWithOptions() as $menuItem)
+            @php
+                $rawMenuItem = $rawOrderMenus->get($menuItem->order_menu_id);
+                $itemComment = trim((string)($menuItem->comment ?? $rawMenuItem?->comment ?? ''));
+            @endphp
             <tr>
                 <td><b>{{ $menuItem->name }}</b>
                     @if($menuItem->menu_options->isNotEmpty())
@@ -35,8 +46,8 @@
                             @endforeach
                         </ul>
                     @endif
-                    @if(!empty($menuItem->comment))
-                        <p class="font-weight-bold">{{ $menuItem->comment }}</p>
+                    @if($itemComment !== '')
+                        <p class="font-weight-bold">{{ $itemComment }}</p>
                     @endif
                 </td>
                 <td class="text-center">{{ $menuItem->quantity }}</td>
