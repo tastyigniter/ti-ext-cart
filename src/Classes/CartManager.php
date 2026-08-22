@@ -604,9 +604,11 @@ class CartManager
         $options = [];
         $menuOptions = $menuModel->menu_options->keyBy('menu_option_id');
 
-        foreach ($optionValues as $cartOption) {
+        foreach ($optionValues as $optionKey => $cartOption) {
             $cartOption = (array)$cartOption;
-            if (!$menuOption = $menuOptions->get($cartOption['id'])) {
+            $cartOptionId = $cartOption['id'] ?? (is_numeric($optionKey) ? (int)$optionKey : null);
+
+            if (!$cartOptionId || !$menuOption = $menuOptions->get($cartOptionId)) {
                 $notes[] = sprintf(
                     lang('igniter.cart::default.alert_option_value_not_found'),
                     $cartOption['name'] ?? lang('igniter.cart::default.orders.text_deleted_option'),
@@ -620,19 +622,37 @@ class CartManager
                     ->pluck('menu_option_value_id')
                     ->all();
 
-                $cartOptionValues = $cartOption['values'];
+                $cartOptionValues = collect($cartOption['values'] ?? [])
+                    ->map(function($cartOptionValue, $optionValueKey): array {
+                        if ($cartOptionValue instanceof Arrayable) {
+                            $cartOptionValue = $cartOptionValue->toArray();
+                        } elseif (is_object($cartOptionValue)) {
+                            $cartOptionValue = (array)$cartOptionValue;
+                        } else {
+                            $cartOptionValue = (array)$cartOptionValue;
+                        }
+
+                        $cartOptionValue['id'] ??= is_numeric($optionValueKey) ? (int)$optionValueKey : null;
+
+                        return $cartOptionValue;
+                    })
+                    ->filter(fn(array $cartOptionValue): bool => is_numeric($cartOptionValue['id'] ?? null));
+
                 $cartOptionValues
-                    ->reject(fn($cartOptionValue) => in_array($cartOptionValue->id, $availableOptionValueIds))
-                    ->each(function($cartOptionValue) use (&$notes): void {
+                    ->reject(fn(array $cartOptionValue): bool => in_array($cartOptionValue['id'], $availableOptionValueIds))
+                    ->each(function(array $cartOptionValue) use (&$notes): void {
                         $notes[] = sprintf(
                             lang('igniter.cart::default.alert_option_value_not_found'),
-                            $cartOptionValue->name,
+                            $cartOptionValue['name'] ?? lang('igniter.cart::default.orders.text_deleted_option'),
                         );
                     });
 
+                $cartOption['id'] = $cartOptionId;
+                $cartOption['name'] ??= $menuOption->option_name;
                 $cartOption['values'] = $cartOptionValues
-                    ->filter(fn($cartOptionValue) => in_array($cartOptionValue->id, $availableOptionValueIds))
-                    ->toArray();
+                    ->filter(fn(array $cartOptionValue): bool => in_array($cartOptionValue['id'], $availableOptionValueIds))
+                    ->values()
+                    ->all();
 
                 $this->validateMenuItemOption($menuOption, $cartOption['values']);
 
