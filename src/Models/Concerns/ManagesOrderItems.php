@@ -78,9 +78,25 @@ trait ManagesOrderItems
             {
                 public function __construct(protected array $attributes)
                 {
+                    $historicalOptionNames = collect($this->attributes['option_values'] ?? [])
+                        ->mapWithKeys(function($menuOption): array {
+                            $menuOption = (array)$menuOption;
+                            $menuOptionId = array_get($menuOption, 'id');
+                            $menuOptionName = array_get($menuOption, 'name');
+
+                            return $menuOptionId && $menuOptionName
+                                ? [(string)$menuOptionId => $menuOptionName]
+                                : [];
+                        });
+
                     $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
                         ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
-                        ->groupBy(fn(object $orderMenuOptionValue) => array_get($orderMenuOptionValue->menu_option ?? [], 'option_name'));
+                        ->groupBy(function(object $orderMenuOptionValue) use ($historicalOptionNames): string {
+                            return array_get($orderMenuOptionValue->menu_option ?? [], 'option_name')
+                                ?? $historicalOptionNames->get((string)($orderMenuOptionValue->menu_option_id ?? ''))
+                                ?? $orderMenuOptionValue->order_option_category
+                                ?? lang('igniter.cart::default.orders.text_deleted_option');
+                        });
                 }
 
                 public function toArray(): array
@@ -165,7 +181,7 @@ trait ManagesOrderItems
             $idsToKeep[] = $orderTotal->getKey();
         }
 
-        $this->totals()->whereNotIn('order_total_id', $idsToKeep)->delete();
+        $this->totals()->whereNotIn('order_id', $idsToKeep)->delete();
 
         $this->calculateTotals();
     }
