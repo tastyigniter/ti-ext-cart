@@ -181,7 +181,7 @@ trait ManagesOrderItems
             $idsToKeep[] = $orderTotal->getKey();
         }
 
-        $this->totals()->whereNotIn('order_id', $idsToKeep)->delete();
+        $this->totals()->whereNotIn('order_total_id', $idsToKeep)->delete();
 
         $this->calculateTotals();
     }
