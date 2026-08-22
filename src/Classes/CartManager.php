@@ -128,7 +128,14 @@ class CartManager
             $menuItem = $cartItem->model;
         }
 
-        throw_unless($menuItem, new ApplicationException(lang('igniter.cart::default.alert_menu_not_found')));
+        if (!$menuItem) {
+            $menuName = $cartItem?->name ?? (is_numeric($menuId) ? Menu::find($menuId)?->getBuyableName() : null);
+
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                $menuName ?? (string)$menuId,
+            ));
+        }
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
@@ -158,6 +165,10 @@ class CartManager
     {
         $cartItem = $this->getCartItem($rowId);
         $menuItem = $this->findMenuItem($cartItem->id);
+
+        if (!$menuItem) {
+            return $this->cart->update($rowId, 0);
+        }
 
         if ($quantityOrAction === 'plus') {
             $quantity = $cartItem->qty + $menuItem->minimum_qty;
@@ -363,8 +374,17 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
         }
 
-        $this->cart->content()->each(function(CartItem $cartItem): void {
+        $unavailableItems = [];
+
+        $this->cart->content()->each(function(CartItem $cartItem) use (&$unavailableItems): void {
             $menuItem = $this->findMenuItem($cartItem->id);
+
+            if (!$menuItem) {
+                $unavailableItems[] = $cartItem->name;
+                $this->cart->remove($cartItem->rowId);
+
+                return;
+            }
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
@@ -381,6 +401,13 @@ class CartManager
                 );
             });
         });
+
+        if ($unavailableItems !== []) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                implode(', ', $unavailableItems),
+            ));
+        }
     }
 
     public function validateLocation(): void
@@ -602,58 +629,16 @@ class CartManager
     protected function prepareCartItemOptionsFromOrderMenu($menuModel, $optionValues, &$notes)
     {
         $options = [];
-        $menuOptions = $menuModel->menu_options->keyBy('menu_option_id');
-
-        foreach ($optionValues as $optionKey => $cartOption) {
+        foreach ($optionValues as $cartOption) {
             $cartOption = (array)$cartOption;
-            $cartOptionId = $cartOption['id'] ?? (is_numeric($optionKey) ? (int)$optionKey : null);
-            $menuOption = $cartOptionId ? $menuOptions->get($cartOptionId) : null;
-
-            if (!$menuOption) {
-                $notes[] = sprintf(
-                    lang('igniter.cart::default.alert_option_value_not_found'),
-                    $cartOption['name'] ?? lang('igniter.cart::default.orders.text_deleted_option'),
-                );
-
+            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id'])) {
                 continue;
             }
 
             try {
-                $availableOptionValueIds = $menuOption->menu_option_values
-                    ->pluck('menu_option_value_id')
-                    ->all();
+                $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
 
-                $cartOptionValues = collect($cartOption['values'] ?? [])
-                    ->map(function($cartOptionValue, $optionValueKey): array {
-                        if ($cartOptionValue instanceof Arrayable) {
-                            $cartOptionValue = $cartOptionValue->toArray();
-                        } else {
-                            $cartOptionValue = (array)$cartOptionValue;
-                        }
-
-                        $cartOptionValue['id'] ??= is_numeric($optionValueKey) ? (int)$optionValueKey : null;
-
-                        return $cartOptionValue;
-                    })
-                    ->filter(fn(array $cartOptionValue): bool => is_numeric($cartOptionValue['id'] ?? null));
-
-                $cartOptionValues
-                    ->reject(fn(array $cartOptionValue): bool => in_array($cartOptionValue['id'], $availableOptionValueIds))
-                    ->each(function(array $cartOptionValue) use (&$notes): void {
-                        $notes[] = sprintf(
-                            lang('igniter.cart::default.alert_option_value_not_found'),
-                            $cartOptionValue['name'] ?? lang('igniter.cart::default.orders.text_deleted_option'),
-                        );
-                    });
-
-                $cartOption['id'] = $cartOptionId;
-                $cartOption['name'] ??= $menuOption->option_name;
-                $cartOption['values'] = $cartOptionValues
-                    ->filter(fn(array $cartOptionValue): bool => in_array($cartOptionValue['id'], $availableOptionValueIds))
-                    ->values()
-                    ->all();
-
-                $this->validateMenuItemOption($menuOption, $cartOption['values']);
+                $cartOption['values'] = $cartOption['values']->filter(fn($cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id))->toArray();
 
                 $options[] = $cartOption;
             } catch (Exception $ex) {
