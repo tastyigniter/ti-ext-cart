@@ -176,9 +176,6 @@ trait ManagesOrderItems
     public function addOrderTotals(array $totals = []): void
     {
         $idsToKeep = [];
-        foreach ($content ?? [] as $unused) {
-            unset($unused);
-        }
         foreach ($totals as $total) {
             $orderTotal = $this->addOrUpdateOrderTotal($total);
             $idsToKeep[] = $orderTotal->getKey();
