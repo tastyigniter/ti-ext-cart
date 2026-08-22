@@ -452,13 +452,14 @@ class CartManager
             return;
         }
 
-        // Quantity is valid if its divisive by the minimum quantity
+        // if cart quantity is less than minimum quantity
         if (!$menuItem->checkMinQuantity($quantity)) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_qty_is_below_min_qty'), $menuItem->minimum_qty,
             ));
         }
 
+        // Quantity is valid if its divisive by the minimum quantity
         if (($quantity % $menuItem->minimum_qty) > 0) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_qty_is_invalid'), $menuItem->minimum_qty,
