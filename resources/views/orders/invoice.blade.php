@@ -103,7 +103,14 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @php
+                        $rawOrderMenus = $model->getOrderMenus()->keyBy('order_menu_id');
+                    @endphp
                     @foreach($model->getOrderMenusWithOptions() as $menuItem)
+                        @php
+                            $rawMenuItem = $rawOrderMenus->get($menuItem->order_menu_id);
+                            $itemComment = trim((string)($menuItem->comment ?? $rawMenuItem?->comment ?? ''));
+                        @endphp
                         <tr>
                             <td>{{ $menuItem->quantity }}x</td>
                             <td class="text-left"><b>{{ $menuItem->name }}</b><br/>
@@ -130,9 +137,9 @@
                                         @endforeach
                                     </ul>
                                 @endif
-                                @if(!empty($menuItem->comment))
+                                @if($itemComment !== '')
                                     <div>
-                                        <small><b>{{ $menuItem->comment }}</b></small>
+                                        <small><b>{{ $itemComment }}</b></small>
                                     </div>
                                 @endif
                             </td>
