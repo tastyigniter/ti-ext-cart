@@ -249,11 +249,26 @@ it('marks order as canceled correctly', function(): void {
 });
 
 it('marks order payment as processed correctly', function(): void {
-    Event::fake();
+    Event::fake([
+        OrderBeforePaymentProcessedEvent::class,
+        OrderPaymentProcessedEvent::class,
+    ]);
 
-    $order = Order::factory()->create();
+    $order = Order::factory()->create([
+        'processed' => false,
+        'invoice_date' => null,
+        'invoice_prefix' => null,
+    ]);
 
-    expect($order->markAsPaymentProcessed())->toBeTrue();
+    expect($order->hasInvoice())->toBeFalse()
+        ->and($order->markAsPaymentProcessed())->toBeTrue();
+
+    $order->refresh();
+
+    expect($order->isPaymentProcessed())->toBeTrue()
+        ->and($order->hasInvoice())->toBeTrue()
+        ->and($order->invoice_number)->not->toBeNull();
+
     Event::assertDispatched(OrderBeforePaymentProcessedEvent::class);
     Event::assertDispatched(OrderPaymentProcessedEvent::class);
 });

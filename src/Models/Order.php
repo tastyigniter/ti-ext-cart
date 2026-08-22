@@ -297,6 +297,12 @@ class Order extends Model
             $this->processed = true;
             $this->saveQuietly();
 
+            // saveQuietly() bypasses the HasInvoice saved listener,
+            // so generate the invoice explicitly.
+            if ($this->isPaymentProcessed() && !$this->hasInvoice()) {
+                $this->generateInvoice();
+            }
+
             OrderPaymentProcessedEvent::dispatch($this);
         }
 
