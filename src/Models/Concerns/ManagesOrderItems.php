@@ -71,30 +71,28 @@ trait ManagesOrderItems
     {
         $this->load('menus.menu_options.menu_option');
 
-        return collect($this->menus)->map(fn(OrderMenu $orderMenu): Arrayable =>
+        return collect($this->menus)->map(function(OrderMenu $orderMenu): Arrayable {
+            $historicalOptionNames = collect($orderMenu->option_values ?? [])
+                ->mapWithKeys(function($menuOption): array {
+                    $menuOptionId = data_get($menuOption, 'id');
+                    $menuOptionName = data_get($menuOption, 'name');
+
+                    return $menuOptionId && $menuOptionName
+                        ? [(string)$menuOptionId => $menuOptionName]
+                        : [];
+                });
+
             // Using an anonymous class to avoid setting grouped collection as a relation,
             // which would interfere with Eloquent's lazy loading
-            new class($orderMenu->toArray()) implements Arrayable
+            return new class($orderMenu->toArray(), $historicalOptionNames) implements Arrayable
             {
-                public function __construct(protected array $attributes)
+                public function __construct(protected array $attributes, Collection $historicalOptionNames)
                 {
-                    $historicalOptionNames = collect($this->attributes['option_values'] ?? [])
-                        ->mapWithKeys(function($menuOption): array {
-                            $menuOption = (array)$menuOption;
-                            $menuOptionId = array_get($menuOption, 'id');
-                            $menuOptionName = array_get($menuOption, 'name');
-
-                            return $menuOptionId && $menuOptionName
-                                ? [(string)$menuOptionId => $menuOptionName]
-                                : [];
-                        });
-
                     $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
                         ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
                         ->groupBy(function(object $orderMenuOptionValue) use ($historicalOptionNames): string {
                             return array_get($orderMenuOptionValue->menu_option ?? [], 'option_name')
                                 ?? $historicalOptionNames->get((string)($orderMenuOptionValue->menu_option_id ?? ''))
-                                ?? $orderMenuOptionValue->order_option_category
                                 ?? lang('igniter.cart::default.orders.text_deleted_option');
                         });
                 }
@@ -108,7 +106,8 @@ trait ManagesOrderItems
                 {
                     return $this->attributes[$name] ?? null;
                 }
-            });
+            };
+        });
     }
 
     /**
