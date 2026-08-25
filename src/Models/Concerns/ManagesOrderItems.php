@@ -92,6 +92,11 @@ trait ManagesOrderItems
                 {
                     return $this->attributes[$name] ?? null;
                 }
+
+                public function __isset(string $name): bool
+                {
+                    return isset($this->attributes[$name]);
+                }
             });
     }
 
