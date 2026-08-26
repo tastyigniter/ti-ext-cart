@@ -118,7 +118,7 @@ it('gets order menu options correctly', function(): void {
     expect($orderMenuOption->order_menu_id)->toBe($orderMenuOptionValue->order_menu_id)
         ->and($order->getOrderMenusWithOptions()->toArray())->toBeArray()
         ->and(!empty($order->getOrderMenusWithOptions()->first()->comment))->toBeTrue();
-})->only();
+});
 
 it('gets order totals correctly', function(): void {
     $order = Order::factory()->create();
