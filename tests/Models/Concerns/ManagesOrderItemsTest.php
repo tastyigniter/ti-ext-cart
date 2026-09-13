@@ -103,6 +103,7 @@ it('gets order menu options correctly', function(): void {
     $orderMenu = OrderMenu::create([
         'order_id' => $order->getKey(),
         'menu_id' => $menu->getKey(),
+        'comment' => 'Test comment',
     ]);
 
     $orderMenuOptionValue = OrderMenuOptionValue::create([
@@ -115,7 +116,8 @@ it('gets order menu options correctly', function(): void {
     $orderMenuOption = $order->getOrderMenuOptions()->first()->first();
 
     expect($orderMenuOption->order_menu_id)->toBe($orderMenuOptionValue->order_menu_id)
-        ->and($order->getOrderMenusWithOptions()->toArray())->toBeArray();
+        ->and($order->getOrderMenusWithOptions()->toArray())->toBeArray()
+        ->and(!empty($order->getOrderMenusWithOptions()->first()->comment))->toBeTrue();
 });
 
 it('gets order totals correctly', function(): void {

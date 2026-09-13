@@ -245,9 +245,7 @@ class Menu extends Model implements Buyable
      */
     public function isAvailable($datetime = null): bool
     {
-        if (is_null($datetime)) {
-            $datetime = Carbon::now();
-        }
+        $datetime ??= Carbon::now();
 
         if (!$datetime instanceof Carbon) {
             $datetime = Carbon::parse($datetime);

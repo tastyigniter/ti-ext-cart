@@ -175,18 +175,6 @@ parameters:
 			path: src/Listeners/OrderPerTimeslotLimitReached.php
 
 		-
-			message: '#^Relation ''menu_options'' is not found in Igniter\\Cart\\Models\\Order model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: src/Listeners/OrderPerTimeslotLimitReached.php
-
-		-
-			message: '#^Relation ''menus'' is not found in Igniter\\Cart\\Models\\Order model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: src/Listeners/OrderPerTimeslotLimitReached.php
-
-		-
 			message: '#^Call to an undefined method Igniter\\Flame\\Database\\Model\:\:getSettings\(\)\.$#'
 			identifier: method.notFound
 			count: 15
@@ -241,12 +229,6 @@ parameters:
 			path: src/Models/Menu.php
 
 		-
-			message: '#^Relation ''menu_options'' is not found in Igniter\\Cart\\Models\\Menu model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: src/Models/Menu.php
-
-		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$linkedOptionValues\.$#'
 			identifier: property.notFound
 			count: 1
@@ -274,12 +256,6 @@ parameters:
 			message: '#^Call to an undefined method Igniter\\Cart\\Models\\MenuItemOption\:\:menu_option_values\(\)\.$#'
 			identifier: method.notFound
 			count: 2
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: '#^Relation ''menu_option_values'' is not found in Igniter\\Cart\\Models\\MenuItemOption model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
 			path: src/Models/MenuItemOption.php
 
 		-

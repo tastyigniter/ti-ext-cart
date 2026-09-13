@@ -63,9 +63,7 @@ class CheckoutForm extends Form
 
         $this->data ??= $this->model;
 
-        if (is_null($this->fields)) {
-            $this->fields = [];
-        }
+        $this->fields ??= [];
 
         $this->allTabs['primary'] = new FormTabs(FormTabs::SECTION_PRIMARY, []);
 

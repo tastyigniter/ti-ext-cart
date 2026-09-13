@@ -289,7 +289,7 @@ class Cart
 
         $this->fireEvent('condition.removing', $cartCondition);
 
-        if (!$cartCondition || !$cartCondition->removeable) {
+        if (!$cartCondition instanceof CartCondition || !$cartCondition->removeable) {
             return false;
         }
 

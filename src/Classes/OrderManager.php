@@ -213,7 +213,7 @@ class OrderManager
             }
 
             // Update customer default address
-            if ($this->customer && $this->customer->address_id != $addressId) {
+            if ($this->customer instanceof Customer && $this->customer->address_id != $addressId) {
                 $this->customer->address_id = $addressId;
                 $this->customer->saveQuietly();
             }
@@ -250,7 +250,7 @@ class OrderManager
         }
 
         $paymentMethod = $this->getPayment($order->payment);
-        if (!$paymentMethod || !$paymentMethod->status) {
+        if (!$paymentMethod instanceof Payment || !$paymentMethod->status) {
             throw new ApplicationException(lang('igniter.cart::default.checkout.error_inactive_payment'));
         }
 
