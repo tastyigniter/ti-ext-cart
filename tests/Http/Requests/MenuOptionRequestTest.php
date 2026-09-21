@@ -35,7 +35,13 @@ it('returns correct validation rules', function(): void {
         ->and($rules)->toHaveKey('locations')
         ->and($rules)->toHaveKey('locations.*')
         ->and($rules)->toHaveKey('values')
+        ->and($rules)->toHaveKey('values.*.option_value_id')
+        ->and($rules)->toHaveKey('values.*.option_id')
+        ->and($rules)->toHaveKey('values.*.name')
         ->and($rules)->toHaveKey('values.*.price')
+        ->and($rules)->toHaveKey('values.*.ingredients')
+        ->and($rules)->toHaveKey('values.*.ingredients')
+        ->and($rules)->toHaveKey('values.*.priority')
         ->and($rules['option_name'])->toContain('required', 'string', 'min:2', 'max:32')
         ->and($rules['display_type'])->toContain('required', 'alpha')
         ->and($rules['is_required'])->toContain('boolean')
@@ -44,5 +50,11 @@ it('returns correct validation rules', function(): void {
         ->and($rules['locations'])->toContain('nullable', 'array')
         ->and($rules['locations.*'])->toContain('integer')
         ->and($rules['values'])->toContain('required', 'array')
-        ->and($rules['values.*.price'])->toContain('nullable', 'currency');
+        ->and($rules['values.*.option_value_id'])->toContain('nullable', 'integer')
+        ->and($rules['values.*.option_id'])->toContain('integer')
+        ->and($rules['values.*.name'])->toContain('string')
+        ->and($rules['values.*.price'])->toContain('nullable', 'currency')
+        ->and($rules['values.*.ingredients'])->toContain('nullable', 'array')
+        ->and($rules['values.*.ingredients.*'])->toContain('integer')
+        ->and($rules['values.*.priority'])->toContain('integer');
 });
