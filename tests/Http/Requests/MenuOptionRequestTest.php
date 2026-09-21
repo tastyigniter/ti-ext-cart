@@ -26,7 +26,7 @@ it('returns correct validation rules', function(): void {
 
     $rules = $request->rules();
 
-    expect($rules)->toHaveCount(9)
+    expect($rules)->toHaveCount(15)
         ->and($rules)->toHaveKey('option_name')
         ->and($rules)->toHaveKey('display_type')
         ->and($rules)->toHaveKey('is_required')
@@ -40,7 +40,7 @@ it('returns correct validation rules', function(): void {
         ->and($rules)->toHaveKey('values.*.name')
         ->and($rules)->toHaveKey('values.*.price')
         ->and($rules)->toHaveKey('values.*.ingredients')
-        ->and($rules)->toHaveKey('values.*.ingredients')
+        ->and($rules)->toHaveKey('values.*.ingredients.*')
         ->and($rules)->toHaveKey('values.*.priority')
         ->and($rules['option_name'])->toContain('required', 'string', 'min:2', 'max:32')
         ->and($rules['display_type'])->toContain('required', 'alpha')
