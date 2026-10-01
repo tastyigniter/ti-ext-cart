@@ -396,6 +396,21 @@ it('applies filters on the query builder', function(): void {
         ->toContain('order by `order_date` desc');
 });
 
+it('applies status filter from array of ids', function(): void {
+    expect(Order::query()->applyStatusFilter([1, 2])->toSql())
+        ->toContain('`status_id` in (?, ?)');
+});
+
+it('skips status filter when no valid ids given', function(): void {
+    expect(Order::query()->applyStatusFilter('0')->toSql())
+        ->not->toContain('`status_id`');
+});
+
+it('filters by order type', function(): void {
+    expect(Order::query()->whereOrderType('delivery')->toSql())
+        ->toContain('`order_type` = ?');
+});
+
 it('generates order hash on create correctly', function(): void {
     $order = Order::factory()->create();
 

@@ -6,6 +6,7 @@ namespace Igniter\Cart\Tests\Http\Controllers;
 
 use Igniter\Admin\Models\Status;
 use Igniter\Cart\Models\Order;
+use Igniter\Flame\Exception\FlashException;
 use Igniter\Local\Facades\Location;
 
 it('accepts order and updates status', function(): void {
@@ -73,4 +74,46 @@ it('rejects order and updates status with reason', function(): void {
 
     expect($order->fresh())->status_id->toBe($status->getKey())
         ->status_history->last()->comment->toBe('Out of stock');
+});
+
+it('throws flash exception when accepted status is missing', function(): void {
+    $order = Order::factory()->create();
+    setting()->set(['accepted_order_status' => null]);
+    Location::setCurrent($order->location);
+
+    expect(fn() => actingAsSuperUser()
+        ->withoutExceptionHandling()
+        ->post(route('igniter.cart.status_workflows', ['slug' => 'accept/'.$order->getKey()])))
+        ->toThrow(FlashException::class, lang('igniter.cart::default.orders.alert_accepted_status_missing'));
+});
+
+it('throws flash exception when reject reason code is missing', function(): void {
+    $order = Order::factory()->create();
+    Location::setCurrent($order->location);
+
+    expect(fn() => actingAsSuperUser()
+        ->withoutExceptionHandling()
+        ->post(route('igniter.cart.status_workflows', ['slug' => 'reject/'.$order->getKey()]), [
+            'reasonCode' => '',
+        ]))
+        ->toThrow(FlashException::class, lang('igniter.cart::default.orders.alert_missing_reject_code'));
+});
+
+it('accepts order with unknown delay minutes', function(): void {
+    $order = Order::factory()->create(['order_time' => '12:00:00']);
+    $status = Status::factory()->create();
+    setting()->set([
+        'accepted_order_status' => $status->getKey(),
+        'delay_times' => [['time' => 30, 'comment' => 'Half hour']],
+    ]);
+
+    actingAsSuperUser()
+        ->post(route('igniter.cart.status_workflows', ['slug' => 'accept/'.$order->getKey()]), [
+            'minutes' => 15,
+        ])
+        ->assertOk();
+
+    expect($order->fresh())
+        ->status_id->toBe($status->getKey())
+        ->order_time->toBe('12:15:00');
 });

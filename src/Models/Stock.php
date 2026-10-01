@@ -95,6 +95,19 @@ class Stock extends Model
         'menu_option_values' => 'igniter.cart::default.stocks.text_stockable_type_menu_option_value',
     ];
 
+    protected array $queryModifierFilters = [
+        'location_id' => 'applyLocationId',
+        'stockable_type' => 'whereStockableType',
+        'search' => 'applySearch',
+    ];
+
+    protected array $queryModifierSorts = [
+        'id asc', 'id desc',
+        'quantity asc', 'quantity desc',
+        'updated_at asc', 'updated_at desc',
+        'created_at asc', 'created_at desc',
+    ];
+
     public function getStockActionOptions(): array
     {
         return [
@@ -120,6 +133,51 @@ class Stock extends Model
     //
     // Scopes
     //
+
+    public function scopeApplyLocationId($query, mixed $locationId)
+    {
+        $ids = is_array($locationId)
+            ? $locationId
+            : preg_split('/\s*,\s*/', (string)$locationId, -1, PREG_SPLIT_NO_EMPTY);
+
+        $ids = array_values(array_unique(array_filter(
+            array_map(static fn($id): int => (int)$id, $ids ?: []),
+            static fn(int $id): bool => $id > 0,
+        )));
+
+        if ($ids === []) {
+            return $query;
+        }
+
+        return count($ids) === 1
+            ? $query->where('location_id', $ids[0])
+            : $query->whereIn('location_id', $ids);
+    }
+
+    public function scopeWhereStockableType($query, string $type)
+    {
+        return $query->where('stockable_type', $type);
+    }
+
+    public function scopeApplySearch($query, mixed $search)
+    {
+        $search = trim((string)$search);
+        if ($search === '') {
+            return $query;
+        }
+
+        $like = '%'.$search.'%';
+
+        return $query->where(function($builder) use ($like): void {
+            $builder
+                ->whereHasMorph('stockable', [Menu::class], function($stockable) use ($like): void {
+                    $stockable->where('menu_name', 'like', $like);
+                })
+                ->orWhereHasMorph('stockable', [MenuOptionValue::class], function($stockable) use ($like): void {
+                    $stockable->where('name', 'like', $like);
+                });
+        });
+    }
 
     public function scopeApplyStockable($query, $model)
     {

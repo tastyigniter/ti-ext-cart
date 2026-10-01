@@ -28,6 +28,36 @@ it('applies stockable scope with correct model type and id', function(): void {
     expect($result)->toBe($query);
 });
 
+it('applies location filter for a single id', function(): void {
+    expect(Stock::query()->applyLocationId(1)->toSql())
+        ->toContain('`location_id` = ?');
+});
+
+it('applies location filter for multiple ids', function(): void {
+    expect(Stock::query()->applyLocationId([1, 2])->toSql())
+        ->toContain('`location_id` in (?, ?)');
+});
+
+it('skips location filter when no valid ids given', function(): void {
+    expect(Stock::query()->applyLocationId('0')->toSql())
+        ->not->toContain('`location_id`');
+});
+
+it('applies search filter to stockable name', function(): void {
+    expect(Stock::query()->applySearch('burger')->toSql())
+        ->toContain('like');
+});
+
+it('skips search filter when search is empty', function(): void {
+    expect(Stock::query()->applySearch('')->toSql())
+        ->not->toContain('like');
+});
+
+it('filters by stockable type', function(): void {
+    expect(Stock::query()->whereStockableType('menus')->toSql())
+        ->toContain('`stockable_type` = ?');
+});
+
 it('updates stock correctly', function(): void {
     Event::fake();
     Mail::fake();
