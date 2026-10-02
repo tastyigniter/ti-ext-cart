@@ -14,13 +14,28 @@ beforeEach(function(): void {
 });
 
 it('applies date time filter correctly', function(): void {
-    $range = ['startAt' => '2023-01-01 00:00:00', 'endAt' => '2023-01-01 23:59:59'];
     $this->builder->shouldReceive('whereBetweenOrderDateTime')
         ->with('2023-01-01 00:00:00', '2023-01-01 23:59:59')
         ->andReturnSelf();
 
     $applyDateTimeFilter = $this->scope->addApplyDateTimeFilter();
-    $applyDateTimeFilter($this->builder, $range);
+    $applyDateTimeFilter($this->builder, [
+        'startAt' => '2023-01-01 00:00:00',
+        'endAt' => '2023-01-01 23:59:59',
+    ]);
+
+    $this->builder->shouldHaveReceived('whereBetweenOrderDateTime')
+        ->with('2023-01-01 00:00:00', '2023-01-01 23:59:59')
+        ->once();
+});
+
+it('applies date time filter with separate start and end arguments', function(): void {
+    $this->builder->shouldReceive('whereBetweenOrderDateTime')
+        ->with('2023-01-01 00:00:00', '2023-01-01 23:59:59')
+        ->andReturnSelf();
+
+    $applyDateTimeFilter = $this->scope->addApplyDateTimeFilter();
+    $applyDateTimeFilter($this->builder, '2023-01-01 00:00:00', '2023-01-01 23:59:59');
 
     $this->builder->shouldHaveReceived('whereBetweenOrderDateTime')
         ->with('2023-01-01 00:00:00', '2023-01-01 23:59:59')
