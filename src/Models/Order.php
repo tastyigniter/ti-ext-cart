@@ -259,7 +259,7 @@ class Order extends Model
         return $this->hasStatus(setting('canceled_order_status'));
     }
 
-    public function isCancelable()
+    public function isCancelable(): bool
     {
         if (!$timeout = $this->location->getOrderCancellationTimeout($this->order_type)) {
             return false;

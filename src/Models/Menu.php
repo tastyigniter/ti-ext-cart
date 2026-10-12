@@ -287,7 +287,7 @@ class Menu extends Model implements Buyable
         return $quantity >= $this->minimum_qty;
     }
 
-    public function hasOrderTypeRestriction($orderType)
+    public function hasOrderTypeRestriction($orderType): bool
     {
         if (empty($this->order_restriction)) {
             return false;

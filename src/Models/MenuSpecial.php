@@ -83,13 +83,13 @@ class MenuSpecial extends Model
         return empty($value) ? 'forever' : $value;
     }
 
-    public function active()
+    public function active(): bool
     {
         if ($this->isDisabled()) {
             return false;
         }
 
-        return $this->isExpired() !== true;
+        return !$this->isExpired();
     }
 
     public function daysRemaining()
@@ -106,7 +106,7 @@ class MenuSpecial extends Model
         return $this->validity == 'recurring';
     }
 
-    public function isExpired()
+    public function isExpired(): bool
     {
         $now = Carbon::now();
 
