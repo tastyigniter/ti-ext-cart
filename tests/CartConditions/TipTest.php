@@ -32,6 +32,16 @@ it('before apply with no tip amount', function(): void {
     expect($this->tip->beforeApply())->toBeFalse();
 });
 
+it('before apply keeps a two decimal tip amount', function(): void {
+    CartSettings::set('enable_tipping', true);
+
+    $this->tip->setMetaData(['amount' => '2.50']);
+    $this->tip->onLoad();
+    $this->tip->beforeApply();
+
+    expect($this->tip->getMetaData('amount'))->toBe('2.50');
+});
+
 it('before apply with invalid tip amount', function(): void {
     CartSettings::set('enable_tipping', true);
 

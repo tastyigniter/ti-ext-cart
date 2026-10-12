@@ -367,6 +367,12 @@ parameters:
 			path: src/Models/OrderMenuOptionValue.php
 
 		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\Relation\<\*, \*, \*\>\:\:isEnabled\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Models/Scopes/MenuScope.php
+
+		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\Stock\:\:\$location\.$#'
 			identifier: property.notFound
 			count: 3

@@ -247,7 +247,7 @@ class Stock extends Model
         ));
     }
 
-    public function checkStock(int $quantity)
+    public function checkStock(int $quantity): bool
     {
         if (!$this->is_tracked) {
             return true;
@@ -337,7 +337,7 @@ class Stock extends Model
         return $this->low_stock_threshold && $this->low_stock_threshold >= $this->quantity;
     }
 
-    protected function shouldUpdateStock($state)
+    protected function shouldUpdateStock($state): bool
     {
         if (!$this->is_tracked) {
             return false;
@@ -367,7 +367,7 @@ class Stock extends Model
         return max($stockQty, 0);
     }
 
-    protected function shouldAlertOnLowStock()
+    protected function shouldAlertOnLowStock(): bool
     {
         if (!$this->low_stock_alert) {
             return false;

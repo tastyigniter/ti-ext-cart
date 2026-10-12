@@ -79,7 +79,7 @@ trait Stockable
         return $stocks->filter(fn($stock) => $stock->outOfStock())->isNotEmpty();
     }
 
-    public function checkStockLevel($quantity, $location = null)
+    public function checkStockLevel($quantity, $location = null): bool
     {
         $stocks = $this->getTrackableStocks($location);
 
