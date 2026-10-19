@@ -395,6 +395,13 @@ class Extension extends BaseExtension
                     'value' => number_format($tax->value, 2, '.', ''),
                 ];
             }
+
+            if ($tip = $order->getOrderTotals()->firstWhere('code', 'tip')) {
+                $fields['purchase_units'][0]['amount']['breakdown']['gratuity'] = [
+                    'currency_code' => $fields['purchase_units'][0]['amount']['currency_code'],
+                    'value' => number_format($tip->value, 2, '.', ''),
+                ];
+            }
         });
 
         Event::listen('admin.order.paymentProcessed', function(Order $model): void {
