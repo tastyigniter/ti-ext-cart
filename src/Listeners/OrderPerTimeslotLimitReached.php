@@ -15,6 +15,7 @@ use Igniter\Local\Models\Location as LocationModel;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use stdClass;
 
 class OrderPerTimeslotLimitReached
 {
@@ -56,7 +57,7 @@ class OrderPerTimeslotLimitReached
         $orderType = Location::orderType();
         $timeslot = Location::orderDateTime();
 
-        $cartMenuItems = $cart->content()->map(fn($item) => (object)[
+        $cartMenuItems = $cart->content()->map(fn($item): stdClass => (object)[
             'menu_id' => $item->id,
             'quantity' => $item->qty,
         ])->all();
@@ -228,7 +229,7 @@ class OrderPerTimeslotLimitReached
                 setting('completed_order_status', []),
             ))
             ->get()
-            ->map(fn(Order $order) => (object)[
+            ->map(fn(Order $order): stdClass => (object)[
                 'order_type' => $order->order_type,
                 'order_time' => $order->order_time,
                 'menus' => $order->getOrderMenus(),
