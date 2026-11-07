@@ -128,7 +128,14 @@ class CartManager
             $menuItem = $cartItem->model;
         }
 
-        throw_unless($menuItem, new ApplicationException(lang('igniter.cart::default.alert_menu_not_found')));
+        if (!$menuItem) {
+            $menuName = $cartItem?->name ?? (is_numeric($menuId) ? Menu::find($menuId)?->getBuyableName() : null);
+
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                $menuName ?? (string)$menuId,
+            ));
+        }
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
@@ -158,6 +165,10 @@ class CartManager
     {
         $cartItem = $this->getCartItem($rowId);
         $menuItem = $this->findMenuItem($cartItem->id);
+
+        if (!$menuItem) {
+            return $this->cart->update($rowId, 0);
+        }
 
         if ($quantityOrAction === 'plus') {
             $quantity = $cartItem->qty + $menuItem->minimum_qty;
@@ -363,8 +374,17 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
         }
 
-        $this->cart->content()->each(function(CartItem $cartItem): void {
+        $unavailableItems = [];
+
+        $this->cart->content()->each(function(CartItem $cartItem) use (&$unavailableItems): void {
             $menuItem = $this->findMenuItem($cartItem->id);
+
+            if (!$menuItem) {
+                $unavailableItems[] = $cartItem->name;
+                $this->cart->remove($cartItem->rowId);
+
+                return;
+            }
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
@@ -381,6 +401,13 @@ class CartManager
                 );
             });
         });
+
+        if ($unavailableItems !== []) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                implode(', ', $unavailableItems),
+            ));
+        }
     }
 
     public function validateLocation(): void
