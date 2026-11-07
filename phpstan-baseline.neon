@@ -61,6 +61,24 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getBuyableName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: '#^Cannot access property \$name on null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
+			message: '#^Expression on left side of \?\? is always null\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: src/Classes/CartManager.php
+
+		-
 			message: '#^Call to an undefined method Igniter\\Local\\Models\\Location\:\:allowGuestOrder\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -359,12 +377,6 @@ parameters:
 			identifier: parameter.notFound
 			count: 1
 			path: src/Models/Order.php
-
-		-
-			message: '#^Access to an undefined property Igniter\\Cart\\Models\\OrderMenuOptionValue\:\:\$menu_option\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/OrderMenuOptionValue.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\Relation\<\*, \*, \*\>\:\:isEnabled\(\)\.$#'

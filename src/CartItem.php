@@ -41,7 +41,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * The name of the cart item.
      *
-     * @var string
+     * @var ?string
      */
     public $name;
 

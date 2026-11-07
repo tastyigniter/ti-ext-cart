@@ -54,7 +54,7 @@ class OrderMenuOptionValue extends Model
 
     public function getOrderOptionCategoryAttribute()
     {
-        return $this->menu_option?->option_name
+        return $this->menu_option->option_name
             ?? lang('igniter.cart::default.orders.text_deleted_option');
     }
 }

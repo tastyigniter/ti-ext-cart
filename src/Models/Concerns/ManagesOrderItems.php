@@ -72,7 +72,12 @@ trait ManagesOrderItems
         $this->load('menus.menu_options.menu_option');
 
         return collect($this->menus)->map(function(OrderMenu $orderMenu): Arrayable {
-            $historicalOptionNames = collect($orderMenu->option_values ?? [])
+            $optionValues = $orderMenu->option_values ?? [];
+            if (is_string($optionValues)) {
+                $optionValues = @unserialize($optionValues) ?: [];
+            }
+
+            $historicalOptionNames = collect($optionValues)
                 ->mapWithKeys(function($menuOption, $optionKey): array {
                     $menuOptionId = data_get($menuOption, 'id')
                         ?? (is_numeric($optionKey) ? (int)$optionKey : null);
@@ -91,11 +96,9 @@ trait ManagesOrderItems
                 {
                     $this->attributes['menu_options'] = collect($this->attributes['menu_options'] ?? [])
                         ->map(fn(array $orderMenuOptionValue): stdClass => (object)$orderMenuOptionValue)
-                        ->groupBy(function(object $orderMenuOptionValue) use ($historicalOptionNames): string {
-                            return array_get($orderMenuOptionValue->menu_option ?? [], 'option_name')
-                                ?? $historicalOptionNames->get((string)($orderMenuOptionValue->menu_option_id ?? ''))
-                                ?? lang('igniter.cart::default.orders.text_deleted_option');
-                        });
+                        ->groupBy(fn(object $orderMenuOptionValue): string => array_get($orderMenuOptionValue->menu_option ?? [], 'option_name')
+                            ?? (string)$historicalOptionNames->get((string)($orderMenuOptionValue->menu_option_id ?? ''))
+                            ?: lang('igniter.cart::default.orders.text_deleted_option'));
                 }
 
                 public function toArray(): array
@@ -112,7 +115,8 @@ trait ManagesOrderItems
                 {
                     return isset($this->attributes[$name]);
                 }
-            });
+            };
+        });
     }
 
     /**
