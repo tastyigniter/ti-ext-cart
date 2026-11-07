@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Tests\Models;
 
+use Igniter\Cart\Models\Casts\CurrencyAmount;
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
 use Igniter\Cart\Models\MenuItemOptionValue;
@@ -101,7 +102,7 @@ it('configures menu item option value model correctly', function(): void {
         ->and($menuItemOptionValue->getCasts()['menu_option_value_id'])->toEqual('integer')
         ->and($menuItemOptionValue->getCasts()['menu_option_id'])->toEqual('integer')
         ->and($menuItemOptionValue->getCasts()['option_value_id'])->toEqual('integer')
-        ->and($menuItemOptionValue->getCasts()['override_price'])->toEqual('float')
+        ->and($menuItemOptionValue->getCasts()['override_price'])->toEqual(CurrencyAmount::class)
         ->and($menuItemOptionValue->getCasts()['priority'])->toEqual('integer')
         ->and($menuItemOptionValue->getCasts()['is_default'])->toEqual('boolean')
         ->and($menuItemOptionValue->getAppends())->toEqual(['name', 'price'])
