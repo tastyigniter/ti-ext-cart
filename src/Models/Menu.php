@@ -245,9 +245,7 @@ class Menu extends Model implements Buyable
      */
     public function isAvailable($datetime = null): bool
     {
-        if (is_null($datetime)) {
-            $datetime = Carbon::now();
-        }
+        $datetime ??= Carbon::now();
 
         if (!$datetime instanceof Carbon) {
             $datetime = Carbon::parse($datetime);
@@ -289,7 +287,7 @@ class Menu extends Model implements Buyable
         return $quantity >= $this->minimum_qty;
     }
 
-    public function hasOrderTypeRestriction($orderType)
+    public function hasOrderTypeRestriction($orderType): bool
     {
         if (empty($this->order_restriction)) {
             return false;

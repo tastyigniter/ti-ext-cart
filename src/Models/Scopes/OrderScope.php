@@ -12,10 +12,17 @@ class OrderScope extends Scope
 {
     public function addApplyDateTimeFilter()
     {
-        return fn(Builder $builder, $range) => $builder->whereBetweenOrderDateTime(
-            Carbon::parse(array_get($range, 'startAt'))->format('Y-m-d H:i:s'),
-            Carbon::parse(array_get($range, 'endAt'))->format('Y-m-d H:i:s'),
-        );
+        return function(Builder $builder, $startAt, $endAt = null) {
+            if (is_array($startAt)) {
+                $endAt = array_get($startAt, 'endAt');
+                $startAt = array_get($startAt, 'startAt');
+            }
+
+            return $builder->whereBetweenOrderDateTime(
+                Carbon::parse($startAt)->format('Y-m-d H:i:s'),
+                Carbon::parse($endAt)->format('Y-m-d H:i:s'),
+            );
+        };
     }
 
     public function addWhereBetweenOrderDateTime()

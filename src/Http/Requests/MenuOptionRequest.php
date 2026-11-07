@@ -34,7 +34,13 @@ class MenuOptionRequest extends FormRequest
             'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
             'values' => ['required', 'array'],
+            'values.*.option_value_id' => ['nullable', 'integer'],
+            'values.*.option_id' => ['integer'],
+            'values.*.name' => ['string'],
             'values.*.price' => ['nullable', 'currency'],
+            'values.*.ingredients' => ['nullable', 'array'],
+            'values.*.ingredients.*' => ['integer'],
+            'values.*.priority' => ['integer'],
         ];
     }
 }

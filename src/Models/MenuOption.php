@@ -71,6 +71,34 @@ class MenuOption extends Model
 
     public $timestamps = true;
 
+    protected array $queryModifierFilters = [
+        'search' => 'applySearch',
+    ];
+
+    protected array $queryModifierSorts = [
+        'option_id asc', 'option_id desc',
+        'option_name asc', 'option_name desc',
+        'priority asc', 'priority desc',
+    ];
+
+    public function scopeApplySearch($query, mixed $search)
+    {
+        $search = trim((string)$search);
+        if ($search === '') {
+            return $query;
+        }
+
+        $like = '%'.$search.'%';
+
+        return $query->where(function($builder) use ($like): void {
+            $builder
+                ->where('option_name', 'like', $like)
+                ->orWhereHas('option_values', function($values) use ($like): void {
+                    $values->where('name', 'like', $like);
+                });
+        });
+    }
+
     public static function getRecordEditorOptions()
     {
         $query = self::selectRaw('option_id, concat(option_name, " (", display_type, ")") AS display_name');

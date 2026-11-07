@@ -238,7 +238,28 @@ it('adds tax info to paypalexpress request parameters', function(): void {
     event('payregister.paypalexpress.extendFields', [$payment, &$fields, $order, $data]);
 
     expect(array_get($fields, 'purchase_units.0.amount.breakdown.tax_total.value'))->toBe('10.00')
-        ->and(array_get($fields, 'purchase_units.0.amount.breakdown.tax_total.currency_code'))->toBe('GBP');
+        ->and(array_get($fields, 'purchase_units.0.amount.breakdown.tax_total.currency_code'))->toBe('GBP')
+        ->and(array_get($fields, 'purchase_units.0.amount.breakdown.gratuity'))->toBeNull();
+});
+
+it('adds tip info to paypalexpress request parameters', function(): void {
+    $fields = [];
+    $data = [];
+    $payment = Payment::firstWhere('code', 'paypalexpress');
+    $order = Order::factory()->create();
+    $order->totals()->create([
+        'code' => 'tip',
+        'title' => 'Tip',
+        'value' => 2.5,
+    ]);
+
+    array_set($fields, 'purchase_units.0.amount.currency_code', 'GBP');
+
+    event('payregister.paypalexpress.extendFields', [$payment, &$fields, $order, $data]);
+
+    expect(array_get($fields, 'purchase_units.0.amount.breakdown.gratuity.value'))->toBe('2.50')
+        ->and(array_get($fields, 'purchase_units.0.amount.breakdown.gratuity.currency_code'))->toBe('GBP')
+        ->and(array_get($fields, 'purchase_units.0.amount.breakdown.tax_total'))->toBeNull();
 });
 
 it('subtracts stocks before payment is processed', function(): void {

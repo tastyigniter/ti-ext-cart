@@ -12,9 +12,7 @@ class CheckoutFormField extends FormField
     #[Override]
     public function getName(null|false|string $arrayName = null): string
     {
-        if ($arrayName === null) {
-            $arrayName = $this->arrayName;
-        }
+        $arrayName ??= $this->arrayName;
 
         if ($arrayName) {
             return $arrayName.'.'.implode('.', name_to_array($this->fieldName));

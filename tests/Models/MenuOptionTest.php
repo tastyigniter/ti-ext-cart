@@ -108,3 +108,14 @@ it('configures menu option model correctly', function(): void {
         ->and($menuOption->getMorphClass())->toBe('menu_options')
         ->and($menuOption->getPurgeableAttributes())->toEqual(['values']);
 });
+
+it('applies search filter to option name', function(): void {
+    expect(MenuOption::query()->applySearch('cheese')->toSql())
+        ->toContain('option_name')
+        ->toContain('like');
+});
+
+it('skips search filter when search is empty', function(): void {
+    expect(MenuOption::query()->applySearch('')->toSql())
+        ->not->toContain('like');
+});

@@ -13,6 +13,7 @@ parameters:
 #        - '#PHPDoc tag @var#'
         - identifier: generics.notGeneric
         - identifier: trait.unused
+        - identifier: larastan.relationExistence
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php
 #    checkMissingIterableValueType: false

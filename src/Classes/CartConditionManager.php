@@ -48,9 +48,7 @@ class CartConditionManager
 
     public function loadRegisteredConditions(): void
     {
-        if (is_null($this->registeredConditions)) {
-            $this->registeredConditions = [];
-        }
+        $this->registeredConditions ??= [];
 
         foreach ($this->registeredCallbacks as $callback) {
             $callback($this);
@@ -65,9 +63,7 @@ class CartConditionManager
 
     public function registerConditions(array $conditions): void
     {
-        if ($this->registeredConditions === null) {
-            $this->registeredConditions = [];
-        }
+        $this->registeredConditions ??= [];
 
         foreach ($conditions as $className => $condition) {
             $this->registerCondition($className, $condition);
@@ -76,9 +72,7 @@ class CartConditionManager
 
     public function registerCondition(string $className, $conditionInfo = null): void
     {
-        if ($this->registeredConditions === null) {
-            $this->registeredConditions = [];
-        }
+        $this->registeredConditions ??= [];
 
         $defaults = [
             'name' => 'default',
