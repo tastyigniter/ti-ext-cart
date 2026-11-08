@@ -67,7 +67,7 @@ class MenuOption extends Model
         ],
     ];
 
-    protected $purgeable = ['values'];
+    protected $purgeable = ['values', 'update_menu_prices'];
 
     public $timestamps = true;
 
@@ -147,8 +147,9 @@ class MenuOption extends Model
      * Create a new or update existing option values
      *
      * @param array $optionValues
+     * @param bool $updateMenuPrices apply changed prices to menu items that override them
      */
-    public function addOptionValues($optionValues = []): int
+    public function addOptionValues($optionValues = [], bool $updateMenuPrices = false): int
     {
         $optionId = $this->getKey();
 
@@ -163,8 +164,16 @@ class MenuOption extends Model
                 'option_id' => $optionId,
             ])->fill(array_except($value, ['option_value_id', 'option_id']));
 
+            // Compare as floats, the stored decimal (e.g. "10.0000") is never identical to the posted amount
+            $priceChanged = $optionValue->exists
+                && (float)$optionValue->getOriginal('price') !== (float)$optionValue->price;
+
             $optionValue->saveOrFail();
             $idsToKeep[] = $optionValue->getKey();
+
+            if ($updateMenuPrices && $priceChanged) {
+                $this->updateMenuItemOverridePrices($optionValue);
+            }
         }
 
         $this->option_values()->where('option_id', $optionId)
@@ -174,6 +183,18 @@ class MenuOption extends Model
             ->whereNotIn('option_value_id', $idsToKeep)->delete();
 
         return count($idsToKeep);
+    }
+
+    /**
+     * Apply the option value's price to menu items that override it.
+     * Menu items without an override already use the option value price.
+     */
+    public function updateMenuItemOverridePrices(MenuOptionValue $optionValue): int
+    {
+        return MenuItemOptionValue::query()
+            ->where('option_value_id', $optionValue->getKey())
+            ->whereNotNull('override_price')
+            ->update(['override_price' => $optionValue->price]);
     }
 
     public function attachRecordTo($menu): void
