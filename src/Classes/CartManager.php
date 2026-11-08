@@ -607,15 +607,7 @@ class CartManager
 
                 $this->validateCartMenuItem($orderMenu->menu, $orderMenu->quantity);
 
-                if (is_string($orderMenu->option_values)) {
-                    $orderMenu->option_values = @unserialize($orderMenu->option_values);
-                }
-
-                if ($orderMenu->option_values instanceof Arrayable) {
-                    $orderMenu->option_values = $orderMenu->option_values->toArray();
-                }
-
-                $options = $this->prepareCartItemOptionsFromOrderMenu($orderMenu->menu, $orderMenu->option_values, $notes);
+                $options = $this->prepareCartItemOptionsFromOrderMenu($orderMenu->menu, (array)($orderMenu->option_values ?? []), $notes);
 
                 $this->cart->add($orderMenu->menu, $orderMenu->quantity, $options, $orderMenu->comment);
             } catch (Exception $ex) {
@@ -629,16 +621,23 @@ class CartManager
     protected function prepareCartItemOptionsFromOrderMenu($menuModel, $optionValues, &$notes)
     {
         $options = [];
-        foreach ($optionValues as $cartOption) {
-            $cartOption = (array)$cartOption;
-            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id'])) {
+        foreach ($optionValues as $optionKey => $cartOption) {
+            $cartOption = $cartOption instanceof Arrayable ? $cartOption->toArray() : (array)$cartOption;
+            $menuOptionId = $cartOption['id'] ?? (is_numeric($optionKey) ? (int)$optionKey : null);
+            if (!$menuOptionId || !$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($menuOptionId)) {
                 continue;
             }
 
             try {
-                $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
+                $cartOptionValues = collect($cartOption['values'] ?? [])
+                    ->map(fn($cartOptionValue): array => $cartOptionValue instanceof Arrayable ? $cartOptionValue->toArray() : (array)$cartOptionValue);
 
-                $cartOption['values'] = $cartOption['values']->filter(fn($cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id))->toArray();
+                $this->validateMenuItemOption($menuOption, $cartOptionValues->all());
+
+                $cartOption['id'] = $menuOptionId;
+                $cartOption['values'] = $cartOptionValues
+                    ->filter(fn(array $cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue['id'] ?? null))
+                    ->all();
 
                 $options[] = $cartOption;
             } catch (Exception $ex) {

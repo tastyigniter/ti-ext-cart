@@ -211,6 +211,7 @@ it('saves order', function(): void {
     $cartCondition->shouldReceive('getValue')->andReturn(10);
     $cartCondition->shouldReceive('getPriority')->andReturn(99);
     $cartCondition->shouldReceive('__serialize')->andReturn(['name' => 'test-condition', 'value' => 10]);
+    $cartCondition->shouldReceive('toArray')->andReturn(['name' => 'test-condition', 'value' => 10]);
     app('cart')->add(['id' => 1, 'name' => 'Menu Item', 'price' => 1, 'conditions' => [$cartCondition, $cartCondition]]);
 
     $manager = new OrderManager;

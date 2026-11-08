@@ -72,12 +72,7 @@ trait ManagesOrderItems
         $this->load('menus.menu_options.menu_option');
 
         return collect($this->menus)->map(function(OrderMenu $orderMenu): Arrayable {
-            $optionValues = $orderMenu->option_values ?? [];
-            if (is_string($optionValues)) {
-                $optionValues = @unserialize($optionValues) ?: [];
-            }
-
-            $historicalOptionNames = collect($optionValues)
+            $historicalOptionNames = collect($orderMenu->option_values ?? [])
                 ->mapWithKeys(function($menuOption, $optionKey): array {
                     $menuOptionId = data_get($menuOption, 'id')
                         ?? (is_numeric($optionKey) ? (int)$optionKey : null);
@@ -143,7 +138,8 @@ trait ManagesOrderItems
                 'price' => $cartItem->price,
                 'subtotal' => $cartItem->subtotal,
                 'comment' => $cartItem->comment,
-                'option_values' => serialize($cartItem->options),
+                // Encoded once, by the model's json cast
+                'option_values' => $cartItem->options,
             ]);
 
             if ($orderMenu && count($cartItem->options)) {

@@ -22,7 +22,6 @@ use Igniter\Cart\Models\OrderMenu;
 use Igniter\Cart\Models\OrderMenuOptionValue;
 use Igniter\Cart\Models\OrderTotal;
 use Igniter\Cart\Models\Scopes\OrderScope;
-use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Local\Models\Concerns\Locationable;
 use Igniter\Local\Models\Location;
 use Igniter\PayRegister\Models\Payment;
@@ -446,7 +445,7 @@ it('configures order model correctly', function(): void {
             'location_id' => 'integer',
             'address_id' => 'integer',
             'total_items' => 'integer',
-            'cart' => Serialize::class,
+            'cart' => 'array',
             'order_date' => 'date',
             'order_time' => 'time',
             'order_total' => 'float',

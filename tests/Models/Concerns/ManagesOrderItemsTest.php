@@ -16,6 +16,7 @@ use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\OrderMenu;
 use Igniter\Cart\Models\OrderMenuOptionValue;
 use Igniter\Cart\Models\Stock;
+use Illuminate\Support\Facades\DB;
 
 it('subtracts stock correctly', function(): void {
     $order = Order::factory()->create();
@@ -180,6 +181,58 @@ it('syncs order totals removing rows absent from the given set', function(): voi
     expect($order->totals()->where('code', 'tip')->exists())->toBeFalse()
         ->and($order->totals()->count())->toBe(3)
         ->and($order->order_total)->toBe(12.50);
+});
+
+it('stores order menu option values as json encoded once', function(): void {
+    $order = Order::factory()->create();
+    $menu = Menu::factory()->create();
+
+    $order->addOrderMenus([
+        (object)[
+            'id' => $menu->getKey(),
+            'name' => $menu->menu_name,
+            'qty' => 1,
+            'price' => $menu->menu_price,
+            'subtotal' => $menu->menu_price,
+            'comment' => '',
+            'options' => CartItemOptions::make([
+                CartItemOption::fromArray([
+                    'id' => 1,
+                    'name' => 'Toppings',
+                    'values' => CartItemOptionValues::make([
+                        CartItemOptionValue::fromArray([
+                            'id' => 2,
+                            'name' => 'Cheese',
+                            'price' => 10,
+                            'qty' => 1,
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ],
+    ]);
+
+    $orderMenu = $order->fresh()->menus->first();
+    $storedValue = DB::table('order_menus')->where('order_menu_id', $orderMenu->getKey())->value('option_values');
+
+    expect(json_decode((string)$storedValue, true))->toBe($orderMenu->option_values)
+        ->and($orderMenu->option_values)->toBe([
+            [
+                'id' => 1,
+                'name' => 'Toppings',
+                'values' => [
+                    ['id' => 2, 'name' => 'Cheese', 'qty' => 1, 'price' => 10, 'free_qty' => 0, 'subtotal' => 10],
+                ],
+                'subtotal' => 10,
+            ],
+        ]);
+});
+
+it('does not unserialize php serialized order menu option values', function(): void {
+    $orderMenu = new OrderMenu;
+    $orderMenu->setRawAttributes(['option_values' => serialize(serialize([]))]);
+
+    expect($orderMenu->option_values)->toBeNull();
 });
 
 it('stores zero price for fully free order menu options', function(): void {
