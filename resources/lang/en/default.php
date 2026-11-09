@@ -326,6 +326,7 @@ return [
         'text_deliver_to' => 'Deliver to',
         'text_asap' => 'ASAP',
         'text_invoice_thank_you' => 'Thank you for your order',
+        'text_deleted_option' => 'Deleted option',
         'text_collection_order_type' => 'This is a pick-up order',
         'text_unassigned' => 'Yet to be Assigned',
         'text_assigned_to_self' => 'Assigned To Me',
@@ -477,6 +478,7 @@ return [
         'label_min_selected' => 'Min Selected',
         'label_max_selected' => 'Max Selected',
         'label_new_price' => 'Override Price',
+        'label_update_menu_prices' => 'Update Menu Item Prices',
         'label_free_quantity' => 'Max Free Quantity',
         'label_value_free_quantity' => 'Free Quantity',
 
@@ -487,6 +489,7 @@ return [
         'label_linked_option_values' => 'Conditional On (Show When)',
         'help_linked_option_values' => 'This option will only appear when one of the selected values above is chosen.',
         'help_menu_option' => 'Choose from the dropdown to assign a menu option to this menu item.',
+        'help_update_menu_prices' => 'When saving, apply any changed option value prices to menu items that override those prices.',
 
         'alert_menu_option_not_attached' => 'Please select a menu option to assign.',
         'alert_menu_option_already_attached' => 'Can not assign, the selected menu option has already been assigned.',

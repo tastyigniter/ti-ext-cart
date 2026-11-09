@@ -6,6 +6,7 @@ namespace Igniter\Cart\Tests\Models;
 
 use Igniter\Cart\Models\Menu;
 use Igniter\Cart\Models\MenuItemOption;
+use Igniter\Cart\Models\MenuItemOptionValue;
 use Igniter\Cart\Models\MenuOption;
 use Igniter\Cart\Models\MenuOptionValue;
 use Igniter\Local\Facades\Location as LocationFacade;
@@ -65,6 +66,103 @@ it('adds values to menu options on save correctly', function(): void {
     expect($menuOption->option_values()->count())->toBe(3);
 });
 
+function createOptionValueWithOverrides(): array
+{
+    $menuOption = MenuOption::factory()->create();
+    $optionValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['name' => 'Large', 'price' => 10]);
+
+    $overridden = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menuOption, 'option')->create(), 'menu_option')
+        ->create(['option_value_id' => $optionValue->getKey(), 'override_price' => 12]);
+
+    $inherited = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menuOption, 'option')->create(), 'menu_option')
+        ->create(['option_value_id' => $optionValue->getKey(), 'override_price' => null]);
+
+    return [$menuOption, $optionValue, $overridden, $inherited];
+}
+
+it('keeps menu item override prices when option value price changes by default', function(): void {
+    [$menuOption, $optionValue, $overridden, $inherited] = createOptionValueWithOverrides();
+
+    $menuOption->addOptionValues([
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large', 'price' => 15],
+    ]);
+
+    expect($optionValue->fresh()->price)->toBe(15.0)
+        ->and($overridden->fresh()->override_price)->toBe(12.0)
+        ->and($inherited->fresh()->override_price)->toBeNull();
+});
+
+it('updates menu item override prices when option value price changes and update is requested', function(): void {
+    [$menuOption, $optionValue, $overridden, $inherited] = createOptionValueWithOverrides();
+
+    $menuOption->addOptionValues([
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large', 'price' => 15],
+    ], updateMenuPrices: true);
+
+    expect($optionValue->fresh()->price)->toBe(15.0)
+        ->and($overridden->fresh()->override_price)->toBe(15.0)
+        ->and($inherited->fresh()->override_price)->toBeNull();
+});
+
+it('updates menu item override prices for all changed values when saving with update menu prices enabled', function(): void {
+    [$menuOption, $optionValue, $overridden, $inherited] = createOptionValueWithOverrides();
+    $otherValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['name' => 'Small', 'price' => 5]);
+    $otherOverride = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menuOption, 'option')->create(), 'menu_option')
+        ->create(['option_value_id' => $otherValue->getKey(), 'override_price' => 6]);
+
+    $menuOption->values = [
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large', 'price' => 15],
+        ['option_value_id' => $otherValue->getKey(), 'name' => 'Small', 'price' => 7],
+    ];
+    $menuOption->update_menu_prices = '1';
+    $menuOption->save();
+
+    expect($overridden->fresh()->override_price)->toBe(15.0)
+        ->and($otherOverride->fresh()->override_price)->toBe(7.0)
+        ->and($inherited->fresh()->override_price)->toBeNull()
+        ->and($menuOption->fresh()->getAttributes())->not->toHaveKey('update_menu_prices');
+});
+
+it('keeps menu item override prices when saving with update menu prices disabled', function(): void {
+    [$menuOption, $optionValue, $overridden] = createOptionValueWithOverrides();
+
+    $menuOption->values = [
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large', 'price' => 15],
+    ];
+    $menuOption->update_menu_prices = '0';
+    $menuOption->save();
+
+    expect($overridden->fresh()->override_price)->toBe(12.0);
+});
+
+it('does not update menu item override prices when option value price is unchanged', function(): void {
+    [$menuOption, $optionValue, $overridden] = createOptionValueWithOverrides();
+
+    $menuOption->addOptionValues([
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large Renamed', 'price' => 10],
+    ], updateMenuPrices: true);
+
+    expect($overridden->fresh()->override_price)->toBe(12.0);
+});
+
+it('does not update override prices of other option values', function(): void {
+    [$menuOption, $optionValue] = createOptionValueWithOverrides();
+    $otherValue = MenuOptionValue::factory()->for($menuOption, 'option')->create(['name' => 'Small', 'price' => 5]);
+    $otherOverride = MenuItemOptionValue::factory()
+        ->for(MenuItemOption::factory()->for($menuOption, 'option')->create(), 'menu_option')
+        ->create(['option_value_id' => $otherValue->getKey(), 'override_price' => 6]);
+
+    $menuOption->addOptionValues([
+        ['option_value_id' => $optionValue->getKey(), 'name' => 'Large', 'price' => 15],
+        ['option_value_id' => $otherValue->getKey(), 'name' => 'Small', 'price' => 5],
+    ], updateMenuPrices: true);
+
+    expect($otherOverride->fresh()->override_price)->toBe(6.0);
+});
+
 it('attaches menu option to menu', function(): void {
     $menu = Menu::factory()->create();
     $menuOption = MenuOption::factory()
@@ -106,7 +204,7 @@ it('configures menu option model correctly', function(): void {
         ])
         ->and($menuOption->timestamps)->toBeTrue()
         ->and($menuOption->getMorphClass())->toBe('menu_options')
-        ->and($menuOption->getPurgeableAttributes())->toEqual(['values']);
+        ->and($menuOption->getPurgeableAttributes())->toEqual(['values', 'update_menu_prices']);
 });
 
 it('applies search filter to option name', function(): void {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Cart\Models\Casts\CurrencyAmount;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Traits\Validation;
@@ -52,7 +53,7 @@ class MenuItemOptionValue extends Model
         'menu_option_value_id' => 'integer',
         'menu_option_id' => 'integer',
         'option_value_id' => 'integer',
-        'override_price' => 'float',
+        'override_price' => CurrencyAmount::class,
         'priority' => 'integer',
         'is_default' => 'boolean',
         'free_quantity' => 'integer',

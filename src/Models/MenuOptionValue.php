@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
+use Igniter\Cart\Models\Casts\CurrencyAmount;
 use Igniter\Cart\Models\Concerns\Stockable;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
@@ -52,7 +53,7 @@ class MenuOptionValue extends Model
     protected $casts = [
         'option_value_id' => 'integer',
         'option_id' => 'integer',
-        'price' => 'float',
+        'price' => CurrencyAmount::class,
         'priority' => 'integer',
     ];
 

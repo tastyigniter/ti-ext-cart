@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Igniter\Cart\Models;
 
-use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Relations\BelongsTo;
 use Igniter\Flame\Database\Relations\HasMany;
@@ -47,7 +46,7 @@ class OrderMenu extends Model
         'quantity' => 'integer',
         'price' => 'float',
         'subtotal' => 'float',
-        'option_values' => Serialize::class,
+        'option_values' => 'array',
     ];
 
     public $relation = [

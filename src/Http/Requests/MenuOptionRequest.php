@@ -33,6 +33,7 @@ class MenuOptionRequest extends FormRequest
             'max_selected' => ['integer', 'gte:min_selected'],
             'locations' => ['nullable', 'array'],
             'locations.*' => ['integer'],
+            'update_menu_prices' => ['nullable', 'boolean'],
             'values' => ['required', 'array'],
             'values.*.option_value_id' => ['nullable', 'integer'],
             'values.*.option_id' => ['integer'],

@@ -128,7 +128,14 @@ class CartManager
             $menuItem = $cartItem->model;
         }
 
-        throw_unless($menuItem, new ApplicationException(lang('igniter.cart::default.alert_menu_not_found')));
+        if (!$menuItem) {
+            $menuName = $cartItem?->name ?? (is_numeric($menuId) ? Menu::find($menuId)?->getBuyableName() : null);
+
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                $menuName ?? (string)$menuId,
+            ));
+        }
 
         $this->validateCartMenuItem($menuItem, $quantity);
 
@@ -158,6 +165,10 @@ class CartManager
     {
         $cartItem = $this->getCartItem($rowId);
         $menuItem = $this->findMenuItem($cartItem->id);
+
+        if (!$menuItem) {
+            return $this->cart->update($rowId, 0);
+        }
 
         if ($quantityOrAction === 'plus') {
             $quantity = $cartItem->qty + $menuItem->minimum_qty;
@@ -363,8 +374,17 @@ class CartManager
             throw new ApplicationException(lang('igniter.cart::default.checkout.alert_no_menu_to_order'));
         }
 
-        $this->cart->content()->each(function(CartItem $cartItem): void {
+        $unavailableItems = [];
+
+        $this->cart->content()->each(function(CartItem $cartItem) use (&$unavailableItems): void {
             $menuItem = $this->findMenuItem($cartItem->id);
+
+            if (!$menuItem) {
+                $unavailableItems[] = $cartItem->name;
+                $this->cart->remove($cartItem->rowId);
+
+                return;
+            }
 
             $this->validateCartMenuItem($menuItem, $cartItem->qty);
 
@@ -381,6 +401,13 @@ class CartManager
                 );
             });
         });
+
+        if ($unavailableItems !== []) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_menu_not_found'),
+                implode(', ', $unavailableItems),
+            ));
+        }
     }
 
     public function validateLocation(): void
@@ -580,15 +607,7 @@ class CartManager
 
                 $this->validateCartMenuItem($orderMenu->menu, $orderMenu->quantity);
 
-                if (is_string($orderMenu->option_values)) {
-                    $orderMenu->option_values = @unserialize($orderMenu->option_values);
-                }
-
-                if ($orderMenu->option_values instanceof Arrayable) {
-                    $orderMenu->option_values = $orderMenu->option_values->toArray();
-                }
-
-                $options = $this->prepareCartItemOptionsFromOrderMenu($orderMenu->menu, $orderMenu->option_values, $notes);
+                $options = $this->prepareCartItemOptionsFromOrderMenu($orderMenu->menu, (array)($orderMenu->option_values ?? []), $notes);
 
                 $this->cart->add($orderMenu->menu, $orderMenu->quantity, $options, $orderMenu->comment);
             } catch (Exception $ex) {
@@ -602,16 +621,23 @@ class CartManager
     protected function prepareCartItemOptionsFromOrderMenu($menuModel, $optionValues, &$notes)
     {
         $options = [];
-        foreach ($optionValues as $cartOption) {
-            $cartOption = (array)$cartOption;
-            if (!$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($cartOption['id'])) {
+        foreach ($optionValues as $optionKey => $cartOption) {
+            $cartOption = $cartOption instanceof Arrayable ? $cartOption->toArray() : (array)$cartOption;
+            $menuOptionId = $cartOption['id'] ?? (is_numeric($optionKey) ? (int)$optionKey : null);
+            if (!$menuOptionId || !$menuOption = $menuModel->menu_options->keyBy('menu_option_id')->get($menuOptionId)) {
                 continue;
             }
 
             try {
-                $this->validateMenuItemOption($menuOption, $cartOption['values']->toArray());
+                $cartOptionValues = collect($cartOption['values'] ?? [])
+                    ->map(fn($cartOptionValue): array => $cartOptionValue instanceof Arrayable ? $cartOptionValue->toArray() : (array)$cartOptionValue);
 
-                $cartOption['values'] = $cartOption['values']->filter(fn($cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue->id))->toArray();
+                $this->validateMenuItemOption($menuOption, $cartOptionValues->all());
+
+                $cartOption['id'] = $menuOptionId;
+                $cartOption['values'] = $cartOptionValues
+                    ->filter(fn(array $cartOptionValue) => $menuOption->menu_option_values->keyBy('menu_option_value_id')->has($cartOptionValue['id'] ?? null))
+                    ->all();
 
                 $options[] = $cartOption;
             } catch (Exception $ex) {

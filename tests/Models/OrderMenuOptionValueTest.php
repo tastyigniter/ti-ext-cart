@@ -15,6 +15,14 @@ it('returns order option category attribute', function(): void {
     expect($orderMenuOptionValue->order_option_category)->toBe($menuItemOption->option->option_name);
 });
 
+it('returns translated fallback when menu option has been deleted', function(): void {
+    $orderMenuOptionValue = new OrderMenuOptionValue;
+    $orderMenuOptionValue->menu_option = null;
+
+    expect($orderMenuOptionValue->order_option_category)
+        ->toBe(lang('igniter.cart::default.orders.text_deleted_option'));
+});
+
 it('configures order menu option value model correctly', function(): void {
     $orderMenuOptionValue = new OrderMenuOptionValue;
     expect($orderMenuOptionValue->getTable())->toBe('order_menu_options')

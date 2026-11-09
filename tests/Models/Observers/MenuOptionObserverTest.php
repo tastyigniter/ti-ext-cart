@@ -22,7 +22,7 @@ it('restores purged values when saved', function(): void {
 it('adds option values when values attribute exists', function(): void {
     $attributes = ['values' => ['value1', 'value2']];
     $this->menuOption->shouldReceive('getAttributes')->andReturn($attributes);
-    $this->menuOption->shouldReceive('addOptionValues')->with(['value1', 'value2'])->once();
+    $this->menuOption->shouldReceive('addOptionValues')->with(['value1', 'value2'], false)->once();
 
     $this->observer->saved($this->menuOption);
 });

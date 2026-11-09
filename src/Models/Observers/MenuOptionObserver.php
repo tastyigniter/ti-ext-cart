@@ -13,7 +13,10 @@ class MenuOptionObserver
         $menuOption->restorePurgedValues();
 
         if (array_key_exists('values', $attributes = $menuOption->getAttributes())) {
-            $menuOption->addOptionValues(array_get($attributes, 'values', []));
+            $menuOption->addOptionValues(
+                array_get($attributes, 'values', []),
+                (bool)array_get($attributes, 'update_menu_prices', false),
+            );
         }
     }
 

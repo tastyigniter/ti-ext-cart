@@ -144,6 +144,13 @@ $config['form']['fields'] = [
         'form' => 'menuoptionvalue',
         'sortable' => true,
     ],
+    'update_menu_prices' => [
+        'label' => 'lang:igniter.cart::default.menu_options.label_update_menu_prices',
+        'type' => 'switch',
+        'default' => false,
+        'context' => ['edit'],
+        'comment' => 'lang:igniter.cart::default.menu_options.help_update_menu_prices',
+    ],
 ];
 
 return $config;

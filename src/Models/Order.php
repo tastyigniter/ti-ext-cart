@@ -16,7 +16,6 @@ use Igniter\Cart\Models\Concerns\HasInvoice;
 use Igniter\Cart\Models\Concerns\LocationAction;
 use Igniter\Cart\Models\Concerns\ManagesOrderItems;
 use Igniter\Flame\Database\Builder;
-use Igniter\Flame\Database\Casts\Serialize;
 use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\Flame\Database\Relations\HasMany;
@@ -132,7 +131,7 @@ class Order extends Model
         'location_id' => 'integer',
         'address_id' => 'integer',
         'total_items' => 'integer',
-        'cart' => Serialize::class,
+        'cart' => 'array',
         'order_date' => 'date',
         'order_time' => 'time',
         'order_total' => 'float',
