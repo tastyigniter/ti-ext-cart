@@ -61,12 +61,6 @@ parameters:
 			path: src/Classes/CartManager.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getBuyableName\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Classes/CartManager.php
-
-		-
 			message: '#^Cannot access property \$name on null\.$#'
 			identifier: property.nonObject
 			count: 1
@@ -145,12 +139,6 @@ parameters:
 			path: src/Http/Controllers/Inventory.php
 
 		-
-			message: '#^Method Igniter\\Cart\\Http\\Controllers\\Inventory\:\:findStockOrFail\(\) should return Igniter\\Cart\\Models\\Stock but returns Illuminate\\Database\\Eloquent\\Model\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Http/Controllers/Inventory.php
-
-		-
 			message: '#^Call to an undefined method Igniter\\Cart\\Http\\Controllers\\Orders\:\:formFindModelObject\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -163,13 +151,13 @@ parameters:
 			path: src/Http/Middleware/InjectStatusWorkflow.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$count\.$#'
+			message: '#^Access to an undefined property Igniter\\Cart\\Models\\Order\:\:\$count\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Listeners/ExtendDashboardCharts.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$label\.$#'
+			message: '#^Access to an undefined property Igniter\\Cart\\Models\\Order\:\:\$label\.$#'
 			identifier: property.notFound
 			count: 2
 			path: src/Listeners/ExtendDashboardCharts.php
@@ -177,18 +165,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method Igniter\\Local\\Models\\Location\:\:getOrderTimeInterval\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: src/Listeners/OrderPerTimeslotLimitReached.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:categories\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Listeners/OrderPerTimeslotLimitReached.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: \(object\{order_type\: string, order_time\: mixed, menus\: Illuminate\\Support\\Collection\}&stdClass\), Closure\(Igniter\\Cart\\Models\\Order\)\: \(object\{order_type\: string, order_time\: mixed, menus\: Illuminate\\Support\\Collection\}&stdClass\) given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Listeners/OrderPerTimeslotLimitReached.php
 
@@ -248,18 +224,6 @@ parameters:
 
 		-
 			message: '#^Access to an undefined property Igniter\\Cart\\Models\\MenuItemOption\:\:\$linkedOptionValues\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$menu_option_values\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Models/MenuItemOption.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$option_name\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Models/MenuItemOption.php
