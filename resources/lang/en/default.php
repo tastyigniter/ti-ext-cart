@@ -183,6 +183,20 @@ return [
     'help_invoice_prefix' => 'Set the invoice prefix (e.g. <b>INV-2015-00</b>1123). Leave blank to use no prefix. The following macros are available: {year} {month} {day} {hour} {minute} {second}',
     'help_order_email' => 'Send a confirmation mail to the customer, admin and/or location email after a new order has been created',
 
+    'mail_blocks' => [
+        'text_order_items' => 'Order items',
+        'help_order_items' => 'The ordered menu items and the order totals.',
+        'label_column_name' => 'Item column heading',
+        'label_column_price' => 'Price column heading',
+        'label_column_subtotal' => 'Subtotal column heading',
+        'text_column_name' => 'Name/Description',
+        'text_column_price' => 'Unit Price',
+        'text_column_subtotal' => 'Sub Total',
+        'label_show_options' => 'Show menu options',
+        'label_show_comments' => 'Show menu comments',
+        'label_show_totals' => 'Show order totals',
+    ],
+
     'checkout' => [
         'text_heading' => 'Checkout',
         'text_checkout' => 'Almost there, Please confirm your details and proceed to payment.',

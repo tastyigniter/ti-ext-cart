@@ -29,6 +29,7 @@ use Igniter\Cart\Listeners\AddsCustomerOrdersTabFields;
 use Igniter\Cart\Listeners\ExtendDashboardCards;
 use Igniter\Cart\Listeners\ExtendDashboardCharts;
 use Igniter\Cart\Listeners\OrderPerTimeslotLimitReached;
+use Igniter\Cart\MailBlocks\OrderItems;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Category;
 use Igniter\Cart\Models\Concerns\LocationAction;
@@ -242,10 +243,30 @@ class Extension extends BaseExtension
     public function registerMailTemplates(): array
     {
         return [
-            'igniter.cart::mail.order' => 'lang:igniter.cart::default.text_mail_order',
-            'igniter.cart::mail.order_alert' => 'lang:igniter.cart::default.text_mail_order_alert',
-            'igniter.cart::mail.order_update' => 'lang:igniter.cart::default.text_mail_order_update',
-            'igniter.cart::mail.low_stock_alert' => 'lang:igniter.cart::default.text_mail_low_stock_alert',
+            'igniter.cart::mail.order' => [
+                'label' => 'lang:igniter.cart::default.text_mail_order',
+                'variables' => ['igniter::system.mail_variables.text_group_order'],
+            ],
+            'igniter.cart::mail.order_alert' => [
+                'label' => 'lang:igniter.cart::default.text_mail_order_alert',
+                'variables' => ['igniter::system.mail_variables.text_group_order'],
+            ],
+            'igniter.cart::mail.order_update' => [
+                'label' => 'lang:igniter.cart::default.text_mail_order_update',
+                'variables' => ['igniter::system.mail_variables.text_group_order'],
+            ],
+            'igniter.cart::mail.low_stock_alert' => [
+                'label' => 'lang:igniter.cart::default.text_mail_low_stock_alert',
+                'variables' => ['system::lang.mail_variables.text_group_stock'],
+            ],
+        ];
+    }
+
+    #[Override]
+    public function registerMailBlocks(): array
+    {
+        return [
+            OrderItems::class,
         ];
     }
 
