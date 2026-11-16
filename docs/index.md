@@ -503,8 +503,8 @@ The Cart extension fires the following events during the checkout process:
 | `admin.order.beforePaymentProcessed` |   Before an order is marked as payment processed.    |      The `Igniter\Cart\Models\Order` model instance     |
 | `admin.order.paymentProcessed` |   After an order is marked as payment processed.    |      The `Igniter\Cart\Models\Order` model instance     |
 | `admin.order.canceled` |   When an order is canceled.    |      The `Igniter\Cart\Models\Order` model instance     |
-| `admin.order.beforeRefundProcessed` |    Before an order is marked as refunded.   |      The `Igniter\Cart\Models\Order` model instance     |
-| `admin.order.refundProcessed` |   After an order is marked as refunded.   |      The `Igniter\Cart\Models\Order` model instance     |
+| `admin.order.beforeRefundProcessed` |    Before an order is marked as refunded.   |      The `Igniter\PayRegister\Models\PaymentLog` model instance of the refunded payment and the `$refundAmount` refunded amount, or `null` when the gateway does not report it     |
+| `admin.order.refundProcessed` |   After an order is marked as refunded.   |      The `Igniter\PayRegister\Models\PaymentLog` model instance of the refunded payment and the `$refundAmount` refunded amount, or `null` when the gateway does not report it     |
 | `igniter.cart.beforeAddOrderStatus` |   Before adding an order status.    |      The `Igniter\Admin\Models\StatusHistory` model instance, `Igniter\Cart\Models\Order` model instance, `$statusId` status ID and the `$previousStatus` previous status ID      |
 | `igniter.cart.orderStatusAdded` |   After an order status is added.    |      The `Igniter\Cart\Models\Order` model instance and `StatusHistory` model instance      |
 | `igniter.cart.orderAssigned` |   After an order is assigned to a staff member.    |      The `Igniter\Cart\Models\Order` model instance and `Igniter\User\Models\User` model instance      |

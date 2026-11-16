@@ -26,6 +26,7 @@ use Igniter\Cart\Http\Middleware\InjectStatusWorkflow;
 use Igniter\Cart\Http\Requests\CheckoutSettingsRequest;
 use Igniter\Cart\Http\Requests\CollectionSettingsRequest;
 use Igniter\Cart\Http\Requests\DeliverySettingsRequest;
+use Igniter\Cart\MailBlocks\OrderItems;
 use Igniter\Cart\Models\CartSettings;
 use Igniter\Cart\Models\Order;
 use Igniter\Cart\Models\Stock;
@@ -105,7 +106,9 @@ it('registers mail templates correctly', function(): void {
         ->and($templates)->toHaveKey('igniter.cart::mail.order')
         ->and($templates)->toHaveKey('igniter.cart::mail.order_alert')
         ->and($templates)->toHaveKey('igniter.cart::mail.order_update')
-        ->and($templates)->toHaveKey('igniter.cart::mail.low_stock_alert');
+        ->and($templates)->toHaveKey('igniter.cart::mail.low_stock_alert')
+        ->and($templates['igniter.cart::mail.order']['variables'])->toBe(['igniter::system.mail_variables.text_group_order'])
+        ->and($extension->registerMailBlocks())->toBe([OrderItems::class]);
 });
 
 it('registers navigation correctly', function(): void {
