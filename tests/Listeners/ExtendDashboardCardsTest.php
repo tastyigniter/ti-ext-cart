@@ -8,6 +8,9 @@ use Igniter\Admin\Classes\AdminController;
 use Igniter\Admin\DashboardWidgets\Statistics;
 use Igniter\Cart\Listeners\ExtendDashboardCards;
 use Igniter\Cart\Models\Order;
+use Igniter\User\Facades\AdminAuth;
+use Igniter\User\Models\User;
+use ReflectionClass;
 
 beforeEach(function(): void {
     $this->listener = new ExtendDashboardCards;
@@ -22,6 +25,7 @@ afterEach(function(): void {
 });
 
 it('registers dashboard cards', function(): void {
+    AdminAuth::shouldReceive('getUser')->andReturn(User::factory()->superUser()->make());
     $this->listener->registerCards();
     $controller = $this->createMock(AdminController::class);
     $statistics = new Statistics($controller, ['card' => 'sale']);
@@ -41,6 +45,16 @@ it('registers dashboard cards', function(): void {
         ->and($cards)->toHaveKey('completed_order_count', 'lang:igniter.cart::default.dashboard.text_completed_order_count')
         ->and($cards)->toHaveKey('canceled_order_total', 'lang:igniter.cart::default.dashboard.text_canceled_order_total')
         ->and($cards)->toHaveKey('canceled_order_count', 'lang:igniter.cart::default.dashboard.text_canceled_order_count');
+
+    $registered = (new ReflectionClass(Statistics::class))->getMethod('listCards')->invoke($statistics);
+    $orderCards = array_intersect_key($registered, array_flip([
+        'sale', 'lost_sale', 'cash_payment', 'order', 'order_menu_items_count',
+        'delivery_order', 'delivery_order_count', 'collection_order', 'collection_order_count',
+        'completed_order', 'completed_order_count', 'canceled_order_total', 'canceled_order_count',
+    ]));
+
+    expect($orderCards)->toHaveCount(13)
+        ->and(array_column($orderCards, 'permission'))->toBe(array_fill(0, 13, 'Admin.Orders'));
 });
 
 it('calculates total sale amount correctly', function(): void {

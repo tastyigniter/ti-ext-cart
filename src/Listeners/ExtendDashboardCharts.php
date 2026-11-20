@@ -21,6 +21,7 @@ class ExtendDashboardCharts
                 $charts->mergeDataset('reports', 'sets', [
                     'orders' => [
                         'label' => 'lang:igniter.cart::default.dashboard.text_charts_orders',
+                        'permission' => 'Admin.Orders',
                         'color' => '#64B5F6',
                         'model' => Order::class,
                         'column' => 'order_date',
@@ -32,6 +33,7 @@ class ExtendDashboardCharts
                     'label' => 'lang:igniter.cart::default.dashboard.text_orders_by_day',
                     'type' => 'doughnut',
                     'icon' => ' fa fa-calendar-day',
+                    'permission' => 'Admin.Orders',
                     'datasetFrom' => $this->getDatasetConfig(...),
                 ]);
 
@@ -39,6 +41,7 @@ class ExtendDashboardCharts
                     'label' => 'lang:igniter.cart::default.dashboard.text_orders_by_hour',
                     'type' => 'doughnut',
                     'icon' => ' fa fa-hourglass',
+                    'permission' => 'Admin.Orders',
                     'datasetFrom' => $this->getDatasetConfig(...),
                 ]);
 
@@ -46,6 +49,7 @@ class ExtendDashboardCharts
                     'label' => 'lang:igniter.cart::default.dashboard.text_orders_by_category',
                     'type' => 'pie',
                     'icon' => ' fa fa-utensils',
+                    'permission' => 'Admin.Orders',
                     'datasetFrom' => $this->getDatasetConfig(...),
                 ]);
 
@@ -53,6 +57,7 @@ class ExtendDashboardCharts
                     'label' => 'lang:igniter.cart::default.dashboard.text_orders_by_payment',
                     'type' => 'pie',
                     'icon' => ' fa fa-money-check',
+                    'permission' => 'Admin.Orders',
                     'datasetFrom' => $this->getDatasetConfig(...),
                 ]);
             });
