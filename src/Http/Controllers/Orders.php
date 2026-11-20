@@ -38,6 +38,7 @@ class Orders extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.orders.text_form_name',
         'model' => Order::class,
+        'recordName' => 'order_id',
         'request' => OrderRequest::class,
         'edit' => [
             'title' => 'lang:igniter::admin.form.edit_title',
