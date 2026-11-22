@@ -6,12 +6,14 @@ namespace Igniter\Cart;
 
 use Closure;
 use Exception;
+use Igniter\Cart\Classes\CartConditionManager;
 use Igniter\Cart\Concerns\ActsAsItemable;
 use Igniter\Cart\Contracts\Buyable;
 use Igniter\Cart\Exceptions\InvalidRowIDException;
 use Igniter\Cart\Exceptions\UnknownModelException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Session\SessionManager;
+use Illuminate\Support\Collection;
 use LogicException;
 
 class Cart
@@ -522,18 +524,25 @@ class Cart
 
         $stored = $this->getStoredCartByIdentifier($identifier);
 
-        $storedData = unserialize($stored->data);
+        $storedData = unserialize((string)$stored->data, ['allowed_classes' => $this->storedCartClasses()]);
+        if (!is_array($storedData)) {
+            return;
+        }
 
         $content = $this->getContent();
 
         $storedContent = array_get($storedData, 'content');
-        foreach ($storedContent as $cartItem) {
-            $content->put($cartItem->rowId, $cartItem);
+        foreach ($storedContent ?? [] as $cartItem) {
+            if ($cartItem instanceof CartItem) {
+                $content->put($cartItem->rowId, $cartItem);
+            }
         }
 
         $storedConditions = array_get($storedData, 'conditions');
-        foreach ($storedConditions as $cartCondition) {
-            $this->getConditions()->put($cartCondition->name, $cartCondition);
+        foreach ($storedConditions ?? [] as $cartCondition) {
+            if ($cartCondition instanceof CartCondition) {
+                $this->getConditions()->put($cartCondition->name, $cartCondition);
+            }
         }
 
         $this->putSession('content', $content);
@@ -541,6 +550,26 @@ class Cart
         $this->fireEvent('restored');
 
         $this->deleteStored($identifier);
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    protected function storedCartClasses(): array
+    {
+        $conditionClasses = array_keys(resolve(CartConditionManager::class)->listRegisteredConditions() ?? []);
+
+        return array_values(array_unique(array_merge([
+            CartContent::class,
+            CartItem::class,
+            CartItemOptions::class,
+            CartItemOption::class,
+            CartItemOptionValues::class,
+            CartItemOptionValue::class,
+            CartItemConditions::class,
+            CartConditions::class,
+            Collection::class,
+        ], $conditionClasses)));
     }
 
     public function deleteStored(int $identifier): void

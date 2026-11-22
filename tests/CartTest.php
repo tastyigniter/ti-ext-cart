@@ -17,6 +17,7 @@ use Igniter\Cart\Models\Cart as CartModel;
 use Igniter\Cart\Models\Menu;
 use Igniter\Local\Facades\Location;
 use Igniter\Local\Models\Location as LocationModel;
+use Illuminate\Support\Fluent;
 use InvalidArgumentException;
 use LogicException;
 
@@ -526,7 +527,24 @@ it('restores the cart correctly', function(): void {
 
     $this->cart->restore(123);
 
-    expect($this->cart->content())->toHaveCount(1);
+    expect($this->cart->content())->toHaveCount(1)
+        ->and($this->cart->conditionsWithoutApplied()->has('VAT'))->toBeTrue();
+});
+
+it('does not instantiate unexpected classes when restoring a stored cart', function(): void {
+    CartModel::query()->create([
+        'identifier' => 456,
+        'instance' => 'default',
+        'data' => serialize([
+            'content' => [new Fluent(['rowId' => 'abc'])],
+            'conditions' => [new Fluent(['name' => 'evil'])],
+        ]),
+    ]);
+
+    $this->cart->restore(456);
+
+    expect($this->cart->content())->toHaveCount(0)
+        ->and($this->cart->conditionsWithoutApplied()->has('evil'))->toBeFalse();
 });
 
 it('keeps session when destroyOnLogout is false', function(): void {
