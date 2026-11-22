@@ -547,6 +547,19 @@ it('does not instantiate unexpected classes when restoring a stored cart', funct
         ->and($this->cart->conditionsWithoutApplied()->has('evil'))->toBeFalse();
 });
 
+it('ignores a stored cart whose data is not an array', function(): void {
+    CartModel::query()->create([
+        'identifier' => 789,
+        'instance' => 'default',
+        'data' => serialize('not-an-array'),
+    ]);
+
+    $this->cart->restore(789);
+
+    expect($this->cart->content())->toHaveCount(0)
+        ->and(CartModel::query()->where('identifier', 789)->exists())->toBeTrue();
+});
+
 it('keeps session when destroyOnLogout is false', function(): void {
     config(['igniter-cart.destroyOnLogout' => false]);
 
