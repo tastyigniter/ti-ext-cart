@@ -376,6 +376,33 @@ it('returns order data with all fields populated', function(): void {
         ->and($result['location_name'])->not->toBeEmpty();
 });
 
+it('escapes option names in the order mail data', function(): void {
+    $order = Order::factory()->create();
+    $orderMenu = $order->menus()->create([
+        'menu_id' => Menu::factory()->create()->getKey(),
+        'name' => 'Menu Name',
+        'quantity' => 1,
+        'price' => 10,
+        'subtotal' => 10,
+        'comment' => '<a href="https://evil.test">click</a>',
+    ]);
+    $orderMenu->menu_options()->create([
+        'order_id' => $order->getKey(),
+        'order_menu_id' => $orderMenu->getKey(),
+        'order_option_name' => '<img src=x onerror=alert(1)>',
+        'order_option_price' => 1,
+        'menu_option_value_id' => MenuItemOptionValue::factory()->create()->getKey(),
+        'menu_option_id' => MenuItemOption::factory()->create()->getKey(),
+        'quantity' => 1,
+    ]);
+
+    $menuData = $order->mailGetData()['order_menus'][0];
+
+    expect($menuData['menu_options'])->toContain('&lt;img src=x onerror=alert(1)&gt;')
+        ->not->toContain('<img')
+        ->and($menuData['menu_comment'])->toBe('<a href="https://evil.test">click</a>');
+});
+
 it('applies filters on the query builder', function(): void {
     $query = Order::query()->applyFilters([
         'customer' => 1,

@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Event;
 
 class CartManager
 {
+    public const int MAX_ITEM_COMMENT_LENGTH = 500;
+
     /**
      * @var Cart
      */
@@ -116,6 +118,12 @@ class CartManager
             $this->removeCartItem($rowId);
 
             return null;
+        }
+
+        if (!is_null($comment) && (!is_string($comment) || mb_strlen($comment) > self::MAX_ITEM_COMMENT_LENGTH)) {
+            throw new ApplicationException(sprintf(
+                lang('igniter.cart::default.alert_item_comment_too_long'), self::MAX_ITEM_COMMENT_LENGTH,
+            ));
         }
 
         $this->validateLocation();

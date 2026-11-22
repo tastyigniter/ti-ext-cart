@@ -94,6 +94,7 @@ return [
     'alert_no_menu_selected' => 'Please select a menu to add to your order.',
     'alert_menu_order_type_restriction' => 'The selected menu item <b>%s</b> is not available for <b>%s</b>',
     'alert_option_not_found' => 'The selected option is not available',
+    'alert_item_comment_too_long' => 'The item comment may not be longer than %s characters.',
     'alert_option_required' => 'Please choose from the <b>%s</b> option.',
     'alert_option_selected' => 'The number of selected options for <b>%s</b> must be between %s and %s.',
     'alert_option_value_not_found' => 'The selected option <b>%s</b> is not available',

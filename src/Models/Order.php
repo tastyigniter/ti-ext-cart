@@ -427,11 +427,11 @@ class Order extends Model
         foreach ($menus as $menu) {
             $optionData = [];
             foreach ($menu->menu_options as $menuItemOptionGroupName => $menuItemOptions) {
-                $optionData[] = $menuItemOptionGroupName;
+                $optionData[] = e((string)$menuItemOptionGroupName);
                 foreach ($menuItemOptions as $menuItemOption) {
                     $optionData[] = $menuItemOption->quantity
                         .'&nbsp;'.lang('igniter::admin.text_times').'&nbsp;'
-                        .$menuItemOption->order_option_name
+                        .e((string)$menuItemOption->order_option_name)
                         .lang('igniter::admin.text_equals')
                         .currency_format(max(0, $menuItemOption->quantity - $menuItemOption->free_qty) * $menuItemOption->order_option_price);
                 }
