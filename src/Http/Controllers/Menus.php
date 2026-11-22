@@ -33,6 +33,7 @@ class Menus extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menus.text_form_name',
         'model' => Menu::class,
+        'recordName' => 'menu_name',
         'request' => MenuRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',

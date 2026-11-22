@@ -329,7 +329,12 @@ it('returns registered dashboard charts', function(): void {
     };
     $datasets = $charts->testDatasets();
 
-    expect($datasets['reports']['sets']['orders']['model'])->toBe(Order::class);
+    expect($datasets['reports']['sets']['orders']['model'])->toBe(Order::class)
+        ->and($datasets['reports']['sets']['orders']['permission'])->toBe('Admin.Orders');
+
+    foreach (['orders_by_day', 'orders_by_hour', 'orders_by_category', 'orders_by_payment'] as $code) {
+        expect($datasets[$code]['permission'])->toBe('Admin.Orders');
+    }
 });
 
 it('returns registered dashboard statistic widgets', function(): void {

@@ -105,6 +105,24 @@ it('adds cart item', function(): void {
         ->and($item->qty)->toBe(1);
 });
 
+it('rejects a cart item comment longer than the limit', function(): void {
+    $menu = Menu::factory()->create();
+
+    expect(fn() => $this->manager->addCartItem($menu->getKey(), [
+        'quantity' => 1,
+        'comment' => str_repeat('a', CartManager::MAX_ITEM_COMMENT_LENGTH + 1),
+    ]))->toThrow(ApplicationException::class, sprintf(
+        lang('igniter.cart::default.alert_item_comment_too_long'), CartManager::MAX_ITEM_COMMENT_LENGTH,
+    ));
+});
+
+it('rejects a cart item comment that is not a string', function(): void {
+    $menu = Menu::factory()->create();
+
+    expect(fn() => $this->manager->addCartItem($menu->getKey(), ['quantity' => 1, 'comment' => ['x']]))
+        ->toThrow(ApplicationException::class);
+});
+
 it('adds cart item when menu option display type is select', function(): void {
     $menu = Menu::factory()->create();
     $option = MenuOption::factory()->create(['display_type' => 'select']);

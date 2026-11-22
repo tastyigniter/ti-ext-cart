@@ -34,6 +34,7 @@ class MenuOptions extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.menu_options.text_form_name',
         'model' => MenuOption::class,
+        'recordName' => 'option_name',
         'request' => MenuOptionRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',

@@ -33,6 +33,7 @@ class Mealtimes extends AdminController
     public array $formConfig = [
         'name' => 'lang:igniter.cart::default.mealtimes.text_form_name',
         'model' => Mealtime::class,
+        'recordName' => 'mealtime_name',
         'request' => MealtimeRequest::class,
         'create' => [
             'title' => 'lang:igniter::admin.form.create_title',
