@@ -104,3 +104,25 @@ it('calculates tax excluding delivery charge when order type is delivery and tax
 
     expect($result)->toBe(109.5);
 });
+
+it('calculates tax using a decimal tax rate', function(float $subTotal, float $expected): void {
+    setting()->set([
+        'tax_mode' => 1,
+        'tax_menu_price' => 1,
+        'tax_percentage' => '6.625',
+    ]);
+
+    Location::shouldReceive('orderTypeIsDelivery')->andReturn(false);
+
+    $this->tax->onLoad();
+
+    expect($this->tax->beforeApply())->toBeTrue()
+        ->and($this->tax->calculate($subTotal))->toEqualWithDelta($expected, 0.0001)
+        ->and($this->tax->getLabel())->toBe('VAT: 6.625%')
+        ->and($this->tax->getActions())->toBe([
+            ['value' => '+6.625%', 'inclusive' => false, 'valuePrecision' => 2],
+        ]);
+})->with([
+    [100.0, 106.63],
+    [12.95, 13.81],
+]);
