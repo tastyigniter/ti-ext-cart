@@ -22,6 +22,4 @@ return new class extends Migration
             $table->unsignedInteger('free_qty')->default(0);
         });
     }
-
-    public function down(): void {}
 };

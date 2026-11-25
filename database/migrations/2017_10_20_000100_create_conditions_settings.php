@@ -31,8 +31,6 @@ return new class extends Migration
         }
     }
 
-    public function down(): void {}
-
     protected function getConditions()
     {
         $existingConditions = [];

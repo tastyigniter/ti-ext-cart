@@ -19,6 +19,4 @@ return new class extends Migration
             $table->time('recurring_to')->nullable();
         });
     }
-
-    public function down(): void {}
 };
