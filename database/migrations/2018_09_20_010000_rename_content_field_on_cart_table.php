@@ -21,6 +21,4 @@ return new class extends Migration
             $table->renameColumn('content', 'data');
         });
     }
-
-    public function down(): void {}
 };
